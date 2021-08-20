@@ -1,0 +1,67 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SchemeLevelPolicy</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ScholarshipQouta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ScholarshipQouta)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.POMS)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.POMS)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DOMS)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DOMS)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SQSOMS)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SQSOMS)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SQSEVIs)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SQSEVIs)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ScholarshipFiscalYear.Code)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SchemeLevel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SchemeLevel.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SchemeLevelPolicyId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

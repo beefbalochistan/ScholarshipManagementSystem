@@ -1,0 +1,78 @@
+﻿@model IEnumerable<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScholarshipQouta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.POMS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DOMS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SQSOMS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SQSEVIs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SchemeLevel)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScholarshipQouta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.POMS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOMS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SQSOMS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SQSEVIs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SchemeLevelPolicyId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SchemeLevelPolicyId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SchemeLevelPolicyId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
