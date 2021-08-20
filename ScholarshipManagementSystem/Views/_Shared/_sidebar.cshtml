@@ -131,16 +131,12 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bx-user"></i>
-                        <span key="t-layouts">Users</span>
+                        <i class="bx bxs-user"></i>
+                        <span key="t-invoices">User</span>
                     </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Create</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                            </ul>
-                        </li>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-action="Index" asp-controller="Users" key="t-invoice-list">View Users</a></li>                                                
+                        @*<li><a asp-action="Index" asp-controller="DistrictDetails" key="t-invoice-detail">District Detail</a></li>*@
                     </ul>
                 </li>
                 <li>
