@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ScholarshipManagementSystem.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ public async static Task Main(string[] args)
         var logger = loggerFactory.CreateLogger("app");
         try
         {
-            var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             await Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
             await Seeds.DefaultUsers.SeedBasicUserAsync(userManager, roleManager);

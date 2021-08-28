@@ -70,71 +70,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -215,6 +150,83 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("ProfilePicture")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UsernameChangeLimit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Audit", b =>
                 {
                     b.Property<int>("Id")
@@ -251,6 +263,39 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail", b =>
+                {
+                    b.Property<int>("SMSAPIServiceAuditTrailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DestinationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TextLength")
+                        .HasColumnType("int");
+
+                    b.HasKey("SMSAPIServiceAuditTrailId");
+
+                    b.ToTable("SMSAPIServiceAuditTrail", "sms");
+                });
+
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree", b =>
                 {
                     b.Property<int>("DegreeId")
@@ -260,8 +305,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -408,23 +453,23 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Address")
-                        .HasColumnType("int");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Email")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FaxNo")
-                        .HasColumnType("int");
+                    b.Property<string>("FaxNo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FocalPersonEmail")
-                        .HasColumnType("int");
+                    b.Property<string>("FocalPersonEmail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FocalPersonName")
-                        .HasColumnType("int");
+                    b.Property<string>("FocalPersonName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FocalPersonPhoneNo")
-                        .HasColumnType("int");
+                    b.Property<string>("FocalPersonPhoneNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InstitudeTypeId")
                         .HasColumnType("int");
@@ -438,11 +483,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("NameAbbreviation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProvienceId")
+                    b.Property<string>("PhoneNo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvienceId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Website")
                         .HasColumnType("nvarchar(max)");
@@ -450,6 +495,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("InstitudeId");
 
                     b.HasIndex("InstitudeTypeId");
+
+                    b.HasIndex("ProvienceId");
 
                     b.ToTable("Institude", "master");
                 });
@@ -506,6 +553,51 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("InstitudeType", "master");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference", b =>
+                {
+                    b.Property<int>("PreferenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DistrictThreshold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstitudeThreshold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("POMSDOMSBoardQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("POMSDOMSInstitudeQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SQSEVIQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SQSOMSQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeBacholar")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeIntermediate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeMS")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeMaster")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeMatrict")
+                        .HasColumnType("int");
+
+                    b.HasKey("PreferenceId");
+
+                    b.ToTable("Preference", "master");
+                });
+
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", b =>
                 {
                     b.Property<int>("ProvienceId")
@@ -525,6 +617,45 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("ProvienceId");
 
                     b.ToTable("Provience", "master");
+                });
+
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QoutaPreference", b =>
+                {
+                    b.Property<int>("QoutaPreferenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BacholarQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MasterQouta")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaBacholar1Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaDAE1Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaDAE2Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaDAE3Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaFAFSc1Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaFAFSc2Y")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QoutaMetric")
+                        .HasColumnType("int");
+
+                    b.HasKey("QoutaPreferenceId");
+
+                    b.ToTable("QoutaPreference", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", b =>
@@ -587,7 +718,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("DegreeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Description1")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InstitudeDepartmentId")
@@ -640,6 +771,48 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasIndex("ScholarshipFiscalYearId");
 
                     b.ToTable("DistrictQoutaBySchemeLevel", "scholar");
+                });
+
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
+                {
+                    b.Property<int>("PolicySRCForumId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEndorse")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PolicyDocumentAttachmentPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SRCMinutesAttachmentPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ScholarshipFiscalYearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PolicySRCForumId");
+
+                    b.HasIndex("ScholarshipFiscalYearId");
+
+                    b.ToTable("PolicySRCForum", "scholar");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
@@ -695,10 +868,16 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DOMS")
                         .HasColumnType("int");
 
                     b.Property<int>("POMS")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PolicySRCForumId")
                         .HasColumnType("int");
 
                     b.Property<int>("SQSEVIs")
@@ -710,21 +889,17 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScholarshipFiscalYearId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ScholarshipQouta")
                         .HasColumnType("int");
 
                     b.HasKey("SchemeLevelPolicyId");
 
-                    b.HasIndex("SchemeLevelId");
+                    b.HasIndex("PolicySRCForumId");
 
-                    b.HasIndex("ScholarshipFiscalYearId");
+                    b.HasIndex("SchemeLevelId");
 
                     b.ToTable("SchemeLevelPolicy", "scholar");
                 });
-            
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.Scholarship", b =>
                 {
@@ -769,6 +944,30 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ScholarshipFiscalYear", "scholar");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.SMSAPIService", b =>
+                {
+                    b.Property<int>("SMSAPIServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSAPIServiceId");
+
+                    b.ToTable("SMSAPIService", "sms");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -780,7 +979,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -789,7 +988,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -804,7 +1003,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -813,7 +1012,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -872,7 +1071,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", "Provience")
+                        .WithMany()
+                        .HasForeignKey("ProvienceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("InstitudeType");
+
+                    b.Navigation("Provience");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment", b =>
@@ -951,6 +1158,17 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ScholarshipFiscalYear");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
+                {
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                        .WithMany()
+                        .HasForeignKey("ScholarshipFiscalYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScholarshipFiscalYear");
+                });
+
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
                 {
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
@@ -972,23 +1190,22 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", b =>
                 {
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "PolicySRCForum")
+                        .WithMany()
+                        .HasForeignKey("PolicySRCForumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
-                        .WithMany()
-                        .HasForeignKey("ScholarshipFiscalYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("PolicySRCForum");
 
                     b.Navigation("SchemeLevel");
-
-                    b.Navigation("ScholarshipFiscalYear");
                 });
-            
 #pragma warning restore 612, 618
         }
     }

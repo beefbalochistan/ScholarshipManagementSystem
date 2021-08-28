@@ -1,57 +1,177 @@
-﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+@model ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree
 
 @{
     ViewData["Title"] = "Edit";
+    ViewBag.pageTitle = "Degree";
+    ViewBag.Title = "Degree";
+    ViewBag.pTitle = "Degree";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
 
-<h4>Degree</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DegreeId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+@if (true)
+{
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link" asp-action="Index" asp-controller="Degrees" aria-selected="true">
+                        <i class="bx bxs-grid-alt check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">List of Degree's</p>
+                    </a>
+                    <a class="nav-link active" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
+                        <i class="bx bxs-edit d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Edit Degree</p>
+                    </a>
+                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h4 class="mt-2 card-title">Edit Degree</h4>
+                                        </div>
+                                        @*<div class="col-sm-6">
+                                                <div class="text-sm-right">
+                                                    <a asp-action="Index" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mr-2">Back to List</a>
+                                                </div>
+                                            </div>*@<!-- end col-->
+                                    </div>
+                                </div>
+                                <form asp-action="Edit">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input type="hidden" asp-for="DegreeId" />
+                                            <div class="form-group">
+                                                <label asp-for="Name" class="control-label"></label>
+                                                <input asp-for="Name" class="form-control" tabindex="1" />
+                                                <span asp-validation-for="Name" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Duration" class="control-label"></label>
+                                                <input asp-for="Duration" class="form-control" tabindex="3" />
+                                                <span asp-validation-for="Duration" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Description" class="control-label"></label>
+                                                <textarea tabindex="5" class="input-large form-control" asp-for="Description" rows="4" placeholder="Enter a description ..."></textarea>
+                                                <span asp-validation-for="Description" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Code" class="control-label"></label>
+                                                <input asp-for="Code" class="form-control" tabindex="2" />
+                                                <span asp-validation-for="Code" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="ResultSystem" class="control-label"></label>
+                                                <select tabindex="4" asp-for="ResultSystem" class="form-control" asp-items="ViewBag.resultsystem"></select>
+                                                <span asp-validation-for="ResultSystem" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="QualificationLevelId" class="control-label"></label>
+                                                <select tabindex="6" asp-for="QualificationLevelId" class="form-control" asp-items="ViewBag.QualificationLevelId"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                                <h4 class="card-title mb-5">Support</h4>
+
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where does it come from?</h5>
+                                        <p class="text-muted">Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators.</p>
+                                    </div>
+                                </div>
+
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Why do we use it?</h5>
+                                        <p class="text-muted">Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
+                                    </div>
+                                </div>
+
+                                <div class="faq-box media">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">What is Lorem Ipsum?</h5>
+                                        <p class="text-muted">New common language will be more simple and regular than the existing European languages. It will be as simple as occidental.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
-                <span asp-validation-for="Duration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ResultSystem" class="control-label"></label>
-                <input asp-for="ResultSystem" class="form-control" />
-                <span asp-validation-for="ResultSystem" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QualificationLevelId" class="control-label"></label>
-                <select asp-for="QualificationLevelId" class="form-control" asp-items="ViewBag.QualificationLevelId"></select>
-                <span asp-validation-for="QualificationLevelId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

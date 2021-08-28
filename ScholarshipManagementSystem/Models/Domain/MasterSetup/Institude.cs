@@ -13,20 +13,30 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Key]
         public int InstitudeId { get; set; }
         [ForeignKey("InstitudeType")]
-        [Display(Name = "InstitudeType")]
+        [Display(Name = "Institude Type")]
         public int InstitudeTypeId { get; set; }
         public string Name { get; set; }
+        [Display(Name = "Abbreviation")]
         public string NameAbbreviation { get; set; }
         public string Website { get; set; }
-        public int Email { get; set; }
-        public int PhoneNo { get; set; }
-        public int FaxNo { get; set; }
-        public string ProvienceId { get; set; }        
-        public int Address { get; set; }
-        public int FocalPersonName { get; set; }
-        public int FocalPersonEmail { get; set; }
-        public int FocalPersonPhoneNo { get; set; }
+        public string Email { get; set; }
+        [Display(Name = "Phone#")]
+        public string PhoneNo { get; set; }
+        [Display(Name = "Fax#")]
+        public string FaxNo { get; set; }
+        [ForeignKey("Provience")]
+        [Display(Name = "Provience")]
+        public int ProvienceId { get; set; }        
+        public string Address { get; set; }
+        [Display(Name = "Focal Person Name")]
+        public string FocalPersonName { get; set; }
+        [Display(Name = "Focal Person Email")]
+        public string FocalPersonEmail { get; set; }
+        [Display(Name = "Focal Person Phone#")]
+        public string FocalPersonPhoneNo { get; set; }
+        [Display(Name = "Logo")]
         public string LogoPath { get; set; }
         public virtual InstitudeType InstitudeType { get; set; }
+        public virtual Provience Provience { get; set; }
     }
 }

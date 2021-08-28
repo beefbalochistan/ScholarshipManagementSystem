@@ -1,0 +1,61 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SMSAPIServiceAuditTrail</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TextLength)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TextLength)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DestinationNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DestinationNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Language)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Language)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ResponseType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ResponseType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ResponseMessage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ResponseMessage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SendOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SendOn)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SMSAPIServiceAuditTrailId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

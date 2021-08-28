@@ -63,7 +63,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,Description,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,Description1,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,Description,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,Description1,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
         {
             if (id != schemeLevel.SchemeLevelId)
             {

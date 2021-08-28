@@ -20,17 +20,17 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         @* <li>
-            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
-            <ul class="sub-menu" aria-expanded="true">
-                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
-            <ul class="sub-menu" aria-expanded="true">
-                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-            </ul>
-        </li>*@
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+                    </ul>
+                </li>*@
                         <li>
                             <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                                 <i class="bx bxs-yin-yang"></i>
@@ -42,7 +42,7 @@
                                 <i class="bx bxs-tag"></i>
                                 <span key="t-calendar">Scholarship Type</span>
                             </a>
-                        </li>                        
+                        </li>
                         <li>
                             <a asp-action="Index" asp-controller="SchemeLevelPolicies" class=" waves-effect">
                                 <i class="bx bxs-ruler"></i>
@@ -54,7 +54,7 @@
                                 <i class="bx bx-shield-quarter"></i>
                                 <span key="t-calendar">District Qouta</span>
                             </a>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
 
@@ -127,32 +127,34 @@
                     </a>
                 </li>
 
-                <li class="menu-title" key="t-menu">User Management</li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bxs-user"></i>
-                        <span key="t-invoices">User</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a asp-action="Index" asp-controller="Users" key="t-invoice-list">View Users</a></li>                                                
-                        @*<li><a asp-action="Index" asp-controller="DistrictDetails" key="t-invoice-detail">District Detail</a></li>*@
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bx-user-check"></i>
-                        <span key="t-layouts">Roles</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Create</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                {
+                    <li class="menu-title" key="t-menu">User Management</li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bxs-user"></i>
+                            <span key="t-invoices">User</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a asp-action="Index" asp-controller="Users" key="t-invoice-list">View Users</a></li>
+                            <li><a asp-area="Identity" asp-page="/Account/Register" key="t-invoice-detail">Register User</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-user-check"></i>
+                            <span key="t-layouts">Roles</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Create</a>
+                                <ul class="sub-menu" aria-expanded="true">
+                                    <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                }
                 <li class="menu-title" key="t-menu">Menu</li>
 
                 <li>

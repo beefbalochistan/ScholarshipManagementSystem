@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ScholarshipManagementSystem.Data
 {
-    public abstract class AuditableIdentityContext : IdentityDbContext
+    public abstract class AuditableIdentityContext : IdentityDbContext<ApplicationUser>
     {
         public AuditableIdentityContext(DbContextOptions options) : base(options)
         {

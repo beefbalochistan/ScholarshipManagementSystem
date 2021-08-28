@@ -1,0 +1,72 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>PolicySRCForum</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PolicySRCForumId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsEndorse" /> @Html.DisplayNameFor(model => model.IsEndorse)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="SRCMinutesAttachmentPath" class="control-label"></label>
+                <input asp-for="SRCMinutesAttachmentPath" class="form-control" />
+                <span asp-validation-for="SRCMinutesAttachmentPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PolicyDocumentAttachmentPath" class="control-label"></label>
+                <input asp-for="PolicyDocumentAttachmentPath" class="form-control" />
+                <span asp-validation-for="PolicyDocumentAttachmentPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherAttachment" class="control-label"></label>
+                <input asp-for="OtherAttachment" class="form-control" />
+                <span asp-validation-for="OtherAttachment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
+                <select asp-for="ScholarshipFiscalYearId" class="form-control" asp-items="ViewBag.ScholarshipFiscalYearId"></select>
+                <span asp-validation-for="ScholarshipFiscalYearId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

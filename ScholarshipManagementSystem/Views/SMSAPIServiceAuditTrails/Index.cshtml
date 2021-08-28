@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextLength)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestinationNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResponseType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResponseMessage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SendOn)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TextLength)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinationNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Language)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResponseType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResponseMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SendOn)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SMSAPIServiceAuditTrailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SMSAPIServiceAuditTrailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SMSAPIServiceAuditTrailId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

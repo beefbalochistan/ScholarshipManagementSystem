@@ -16,9 +16,9 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         [ForeignKey("SchemeLevel")]
         [Display(Name = "SchemeLevel")]
         public int SchemeLevelId { get; set; }
-        [ForeignKey("ScholarshipFiscalYear")]
-        [Display(Name = "ScholarshipFiscalYear")]
-        public int ScholarshipFiscalYearId { get; set; }
+        [ForeignKey("PolicySRCForum")]
+        [Display(Name = "PolicySRCForum")]
+        public int PolicySRCForumId { get; set; }
         [Display(Name = "Stipend")]
         public int Amount { get; set; }
         public int ScholarshipQouta { get; set; }
@@ -30,7 +30,8 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         public int SQSOMS { get; set; }
         [Display(Name = "SQS-EVIs")]
         public int SQSEVIs { get; set; }
-        public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public virtual PolicySRCForum PolicySRCForum { get; set; }
         public virtual SchemeLevel SchemeLevel { get; set; }
     }
 }

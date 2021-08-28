@@ -32,7 +32,10 @@
                 @Html.DisplayNameFor(model => model.SQSEVIs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PolicySRCForum)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SchemeLevel)
@@ -62,7 +65,10 @@
                 @Html.DisplayFor(modelItem => item.SQSEVIs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Code)
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PolicySRCForum.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SchemeLevel.Name)

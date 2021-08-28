@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ScholarshipManagementSystem.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +11,8 @@ namespace ScholarshipManagementSystem.Controllers
 [Authorize]
 public class UsersController : Controller
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    public UsersController(UserManager<IdentityUser> userManager)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public UsersController(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

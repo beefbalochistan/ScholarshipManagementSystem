@@ -1,8 +1,15 @@
 ﻿@page
 @model RegisterModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
 @{
     ViewData["Title"] = "Ragister";
-    Layout = "~/Views/_Shared/_BlankLayout.cshtml";
+    ViewData["Title"] = "Register";
+    ViewBag.pageTitle = "Management";
+    ViewBag.Title = "User Management";
+    ViewBag.pTitle = "Register";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
 <!-- owl.carousel css -->
@@ -70,51 +77,139 @@
     </div>*@
 
 
-<div>
-    <div class="container-fluid p-0">
-        <div class="row no-gutters">
-
-            <div class="col-xl-9">
-                <div class="auth-full-bg pt-lg-5 p-4">
-                    <div class="w-100">
-                        <div class="bg-overlay"></div>
-                        <div class="d-flex h-100 flex-column">
-
-                            <div class="p-4 mt-auto">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-7">
-                                        <div class="text-center">
-
-                                            <h4 class="mb-3"><i class="bx bxs-quote-alt-left text-primary h1 align-middle mr-3"></i><span class="text-primary">5k</span>+ Satisfied clients</h4>
-
-                                            <div dir="ltr">
-                                                <div class="owl-carousel owl-theme auth-review-carousel" id="auth-review-carousel">
-                                                    <div class="item">
-                                                        <div class="py-3">
-                                                            <p class="font-size-16 mb-4">" Fantastic theme with a ton of options. If you just want the HTML to integrate with your project, then this is the package. You can find the files in the 'dist' folder...no need to install git and all the other stuff the documentation talks about. "</p>
-
-                                                            <div>
-                                                                <h4 class="font-size-16 text-primary">Abs1981</h4>
-                                                                <p class="font-size-14 mb-0">- BEEF User</p>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="item">
-                                                        <div class="py-3">
-                                                            <p class="font-size-16 mb-4">" If Every Vendor on Envato are as supportive as ICT Section, Development with be a nice experience. You guys are Wonderful. Keep us the good work. "</p>
-
-                                                            <div>
-                                                                <h4 class="font-size-16 text-primary">nezerious</h4>
-                                                                <p class="font-size-14 mb-0">- BEEF User</p>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
+@if (true)
+{
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link" asp-action="Index" asp-controller="Users" aria-selected="true">
+                        <i class="bx bxs-grid-alt check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">List of Users</p>
+                    </a>
+                    <a class="nav-link active" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
+                        <i class="bx bx-list-plus d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Register New User</p>
+                    </a>
+                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h4 class="mt-2 card-title">Register New User</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form asp-route-returnUrl="/Users/Index" method="post">
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-4">
+                                            @*<form asp-route-returnUrl="@Model.ReturnUrl" method="post">*@
+                                            <div class="form-group">
+                                                <label asp-for="Input.FirstName"></label>
+                                                <input tabindex="1" asp-for="Input.FirstName" class="form-control" placeholder="Enter first name" />
+                                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="userpassword">Password</label>
+                                                <input tabindex="4" type="password" class="form-control" asp-for="Input.Password" id="userpassword" placeholder="Enter password">
+                                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                            </div>
+                                            <div>
+                                                <p class="mb-0">By registering you agree to the BEEF</p> <p><a href="#" class="text-primary">Terms of Use</a></p>
+                                            </div>
+                                            <div class="mt-4">
+                                                <button tabindex="6" class="btn btn-primary btn-block waves-effect waves-light" type="submit">Register User</button>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Input.LastName"></label>
+                                                <input asp-for="Input.LastName" class="form-control" placeholder="Enter last name" tabindex="2" />
+                                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="userpasswordc">Confirm Password</label>
+                                                <input tabindex="5" type="password" class="form-control" asp-for="Input.ConfirmPassword" id="userpasswordc" placeholder="Enter confirm password">
+                                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class=" col-md-4">
+                                            <div class="form-group">
+                                                <label for="useremail">Email</label>
+                                                <input tabindex="3" type="email" class="form-control" asp-for="Input.Email" id="useremail" placeholder="Enter email">
+                                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mt-5 text-center">
+                                <div>
+                                    <p class="mb-0">
+                                        ©
+                                        <script>document.write(new Date().getFullYear())</script> BEEF. Crafted with <i class="mdi mdi-heart text-danger"></i> by ICT Section
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                                <h4 class="card-title mb-5">Support</h4>
+
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where does it come from?</h5>
+                                        <p class="text-muted">Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators.</p>
+                                    </div>
+                                </div>
+
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Why do we use it?</h5>
+                                        <p class="text-muted">Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
+                                    </div>
+                                </div>
+
+                                <div class="faq-box media">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">What is Lorem Ipsum?</h5>
+                                        <p class="text-muted">New common language will be more simple and regular than the existing European languages. It will be as simple as occidental.</p>
                                     </div>
                                 </div>
                             </div>
@@ -122,109 +217,31 @@
                     </div>
                 </div>
             </div>
-            <!-- end col -->
-
-            <div class="col-xl-3">
-                <div class="auth-full-page-content p-md-5 p-4">
-                    <div class="w-100">
-
-                        <div class="d-flex flex-column h-100">
-                            <div class="mb-4 mb-md-5">
-                                <a href=@Url.Action("Home", "index2") class="d-block auth-logo">
-                                    <img src="~/assets/images/logo-dark.png" alt="" height="18" class="auth-logo-dark">
-                                    <img src="~/assets/images/logo-light.png" alt="" height="18" class="auth-logo-light">
-                                </a>
-                            </div>
-                            <div class="my-auto">
-
-                                <div>
-                                    <h5 class="text-primary">Register account</h5>
-                                    <p class="text-muted">Get your free BEEF account now.</p>
-                                </div>
-
-                                <div class="mt-4">
-                                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                                        <div asp-validation-summary="All" class="text-danger"></div>
-                                        <div class="form-group">
-                                            <label for="useremail">Email</label>
-                                            <input type="email" class="form-control" asp-for="Input.Email" id="useremail" placeholder="Enter email">
-                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                        </div>
-
-                                        @*<div class="form-group">
-                                                <label for="username">Username</label>
-                                                <input type="text" class="form-control" asp-for="Input.Email" id="username" placeholder="Enter username">
-                                            </div>*@
-
-                                        <div class="form-group">
-                                            <label for="userpassword">Password</label>
-                                            <input type="password" class="form-control" asp-for="Input.Password" id="userpassword" placeholder="Enter password">
-                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="userpasswordc">Confirm Password</label>
-                                            <input type="password" class="form-control" asp-for="Input.ConfirmPassword" id="userpasswordc" placeholder="Enter confirm password">
-                                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                                        </div>
-                                        <div>
-                                            <p class="mb-0">By registering you agree to the BEEF <a href="#" class="text-primary">Terms of Use</a></p>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">Register</button>
-                                        </div>
-
-                                        @*<div class="mt-4 text-center">
-                                                <h5 class="font-size-14 mb-3">Sign up using</h5>
-
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <a href="javascript::void()" class="social-list-item bg-primary text-white border-primary">
-                                                            <i class="mdi mdi-facebook"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a href="javascript::void()" class="social-list-item bg-info text-white border-info">
-                                                            <i class="mdi mdi-twitter"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a href="javascript::void()" class="social-list-item bg-danger text-white border-danger">
-                                                            <i class="mdi mdi-google"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-
-                                            </div>*@
-
-                                    </form>
-
-                                    @*<div class="mt-5 text-center">
-                                            <p>Already have an account ? <a href=@Url.Action("Index", "AuthLogin2") class="font-weight-medium text-primary"> Login</a> </p>
-                                        </div>*@
-
-                                </div>
-                            </div>
-
-                            <div class="mt-4 mt-md-5 text-center">
-                                <p class="mb-0">
-                                    ©
-                                    <script>document.write(new Date().getFullYear())</script> BEEF. Crafted with <i class="mdi mdi-heart text-danger"></i> by ICT Section
-                                </p>
-                            </div>
-                        </div>
-
-
+        </div>
+    </div>    
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
                     </div>
                 </div>
             </div>
-            <!-- end col -->
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- end row -->
     </div>
-    <!-- end container-fluid -->
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 }

@@ -51,6 +51,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         public IActionResult Create()
         {
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name");
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 10, 11).Select(x =>
+           new SelectListItem()
+           {
+               Text = x.ToString(),
+               Value = x.ToString()
+           }).OrderByDescending(a=>a.Value), "Value", "Text");
             return View();
         }
 
@@ -68,6 +74,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name", districtDetail.DistrictId);
+            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name");
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 10, 11).Select(x =>
+           new SelectListItem()
+           {
+               Text = x.ToString(),
+               Value = x.ToString()
+           }).OrderByDescending(a=>a.Value), "Value", "Text");
             return View(districtDetail);
         }
 
@@ -85,6 +98,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name", districtDetail.DistrictId);
+            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name");
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 10, 11).Select(x =>
+           new SelectListItem()
+           {
+               Text = x.ToString(),
+               Value = x.ToString()
+           }).OrderByDescending(a=>a.Value), "Value", "Text",districtDetail.CensesYear);
             return View(districtDetail);
         }
 
@@ -121,6 +141,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name", districtDetail.DistrictId);
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 10, 11).Select(x =>
+           new SelectListItem()
+           {
+               Text = x.ToString(),
+               Value = x.ToString()
+           }).OrderByDescending(a=>a.Value), "Value", "Text", districtDetail.CensesYear);
             return View(districtDetail);
         }
 

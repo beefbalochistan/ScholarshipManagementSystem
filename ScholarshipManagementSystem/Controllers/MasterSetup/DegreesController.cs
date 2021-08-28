@@ -50,6 +50,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: Degrees/Create
         public IActionResult Create()
         {
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Marks", Value = "Marks" },
+                new SelectListItem{ Text="GPA", Value = "GPA" },                
+
+            };
+            ViewBag.resultsystem = new SelectList(list, "Value","Text");
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Code");
             return View();
         }
@@ -67,6 +74,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Marks", Value = "Marks" },
+                new SelectListItem{ Text="GPA", Value = "GPA" },
+
+            };
+            ViewBag.resultsystem = new SelectList(list, "Value", "Text");
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Code", degree.QualificationLevelId);
             return View(degree);
         }
@@ -84,6 +98,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Marks", Value = "Marks" },
+                new SelectListItem{ Text="GPA", Value = "GPA" },
+
+            };
+            ViewBag.resultsystem = new SelectList(list, "Value", "Text", degree.ResultSystem);
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Code", degree.QualificationLevelId);
             return View(degree);
         }
@@ -120,6 +141,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Marks", Value = "Marks" },
+                new SelectListItem{ Text="GPA", Value = "GPA" },
+
+            };
+            ViewBag.resultsystem = new SelectList(list, "Value", "Text", degree.ResultSystem);
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Code", degree.QualificationLevelId);
             return View(degree);
         }

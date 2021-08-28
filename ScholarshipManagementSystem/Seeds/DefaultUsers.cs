@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScholarshipManagementSystem.Constants;
+using ScholarshipManagementSystem.Models;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,11 +9,13 @@ namespace ScholarshipManagementSystem.Seeds
 {
     public static class DefaultUsers
     {
-        public static async Task SeedBasicUserAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedBasicUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Default User
-            var defaultUser = new IdentityUser
+            var defaultUser = new ApplicationUser
             {
+                FirstName = "basic",
+                LastName = "user",
                 UserName = "basicuser@gmail.com",
                 Email = "basicuser@gmail.com",
                 EmailConfirmed = true,
@@ -29,11 +32,13 @@ namespace ScholarshipManagementSystem.Seeds
             }
         }
 
-        public static async Task SeedSuperAdminAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedSuperAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Default User
-            var defaultUser = new IdentityUser
+            var defaultUser = new ApplicationUser
             {
+                FirstName = "super",
+                LastName = "admin",
                 UserName = "superadmin@gmail.com",
                 Email = "superadmin@gmail.com",
                 EmailConfirmed = true,

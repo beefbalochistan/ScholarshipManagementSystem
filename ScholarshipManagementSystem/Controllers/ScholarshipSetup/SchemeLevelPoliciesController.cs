@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 {
+    [AllowAnonymous]
     public class SchemeLevelPoliciesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +24,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // GET: SchemeLevelPolicies
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SchemeLevelPolicy.Include(s => s.SchemeLevel).Include(s => s.ScholarshipFiscalYear);
+            var applicationDbContext = _context.SchemeLevelPolicy.Include(s => s.PolicySRCForum).Include(s => s.SchemeLevel);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,8 +37,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             }
 
             var schemeLevelPolicy = await _context.SchemeLevelPolicy
+                .Include(s => s.PolicySRCForum)
                 .Include(s => s.SchemeLevel)
-                .Include(s => s.ScholarshipFiscalYear)
                 .FirstOrDefaultAsync(m => m.SchemeLevelPolicyId == id);
             if (schemeLevelPolicy == null)
             {
@@ -49,8 +51,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // GET: SchemeLevelPolicies/Create
         public IActionResult Create()
         {
+            ViewData["PolicySRCForumId"] = new SelectList(_context.Set<PolicySRCForum>(), "PolicySRCForumId", "Name");
             ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name");
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code");
             return View();
         }
 
@@ -59,7 +61,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelPolicyId,SchemeLevelId,ScholarshipFiscalYearId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs")] SchemeLevelPolicy schemeLevelPolicy)
+        public async Task<IActionResult> Create([Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +69,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PolicySRCForumId"] = new SelectList(_context.Set<PolicySRCForum>(), "PolicySRCForumId", "Name", schemeLevelPolicy.PolicySRCForumId);
             ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", schemeLevelPolicy.SchemeLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", schemeLevelPolicy.ScholarshipFiscalYearId);
             return View(schemeLevelPolicy);
         }
 
@@ -85,8 +87,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 return NotFound();
             }
+            ViewData["PolicySRCForumId"] = new SelectList(_context.Set<PolicySRCForum>(), "PolicySRCForumId", "Name", schemeLevelPolicy.PolicySRCForumId);
             ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", schemeLevelPolicy.SchemeLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", schemeLevelPolicy.ScholarshipFiscalYearId);
             return View(schemeLevelPolicy);
         }
 
@@ -95,7 +97,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelPolicyId,SchemeLevelId,ScholarshipFiscalYearId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs")] SchemeLevelPolicy schemeLevelPolicy)
+        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
         {
             if (id != schemeLevelPolicy.SchemeLevelPolicyId)
             {
@@ -122,8 +124,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PolicySRCForumId"] = new SelectList(_context.Set<PolicySRCForum>(), "PolicySRCForumId", "Name", schemeLevelPolicy.PolicySRCForumId);
             ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", schemeLevelPolicy.SchemeLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", schemeLevelPolicy.ScholarshipFiscalYearId);
             return View(schemeLevelPolicy);
         }
 
@@ -136,8 +138,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             }
 
             var schemeLevelPolicy = await _context.SchemeLevelPolicy
+                .Include(s => s.PolicySRCForum)
                 .Include(s => s.SchemeLevel)
-                .Include(s => s.ScholarshipFiscalYear)
                 .FirstOrDefaultAsync(m => m.SchemeLevelPolicyId == id);
             if (schemeLevelPolicy == null)
             {

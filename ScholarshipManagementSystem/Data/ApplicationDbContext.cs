@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Models.Domain.MasterSetup;
 using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
+using ScholarshipManagementSystem.Models;
+using ScholarshipManagementSystem.Models.Domain.AutoSMSApi;
 
 namespace ScholarshipManagementSystem.Data
 {
@@ -28,5 +30,10 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment> SchemeLevelPayment { get; set; }        
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel> DistrictQoutaBySchemeLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy> SchemeLevelPolicy { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum> PolicySRCForum { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference> Preference { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.QoutaPreference> QoutaPreference { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.SMSAPIService> SMSAPIService { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail> SMSAPIServiceAuditTrail { get; set; }
     }
 }

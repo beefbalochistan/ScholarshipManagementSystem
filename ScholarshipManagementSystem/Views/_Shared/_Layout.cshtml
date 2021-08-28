@@ -10,6 +10,8 @@
 
 <body data-topbar="dark">
 
+    <!-- Loader -->
+    <div id="preloader"> <div id="status"> <div class="spinner-chase"> <div class="chase-dot"></div> <div class="chase-dot"></div> <div class="chase-dot"></div> <div class="chase-dot"></div> <div class="chase-dot"></div> <div class="chase-dot"></div> </div> </div> </div>
     <!-- Begin page -->
     <div id="layout-wrapper">
         @await Html.PartialAsync("~/Views/_Shared/_topbar.cshtml")
@@ -83,6 +85,11 @@
 
     <script src="~/assets/js/app.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $("#preloader").hide();
+        });
+    </script>
 </body>
 
 </html>

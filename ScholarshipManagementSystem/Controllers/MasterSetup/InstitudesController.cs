@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
 using ScholarshipManagementSystem.Models.Domain.MasterSetup;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
@@ -24,7 +28,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: Institudes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Institude.Include(i => i.InstitudeType);
+            var applicationDbContext = _context.Institude.Include(i => i.InstitudeType).Include(i => i.Provience);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -51,23 +55,50 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         public IActionResult Create()
         {
             ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name");
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name");
             return View();
         }
-
+     
         // POST: Institudes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude)
+        public async Task<IActionResult> Create([Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude, IFormFile Attachment)
         {
             if (ModelState.IsValid)
             {
+                if (Attachment != null && Attachment.Length > 0)
+                {
+                    var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Institutes\\Logo\\");
+                    string fileName = Path.GetFileName(Attachment.FileName);
+                    fileName = fileName.Replace("&", "n");
+                    fileName = fileName.Replace(" ", "");
+                    fileName = fileName.Replace("#", "H");
+                    fileName = fileName.Replace("(", "");
+                    fileName = fileName.Replace(")", "");
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 1000);
+                    fileName = "Logo" + randomNumber.ToString() + fileName;
+                    institude.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
+                    string sPath = Path.Combine(rootPath);
+                    if (!System.IO.Directory.Exists(sPath))
+                    {
+                        System.IO.Directory.CreateDirectory(sPath);
+                    }
+                    string FullPathWithFileName = Path.Combine(sPath, fileName);
+                    //-----------------------------------
+                    using var image = Image.Load(Attachment.OpenReadStream());
+                    image.Mutate(x => x.Resize(60, 60));
+                    image.Save(FullPathWithFileName);
+                }
                 _context.Add(institude);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
             return View(institude);
         }
 
@@ -85,6 +116,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
             ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
             return View(institude);
         }
 
@@ -93,7 +125,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude)
+        public async Task<IActionResult> Edit(int id, [Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude, IFormFile Attachment)
         {
             if (id != institude.InstitudeId)
             {
@@ -104,6 +136,31 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 try
                 {
+                    if (Attachment != null && Attachment.Length > 0)
+                    {
+                        var rootPath = Path.Combine(
+                            Directory.GetCurrentDirectory(), "wwwroot\\Institutes\\Logo\\");
+                        string fileName = Path.GetFileName(Attachment.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Logo" + randomNumber.ToString() + fileName;
+                        institude.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        //-----------------------------------
+                        using var image = Image.Load(Attachment.OpenReadStream());
+                        image.Mutate(x => x.Resize(60, 60));
+                        image.Save(FullPathWithFileName);
+                    }
                     _context.Update(institude);
                     await _context.SaveChangesAsync();
                 }
@@ -121,6 +178,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
             return View(institude);
         }
 

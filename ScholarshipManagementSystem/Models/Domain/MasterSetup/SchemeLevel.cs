@@ -10,8 +10,9 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Key]
         public int SchemeLevelId { get; set; }
         [Required]
-        public string Name { get; set; }       
-        public string Description { get; set; }
+        public string Name { get; set; }
+        [Display(Name = "Description")]
+        public string Description1 { get; set; }
         public string Code { get; set; }
         [ForeignKey("Scheme")]
         [Display(Name = "Scheme")]
