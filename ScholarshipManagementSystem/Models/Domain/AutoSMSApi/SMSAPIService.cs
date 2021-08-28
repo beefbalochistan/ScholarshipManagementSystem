@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ScholarshipManagementSystem.Models
+namespace ScholarshipManagementSystem.Models.Domain.AutoSMSApi
 {
     [Table("SMSAPIService", Schema = "sms")]
     public class SMSAPIService
