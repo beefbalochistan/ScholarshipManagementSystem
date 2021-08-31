@@ -37,7 +37,14 @@ public static class Permissions
         public const string Edit = "Permissions.District.Edit";        
         public const string Delete = "Permissions.District.Delete";        
     }
-    public static class ScholarshipType
+        public static class DistrictDetail
+        {
+            public const string View = "Permissions.DistrictDetail.View";
+            public const string Create = "Permissions.DistrictDetail.Create";
+            public const string Edit = "Permissions.DistrictDetail.Edit";
+            public const string Delete = "Permissions.DistrictDetail.Delete";
+        }
+        public static class ScholarshipType
     {
         public const string View = "Permissions.ScholarshipType.View";
         public const string Create = "Permissions.ScholarshipType.Create";
@@ -107,5 +114,19 @@ public static class Permissions
             public const string Edit = "Permissions.SchemeLevel.Edit";
             public const string Delete = "Permissions.SchemeLevel.Delete";
         }
+        public static class PolicySRCForum
+        {
+            public const string View = "Permissions.PolicySRCForum.View";
+            public const string Create = "Permissions.PolicySRCForum.Create";
+            public const string Edit = "Permissions.PolicySRCForum.Edit";
+            public const string Delete = "Permissions.PolicySRCForum.Delete";
+        }
+        public static class DistrictQoutaBySchemeLevel
+        {
+            public const string View = "Permissions.DistrictQoutaBySchemeLevel.View";
+            public const string Create = "Permissions.DistrictQoutaBySchemeLevel.Create";
+            public const string Edit = "Permissions.DistrictQoutaBySchemeLevel.Edit";
+            public const string Delete = "Permissions.DistrictQoutaBySchemeLevel.Delete";
+        }   
     }
 }

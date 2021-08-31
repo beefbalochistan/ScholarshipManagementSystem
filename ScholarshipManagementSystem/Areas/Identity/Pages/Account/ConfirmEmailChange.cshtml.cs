@@ -52,14 +52,14 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
             // In our UI email and user name are one and the same, so when we update the email
             // we need to update the user name.,
             // In BEEF we seprate email and user name, username will be the before @
-            MailAddress address = new MailAddress(email);
+            /*MailAddress address = new MailAddress(email);
             string userName = address.User;
             var setUserNameResult = await _userManager.SetUserNameAsync(user, userName);
             if (!setUserNameResult.Succeeded)
             {
                 StatusMessage = "Error changing user name.";
                 return Page();
-            }
+            }*/
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Thank you for confirming your email change.";

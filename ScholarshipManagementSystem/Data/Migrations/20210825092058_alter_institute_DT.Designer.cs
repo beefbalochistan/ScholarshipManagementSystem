@@ -576,9 +576,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Provience", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QoutaPreference", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.PreferencesSlot", b =>
                 {
-                    b.Property<int>("QoutaPreferenceId")
+                    b.Property<int>("PreferencesSlotId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -610,9 +610,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("QoutaMetric")
                         .HasColumnType("int");
 
-                    b.HasKey("QoutaPreferenceId");
+                    b.HasKey("PreferencesSlotId");
 
-                    b.ToTable("QoutaPreference", "master");
+                    b.ToTable("PreferencesSlot", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", b =>

@@ -32,11 +32,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QoutaPreference",
+                name: "PreferencesSlot",
                 schema: "master",
                 columns: table => new
                 {
-                    QoutaPreferenceId = table.Column<int>(type: "int", nullable: false)
+                    PreferencesSlotId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QoutaMetric = table.Column<int>(type: "int", nullable: false),
                     QoutaFAFSc1Y = table.Column<int>(type: "int", nullable: false),
@@ -50,7 +50,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QoutaPreference", x => x.QoutaPreferenceId);
+                    table.PrimaryKey("PK_PreferencesSlot", x => x.PreferencesSlotId);
                 });
 
             migrationBuilder.CreateTable(
@@ -144,7 +144,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 schema: "master");
 
             migrationBuilder.DropTable(
-                name: "QoutaPreference",
+                name: "PreferencesSlot",
                 schema: "master");
 
             migrationBuilder.DropTable(

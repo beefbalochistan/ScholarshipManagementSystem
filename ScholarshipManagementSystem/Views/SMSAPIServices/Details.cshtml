@@ -1,43 +1,411 @@
 ﻿@model ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIService
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "SMS";
+    ViewBag.Title = "Service Analysis";
+    ViewBag.pTitle = "Service Analysis";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+@if (true)
+{
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link" asp-action="Index" asp-controller="SMSAPIServices" aria-selected="true">
+                        <i class="bx bxs-grid-alt check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">List of Services</p>
+                    </a>
+                    <a class="nav-link active" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
+                        <i class="bx bx-list-plus d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Service Detail</p>
+                    </a>
+                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">Service Detail</h4>
+                                </div>
+                                <div>
+                                    <dl class="row">
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Username)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.Username)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Password)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.Password)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.SendSMSURL)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.SendSMSURL)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.BalanceEnquiryURL)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.BalanceEnquiryURL)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.PackageExpiryURL)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.PackageExpiryURL)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Mask)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.Mask)
+                                        </dd>
+                                        <dt class="col-sm-2">
+                                            @Html.DisplayNameFor(model => model.Description)
+                                        </dt>
+                                        <dd class="col-sm-10">
+                                            @Html.DisplayFor(model => model.Description)
+                                        </dd>                                        
+                                    </dl>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="button-items">
+                                            <button onclick="checkBalanceEnquiry()" type="button" class="btn btn-primary" id="showtoast1">Check Balance Enquiry</button>
+                                        </div>
+                                        <div id="checkBalanceResponse"></div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="button-items">
+                                            <button onclick="checkPackageExpiry()" type="button" class="btn btn-primary" id="showtoast2">Check Package Expiry</button>
+                                        </div>
+                                        <div id="checkPackageExpiryResponse"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">Support</h4>
+                                </div>
 
-<h1>Details</h1>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where does it come from?</h5>
+                                        <p class="text-muted">Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators.</p>
+                                    </div>
+                                </div>
 
-<div>
-    <h4>SMSAPIService</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Mask)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Mask)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Why do we use it?</h5>
+                                        <p class="text-muted">Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">Where can I get some?</h5>
+                                        <p class="text-muted">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
+                                    </div>
+                                </div>
+
+                                <div class="faq-box media">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">What is Lorem Ipsum?</h5>
+                                        <p class="text-muted">New common language will be more simple and regular than the existing European languages. It will be as simple as occidental.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+
+<div class="row" style="display:none">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="form-group">
+                                    <label class="control-label">Title</label>
+                                    <input id="title" type="text" class="input-large form-control" value="BEEF MIS" placeholder="Enter a title ..." />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Message</label>
+                                    <textarea class="input-large form-control" id="message" rows="3"  placeholder="Enter a message ...">Request has been submitted successfully!</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group my-4">
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="closeButton" value="checked">
+                                <label class="custom-control-label" for="closeButton">Close Button</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="addBehaviorOnToastClick" value="checked">
+                                <label class="custom-control-label" for="addBehaviorOnToastClick">Add behavior on toast click</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="debugInfo" value="checked">
+                                <label class="custom-control-label" for="debugInfo">Debug</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="progressBar" value="checked">
+                                <label class="custom-control-label" for="progressBar">Progress Bar</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="preventDuplicates" value="checked">
+                                <label class="custom-control-label" for="preventDuplicates">Prevent Duplicates</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="addClear" value="checked">
+                                <label class="custom-control-label" for="addClear">Add button to force clearing a toast, ignoring focus</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input input-mini" id="newestOnTop" value="checked">
+                                <label class="custom-control-label" for="newestOnTop">Newest on top</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <div class="control-group" id="toastTypeGroup">
+                            <div class="controls mb-4">
+                                <label>Toast Type</label>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio1" name="radio" class="custom-control-input" value="success" checked>
+                                    <label class="custom-control-label" for="radio1">Success</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio2" name="radio" class="custom-control-input" value="info">
+                                    <label class="custom-control-label" for="radio2">Info</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio3" name="radio" class="custom-control-input" value="warning">
+                                    <label class="custom-control-label" for="radio3">Warning</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio4" name="radio" class="custom-control-input" value="error">
+                                    <label class="custom-control-label" for="radio4">Error</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="control-group" id="positionGroup">
+                            <div class="controls mb-4">
+                                <label>Position</label>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio5" name="positions" class="custom-control-input" value="toast-top-right" checked />
+                                    <label class="custom-control-label" for="radio5">Top Right</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio6" name="positions" class="custom-control-input" value="toast-bottom-right" />
+                                    <label class="custom-control-label" for="radio6">Bottom Right</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio7" name="positions" class="custom-control-input" value="toast-bottom-left" />
+                                    <label class="custom-control-label" for="radio7">Bottom Left</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio8" name="positions" class="custom-control-input" value="toast-top-left" />
+                                    <label class="custom-control-label" for="radio8">Top Left</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio9" name="positions" class="custom-control-input" value="toast-top-full-width" />
+                                    <label class="custom-control-label" for="radio9">Top Full Width</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio10" name="positions" class="custom-control-input" value="toast-bottom-full-width" />
+                                    <label class="custom-control-label" for="radio10">Bottom Full Width</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio11" name="positions" class="custom-control-input" value="toast-top-center" />
+                                    <label class="custom-control-label" for="radio11">Top Center</label>
+                                </div>
+
+                                <div class="custom-control custom-radio mb-2">
+                                    <input type="radio" id="radio12" name="positions" class="custom-control-input" value="toast-bottom-center" />
+                                    <label class="custom-control-label" for="radio12">Bottom Center</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="form-group">
+                                    <label for="showEasing">Show Easing</label>
+                                    <input id="showEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="swing" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="hideEasing">Hide Easing</label>
+                                    <input id="hideEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="linear" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="showMethod">Show Method</label>
+                                    <input id="showMethod" type="text" placeholder="show, fadeIn, slideDown" class="input-mini form-control" value="fadeIn" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="hideMethod">Hide Method</label>
+                                    <input id="hideMethod" type="text" placeholder="hide, fadeOut, slideUp" class="input-mini form-control" value="fadeOut" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="form-group">
+                                    <label for="showDuration">Show Duration</label>
+                                    <input id="showDuration" type="text" placeholder="ms" class="input-mini form-control" value="300" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="hideDuration">Hide Duration</label>
+                                    <input id="hideDuration" type="text" placeholder="ms" class="input-mini form-control" value="1000" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="timeOut">Time out</label>
+                                    <input id="timeOut" type="text" placeholder="ms" class="input-mini form-control" value="5000" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="extendedTimeOut">Extended time out</label>
+                                    <input id="extendedTimeOut" type="text" placeholder="ms" class="input-mini form-control" value="1000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="button-items">
+                            <button type="button" class="btn btn-primary" id="showtoast">Show Toast</button>
+                            <button type="button" class="btn btn-danger" id="cleartoasts">Clear Toasts</button>
+                            <button type="button" class="btn btn-danger" id="clearlasttoast">Clear Last Toast</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <pre id='toastrOptions' class="toastr-options"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.SMSAPIServiceId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    function checkBalanceEnquiry() {
+		$("#showtoast1").attr("disabled", true);
+        $.get('@Url.Action("BalanceEnquiry")', function (content) {
+            $("#checkBalanceResponse").html(content);
+            $("#showtoast1").attr("disabled", false);
+            });
+    };
+
+    function checkPackageExpiry() {
+		$("#showtoast2").attr("disabled", true);
+        $.get('@Url.Action("PackageExpiry")', function (content) {
+            $("#checkPackageExpiryResponse").html(content);
+            $("#showtoast2").attr("disabled", false);
+        });
+    };
+</script>

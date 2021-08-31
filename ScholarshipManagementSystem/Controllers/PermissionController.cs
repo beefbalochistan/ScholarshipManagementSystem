@@ -27,6 +27,19 @@ public class PermissionController : Controller
         /*allPermissions.GetPermissions(typeof(Permissions.Country), roleId);*/
         allPermissions.GetPermissions(typeof(Permissions.Division), roleId);
         allPermissions.GetPermissions(typeof(Permissions.District), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.DistrictDetail), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.ScholarshipType), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.ScholarshipFiscalYear), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Degree), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Discipline), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.InstitudeType), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Institude), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.InstitudeDepartment), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.QualificationLevel), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Scheme), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.SchemeLevel), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.PolicySRCForum), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.DistrictQoutaBySchemeLevel), roleId);
         var role = await _roleManager.FindByIdAsync(roleId);
         model.RoleId = roleId;
         var claims = await _roleManager.GetClaimsAsync(role);

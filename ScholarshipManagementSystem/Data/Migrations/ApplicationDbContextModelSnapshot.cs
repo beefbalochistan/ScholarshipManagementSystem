@@ -263,6 +263,39 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIService", b =>
+                {
+                    b.Property<int>("SMSAPIServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BalanceEnquiryURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageExpiryURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendSMSURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSAPIServiceId");
+
+                    b.ToTable("SMSAPIService", "sms");
+                });
+
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail", b =>
                 {
                     b.Property<int>("SMSAPIServiceAuditTrailId")
@@ -274,6 +307,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageFor")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResponseMessage")
@@ -290,6 +326,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<int>("TextLength")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SMSAPIServiceAuditTrailId");
 
@@ -619,9 +658,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Provience", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QoutaPreference", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.PreferencesSlot", b =>
                 {
-                    b.Property<int>("QoutaPreferenceId")
+                    b.Property<int>("PreferencesSlotId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -653,9 +692,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("QoutaMetric")
                         .HasColumnType("int");
 
-                    b.HasKey("QoutaPreferenceId");
+                    b.HasKey("PreferencesSlotId");
 
-                    b.ToTable("QoutaPreference", "master");
+                    b.ToTable("PreferencesSlot", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", b =>
@@ -679,6 +718,27 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("QualificationLevelId");
 
                     b.ToTable("QualificationLevel", "master");
+                });
+
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage", b =>
+                {
+                    b.Property<int>("SMSMassageTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Massage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SMSType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSMassageTypeId");
+
+                    b.ToTable("SMSMassage", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", b =>
@@ -942,30 +1002,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("ScholarshipFiscalYearId");
 
                     b.ToTable("ScholarshipFiscalYear", "scholar");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.SMSAPIService", b =>
-                {
-                    b.Property<int>("SMSAPIServiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mask")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SMSAPIServiceId");
-
-                    b.ToTable("SMSAPIService", "sms");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

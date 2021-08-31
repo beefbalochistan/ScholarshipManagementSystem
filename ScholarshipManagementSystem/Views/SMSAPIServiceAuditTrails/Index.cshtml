@@ -1,72 +1,229 @@
 ﻿@model IEnumerable<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
 
 @{
     ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "SMS";
+    ViewBag.Title = "Reporting";
+    ViewBag.pTitle = "Reporting";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+@if (true)
+{
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
+                        <i class="bx bxs-grid-alt d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">List of SMS Report</p>
+                    </a>                  
+                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">List of SMS Report</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.MessageFor)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.DestinationNumber)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.SendOn)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.ResponseMessage)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.UserId)
+                                                </th>
+                                                <th>View Detail</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.MessageFor)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DestinationNumber)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SendOn)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ResponseMessage)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.UserId)
+                                                </td>
+                                                <td>
+                                                    <a asp-action="Details" class="btn btn-primary btn-sm btn-rounded" asp-route-id="@item.SMSAPIServiceAuditTrailId">View Details</a>
+                                                </td>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TextLength)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Language)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResponseType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResponseMessage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SendOn)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TextLength)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResponseType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResponseMessage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SendOn)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SMSAPIServiceAuditTrailId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SMSAPIServiceAuditTrailId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SMSAPIServiceAuditTrailId">Delete</a>
-            </td>
-        </tr>
+                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                {
+                                                    <td>
+                                                        <a asp-action="Edit" asp-route-id="@item.SMSAPIServiceAuditTrailId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                    </td>
+                                                }
+
+                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+                                                {
+                                                    <td>
+                                                        <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.SMSAPIServiceAuditTrailId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                    </td>
+                                                }
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">SMS Count</h4>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">SMS Count For English</h5>
+                                        <p class="text-muted">Following are the SMS charging details based on sms length.</p>
+                                        <ul>
+                                            <li>a) Total length allowed is 612 characters (4 SMS)</li>
+                                            <li>b) 1st SMS till 160 characters.</li>
+                                            <li>c) 2nd SMS till 306 characters</li>
+                                            <li>d) 3rd SMS till 459 characters</li>
+                                            <li>e) 4th SMS till 612 characters</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">SMS Count For Urdu/Unicode/Other Languages</h5>
+                                        <p class="text-muted">Following are the SMS charging details based on sms length.</p>
+                                        <ul>
+                                            <li>a) Total length allowed is 268 characters (4 SMS)</li>
+                                            <li>b) 1st SMS till 70 characters</li>
+                                            <li>c) 2nd SMS till 134 characters</li>
+                                            <li>d) 3rd SMS till 201 characters</li>
+                                            <li>e) 4th SMS till 268 characters</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">Responses & Messages</h4>
+                                </div>
+                                <div class="faq-box media mb-4">
+                                    <div class="faq-icon mr-3">
+                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="font-size-15">On request submission following are the responses those can be returned by the api service</h5>                                        
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Response</th>
+                                                    <th>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="color:red">Invalid Paramenters</td>
+                                                    <td>URL has invalid parameters</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Invalid Username or Password</td>
+                                                    <td>URL has invalid username or password</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Invalid Short Code</td>
+                                                    <td>URL has invalid masking</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Invalid Number</td>
+                                                    <td>URL has invalid number</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Your Package Has Been Expire</td>
+                                                    <td>Package expires</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Insufficent Balance</td>
+                                                    <td>Insufficient balance</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:forestgreen">SMS Sent Successfully</td>
+                                                    <td>ISMS Sent Successfully</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:red">Failed To Send SMS</td>
+                                                    <td>Insufficient balancSMS failed to send, unknown error</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

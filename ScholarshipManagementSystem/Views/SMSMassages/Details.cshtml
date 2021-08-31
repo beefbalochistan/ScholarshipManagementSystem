@@ -1,0 +1,37 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SMSMassage</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SMSType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SMSType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Massage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Massage)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SMSMassageTypeId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -32,8 +32,9 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy> SchemeLevelPolicy { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum> PolicySRCForum { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference> Preference { get; set; }
-        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.QoutaPreference> QoutaPreference { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.PreferencesSlot> PreferencesSlot { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIService> SMSAPIService { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail> SMSAPIServiceAuditTrail { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage> SMSMassage { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ScholarshipManagementSystem.Common;
 using ScholarshipManagementSystem.Data;
 using ScholarshipManagementSystem.Models.Domain.AutoSMSApi;
 
@@ -42,7 +43,23 @@ namespace ScholarshipManagementSystem.Controllers.AutoSMSApi
 
             return View(sMSAPIService);
         }
-
+        //[HttpPost]
+        public ActionResult BalanceEnquiry()
+        {
+            SMSAPIService ConfigObj = new SMSAPIService();
+            ConfigObj = _context.SMSAPIService.Find(1);
+            SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.BalanceEnquiryURL);                        
+            ViewBag.message =  SMSObj.BalanceEnquiry();
+            return PartialView();
+        }
+        public ActionResult PackageExpiry()
+        {
+            SMSAPIService ConfigObj = new SMSAPIService();
+            ConfigObj = _context.SMSAPIService.Find(1);
+            SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.PackageExpiryURL);
+            ViewBag.message = SMSObj.BalanceEnquiry();
+            return PartialView();
+        }
         // GET: SMSAPIServices/Create
         public IActionResult Create()
         {
@@ -54,7 +71,7 @@ namespace ScholarshipManagementSystem.Controllers.AutoSMSApi
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SMSAPIServiceId,Username,Password,Mask,Description")] SMSAPIService sMSAPIService)
+        public async Task<IActionResult> Create([Bind("SMSAPIServiceId,Username,Password,SendSMSURL,BalanceEnquiryURL,PackageExpiryURL,Mask,Description")] SMSAPIService sMSAPIService)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +103,7 @@ namespace ScholarshipManagementSystem.Controllers.AutoSMSApi
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SMSAPIServiceId,Username,Password,Mask,Description")] SMSAPIService sMSAPIService)
+        public async Task<IActionResult> Edit(int id, [Bind("SMSAPIServiceId,Username,Password,SendSMSURL,BalanceEnquiryURL,PackageExpiryURL,Mask,Description")] SMSAPIService sMSAPIService)
         {
             if (id != sMSAPIService.SMSAPIServiceId)
             {
