@@ -23,10 +23,16 @@
                 @Html.DisplayNameFor(model => model.MPI)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DistrictPopulationSlot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DistrictMPISlot)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.District)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+                @Html.DisplayNameFor(model => model.SRCForum)
             </th>
             <th></th>
         </tr>
@@ -44,10 +50,16 @@
                 @Html.DisplayFor(modelItem => item.MPI)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DistrictPopulationSlot)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DistrictMPISlot)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.District.Code)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Code)
+                @Html.DisplayFor(modelItem => item.SRCForum.Code)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DistrictQoutaBySchemeLevelId">Edit</a> |

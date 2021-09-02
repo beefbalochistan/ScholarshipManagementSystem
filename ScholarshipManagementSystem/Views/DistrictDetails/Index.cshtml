@@ -58,17 +58,20 @@
                                                     @Html.DisplayNameFor(model => model.Population)
                                                 </th>
                                                 <th>
+                                                    @Html.DisplayNameFor(model => model.CensesYear)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.MPIScore)
+                                                </th>
+                                                <th>
                                                     @Html.DisplayNameFor(model => model.MaleRatio)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.FemaleRatio)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.FemaleRatio)
+                                                    @Html.DisplayNameFor(model => model.GrowthRate)
                                                 </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.FemaleRatio)
-                                                </th>                                                
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <th>Edit</th>
@@ -90,29 +93,31 @@
                                                     @Html.DisplayFor(modelItem => item.Population)
                                                 </td>
                                                 <td>
+                                                    @Html.DisplayFor(modelItem => item.CensesYear)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.MPIScore)
+                                                </td>
+                                                <td>
                                                     @Html.DisplayFor(modelItem => item.MaleRatio)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.FemaleRatio)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.CensesYear)
-                                                </td>
-                                                <td>
                                                     @Html.DisplayFor(modelItem => item.GrowthRate)
-                                                </td>                                               
-
+                                                </td>
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <td>
-                                                        <a asp-action="Edit" asp-route-id="@item.DistrictId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a asp-action="Edit" asp-route-id="@item.DistrictDetailId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                     </td>
                                                 }
 
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
                                                 {
                                                     <td>
-                                                        <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.DistrictId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.DistrictDetailId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
                                                     </td>
                                                 }
                                             </tr>

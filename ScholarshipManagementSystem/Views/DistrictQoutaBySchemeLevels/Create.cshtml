@@ -15,7 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="DistrictId" class="control-label"></label>
-                <select asp-for="DistrictId" class ="form-control" asp-items="ViewBag.DistrictId"></select>
+                <select asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Threshold" class="control-label"></label>
@@ -28,13 +28,23 @@
                 <span asp-validation-for="CurrentYearPopulation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
-                <select asp-for="ScholarshipFiscalYearId" class ="form-control" asp-items="ViewBag.ScholarshipFiscalYearId"></select>
+                <label asp-for="PolicySRCForumId" class="control-label"></label>
+                <select asp-for="PolicySRCForumId" class="form-control" asp-items="ViewBag.PolicySRCForumId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="MPI" class="control-label"></label>
                 <input asp-for="MPI" class="form-control" />
                 <span asp-validation-for="MPI" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DistrictPopulationSlot" class="control-label"></label>
+                <input asp-for="DistrictPopulationSlot" class="form-control" />
+                <span asp-validation-for="DistrictPopulationSlot" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DistrictMPISlot" class="control-label"></label>
+                <input asp-for="DistrictMPISlot" class="form-control" />
+                <span asp-validation-for="DistrictMPISlot" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

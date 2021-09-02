@@ -23,6 +23,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [ForeignKey("Degree")]
         [Display(Name = "Degree")]
         public int DegreeId { get; set; }
+        public bool IsActive { get; set; } = true;
         public virtual Scheme Scheme { get; set; }
         public virtual Degree Degree { get; set; }
         public virtual InstitudeDepartment InstitudeDepartment { get; set; }

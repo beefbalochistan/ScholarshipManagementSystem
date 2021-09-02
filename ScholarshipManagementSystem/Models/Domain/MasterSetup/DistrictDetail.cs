@@ -14,7 +14,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Display(Name = "District")]
         public int DistrictId { get; set; }
         [Required]
-        public Int64 Population { get; set; }
+        public int Population { get; set; }
         [Display(Name = "Male Ratio")]
         public float MaleRatio { get; set; }
         [Display(Name = "Female Ratio")]
@@ -24,6 +24,8 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public string CensesYear { get; set; }
         [Display(Name = "Growth Rate")]
         public float GrowthRate { get; set; }
+        [Display(Name = "MPI Score")]
+        public float MPIScore { get; set; }
 
         public virtual District District { get; set; }
     }

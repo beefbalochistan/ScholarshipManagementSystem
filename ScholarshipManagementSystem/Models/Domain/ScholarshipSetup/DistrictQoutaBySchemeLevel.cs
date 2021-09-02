@@ -19,11 +19,14 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         public int Threshold { get; set; }
         public int CurrentYearPopulation { get; set; }
         [ForeignKey("ScholarshipFiscalYear")]
-        [Display(Name = "ScholarshipFiscalYear")]
-        public int ScholarshipFiscalYearId { get; set; }
+        [Display(Name = "Policy SRC Forum")]
+        public int PolicySRCForumId { get; set; }
+        [ForeignKey("MPI Score")]
         public float MPI { get; set; }
+        public float DistrictPopulationSlot { get; set; }
+        public float DistrictMPISlot { get; set; }        
 
         public virtual District District { get; set; }
-        public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
+        public virtual PolicySRCForum SRCForum { get; set; }
     }
 }

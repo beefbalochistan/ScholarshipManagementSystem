@@ -79,6 +79,7 @@ namespace ScholarshipManagementSystem
                     pattern: "{controller=Home}/{action=Index2}/{id?}");
                 endpoints.MapRazorPages();
             });
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDczNTU0QDMxMzkyZTMyMmUzMEh0QU9pd2FiUWJ5ZndJRFNQNjFTTWJwS2kySFVwL3dIY0k5L29KSWFtREU9;NDczNTU1QDMxMzkyZTMyMmUzMEJsZWdlZmtoN0EwOEkxUng2aUdZUjB1RW03VGozdzk3Zk54VWdibnAzVHc9");
         }
     }
 }

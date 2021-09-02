@@ -20,21 +20,27 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         @* <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                    </ul>
-                </li>*@
+            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
+            <ul class="sub-menu" aria-expanded="true">
+                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
+            <ul class="sub-menu" aria-expanded="true">
+                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+            </ul>
+        </li>*@
                         <li>
                             <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                                 <i class="bx bxs-yin-yang"></i>
                                 <span key="t-calendar">Fiscal Year</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="PolicySRCForums" class=" waves-effect">
+                                <i class="bx bxs-yin-yang"></i>
+                                <span key="t-calendar">Policy SRC Forum</span>
                             </a>
                         </li>
                         <li>

@@ -23,7 +23,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // GET: DistrictQoutaBySchemeLevels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(d => d.District).Include(d => d.ScholarshipFiscalYear);
+            var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(d => d.District).Include(d => d.SRCForum);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,7 +37,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 
             var districtQoutaBySchemeLevel = await _context.DistrictQoutaBySchemeLevel
                 .Include(d => d.District)
-                .Include(d => d.ScholarshipFiscalYear)
+                .Include(d => d.SRCForum)
                 .FirstOrDefaultAsync(m => m.DistrictQoutaBySchemeLevelId == id);
             if (districtQoutaBySchemeLevel == null)
             {
@@ -51,7 +51,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         public IActionResult Create()
         {
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code");
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code");
+            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Code");
             return View();
         }
 
@@ -60,7 +60,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,ScholarshipFiscalYearId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
+        public async Task<IActionResult> Create([Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", districtQoutaBySchemeLevel.DistrictId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", districtQoutaBySchemeLevel.ScholarshipFiscalYearId);
+            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Code", districtQoutaBySchemeLevel.PolicySRCForumId);
             return View(districtQoutaBySchemeLevel);
         }
 
@@ -87,7 +87,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 return NotFound();
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", districtQoutaBySchemeLevel.DistrictId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", districtQoutaBySchemeLevel.ScholarshipFiscalYearId);
+            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Code", districtQoutaBySchemeLevel.PolicySRCForumId);
             return View(districtQoutaBySchemeLevel);
         }
 
@@ -96,7 +96,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,ScholarshipFiscalYearId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
         {
             if (id != districtQoutaBySchemeLevel.DistrictQoutaBySchemeLevelId)
             {
@@ -124,7 +124,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", districtQoutaBySchemeLevel.DistrictId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", districtQoutaBySchemeLevel.ScholarshipFiscalYearId);
+            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Code", districtQoutaBySchemeLevel.PolicySRCForumId);
             return View(districtQoutaBySchemeLevel);
         }
 
@@ -138,7 +138,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 
             var districtQoutaBySchemeLevel = await _context.DistrictQoutaBySchemeLevel
                 .Include(d => d.District)
-                .Include(d => d.ScholarshipFiscalYear)
+                .Include(d => d.PolicySRCForumId)
                 .FirstOrDefaultAsync(m => m.DistrictQoutaBySchemeLevelId == id);
             if (districtQoutaBySchemeLevel == null)
             {

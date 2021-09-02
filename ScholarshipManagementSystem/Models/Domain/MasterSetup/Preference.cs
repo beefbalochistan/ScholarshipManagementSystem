@@ -11,17 +11,23 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Key]
         public int PreferenceId { get; set; }
         [Required]
-        public int SchemeMatrict { get; set; }
-        public int SchemeIntermediate { get; set; }
-        public int SchemeBacholar { get; set; }
-        public int SchemeMaster { get; set; }
-        public int SchemeMS { get; set; }        
+        public int SchemeMatrictStipend { get; set; }
+        public int SchemeIntermediateStipend { get; set; }
+        public int SchemeDAEStipend { get; set; }
+        public int SchemeSimpleGraduationStipend { get; set; }
+        public int SchemeBacholarStipend { get; set; }
+        public int SchemeMasterStipend { get; set; }
+        public int SchemeMSStipend { get; set; }        
         public int DistrictThreshold { get; set; }        
         public int InstitudeThreshold { get; set; }
-        [Display(Name = "POMS/IOMS InstitudeQouta")]
-        public int POMSDOMSBoardQouta { get; set; }
-        [Display(Name = "POMS/IOMS InstitudeQouta")]
-        public int POMSDOMSInstitudeQouta { get; set; }
+        [Display(Name = "IOMS Institude Qouta")]
+        public int IOMSInstitudeQouta { get; set; }
+        [Display(Name = "POMS Board Qouta")]
+        public int POMSIBoardQouta { get; set; }
+        [Display(Name = "DOMS Institude Qouta")]
+        public int DOMSInstitudeQouta { get; set; }
+        [Display(Name = "DOMS Board Qouta")]
+        public int DOMSBoardQouta { get; set; }
 
         [Display(Name = "SQSOMS Qouta")]
         public int SQSOMSQouta { get; set; }

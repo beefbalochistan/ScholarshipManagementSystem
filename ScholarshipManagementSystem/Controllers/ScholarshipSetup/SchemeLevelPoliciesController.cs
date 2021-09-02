@@ -61,7 +61,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
+        public async Task<IActionResult> Create([Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipSlot,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipQouta,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
+        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelPolicyId,SchemeLevelId,PolicySRCForumId,Amount,ScholarshipSlot,POMS,DOMS,SQSOMS,SQSEVIs,CreatedOn")] SchemeLevelPolicy schemeLevelPolicy)
         {
             if (id != schemeLevelPolicy.SchemeLevelPolicyId)
             {

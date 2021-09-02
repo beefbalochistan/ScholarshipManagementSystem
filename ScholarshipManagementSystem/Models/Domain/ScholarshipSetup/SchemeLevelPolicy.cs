@@ -21,7 +21,7 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         public int PolicySRCForumId { get; set; }
         [Display(Name = "Stipend")]
         public int Amount { get; set; }
-        public int ScholarshipQouta { get; set; }
+        public int ScholarshipSlot { get; set; }
         [Display(Name = "POMS/IOMS")]
         public int POMS { get; set; }
         [Display(Name = "DOMS")]

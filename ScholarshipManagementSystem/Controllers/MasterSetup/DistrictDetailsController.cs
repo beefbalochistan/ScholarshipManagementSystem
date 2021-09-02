@@ -65,7 +65,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DistrictDetailId,DistrictId,Population,MaleRatio,FemaleRatio,CensesYear,GrowthRate")] DistrictDetail districtDetail)
+        public async Task<IActionResult> Create([Bind("DistrictDetailId,DistrictId,MPIScore,Population,MaleRatio,FemaleRatio,CensesYear,GrowthRate")] DistrictDetail districtDetail)
         {
             if (ModelState.IsValid)
             {
@@ -97,8 +97,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name", districtDetail.DistrictId);
-            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name");
+            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Name", districtDetail.DistrictId);            
             ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 10, 11).Select(x =>
            new SelectListItem()
            {
@@ -113,7 +112,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DistrictDetailId,DistrictId,Population,MaleRatio,FemaleRatio,CensesYear,GrowthRate")] DistrictDetail districtDetail)
+        public async Task<IActionResult> Edit(int id, [Bind("DistrictDetailId,DistrictId,MPIScore,Population,MaleRatio,FemaleRatio,CensesYear,GrowthRate")] DistrictDetail districtDetail)
         {
             if (id != districtDetail.DistrictDetailId)
             {
