@@ -1,0 +1,508 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+                   
+<!-- Collapse -->
+<div class="row">    
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Preferences</h4>
+                <p class="card-title-desc">Pre-defined parameters of defined schemes in BEEF</p>
+                <form asp-action="Edit">
+                    <input type="hidden" asp-for="PreferenceId" />
+                    <div id="accordion">
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingOne">
+                                <h6 class="m-0">
+                                    <a href="#collapseOne" class="text-dark" data-toggle="collapse"
+                                       aria-expanded="true"
+                                       aria-controls="collapseOne">
+                                        <i class="bx bxs-graduation"></i> Matric
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseOne" class="collapse show"
+                                 aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="SchemeMatricStipend" class="control-label"></label>
+                                                <input asp-for="SchemeMatricStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeMatricStipend" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DOMSMatricQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSMatricQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSMatricQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotMetric" class="control-label"></label>
+                                                <input asp-for="SlotMetric" class="form-control" />
+                                                <span asp-validation-for="SlotMetric" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="MatricThreshold" class="control-label"></label>
+                                                <input asp-for="MatricThreshold" class="form-control" />
+                                                <span asp-validation-for="MatricThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSMatricQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSMatricQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSMatricQoutaPER" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSMatricQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSMatricQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSMatricQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIMatricQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSMatricQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSMatricQoutaPER" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingTwo">
+                                <h6 class="m-0">
+                                    <a href="#collapseTwo" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseTwo">
+                                        <i class="bx bxs-graduation"></i> Intermediate
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="IntermediateThreshold" class="control-label"></label>
+                                                <input asp-for="IntermediateThreshold" class="form-control" />
+                                                <span asp-validation-for="IntermediateThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSIntermediateQouta" class="control-label"></label>
+                                                <input asp-for="SQSOMSIntermediateQouta" class="form-control" />
+                                                <span asp-validation-for="SQSOMSIntermediateQouta" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotFAFSc1Y" class="control-label"></label>
+                                                <input asp-for="SlotFAFSc1Y" class="form-control" />
+                                                <span asp-validation-for="SlotFAFSc1Y" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSIntermediateQoutaPER" class="control-label"></label>
+                                                <input asp-for="IntermediateThreshold" class="form-control" />
+                                                <span asp-validation-for="IntermediateThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSIntermediateEVIQouta" class="control-label"></label>
+                                                <input asp-for="SQSIntermediateEVIQouta" class="form-control" />
+                                                <span asp-validation-for="SQSIntermediateEVIQouta" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotFAFSc2Y" class="control-label"></label>
+                                                <input asp-for="SlotFAFSc2Y" class="form-control" />
+                                                <span asp-validation-for="SlotFAFSc2Y" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSIntermediateQoutaPER" class="control-label"></label>
+                                                <input asp-for="DAEThreshold" class="form-control" />
+                                                <span asp-validation-for="DAEThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeIntermediateStipend" class="control-label"></label>
+                                                <input asp-for="SchemeIntermediateStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeIntermediateStipend" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingThree">
+                                <h6 class="m-0">
+                                    <a href="#collapseThree" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseThree">
+                                        <i class="bx bxs-graduation"></i> DAE
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseThree" class="collapse"
+                                 aria-labelledby="headingThree" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DAEThreshold" class="control-label"></label>
+                                                <input asp-for="DAEThreshold" class="form-control" />
+                                                <span asp-validation-for="DAEThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSDAEQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSDAEQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSDAEQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotDAE1Y" class="control-label"></label>
+                                                <input asp-for="SlotDAE1Y" class="form-control" />
+                                                <span asp-validation-for="SlotDAE1Y" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="IOMSDAEQoutaPER" class="control-label"></label>
+                                                <input asp-for="IOMSDAEQoutaPER" class="form-control" />
+                                                <span asp-validation-for="IOMSDAEQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIDAEQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSEVIDAEQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSEVIDAEQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotDAE2Y" class="control-label"></label>
+                                                <input asp-for="SlotDAE2Y" class="form-control" />
+                                                <span asp-validation-for="SlotDAE2Y" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSDAEQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSDAEQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSDAEQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeDAEStipend" class="control-label"></label>
+                                                <input asp-for="SchemeDAEStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeDAEStipend" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotDAE3Y" class="control-label"></label>
+                                                <input asp-for="SlotDAE3Y" class="form-control" />
+                                                <span asp-validation-for="SlotDAE3Y" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingFour">
+                                <h6 class="m-0">
+                                    <a href="#collapseFour" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseFour">
+                                        <i class="bx bxs-graduation"></i> Simple Graduation
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseFour" class="collapse"
+                                 aria-labelledby="headingFour" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="GraduationThreshold" class="control-label"></label>
+                                                <input asp-for="GraduationThreshold" class="form-control" />
+                                                <span asp-validation-for="GraduationThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSGraduationQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSGraduationQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSGraduationQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotBacholar1Y" class="control-label"></label>
+                                                <input asp-for="SlotBacholar1Y" class="form-control" />
+                                                <span asp-validation-for="SlotBacholar1Y" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSGraduationQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSGraduationQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSGraduationQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIGraduationQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSEVIGraduationQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSEVIGraduationQoutaPER" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSGraduationQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSGraduationQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSGraduationQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeGraduationStipend" class="control-label"></label>
+                                                <input asp-for="SchemeGraduationStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeGraduationStipend" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingFive">
+                                <h6 class="m-0">
+                                    <a href="#collapseFive" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseFive">
+                                        <i class="bx bxs-graduation"></i> Bachelor - BS/BE (4/5 Yr)
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseFive" class="collapse"
+                                 aria-labelledby="headingFive" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="BSProfDistrictThresholdFor1stY" class="control-label"></label>
+                                                <input asp-for="BSProfDistrictThresholdFor1stY" class="form-control" />
+                                                <span asp-validation-for="BSProfDistrictThresholdFor1stY" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSBachelorQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSBachelorQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSBachelorQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="BacholarSlot" class="control-label"></label>
+                                                <input asp-for="BacholarSlot" class="form-control" />
+                                                <span asp-validation-for="BacholarSlot" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSBachelorQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSBachelorQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSBachelorQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIBachelorQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSEVIBachelorQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSEVIBachelorQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="BSProfThresholdForClass" class="control-label"></label>
+                                                <input asp-for="BSProfThresholdForClass" class="form-control" />
+                                                <span asp-validation-for="BSProfThresholdForClass" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSBachelorQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSBachelorQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSBachelorQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeBacholarStipend" class="control-label"></label>
+                                                <input asp-for="SchemeBacholarStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeBacholarStipend" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingSix">
+                                <h6 class="m-0">
+                                    <a href="#collapseSix" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseSix">
+                                        <i class="bx bxs-graduation"></i> Master
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseSix" class="collapse"
+                                 aria-labelledby="headingSix" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="MasterThreshold" class="control-label"></label>
+                                                <input asp-for="MasterThreshold" class="form-control" />
+                                                <span asp-validation-for="MasterThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSMasterQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSMasterQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSMasterQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="MasterSlot" class="control-label"></label>
+                                                <input asp-for="MasterSlot" class="form-control" />
+                                                <span asp-validation-for="MasterSlot" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSMasterQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSMasterQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSMasterQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIMasterQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSEVIMasterQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSEVIMasterQoutaPER" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSMasterQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSMasterQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSMasterQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeMasterStipend" class="control-label"></label>
+                                                <input asp-for="SchemeMasterStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeMasterStipend" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-1 shadow-none">
+                            <div class="card-header" id="headingSeven">
+                                <h6 class="m-0">
+                                    <a href="#collapseSeven" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseSeven">
+                                        <i class="bx bxs-graduation"></i> MS
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseSeven" class="collapse"
+                                 aria-labelledby="headingSeven" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="MSThreshold" class="control-label"></label>
+                                                <input asp-for="MSThreshold" class="form-control" />
+                                                <span asp-validation-for="MSThreshold" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSOMSMSQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSOMSMSQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSOMSMSQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="MSSlot" class="control-label"></label>
+                                                <input asp-for="MSSlot" class="form-control" />
+                                                <span asp-validation-for="MSSlot" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="POMSMSQoutaPER" class="control-label"></label>
+                                                <input asp-for="POMSMSQoutaPER" class="form-control" />
+                                                <span asp-validation-for="POMSMSQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SQSEVIMSQoutaPER" class="control-label"></label>
+                                                <input asp-for="SQSEVIMSQoutaPER" class="form-control" />
+                                                <span asp-validation-for="SQSEVIMSQoutaPER" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DOMSMSQoutaPER" class="control-label"></label>
+                                                <input asp-for="DOMSMSQoutaPER" class="form-control" />
+                                                <span asp-validation-for="DOMSMSQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SchemeMSStipend" class="control-label"></label>
+                                                <input asp-for="SchemeMSStipend" class="form-control" />
+                                                <span asp-validation-for="SchemeMSStipend" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-0 shadow-none">
+                            <div class="card-header" id="headingEight">
+                                <h6 class="m-0">
+                                    <a href="#collapseEight" class="text-dark collapsed" data-toggle="collapse"
+                                       aria-expanded="false"
+                                       aria-controls="collapseEight">
+                                        <i class="bx bxs-graduation"></i> PhD
+                                    </a>
+                                </h6>
+                            </div>
+                            <div id="collapseEight" class="collapse"
+                                 aria-labelledby="headingEight" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="PhDThreshold" class="control-label"></label>
+                                                <input asp-for="PhDThreshold" class="form-control" />
+                                                <span asp-validation-for="PhDThreshold" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->

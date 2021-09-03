@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210902134622_altr_tbl_Prefrence_rearrange")]
+    partial class altr_tbl_Prefrence_rearrange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -669,12 +671,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BSProfDistrictThresholdFor1stY")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BSProfThresholdForClass")
-                        .HasColumnType("int");
-
                     b.Property<int>("BacholarSlot")
                         .HasColumnType("int");
 
@@ -834,6 +830,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("SlotMetric")
                         .HasColumnType("int");
 
+                    b.Property<int>("bachelorThreshold")
+                        .HasColumnType("int");
+
                     b.HasKey("PreferenceId");
 
                     b.ToTable("Preference", "master");
@@ -978,9 +977,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("CurrentYearPopulation")
                         .HasColumnType("int");
 
-                    b.Property<float>("DistrictAdditionalSlot")
-                        .HasColumnType("real");
-
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
@@ -996,12 +992,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("PolicySRCForumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SchemeLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StipendAmount")
-                        .HasColumnType("int");
-
                     b.Property<int>("Threshold")
                         .HasColumnType("int");
 
@@ -1010,8 +1000,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasIndex("DistrictId");
 
                     b.HasIndex("PolicySRCForumId");
-
-                    b.HasIndex("SchemeLevelId");
 
                     b.ToTable("DistrictQoutaBySchemeLevel", "scholar");
                 });
@@ -1383,15 +1371,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("District");
-
-                    b.Navigation("SchemeLevel");
 
                     b.Navigation("SRCForum");
                 });
