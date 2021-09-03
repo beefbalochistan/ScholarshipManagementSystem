@@ -47,7 +47,7 @@
                                 <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
                                     <h4 class="mt-2 card-title">List of Seheme Level</h4>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="">
                                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                             <tr>
@@ -211,3 +211,14 @@ else
         </div>
     </div>
 }
+
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#datatable').DataTable({
+            "order": []
+   });
+
+});
+</script>

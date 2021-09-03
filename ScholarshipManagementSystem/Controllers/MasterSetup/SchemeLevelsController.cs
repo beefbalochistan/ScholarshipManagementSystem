@@ -24,7 +24,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: SchemeLevels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SchemeLevel.Include(s => s.Degree).Include(s => s.Scheme).Include(s => s.InstitudeDepartment);
+            var applicationDbContext = _context.SchemeLevel.Include(s => s.Degree).Include(s => s.Scheme).Include(s => s.InstitudeDepartment).OrderBy(a=>a.SchemeId);
             return View(await applicationDbContext.ToListAsync());
         }
 

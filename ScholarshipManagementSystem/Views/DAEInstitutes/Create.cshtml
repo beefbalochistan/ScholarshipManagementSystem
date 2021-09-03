@@ -1,13 +1,13 @@
-﻿@using Microsoft.AspNetCore.Authorization
+﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute
+@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @using ScholarshipManagementSystem.Constants
-@model ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment
 
 @{
     ViewData["Title"] = "Create";
-    ViewBag.pageTitle = "Institude";
-    ViewBag.Title = "Department";
-    ViewBag.pTitle = "Department";
+    ViewBag.pageTitle = "Home";
+    ViewBag.Title = "Institude";
+    ViewBag.pTitle = "Institude";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
@@ -18,13 +18,13 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" asp-action="Index" asp-controller="InstitudeDepartments" aria-selected="true">
+                    <a class="nav-link" asp-action="Index" asp-controller="DAEInstitutes" aria-selected="true">
                         <i class="bx bxs-grid-alt check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">List of Institute Dept</p>
+                        <p class="font-weight-bold mb-4">List of DAE Institude</p>
                     </a>
                     <a class="nav-link active" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
                         <i class="bx bx-list-plus d-block check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">Add New Institute Dept</p>
+                        <p class="font-weight-bold mb-4">Add New DAE Institude</p>
                     </a>
                     <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
                         <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
@@ -40,7 +40,7 @@
                                 <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <h4 class="mt-2 card-title">Add New I.Department</h4>
+                                            <h4 class="mt-2 card-title">Add New DAE Institude</h4>
                                         </div>
                                         @*<div class="col-sm-6">
                                                 <div class="text-sm-right">
@@ -54,34 +54,92 @@
                                         <div class="col-md-4">
                                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                             <div class="form-group">
-                                                <label asp-for="InstitudeId" class="control-label"></label>
-                                                <select tabindex="1" asp-for="InstitudeId" class="form-control" asp-items="ViewBag.InstitudeId"></select>
-                                            </div>
-                                            <div class="form-group">
                                                 <label asp-for="Name" class="control-label"></label>
-                                                <input asp-for="Name" class="form-control" tabindex="3" />
+                                                <input asp-for="Name" class="form-control" tabindex="1" />
                                                 <span asp-validation-for="Name" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
-                                                <label asp-for="Description" class="control-label"></label>
-                                                <textarea tabindex="5" class="input-large form-control" asp-for="Description" rows="4" placeholder="Enter a description ..."></textarea>
-                                                <span asp-validation-for="Description" class="text-danger"></span>
+                                                <label asp-for="DistrictId" class="control-label"></label>
+                                                <select tabindex="4" asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input tabindex="7" asp-for="Email" class="form-control" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="FocalPersonName" class="control-label"></label>
+                                                <input tabindex="10" asp-for="FocalPersonName" class="form-control" />
+                                                <span asp-validation-for="FocalPersonName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="FocalPersonPhoneNo" class="control-label"></label>
+                                                <input tabindex="12" asp-for="FocalPersonPhoneNo" class="form-control" />
+                                                <span asp-validation-for="FocalPersonPhoneNo" class="text-danger"></span>
+                                            </div>   
+                                            <div class="form-group">
+                                                <label asp-for="Enrollment3rdY" class="control-label"></label>
+                                                <input tabindex="10" asp-for="Enrollment3rdY" class="form-control" />
+                                                <span asp-validation-for="Enrollment3rdY" class="text-danger"></span>
                                             </div>
                                             <div class="form-group mt-2">
-                                                <input tabindex="5" type="submit" value="Add Institute" class="btn btn-primary" />
+                                                <input tabindex="14" type="submit" value="Add Institute" class="btn btn-primary" />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="DisciplineId" class="control-label"></label>
-                                                <select tabindex="2" asp-for="DisciplineId" class="form-control" asp-items="ViewBag.DisciplineId"></select>
-                                            </div>                                            
+                                                <label asp-for="NameAbbreviation" class="control-label"></label>
+                                                <input asp-for="NameAbbreviation" class="form-control" tabindex="2" />
+                                                <span asp-validation-for="NameAbbreviation" class="text-danger"></span>
+                                            </div>
                                             <div class="form-group">
-                                                <label asp-for="Code" class="control-label"></label>
-                                                <input tabindex="4" asp-for="Code" class="form-control" />
-                                                <span asp-validation-for="Code" class="text-danger"></span>
-                                            </div>                                            
-                                        </div>                                                                               
+                                                <label asp-for="ProvienceId" class="control-label"></label>
+                                                <select tabindex="5" asp-for="ProvienceId" class="form-control" asp-items="ViewBag.ProvienceId"></select>
+                                                <span asp-validation-for="ProvienceId" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="FaxNo" class="control-label"></label>
+                                                <input tabindex="8" asp-for="FaxNo" class="form-control" />
+                                                <span asp-validation-for="FaxNo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="FocalPersonEmail" class="control-label"></label>
+                                                <input tabindex="11" asp-for="FocalPersonEmail" class="form-control" />
+                                                <span asp-validation-for="FocalPersonEmail" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="PercentageSlots" class="control-label"></label>
+                                                <input asp-for="PercentageSlots" class="form-control" tabindex="2" />
+                                                <span asp-validation-for="PercentageSlots" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Enrollment2ndY" class="control-label"></label>
+                                                <input tabindex="10" asp-for="Enrollment2ndY" class="form-control" />
+                                                <span asp-validation-for="Enrollment2ndY" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Website" class="control-label"></label>
+                                                <input tabindex="3" asp-for="Website" class="form-control" />
+                                                <span asp-validation-for="Website" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="PhoneNo" class="control-label"></label>
+                                                <input tabindex="6" asp-for="PhoneNo" class="form-control" />
+                                                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Address" class="control-label"></label>
+                                                <textarea tabindex="9" class="input-large form-control" asp-for="Address" rows="4" placeholder="Enter a Address ..."></textarea>
+                                                <span asp-validation-for="Address" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Enrollment1stY" class="control-label"></label>
+                                                <input tabindex="10" asp-for="Enrollment1stY" class="form-control" />
+                                                <span asp-validation-for="Enrollment1stY" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
 

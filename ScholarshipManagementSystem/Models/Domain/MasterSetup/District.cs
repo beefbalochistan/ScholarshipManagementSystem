@@ -17,6 +17,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Required]
         [MaxLength(3, ErrorMessage = "Code cannot exceeding from 3 digit")]
         public string Code { get; set; }
+        public bool IsActive { get; set; } = true;
         public string Description { get; set; }
         [ForeignKey("Division")]
         [Display(Name = "Division")]

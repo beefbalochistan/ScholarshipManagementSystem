@@ -32,11 +32,14 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public string FocalPersonEmail { get; set; }
         [Display(Name = "Focal Person Phone#")]
         public string FocalPersonPhoneNo { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public int Enrollment1stY { get; set; }
+        public int Enrollment2ndY { get; set; }
+        public int Enrollment3rdY { get; set; }
         [ForeignKey("District")]
         [Display(Name = "District")]
         public int DistrictId { get; set; }
-        public int PercentageSlots { get; set; }
+        public float PercentageSlots { get; set; }
         public virtual District District { get; set; }
     }
 }

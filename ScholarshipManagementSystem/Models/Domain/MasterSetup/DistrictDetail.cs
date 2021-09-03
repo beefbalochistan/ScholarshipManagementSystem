@@ -26,6 +26,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public float GrowthRate { get; set; }
         [Display(Name = "MPI Score")]
         public float MPIScore { get; set; }
+        public float MPIDifferenceFromStatndard { get; set; }
 
         public virtual District District { get; set; }
     }

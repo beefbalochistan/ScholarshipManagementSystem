@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210903112442_altr_preferences_qouta")]
+    partial class altr_preferences_qouta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,8 +385,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("PercentageSlots")
-                        .HasColumnType("real");
+                    b.Property<int>("PercentageSlots")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNo")
                         .HasColumnType("nvarchar(max)");
@@ -479,9 +481,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("DivisionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -511,9 +510,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("real");
 
                     b.Property<float>("GrowthRate")
-                        .HasColumnType("real");
-
-                    b.Property<float>("MPIDifferenceFromStatndard")
                         .HasColumnType("real");
 
                     b.Property<float>("MPIScore")
@@ -708,28 +704,10 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("DOMSMatricQoutaPER")
                         .HasColumnType("int");
 
-                    b.Property<int>("DistrictSlotMPIPer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DistrictSlotPopulationPer")
-                        .HasColumnType("int");
-
                     b.Property<int>("GraduationThreshold")
                         .HasColumnType("int");
 
-                    b.Property<int>("IOMSBachelorQoutaPER")
-                        .HasColumnType("int");
-
                     b.Property<int>("IOMSDAEQoutaPER")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IOMSGraduationQoutaPER")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IOMSMSQoutaPER")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IOMSMasterQoutaPER")
                         .HasColumnType("int");
 
                     b.Property<int>("IntermediateThreshold")
@@ -750,7 +728,19 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("MatricThreshold")
                         .HasColumnType("int");
 
+                    b.Property<int>("POMSBachelorQoutaPER")
+                        .HasColumnType("int");
+
+                    b.Property<int>("POMSGraduationQoutaPER")
+                        .HasColumnType("int");
+
                     b.Property<int>("POMSIntermediateQoutaPER")
+                        .HasColumnType("int");
+
+                    b.Property<int>("POMSMSQoutaPER")
+                        .HasColumnType("int");
+
+                    b.Property<int>("POMSMasterQoutaPER")
                         .HasColumnType("int");
 
                     b.Property<int>("POMSMatricQoutaPER")
@@ -1005,9 +995,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<float>("MPI")
                         .HasColumnType("real");
 
-                    b.Property<float>("MPIDifferenceFromStatndard")
-                        .HasColumnType("real");
-
                     b.Property<int>("PolicySRCForumId")
                         .HasColumnType("int");
 
@@ -1017,8 +1004,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("StipendAmount")
                         .HasColumnType("int");
 
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
+                    b.Property<int>("Threshold")
+                        .HasColumnType("int");
 
                     b.HasKey("DistrictQoutaBySchemeLevelId");
 
