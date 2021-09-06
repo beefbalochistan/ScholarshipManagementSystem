@@ -18,9 +18,9 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         [Display(Name = "District")]
         public int DistrictId { get; set; }
         [Required]
-        [ForeignKey("SchemeLevel")]
-        [Display(Name = "SchemeLevel")]
-        public int SchemeLevelId { get; set; }
+        [ForeignKey("SchemeLevelPolicy")]
+        [Display(Name = "Scheme Level Policy")]
+        public int SchemeLevelPolicyId { get; set; }
         public float Threshold { get; set; }
         public int StipendAmount { get; set; }
         public int CurrentYearPopulation { get; set; }
@@ -35,7 +35,7 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         public float DistrictMPISlot { get; set; }
         public float DistrictAdditionalSlot { get; set; }
         public virtual District District { get; set; }
-        public virtual SchemeLevel SchemeLevel { get; set; }
+        public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual PolicySRCForum SRCForum { get; set; }
     }
 }

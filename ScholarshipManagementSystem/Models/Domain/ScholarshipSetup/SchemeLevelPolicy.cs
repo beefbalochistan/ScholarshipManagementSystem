@@ -21,15 +21,15 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         public int PolicySRCForumId { get; set; }
         [Display(Name = "Stipend")]
         public int Amount { get; set; }
-        public int ScholarshipSlot { get; set; }
+        public float ScholarshipSlot { get; set; }
         [Display(Name = "POMS/IOMS")]
-        public int POMS { get; set; }
+        public float POMS { get; set; }
         [Display(Name = "DOMS")]
-        public int DOMS { get; set; }
+        public float DOMS { get; set; }
         [Display(Name = "SQS-OMS")]
-        public int SQSOMS { get; set; }
+        public float SQSOMS { get; set; }
         [Display(Name = "SQS-EVIs")]
-        public int SQSEVIs { get; set; }
+        public float SQSEVIs { get; set; }
         public DateTime CreatedOn { get; set; }
         public virtual PolicySRCForum PolicySRCForum { get; set; }
         public virtual SchemeLevel SchemeLevel { get; set; }

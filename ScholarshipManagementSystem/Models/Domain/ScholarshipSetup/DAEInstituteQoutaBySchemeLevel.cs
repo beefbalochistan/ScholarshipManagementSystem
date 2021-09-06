@@ -22,12 +22,12 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         [ForeignKey("ScholarshipFiscalYear")]
         [Display(Name = "Policy SRC Forum")]
         public int PolicySRCForumId { get; set; }
-        [ForeignKey("SchemeLevel")]
-        [Display(Name = "SchemeLevel")]
-        public int SchemeLevelId { get; set; }                        
+        [ForeignKey("SchemeLevelPolicy")]
+        [Display(Name = "Scheme Level Policy")]
+        public int SchemeLevelPolicyId { get; set; }                        
         public float InstituteAdditionalSlot { get; set; }        
         public virtual DAEInstitute DAEInstitute { get; set; }
-        public virtual SchemeLevel SchemeLevel { get; set; }
+        public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual PolicySRCForum SRCForum { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210906094234_alter_tbl_preference")]
+    partial class alter_tbl_preference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -983,48 +985,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
-                {
-                    b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassEnrollment")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DAEInstituteId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("InstituteAdditionalSlot")
-                        .HasColumnType("real");
-
-                    b.Property<int>("PolicySRCForumId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchemeLevelPolicyId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("SlotAllocate")
-                        .HasColumnType("real");
-
-                    b.Property<int>("StipendAmount")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
-
-                    b.HasKey("DAEInstituteQoutaBySchemeLevelId");
-
-                    b.HasIndex("DAEInstituteId");
-
-                    b.HasIndex("PolicySRCForumId");
-
-                    b.HasIndex("SchemeLevelPolicyId");
-
-                    b.ToTable("DAEInstituteQoutaBySchemeLevel");
-                });
-
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
@@ -1427,33 +1387,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("InstitudeDepartment");
 
                     b.Navigation("Scheme");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
-                        .WithMany()
-                        .HasForeignKey("DAEInstituteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
-                        .WithMany()
-                        .HasForeignKey("PolicySRCForumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DAEInstitute");
-
-                    b.Navigation("SchemeLevelPolicy");
-
-                    b.Navigation("SRCForum");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210906083243_alter_tbl_DistrictQouta_SchemelevelpolicyId")]
+    partial class alter_tbl_DistrictQouta_SchemelevelpolicyId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -681,32 +683,32 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("BSProfThresholdForClass")
                         .HasColumnType("int");
 
-                    b.Property<float>("BacholarSlot")
-                        .HasColumnType("real");
+                    b.Property<int>("BacholarSlot")
+                        .HasColumnType("int");
 
                     b.Property<int>("DAEThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("DOMSBachelorQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSBachelorQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSDAEQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSDAEQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSGraduationQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSGraduationQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSIntermediateQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSIntermediateQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSMSQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSMSQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSMasterQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSMasterQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("DOMSMatricQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMSMatricQoutaPER")
+                        .HasColumnType("int");
 
                     b.Property<int>("DistrictSlotMPIPer")
                         .HasColumnType("int");
@@ -717,32 +719,32 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("GraduationThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("IOMSBachelorQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("IOMSBachelorQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("IOMSDAEQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("IOMSDAEQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("IOMSGraduationQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("IOMSGraduationQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("IOMSMSQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("IOMSMSQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("IOMSMasterQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("IOMSMasterQoutaPER")
+                        .HasColumnType("int");
 
                     b.Property<int>("IntermediateThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("MSSlot")
-                        .HasColumnType("real");
+                    b.Property<int>("MSSlot")
+                        .HasColumnType("int");
 
                     b.Property<int>("MSThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("MasterSlot")
-                        .HasColumnType("real");
+                    b.Property<int>("MasterSlot")
+                        .HasColumnType("int");
 
                     b.Property<int>("MasterThreshold")
                         .HasColumnType("int");
@@ -750,59 +752,59 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("MatricThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("POMSIntermediateQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("POMSIntermediateQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("POMSMatricQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("POMSMatricQoutaPER")
+                        .HasColumnType("int");
 
                     b.Property<int>("PhDThreshold")
                         .HasColumnType("int");
 
-                    b.Property<float>("Qouta")
-                        .HasColumnType("real");
+                    b.Property<int>("Qouta")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIBachelorQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIBachelorQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIDAEQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIDAEQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIGraduationQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIGraduationQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIMSQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIMSQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIMasterQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIMasterQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIMatricQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIMatricQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSIntermediateEVIQouta")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSIntermediateEVIQouta")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSBachelorQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSBachelorQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSDAEQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSDAEQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSGraduationQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSGraduationQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSIntermediateQouta")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSIntermediateQouta")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSMSQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSMSQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSMasterQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSMasterQoutaPER")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMSMatricQoutaPER")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMSMatricQoutaPER")
+                        .HasColumnType("int");
 
                     b.Property<int>("SchemeBacholarStipend")
                         .HasColumnType("int");
@@ -825,26 +827,26 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("SchemeMatricStipend")
                         .HasColumnType("int");
 
-                    b.Property<float>("SlotBacholar1Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotBacholar1Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotDAE1Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotDAE1Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotDAE2Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotDAE2Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotDAE3Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotDAE3Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotFAFSc1Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotFAFSc1Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotFAFSc2Y")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotFAFSc2Y")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SlotMetric")
-                        .HasColumnType("real");
+                    b.Property<int>("SlotMetric")
+                        .HasColumnType("int");
 
                     b.HasKey("PreferenceId");
 
@@ -981,48 +983,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasIndex("SchemeId");
 
                     b.ToTable("SchemeLevel", "master");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
-                {
-                    b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassEnrollment")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DAEInstituteId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("InstituteAdditionalSlot")
-                        .HasColumnType("real");
-
-                    b.Property<int>("PolicySRCForumId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchemeLevelPolicyId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("SlotAllocate")
-                        .HasColumnType("real");
-
-                    b.Property<int>("StipendAmount")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
-
-                    b.HasKey("DAEInstituteQoutaBySchemeLevelId");
-
-                    b.HasIndex("DAEInstituteId");
-
-                    b.HasIndex("PolicySRCForumId");
-
-                    b.HasIndex("SchemeLevelPolicyId");
-
-                    b.ToTable("DAEInstituteQoutaBySchemeLevel");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
@@ -1174,26 +1134,26 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("DOMS")
-                        .HasColumnType("real");
+                    b.Property<int>("DOMS")
+                        .HasColumnType("int");
 
-                    b.Property<float>("POMS")
-                        .HasColumnType("real");
+                    b.Property<int>("POMS")
+                        .HasColumnType("int");
 
                     b.Property<int>("PolicySRCForumId")
                         .HasColumnType("int");
 
-                    b.Property<float>("SQSEVIs")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSEVIs")
+                        .HasColumnType("int");
 
-                    b.Property<float>("SQSOMS")
-                        .HasColumnType("real");
+                    b.Property<int>("SQSOMS")
+                        .HasColumnType("int");
 
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
-                    b.Property<float>("ScholarshipSlot")
-                        .HasColumnType("real");
+                    b.Property<int>("ScholarshipSlot")
+                        .HasColumnType("int");
 
                     b.HasKey("SchemeLevelPolicyId");
 
@@ -1427,33 +1387,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("InstitudeDepartment");
 
                     b.Navigation("Scheme");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
-                        .WithMany()
-                        .HasForeignKey("DAEInstituteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
-                        .WithMany()
-                        .HasForeignKey("PolicySRCForumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DAEInstitute");
-
-                    b.Navigation("SchemeLevelPolicy");
-
-                    b.Navigation("SRCForum");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>

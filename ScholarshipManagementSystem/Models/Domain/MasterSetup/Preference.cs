@@ -50,89 +50,89 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public int PhDThreshold { get; set; }
         //--------------------Qouta In Percentage---------------------
         //---Matric
-        public int Qouta { get; set; }
+        public float Qouta { get; set; }
         [Display(Name = "POMS Matric Qouta Percentage")]
-        public int POMSMatricQoutaPER { get; set; }
+        public float POMSMatricQoutaPER { get; set; }
         [Display(Name = "DOMS Matric Qouta Percentage")]
-        public int DOMSMatricQoutaPER { get; set; }
+        public float DOMSMatricQoutaPER { get; set; }
         [Display(Name = "SQS-OMS Matric Qouta Percentage")]
-        public int SQSOMSMatricQoutaPER { get; set; }
+        public float SQSOMSMatricQoutaPER { get; set; }
         [Display(Name = "SQS-EVI Matric Qouta Percentage")]
-        public int SQSEVIMatricQoutaPER { get; set; }
-        //---Intermediate
-        [Display(Name = "POMS Intermediate Qouta Percentage")]
-        public int POMSIntermediateQoutaPER { get; set; }
-        [Display(Name = "DOMS Intermediate Qouta Percentage")]
-        public int DOMSIntermediateQoutaPER { get; set; }
-        [Display(Name = "SQS-OMS Intermediate Qouta Percentage")]
-        public int SQSOMSIntermediateQouta { get; set; }
-        [Display(Name = "SQS-EVI Intermediate Qouta Percentage")]
-        public int SQSIntermediateEVIQouta { get; set; }
+        public float SQSEVIMatricQoutaPER { get; set; }
+        //---floatermediate
+        [Display(Name = "POMS floatermediate Qouta Percentage")]
+        public float POMSIntermediateQoutaPER { get; set; }
+        [Display(Name = "DOMS floatermediate Qouta Percentage")]
+        public float DOMSIntermediateQoutaPER { get; set; }
+        [Display(Name = "SQS-OMS floatermediate Qouta Percentage")]
+        public float SQSOMSIntermediateQouta { get; set; }
+        [Display(Name = "SQS-EVI floatermediate Qouta Percentage")]
+        public float SQSIntermediateEVIQouta { get; set; }
         //---DAE
         [Display(Name = "IOMS DAE Qouta Percentage")]
-        public int IOMSDAEQoutaPER { get; set; }
+        public float IOMSDAEQoutaPER { get; set; }
         [Display(Name = "DOMS DAE Qouta Percentage")]
-        public int DOMSDAEQoutaPER { get; set; }
+        public float DOMSDAEQoutaPER { get; set; }
         [Display(Name = "SQS-OMS DAE Qouta Percentage")]
-        public int SQSOMSDAEQoutaPER { get; set; }
+        public float SQSOMSDAEQoutaPER { get; set; }
         [Display(Name = "SQS-EVI DAE Qouta Percentage")]
-        public int SQSEVIDAEQoutaPER { get; set; }
+        public float SQSEVIDAEQoutaPER { get; set; }
         //---Graduation
         [Display(Name = "IOMS Graduation Qouta Percentage")]
-        public int IOMSGraduationQoutaPER { get; set; }
+        public float IOMSGraduationQoutaPER { get; set; }
         [Display(Name = "DOMS Graduation Percentage")]
-        public int DOMSGraduationQoutaPER { get; set; }
+        public float DOMSGraduationQoutaPER { get; set; }
         [Display(Name = "SQS-OMS Graduation Qouta Percentage")]
-        public int SQSOMSGraduationQoutaPER { get; set; }
+        public float SQSOMSGraduationQoutaPER { get; set; }
         [Display(Name = "SQS-EVI Graduation Qouta Percentage")]
-        public int SQSEVIGraduationQoutaPER { get; set; }
+        public float SQSEVIGraduationQoutaPER { get; set; }
         //---Bachelor
         [Display(Name = "IOMS Bachelor Qouta Percentage")]
-        public int IOMSBachelorQoutaPER { get; set; }
+        public float IOMSBachelorQoutaPER { get; set; }
         [Display(Name = "DOMS Bachelor Percentage")]
-        public int DOMSBachelorQoutaPER { get; set; }
+        public float DOMSBachelorQoutaPER { get; set; }
         [Display(Name = "SQS-OMS Bachelor Qouta Percentage")]
-        public int SQSOMSBachelorQoutaPER { get; set; }
+        public float SQSOMSBachelorQoutaPER { get; set; }
         [Display(Name = "SQS-EVI Bachelor Qouta Percentage")]
-        public int SQSEVIBachelorQoutaPER { get; set; }
+        public float SQSEVIBachelorQoutaPER { get; set; }
         //---Master
         [Display(Name = "IOMS Master Qouta Percentage")]
-        public int IOMSMasterQoutaPER { get; set; }
+        public float IOMSMasterQoutaPER { get; set; }
         [Display(Name = "DOMS Master Percentage")]
-        public int DOMSMasterQoutaPER { get; set; }
+        public float DOMSMasterQoutaPER { get; set; }
         [Display(Name = "SQS-OMS Master Qouta Percentage")]
-        public int SQSOMSMasterQoutaPER { get; set; }
+        public float SQSOMSMasterQoutaPER { get; set; }
         [Display(Name = "SQS-EVI Master Qouta Percentage")]
-        public int SQSEVIMasterQoutaPER { get; set; }
+        public float SQSEVIMasterQoutaPER { get; set; }
         //---MS
         [Display(Name = "IOMS MS Qouta Percentage")]
-        public int IOMSMSQoutaPER { get; set; }
+        public float IOMSMSQoutaPER { get; set; }
         [Display(Name = "DOMS MS Percentage")]
-        public int DOMSMSQoutaPER { get; set; }
+        public float DOMSMSQoutaPER { get; set; }
         [Display(Name = "SQS-OMS MS Qouta Percentage")]
-        public int SQSOMSMSQoutaPER { get; set; }
+        public float SQSOMSMSQoutaPER { get; set; }
         [Display(Name = "SQS-EVI MS Qouta Percentage")]
-        public int SQSEVIMSQoutaPER { get; set; }
+        public float SQSEVIMSQoutaPER { get; set; }
         //--------------------Qouta In Percentage---------------------
         [Display(Name = "Slot Metric")]
-        public int SlotMetric { get; set; }
+        public float SlotMetric { get; set; }
         [Display(Name = "Slot FAFSc 1Y")]
-        public int SlotFAFSc1Y { get; set; }        
+        public float SlotFAFSc1Y { get; set; }        
         [Display(Name = "Slot FAFSc 2Y")]
-        public int SlotFAFSc2Y { get; set; }
+        public float SlotFAFSc2Y { get; set; }
         [Display(Name = "Slot DAE 1Y")]
-        public int SlotDAE1Y { get; set; }
+        public float SlotDAE1Y { get; set; }
         [Display(Name = "Slot DAE 2Y")]
-        public int SlotDAE2Y { get; set; }
+        public float SlotDAE2Y { get; set; }
         [Display(Name = "Slot Slot DAE 3Y")]
-        public int SlotDAE3Y { get; set; }
+        public float SlotDAE3Y { get; set; }
         [Display(Name = "Slot Bacholar 1Y")]
-        public int SlotBacholar1Y { get; set; }
+        public float SlotBacholar1Y { get; set; }
         [Display(Name = "Slot Bacholar")]
-        public int BacholarSlot { get; set; }
+        public float BacholarSlot { get; set; }
         [Display(Name = "Slot Master")]
-        public int MasterSlot { get; set; }
+        public float MasterSlot { get; set; }
         [Display(Name = "Slot MS")]
-        public int MSSlot { get; set; }
+        public float MSSlot { get; set; }
     }
 }

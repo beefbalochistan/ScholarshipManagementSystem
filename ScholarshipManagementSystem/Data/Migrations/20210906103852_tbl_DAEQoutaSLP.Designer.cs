@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210906103852_tbl_DAEQoutaSLP")]
+    partial class tbl_DAEQoutaSLP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1002,7 +1004,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("PolicySRCForumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SchemeLevelPolicyId")
+                    b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
                     b.Property<float>("SlotAllocate")
@@ -1020,7 +1022,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasIndex("PolicySRCForumId");
 
-                    b.HasIndex("SchemeLevelPolicyId");
+                    b.HasIndex("SchemeLevelId");
 
                     b.ToTable("DAEInstituteQoutaBySchemeLevel");
                 });
@@ -1443,15 +1445,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
+                        .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DAEInstitute");
 
-                    b.Navigation("SchemeLevelPolicy");
+                    b.Navigation("SchemeLevel");
 
                     b.Navigation("SRCForum");
                 });

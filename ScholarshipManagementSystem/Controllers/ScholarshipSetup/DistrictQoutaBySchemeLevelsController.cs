@@ -60,7 +60,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
+        public async Task<IActionResult> Create([Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,SchemeLevelPolicyId,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,SchemeLevelPolicyId,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
         {
             if (id != districtQoutaBySchemeLevel.DistrictQoutaBySchemeLevelId)
             {
