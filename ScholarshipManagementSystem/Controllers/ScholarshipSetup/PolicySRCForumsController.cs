@@ -311,7 +311,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 }
                 else
                 {
-                    if(currentScheme.SchemeId == 3) // Bachlor-BS (Other then first year)
+                    if(currentScheme.SchemeId == 4) // Bachlor-BS (Other then first year)
                     {
                         POMS = Preferences.BSProfThresholdForClass;
                         SQSOMS = Preferences.BSProfThresholdForClass/Preferences.IOMSBachelorQoutaPER*Preferences.SQSEVIBachelorQoutaPER;
@@ -321,7 +321,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         Obj.PolicySRCForumId = SRCForumId;
                         Obj.CreatedOn = DateTime.Now;
                     }
-                    else if(currentScheme.SchemeId == 4) // Master
+                    else if(currentScheme.SchemeId == 5) // Master
                     {
                         POMS = Preferences.MasterThreshold;
                         SQSOMS = Preferences.MasterThreshold / Preferences.IOMSMasterQoutaPER * Preferences.SQSEVIMasterQoutaPER;
@@ -331,7 +331,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         Obj.PolicySRCForumId = SRCForumId;
                         Obj.CreatedOn = DateTime.Now;
                     }                   
-                    else if (currentScheme.SchemeId == 5) // MS/M.Phil
+                    else if (currentScheme.SchemeId == 6) // MS/M.Phil
                     {
                         POMS = Preferences.MSThreshold;
                         SQSOMS = Preferences.MSThreshold / Preferences.IOMSMSQoutaPER * Preferences.SQSEVIMSQoutaPER;
