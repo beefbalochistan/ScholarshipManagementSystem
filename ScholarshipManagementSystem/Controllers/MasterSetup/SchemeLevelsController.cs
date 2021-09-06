@@ -24,7 +24,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: SchemeLevels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SchemeLevel.Include(s => s.Degree).Include(s => s.Scheme).Include(s => s.InstitudeDepartment).OrderBy(a=>a.SchemeId);
+            var applicationDbContext = _context.SchemeLevel.Include(s => s.Degree).Include(s => s.Scheme).Include(s => s.InstitudeDepartment).OrderBy(a=>a.OrderBy);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -63,7 +63,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
         {
             if (id != schemeLevel.SchemeLevelId)
             {
