@@ -17,12 +17,12 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Division> Division { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.District> District { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DistrictDetail> DistrictDetail { get; set; }
-        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeType> InstitudeType { get; set; }
-        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Institude> Institude { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteType> InstituteType { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute> Institute { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel> QualificationLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Discipline> Discipline { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree> Degree { get; set; }
-        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment> InstitudeDepartment { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel> SchemeLevel { get; set; }
@@ -36,6 +36,10 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail> SMSAPIServiceAuditTrail { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage> SMSMassage { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute> DAEInstitute { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteFaculty> InstituteFaculty { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel> DAEInstituteQoutaBySchemeLevel { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Faculty> Faculty { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel> DegreeLevel { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel> SchemeLevelDegreeLevel { get; set; }
     }
 }

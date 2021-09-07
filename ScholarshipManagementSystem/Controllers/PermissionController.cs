@@ -32,9 +32,9 @@ public class PermissionController : Controller
         allPermissions.GetPermissions(typeof(Permissions.ScholarshipFiscalYear), roleId);
         allPermissions.GetPermissions(typeof(Permissions.Degree), roleId);
         allPermissions.GetPermissions(typeof(Permissions.Discipline), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.InstitudeType), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.Institude), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.InstitudeDepartment), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.InstituteType), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Institute), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.InstituteDepartment), roleId);
         allPermissions.GetPermissions(typeof(Permissions.QualificationLevel), roleId);
         allPermissions.GetPermissions(typeof(Permissions.Scheme), roleId);
         allPermissions.GetPermissions(typeof(Permissions.SchemeLevel), roleId);

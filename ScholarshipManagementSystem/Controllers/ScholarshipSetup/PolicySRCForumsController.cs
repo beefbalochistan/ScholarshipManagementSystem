@@ -25,7 +25,20 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> PolicyFiscalYear()
+        {
+            var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
 
+            /*var grouped = from b in _context.Products
+                          group b.Id by b.Category.Name into g
+                          select new
+                          {
+                              Key = g.Key,
+                              Products = g.Count()
+                          };*/
+            //var result = grouped.ToList();
+            return View(await applicationDbContext.ToListAsync());
+        }
         // GET: PolicySRCForums/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -97,7 +110,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
             return View(policySRCForum);
         }
-        private async Task<int> DistrictSlotAllocation(float DOMSSlot, int SRCId, int DistrictThreshold, int SchemeLevelPolicyId, int Stipend, float districtSlotPopulationPer, float districtSlotMPIPer)
+        private async Task<int> DistrictSlotAllocation(float DOMSSlot, int SRCId, float DistrictThreshold, int SchemeLevelPolicyId, int Stipend, float districtSlotPopulationPer, float districtSlotMPIPer)
         {
             var totalPopulation = _context.DistrictDetail.Include(a=>a.District).Where(a=>a.District.IsActive == true).Sum(a=>a.Population);
             float OnePercentPopulation = (float)totalPopulation / 100f;
@@ -135,7 +148,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             await _context.SaveChangesAsync();
             return 1;
         }
-        private async Task<int> DAEInstituteSlotAllocation(float DOMSSlot, int SRCId,int SchemeLvevePolicylId, int DAEThreshold, int Stipend, int TotalEnrollment)
+        private async Task<int> DAEInstituteSlotAllocation(float DOMSSlot, int SRCId,int SchemeLvevePolicylId, float DAEThreshold, int Stipend, int TotalEnrollment, string year)
         {
             var DAEInstitutes = await _context.DAEInstitute.Where(a => a.IsActive == true).ToListAsync();
             var OnePercentEnrollment = (float)TotalEnrollment / 100f;
@@ -144,12 +157,14 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 DAEInstituteQoutaBySchemeLevel Obj = new DAEInstituteQoutaBySchemeLevel();
                 Obj.PolicySRCForumId = SRCId;
+                Obj.Year = year;
                 Obj.SchemeLevelPolicyId = SchemeLvevePolicylId;
                 Obj.StipendAmount = Stipend;
                 Obj.DAEInstituteId = institute.DAEInstituteId;
-                Obj.Threshold = (float)DAEThreshold/3f;
-                Obj.ClassEnrollment = institute.Enrollment1stY;
-                Obj.SlotAllocate = institute.Enrollment1stY / OnePercentEnrollment * OnePercentSlot;
+                Obj.Threshold = (float)DAEThreshold;
+                var classEnrollment = (year == "1st" ? institute.Enrollment1stY : (year == "2nd" ? institute.Enrollment2ndY : (year == "3rd" ? institute.Enrollment3rdY : 0)));
+                Obj.ClassEnrollment = classEnrollment;
+                Obj.SlotAllocate = classEnrollment / OnePercentEnrollment * OnePercentSlot;
                 if(Obj.SlotAllocate < DAEThreshold)
                 {
                     Obj.InstituteAdditionalSlot = DAEThreshold - Obj.SlotAllocate;
@@ -260,7 +275,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     _context.Add(Obj);
                     await _context.SaveChangesAsync();
                     var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE1stY);
+                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE1stY, "1st");
                 }
                 else if (schemeLevel.SchemeLevelId == 9)// DAE 1st Yr Pass 2nd Yr
                 {
@@ -282,7 +297,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     _context.Add(Obj);
                     await _context.SaveChangesAsync();
                     var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE2ndY);
+                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE2ndY, "2nd");
                 }
                 else if (schemeLevel.SchemeLevelId == 10)// DAE 2nd Yr Pass 3rd Yr
                 {
@@ -304,7 +319,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     _context.Add(Obj);
                     await _context.SaveChangesAsync();
                     var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE3rdY);
+                    await DAEInstituteSlotAllocation(DOMS, SRCForumId, MaxId, preferences.DAEThreshold, preferences.SchemeDAEStipend, TotalDAE3rdY, "3rd");
                 }
                 else if (currentScheme.SchemeId == 3 && schemeLevel.Name.Contains("1st")) // Simple Graduation BA/BSc
                 {
@@ -328,10 +343,10 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 else if (currentScheme.SchemeId == 4 && schemeLevel.Name.Contains("1st")) // BS/BE 1st Professional
                 {
                     Obj.Amount = preferences.SchemeBacholarStipend;
-                    POMS = preferences.SlotBacholar1Y / 100f * preferences.IOMSGraduationQoutaPER;
-                    SQSOMS = preferences.SlotBacholar1Y / 100f * preferences.SQSOMSGraduationQoutaPER;
-                    SQSEVI = preferences.SlotBacholar1Y / 100f * preferences.SQSEVIGraduationQoutaPER;
-                    DOMS = preferences.SlotBacholar1Y / 100f * preferences.DOMSGraduationQoutaPER;                    
+                    POMS = preferences.SlotBacholar1Y / 100f * preferences.IOMSBachelor1stYQoutaPER;
+                    SQSOMS = preferences.SlotBacholar1Y / 100f * preferences.SQSOMSBachelor1stYQoutaPER;
+                    SQSEVI = preferences.SlotBacholar1Y / 100f * preferences.SQSEVIBachelor1stYQoutaPER;
+                    DOMS = preferences.SlotBacholar1Y / 100f * preferences.DOMSBachelor1stYQoutaPER;                    
                     Obj.POMS = POMS;
                     Obj.SQSOMS = SQSOMS;
                     Obj.SQSEVIs = SQSEVI;
@@ -342,7 +357,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     _context.Add(Obj);
                     await _context.SaveChangesAsync();
                     var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                    await DistrictSlotAllocation(DOMS, SRCForumId, preferences.GraduationThreshold, MaxId, preferences.SchemeGraduationStipend, preferences.DistrictSlotPopulationPer, preferences.DistrictSlotMPIPer);
+                    await DistrictSlotAllocation(DOMS, SRCForumId, preferences.BSProfDistrictThresholdFor1stY, MaxId, preferences.SchemeBacholarStipend, preferences.DistrictSlotPopulationPer, preferences.DistrictSlotMPIPer);
                 }
                 else
                 {
@@ -350,9 +365,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     {
                         Obj.Amount = preferences.SchemeBacholarStipend;
                         POMS = preferences.BSProfThresholdForClass;
-                        SQSOMS = preferences.BSProfThresholdForClass/preferences.IOMSBachelorQoutaPER*preferences.SQSEVIBachelorQoutaPER;
-                        SQSEVI = preferences.BSProfThresholdForClass/preferences.IOMSBachelorQoutaPER*preferences.SQSOMSBachelorQoutaPER;
-                        DOMS = (float)preferences.BSProfThresholdForClass/100f*(float)preferences.IOMSBachelorQoutaPER;                                            
+                        SQSOMS = preferences.BSProfThresholdForClass/preferences.IOMSBachelorClassQoutaPER*preferences.SQSEVIBachelorClassQoutaPER;
+                        SQSEVI = preferences.BSProfThresholdForClass/preferences.IOMSBachelorClassQoutaPER*preferences.SQSOMSBachelorClassQoutaPER;
+                        DOMS = (float)preferences.BSProfThresholdForClass/100f*(float)preferences.IOMSBachelorClassQoutaPER;                                            
                         Obj.SchemeLevelId = schemeLevel.SchemeLevelId;
                         Obj.PolicySRCForumId = SRCForumId;
                         Obj.CreatedOn = DateTime.Now;

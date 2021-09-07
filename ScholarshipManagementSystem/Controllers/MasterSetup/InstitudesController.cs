@@ -16,23 +16,23 @@ using SixLabors.ImageSharp.Processing;
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
     [AllowAnonymous]
-    public class InstitudesController : Controller
+    public class InstitutesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InstitudesController(ApplicationDbContext context)
+        public InstitutesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Institudes
+        // GET: Institutes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Institude.Include(i => i.InstitudeType).Include(i => i.Provience);
+            var applicationDbContext = _context.Institute.Include(i => i.InstituteType).Include(i => i.Provience);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Institudes/Details/5
+        // GET: Institutes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,31 +40,31 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institude = await _context.Institude
-                .Include(i => i.InstitudeType)
-                .FirstOrDefaultAsync(m => m.InstitudeId == id);
-            if (institude == null)
+            var Institute = await _context.Institute
+                .Include(i => i.InstituteType)
+                .FirstOrDefaultAsync(m => m.InstituteId == id);
+            if (Institute == null)
             {
                 return NotFound();
             }
 
-            return View(institude);
+            return View(Institute);
         }
 
-        // GET: Institudes/Create
+        // GET: Institutes/Create
         public IActionResult Create()
         {
-            ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name");
+            ViewData["InstituteTypeId"] = new SelectList(_context.InstituteType, "InstituteTypeId", "Name");
             ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name");
             return View();
         }
      
-        // POST: Institudes/Create
+        // POST: Institutes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude, IFormFile Attachment)
+        public async Task<IActionResult> Create([Bind("InstituteId,InstituteTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institute Institute, IFormFile Attachment)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     Random random = new Random();
                     int randomNumber = random.Next(1, 1000);
                     fileName = "Logo" + randomNumber.ToString() + fileName;
-                    institude.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
+                    Institute.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
                     string sPath = Path.Combine(rootPath);
                     if (!System.IO.Directory.Exists(sPath))
                     {
@@ -93,16 +93,16 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     image.Mutate(x => x.Resize(60, 60));
                     image.Save(FullPathWithFileName);
                 }
-                _context.Add(institude);
+                _context.Add(Institute);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
-            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
-            return View(institude);
+            ViewData["InstituteTypeId"] = new SelectList(_context.InstituteType, "InstituteTypeId", "Name", Institute.InstituteTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", Institute.ProvienceId);
+            return View(Institute);
         }
 
-        // GET: Institudes/Edit/5
+        // GET: Institutes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,24 +110,24 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institude = await _context.Institude.FindAsync(id);
-            if (institude == null)
+            var Institute = await _context.Institute.FindAsync(id);
+            if (Institute == null)
             {
                 return NotFound();
             }
-            ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
-            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
-            return View(institude);
+            ViewData["InstituteTypeId"] = new SelectList(_context.InstituteType, "InstituteTypeId", "Name", Institute.InstituteTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", Institute.ProvienceId);
+            return View(Institute);
         }
 
-        // POST: Institudes/Edit/5
+        // POST: Institutes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstitudeId,InstitudeTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institude institude, IFormFile Attachment)
+        public async Task<IActionResult> Edit(int id, [Bind("InstituteId,InstituteTypeId,Name,NameAbbreviation,Website,Email,PhoneNo,FaxNo,ProvienceId,Address,FocalPersonName,FocalPersonEmail,FocalPersonPhoneNo,LogoPath")] Institute Institute, IFormFile Attachment)
         {
-            if (id != institude.InstitudeId)
+            if (id != Institute.InstituteId)
             {
                 return NotFound();
             }
@@ -149,7 +149,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         Random random = new Random();
                         int randomNumber = random.Next(1, 1000);
                         fileName = "Logo" + randomNumber.ToString() + fileName;
-                        institude.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
+                        Institute.LogoPath = Path.Combine("/Institutes/Logo/", fileName);//Server Path
                         string sPath = Path.Combine(rootPath);
                         if (!System.IO.Directory.Exists(sPath))
                         {
@@ -161,12 +161,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         image.Mutate(x => x.Resize(60, 60));
                         image.Save(FullPathWithFileName);
                     }
-                    _context.Update(institude);
+                    _context.Update(Institute);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstitudeExists(institude.InstitudeId))
+                    if (!InstituteExists(Institute.InstituteId))
                     {
                         return NotFound();
                     }
@@ -177,12 +177,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstitudeTypeId"] = new SelectList(_context.InstitudeType, "InstitudeTypeId", "Name", institude.InstitudeTypeId);
-            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", institude.ProvienceId);
-            return View(institude);
+            ViewData["InstituteTypeId"] = new SelectList(_context.InstituteType, "InstituteTypeId", "Name", Institute.InstituteTypeId);
+            ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Name", Institute.ProvienceId);
+            return View(Institute);
         }
 
-        // GET: Institudes/Delete/5
+        // GET: Institutes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -190,31 +190,31 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institude = await _context.Institude
-                .Include(i => i.InstitudeType)
-                .FirstOrDefaultAsync(m => m.InstitudeId == id);
-            if (institude == null)
+            var Institute = await _context.Institute
+                .Include(i => i.InstituteType)
+                .FirstOrDefaultAsync(m => m.InstituteId == id);
+            if (Institute == null)
             {
                 return NotFound();
             }
 
-            return View(institude);
+            return View(Institute);
         }
 
-        // POST: Institudes/Delete/5
+        // POST: Institutes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var institude = await _context.Institude.FindAsync(id);
-            _context.Institude.Remove(institude);
+            var Institute = await _context.Institute.FindAsync(id);
+            _context.Institute.Remove(Institute);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstitudeExists(int id)
+        private bool InstituteExists(int id)
         {
-            return _context.Institude.Any(e => e.InstitudeId == id);
+            return _context.Institute.Any(e => e.InstituteId == id);
         }
     }
 }

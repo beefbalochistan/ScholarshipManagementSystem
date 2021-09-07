@@ -17,16 +17,16 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [ForeignKey("Scheme")]
         [Display(Name = "Scheme")]
         public int SchemeId { get; set; }
-        [ForeignKey("InstitudeDepartment")]
-        [Display(Name = "Institude Department")]
-        public int InstitudeDepartmentId { get; set; }
-        [ForeignKey("Degree")]
-        [Display(Name = "Degree")]
-        public int DegreeId { get; set; }
+        [ForeignKey("Institute")]
+        [Display(Name = "Institute")]
+        public int InstituteId { get; set; }
+        [ForeignKey("QualificationLevel")]
+        [Display(Name = "QualificationLevel")]
+        public int QualificationLevelId { get; set; }
         public int OrderBy { get; set; }
         public bool IsActive { get; set; } = true;
         public virtual Scheme Scheme { get; set; }
-        public virtual Degree Degree { get; set; }
-        public virtual InstitudeDepartment InstitudeDepartment { get; set; }
+        public virtual QualificationLevel QualificationLevel { get; set; }
+        public virtual Institute Institute { get; set; }
     }
 }

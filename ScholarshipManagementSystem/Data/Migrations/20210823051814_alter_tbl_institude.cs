@@ -2,14 +2,14 @@
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
-    public partial class alter_tbl_institude : Migration
+    public partial class alter_tbl_Institute : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "FocalPersonPhoneNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -18,7 +18,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "FocalPersonName",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -27,7 +27,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "FocalPersonEmail",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -36,7 +36,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Email",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -45,7 +45,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -57,7 +57,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "FocalPersonPhoneNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -68,7 +68,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "FocalPersonName",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -79,7 +79,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "FocalPersonEmail",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -90,7 +90,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "Email",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -101,7 +101,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "Address",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,

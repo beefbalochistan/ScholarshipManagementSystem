@@ -20,9 +20,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     SchemeMaster = table.Column<int>(type: "int", nullable: false),
                     SchemeMS = table.Column<int>(type: "int", nullable: false),
                     DistrictThreshold = table.Column<int>(type: "int", nullable: false),
-                    InstitudeThreshold = table.Column<int>(type: "int", nullable: false),
+                    InstituteThreshold = table.Column<int>(type: "int", nullable: false),
                     POMSDOMSBoardQouta = table.Column<int>(type: "int", nullable: false),
-                    POMSDOMSInstitudeQouta = table.Column<int>(type: "int", nullable: false),
+                    POMSDOMSInstituteQouta = table.Column<int>(type: "int", nullable: false),
                     SQSOMSQouta = table.Column<int>(type: "int", nullable: false),
                     SQSEVIQouta = table.Column<int>(type: "int", nullable: false)
                 },

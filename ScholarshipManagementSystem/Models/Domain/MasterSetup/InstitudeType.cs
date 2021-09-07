@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
 {
-    [Table("InstitudeType", Schema = "master")]
-    public class InstitudeType
+    [Table("InstituteType", Schema = "master")]
+    public class InstituteType
     {
         [Key]
-        public int InstitudeTypeId { get; set; }
+        public int InstituteTypeId { get; set; }
         [Required]
         public string Name { get; set; }        
         public string Description { get; set; }        

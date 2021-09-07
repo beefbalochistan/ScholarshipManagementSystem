@@ -41,13 +41,13 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 newName: "SlotDAE3Y");
 
             migrationBuilder.RenameColumn(
-                name: "InstitudeThreshold",
+                name: "InstituteThreshold",
                 schema: "master",
                 table: "Preference",
                 newName: "SlotDAE2Y");
 
             migrationBuilder.RenameColumn(
-                name: "IOMSInstitudeQouta",
+                name: "IOMSInstituteQouta",
                 schema: "master",
                 table: "Preference",
                 newName: "SlotDAE1Y");
@@ -59,7 +59,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 newName: "SlotBacholar1Y");
 
             migrationBuilder.RenameColumn(
-                name: "DOMSInstitudeQouta",
+                name: "DOMSInstituteQouta",
                 schema: "master",
                 table: "Preference",
                 newName: "SchemeMatricStipend");
@@ -601,13 +601,13 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 name: "SlotDAE2Y",
                 schema: "master",
                 table: "Preference",
-                newName: "InstitudeThreshold");
+                newName: "InstituteThreshold");
 
             migrationBuilder.RenameColumn(
                 name: "SlotDAE1Y",
                 schema: "master",
                 table: "Preference",
-                newName: "IOMSInstitudeQouta");
+                newName: "IOMSInstituteQouta");
 
             migrationBuilder.RenameColumn(
                 name: "SlotBacholar1Y",
@@ -619,7 +619,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 name: "SchemeMatricStipend",
                 schema: "master",
                 table: "Preference",
-                newName: "DOMSInstitudeQouta");
+                newName: "DOMSInstituteQouta");
 
             migrationBuilder.RenameColumn(
                 name: "SchemeGraduationStipend",

@@ -7,7 +7,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "POMSDOMSInstitudeQouta",
+                name: "POMSDOMSInstituteQouta",
                 schema: "master",
                 table: "Preference",
                 newName: "POMSIBoardQouta");
@@ -16,7 +16,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 name: "POMSDOMSBoardQouta",
                 schema: "master",
                 table: "Preference",
-                newName: "IOMSInstitudeQouta");
+                newName: "IOMSInstituteQouta");
 
             migrationBuilder.AddColumn<int>(
                 name: "DOMSBoardQouta",
@@ -27,7 +27,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
-                name: "DOMSInstitudeQouta",
+                name: "DOMSInstituteQouta",
                 schema: "master",
                 table: "Preference",
                 type: "int",
@@ -43,7 +43,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 table: "Preference");
 
             migrationBuilder.DropColumn(
-                name: "DOMSInstitudeQouta",
+                name: "DOMSInstituteQouta",
                 schema: "master",
                 table: "Preference");
 
@@ -51,10 +51,10 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 name: "POMSIBoardQouta",
                 schema: "master",
                 table: "Preference",
-                newName: "POMSDOMSInstitudeQouta");
+                newName: "POMSDOMSInstituteQouta");
 
             migrationBuilder.RenameColumn(
-                name: "IOMSInstitudeQouta",
+                name: "IOMSInstituteQouta",
                 schema: "master",
                 table: "Preference",
                 newName: "POMSDOMSBoardQouta");

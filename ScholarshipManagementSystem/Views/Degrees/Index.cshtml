@@ -110,7 +110,7 @@
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <td>
-                                                        <a asp-action="Edit" asp-route-id="@item.QualificationLevelId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        <a asp-action="Edit" asp-route-id="@item.DegreeId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                     </td>
                                                 }
 

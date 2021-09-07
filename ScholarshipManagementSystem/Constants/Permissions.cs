@@ -72,26 +72,26 @@ public static class Permissions
             public const string Edit = "Permissions.Discipline.Edit";
             public const string Delete = "Permissions.Discipline.Delete";
         }
-        public static class InstitudeType
+        public static class InstituteType
         {
-            public const string View = "Permissions.InstitudeType.View";
-            public const string Create = "Permissions.InstitudeType.Create";
-            public const string Edit = "Permissions.InstitudeType.Edit";
-            public const string Delete = "Permissions.InstitudeType.Delete";
+            public const string View = "Permissions.InstituteType.View";
+            public const string Create = "Permissions.InstituteType.Create";
+            public const string Edit = "Permissions.InstituteType.Edit";
+            public const string Delete = "Permissions.InstituteType.Delete";
         }
-        public static class Institude
+        public static class Institute
         {
-            public const string View = "Permissions.Institude.View";
-            public const string Create = "Permissions.Institude.Create";
-            public const string Edit = "Permissions.Institude.Edit";
-            public const string Delete = "Permissions.Institude.Delete";
+            public const string View = "Permissions.Institute.View";
+            public const string Create = "Permissions.Institute.Create";
+            public const string Edit = "Permissions.Institute.Edit";
+            public const string Delete = "Permissions.Institute.Delete";
         }
-        public static class InstitudeDepartment
+        public static class InstituteDepartment
         {
-            public const string View = "Permissions.InstitudeDepartment.View";
-            public const string Create = "Permissions.InstitudeDepartment.Create";
-            public const string Edit = "Permissions.InstitudeDepartment.Edit";
-            public const string Delete = "Permissions.InstitudeDepartment.Delete";
+            public const string View = "Permissions.InstituteDepartment.View";
+            public const string Create = "Permissions.InstituteDepartment.Create";
+            public const string Edit = "Permissions.InstituteDepartment.Edit";
+            public const string Delete = "Permissions.InstituteDepartment.Delete";
         }
         public static class QualificationLevel
         {

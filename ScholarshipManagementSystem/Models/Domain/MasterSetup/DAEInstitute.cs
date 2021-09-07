@@ -36,6 +36,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public int Enrollment1stY { get; set; }
         public int Enrollment2ndY { get; set; }
         public int Enrollment3rdY { get; set; }
+        public string DAEYear { get; set; }
         [ForeignKey("District")]
         [Display(Name = "District")]
         public int DistrictId { get; set; }

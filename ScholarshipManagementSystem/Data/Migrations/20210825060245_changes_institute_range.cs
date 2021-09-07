@@ -9,7 +9,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "ProvienceId",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -29,15 +29,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 oldMaxLength: 3);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Institude_ProvienceId",
+                name: "IX_Institute_ProvienceId",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 column: "ProvienceId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Institude_Provience_ProvienceId",
+                name: "FK_Institute_Provience_ProvienceId",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 column: "ProvienceId",
                 principalSchema: "master",
                 principalTable: "Provience",
@@ -48,19 +48,19 @@ namespace ScholarshipManagementSystem.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Institude_Provience_ProvienceId",
+                name: "FK_Institute_Provience_ProvienceId",
                 schema: "master",
-                table: "Institude");
+                table: "Institute");
 
             migrationBuilder.DropIndex(
-                name: "IX_Institude_ProvienceId",
+                name: "IX_Institute_ProvienceId",
                 schema: "master",
-                table: "Institude");
+                table: "Institute");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ProvienceId",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),

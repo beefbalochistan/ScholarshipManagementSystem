@@ -31,23 +31,23 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public int DistrictSlotMPIPer { get; set; }
         //--------------------Threshold--------------------------
         [Display(Name = "Matric Threshold")]
-        public int MatricThreshold { get; set; }
+        public float MatricThreshold { get; set; }
         [Display(Name = "Intermediate Threshold")]
-        public int IntermediateThreshold { get; set; }
+        public float IntermediateThreshold { get; set; }
         [Display(Name = "DAE Threshold")]
-        public int DAEThreshold { get; set; }
+        public float DAEThreshold { get; set; }
         [Display(Name = "Graduation Threshold")]
-        public int GraduationThreshold { get; set; }
+        public float GraduationThreshold { get; set; }       
         [Display(Name = "BS Prof Threshold For Class")]
-        public int BSProfThresholdForClass { get; set; }
-        [Display(Name = "bachelor Threshold")]
-        public int BSProfDistrictThresholdFor1stY { get; set; }        
+        public float BSProfThresholdForClass { get; set; }
+        [Display(Name = "Bachelor Threshold For District")]
+        public float BSProfDistrictThresholdFor1stY { get; set; }        
         [Display(Name = "Master Threshold")]
-        public int MasterThreshold { get; set; }
+        public float MasterThreshold { get; set; }
         [Display(Name = "MS Threshold")]
-        public int MSThreshold { get; set; }
+        public float MSThreshold { get; set; }
         [Display(Name = "PhD Threshold")]
-        public int PhDThreshold { get; set; }
+        public float PhDThreshold { get; set; }
         //--------------------Qouta In Percentage---------------------
         //---Matric
         public float Qouta { get; set; }
@@ -87,14 +87,23 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Display(Name = "SQS-EVI Graduation Qouta Percentage")]
         public float SQSEVIGraduationQoutaPER { get; set; }
         //---Bachelor
-        [Display(Name = "IOMS Bachelor Qouta Percentage")]
-        public float IOMSBachelorQoutaPER { get; set; }
-        [Display(Name = "DOMS Bachelor Percentage")]
-        public float DOMSBachelorQoutaPER { get; set; }
-        [Display(Name = "SQS-OMS Bachelor Qouta Percentage")]
-        public float SQSOMSBachelorQoutaPER { get; set; }
-        [Display(Name = "SQS-EVI Bachelor Qouta Percentage")]
-        public float SQSEVIBachelorQoutaPER { get; set; }
+        [Display(Name = "IOMS Bachelor Class Qouta Percentage")]
+        public float IOMSBachelorClassQoutaPER { get; set; }
+        [Display(Name = "DOMS Bachelor Class Percentage")]
+        public float DOMSBachelorClassQoutaPER { get; set; }
+        [Display(Name = "SQS-OMS Bachelor Class Qouta Percentage")]
+        public float SQSOMSBachelorClassQoutaPER { get; set; }
+        [Display(Name = "SQS-EVI Bachelor Class Qouta Percentage")]
+        public float SQSEVIBachelorClassQoutaPER { get; set; }
+
+        [Display(Name = "IOMS Bachelor 1stY Qouta Percentage")]
+        public float IOMSBachelor1stYQoutaPER { get; set; }
+        [Display(Name = "DOMS Bachelor 1stY Percentage")]
+        public float DOMSBachelor1stYQoutaPER { get; set; }
+        [Display(Name = "SQS-OMS Bachelor 1st Qouta Percentage")]
+        public float SQSOMSBachelor1stYQoutaPER { get; set; }
+        [Display(Name = "SQS-EVI Bachelor 1stY Qouta Percentage")]
+        public float SQSEVIBachelor1stYQoutaPER { get; set; }
         //---Master
         [Display(Name = "IOMS Master Qouta Percentage")]
         public float IOMSMasterQoutaPER { get; set; }
@@ -128,8 +137,16 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public float SlotDAE3Y { get; set; }
         [Display(Name = "Slot Bacholar 1Y")]
         public float SlotBacholar1Y { get; set; }
-        [Display(Name = "Slot Bacholar")]
-        public float BacholarSlot { get; set; }
+        [Display(Name = "Graduation PROF 1stY Slot")]        
+        public float GraduationPROF1stYSlot { get; set; }
+        [Display(Name = "Graduation PROF 2ndY Slot")]
+        public float GraduationPROF2ndYSlot { get; set; }
+        [Display(Name = "Graduation PROF 3rdY Slot")]
+        public float GraduationPROF3rdYSlot { get; set; }
+        [Display(Name = "Graduation PROF 4th Slot")]
+        public float GraduationPROF4thYSlot { get; set; }
+        [Display(Name = "Graduation PROF 5th Slot")]
+        public float GraduationPROF5thYSlot { get; set; }
         [Display(Name = "Slot Master")]
         public float MasterSlot { get; set; }
         [Display(Name = "Slot MS")]

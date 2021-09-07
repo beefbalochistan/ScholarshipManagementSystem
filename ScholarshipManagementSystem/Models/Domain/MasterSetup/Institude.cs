@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
 {
-    [Table("Institude", Schema = "master")]
-    public class Institude
+    [Table("Institute", Schema = "master")]
+    public class Institute
     {
         [Key]
-        public int InstitudeId { get; set; }
-        [ForeignKey("InstitudeType")]
-        [Display(Name = "Institude Type")]
-        public int InstitudeTypeId { get; set; }
+        public int InstituteId { get; set; }
+        [ForeignKey("InstituteType")]
+        [Display(Name = "Institute Type")]
+        public int InstituteTypeId { get; set; }
         public string Name { get; set; }
         [Display(Name = "Abbreviation")]
         public string NameAbbreviation { get; set; }
@@ -36,7 +36,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public string FocalPersonPhoneNo { get; set; }
         [Display(Name = "Logo")]
         public string LogoPath { get; set; }
-        public virtual InstitudeType InstitudeType { get; set; }
+        public virtual InstituteType InstituteType { get; set; }
         public virtual Provience Provience { get; set; }
     }
 }

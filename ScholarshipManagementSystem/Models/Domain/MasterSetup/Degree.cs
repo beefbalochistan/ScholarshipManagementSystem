@@ -15,7 +15,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Required]
         public string Name { get; set; }
         [Required]
-        [MaxLength(8, ErrorMessage = "Code cannot exceeding from 8 digit")]
+        [MaxLength(12, ErrorMessage = "Code cannot exceeding from 12 digit")]
         public string Code { get; set; }
         public string Description { get; set; }
         public int Duration { get; set; }
@@ -24,6 +24,10 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [ForeignKey("QualificationLevel")]
         [Display(Name = "Qualification Level")]
         public int QualificationLevelId { get; set; }
+        [ForeignKey("Discipline")]
+        [Display(Name = "Discipline")]
+        public int DisciplineId { get; set; }
         public virtual QualificationLevel QualificationLevel { get; set; }
+        public virtual Discipline Discipline { get; set; }
     }
 }

@@ -557,9 +557,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Division", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institude", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", b =>
                 {
-                    b.Property<int>("InstitudeId")
+                    b.Property<int>("InstituteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -582,7 +582,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("FocalPersonPhoneNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstitudeTypeId")
+                    b.Property<int>("InstituteTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("LogoPath")
@@ -603,18 +603,18 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("Website")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("InstitudeId");
+                    b.HasKey("InstituteId");
 
-                    b.HasIndex("InstitudeTypeId");
+                    b.HasIndex("InstituteTypeId");
 
                     b.HasIndex("ProvienceId");
 
-                    b.ToTable("Institude", "master");
+                    b.ToTable("Institute", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment", b =>
                 {
-                    b.Property<int>("InstitudeDepartmentId")
+                    b.Property<int>("InstituteDepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -629,25 +629,25 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("DisciplineId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InstitudeId")
+                    b.Property<int>("InstituteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("InstitudeDepartmentId");
+                    b.HasKey("InstituteDepartmentId");
 
                     b.HasIndex("DisciplineId");
 
-                    b.HasIndex("InstitudeId");
+                    b.HasIndex("InstituteId");
 
-                    b.ToTable("InstitudeDepartment", "master");
+                    b.ToTable("InstituteDepartment", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeType", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteType", b =>
                 {
-                    b.Property<int>("InstitudeTypeId")
+                    b.Property<int>("InstituteTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -659,9 +659,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("InstitudeTypeId");
+                    b.HasKey("InstituteTypeId");
 
-                    b.ToTable("InstitudeType", "master");
+                    b.ToTable("InstituteType", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference", b =>
@@ -677,16 +677,16 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("DOMSBoardQouta")
                         .HasColumnType("int");
 
-                    b.Property<int>("DOMSInstitudeQouta")
+                    b.Property<int>("DOMSInstituteQouta")
                         .HasColumnType("int");
 
                     b.Property<int>("DistrictThreshold")
                         .HasColumnType("int");
 
-                    b.Property<int>("IOMSInstitudeQouta")
+                    b.Property<int>("IOMSInstituteQouta")
                         .HasColumnType("int");
 
-                    b.Property<int>("InstitudeThreshold")
+                    b.Property<int>("InstituteThreshold")
                         .HasColumnType("int");
 
                     b.Property<int>("POMSIBoardQouta")
@@ -868,7 +868,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("Description1")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstitudeDepartmentId")
+                    b.Property<int>("InstituteDepartmentId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -885,7 +885,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasIndex("DegreeId");
 
-                    b.HasIndex("InstitudeDepartmentId");
+                    b.HasIndex("InstituteDepartmentId");
 
                     b.HasIndex("SchemeId");
 
@@ -1206,11 +1206,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Provience");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institude", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeType", "InstitudeType")
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteType", "InstituteType")
                         .WithMany()
-                        .HasForeignKey("InstitudeTypeId")
+                        .HasForeignKey("InstituteTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1220,12 +1220,12 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("InstitudeType");
+                    b.Navigation("InstituteType");
 
                     b.Navigation("Provience");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment", b =>
                 {
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Discipline", "Discipline")
                         .WithMany()
@@ -1233,15 +1233,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institude", "Institude")
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", "Institute")
                         .WithMany()
-                        .HasForeignKey("InstitudeId")
+                        .HasForeignKey("InstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Discipline");
 
-                    b.Navigation("Institude");
+                    b.Navigation("Institute");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", b =>
@@ -1263,9 +1263,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstitudeDepartment", "InstitudeDepartment")
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment", "InstituteDepartment")
                         .WithMany()
-                        .HasForeignKey("InstitudeDepartmentId")
+                        .HasForeignKey("InstituteDepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1277,7 +1277,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Navigation("Degree");
 
-                    b.Navigation("InstitudeDepartment");
+                    b.Navigation("InstituteDepartment");
 
                     b.Navigation("Scheme");
                 });

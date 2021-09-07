@@ -24,7 +24,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: SchemeLevels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SchemeLevel.Include(s => s.Degree).Include(s => s.Scheme).Include(s => s.InstitudeDepartment).OrderBy(a=>a.OrderBy);
+            var applicationDbContext = _context.SchemeLevel.Include(s => s.QualificationLevel).Include(s => s.Scheme).Include(s => s.Institute).OrderBy(a=>a.OrderBy);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,9 +37,9 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
 
             var schemeLevel = await _context.SchemeLevel
-                .Include(s => s.Degree)
+                .Include(s => s.QualificationLevel)
                 .Include(s => s.Scheme)
-                .Include(s => s.InstitudeDepartment)
+                .Include(s => s.Institute)
                 .FirstOrDefaultAsync(m => m.SchemeLevelId == id);
             if (schemeLevel == null)
             {
@@ -52,8 +52,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: SchemeLevels/Create
         public IActionResult Create()
         {
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name");
-            ViewData["InstitudeDepartmentId"] = new SelectList(_context.InstitudeDepartment, "InstitudeDepartmentId", "Name");
+            ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name");
+            ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name");
             return View();
         }
@@ -63,7 +63,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstituteId,SchemeId,QualificationLevelId")] SchemeLevel schemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -71,8 +71,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", schemeLevel.DegreeId);
-            ViewData["InstitudeDepartmentId"] = new SelectList(_context.InstitudeDepartment, "InstitudeDepartmentId", "Name");
+            ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
+            ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
             return View(schemeLevel);
         }
@@ -90,8 +90,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", schemeLevel.DegreeId);
-            ViewData["InstitudeDepartmentId"] = new SelectList(_context.InstitudeDepartment, "InstitudeDepartmentId", "Name");
+            ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
+            ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
             return View(schemeLevel);
         }
@@ -101,7 +101,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstitudeDepartmentId,SchemeId,DegreeId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,OrderBy,Description1,IsActive,InstituteId,SchemeId,QualificationLevelId")] SchemeLevel schemeLevel)
         {
             if (id != schemeLevel.SchemeLevelId)
             {
@@ -128,8 +128,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", schemeLevel.DegreeId);
-            ViewData["InstitudeDepartmentId"] = new SelectList(_context.InstitudeDepartment, "InstitudeDepartmentId", "Name");
+            ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
+            ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name", schemeLevel.InstituteId);
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
             return View(schemeLevel);
         }
@@ -143,7 +143,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
 
             var schemeLevel = await _context.SchemeLevel
-                .Include(s => s.Degree)
+                .Include(s => s.QualificationLevel)
                 .Include(s => s.Scheme)
                 .FirstOrDefaultAsync(m => m.SchemeLevelId == id);
             if (schemeLevel == null)

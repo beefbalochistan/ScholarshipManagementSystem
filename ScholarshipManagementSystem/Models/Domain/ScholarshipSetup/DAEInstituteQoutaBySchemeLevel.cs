@@ -16,6 +16,7 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
         [Display(Name = "DAEInstitute")]
         public int DAEInstituteId { get; set; }
         public int ClassEnrollment { get; set; }
+        public string Year { get; set; }
         public float SlotAllocate { get; set; }
         public int StipendAmount { get; set; }
         public float Threshold { get; set; }        

@@ -12,23 +12,23 @@ using ScholarshipManagementSystem.Models.Domain.MasterSetup;
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
     [AllowAnonymous]
-    public class InstitudeDepartmentsController : Controller
+    public class InstituteDepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InstitudeDepartmentsController(ApplicationDbContext context)
+        public InstituteDepartmentsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: InstitudeDepartments
+        // GET: InstituteDepartments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.InstitudeDepartment.Include(i => i.Discipline).Include(i => i.Institude);
+            var applicationDbContext = _context.InstituteDepartment/*.Include(i => i.Discipline).Include(i => i.InstituteFaculty)*/;
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: InstitudeDepartments/Details/5
+        // GET: InstituteDepartments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,45 +36,45 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeDepartment = await _context.InstitudeDepartment
+            var InstituteDepartment = await _context.InstituteDepartment
                 .Include(i => i.Discipline)
-                .Include(i => i.Institude)
-                .FirstOrDefaultAsync(m => m.InstitudeDepartmentId == id);
-            if (institudeDepartment == null)
+                .Include(i => i.InstituteFaculty)
+                .FirstOrDefaultAsync(m => m.InstituteDepartmentId == id);
+            if (InstituteDepartment == null)
             {
                 return NotFound();
             }
 
-            return View(institudeDepartment);
+            return View(InstituteDepartment);
         }
 
-        // GET: InstitudeDepartments/Create
+        // GET: InstituteDepartments/Create
         public IActionResult Create()
         {
             ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name");
-            ViewData["InstitudeId"] = new SelectList(_context.Institude, "InstitudeId", "Name");
+            ViewData["InstituteFacultyId"] = new SelectList(_context.InstituteFaculty, "InstituteFacultyId", "Name");
             return View();
         }
 
-        // POST: InstitudeDepartments/Create
+        // POST: InstituteDepartments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InstitudeDepartmentId,Name,InstitudeId,DisciplineId,Code,Description")] InstitudeDepartment institudeDepartment)
+        public async Task<IActionResult> Create([Bind("InstituteDepartmentId,Name,InstituteFacultyId,DisciplineId,Code,Description")] InstituteDepartment InstituteDepartment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(institudeDepartment);
+                _context.Add(InstituteDepartment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", institudeDepartment.DisciplineId);
-            ViewData["InstitudeId"] = new SelectList(_context.Institude, "InstitudeId", "Name", institudeDepartment.InstitudeId);
-            return View(institudeDepartment);
+            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", InstituteDepartment.DisciplineId);
+            ViewData["InstituteFacultyId"] = new SelectList(_context.InstituteFaculty, "InstituteFacultyId", "Name", InstituteDepartment.InstituteFacultyId);
+            return View(InstituteDepartment);
         }
 
-        // GET: InstitudeDepartments/Edit/5
+        // GET: InstituteDepartments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,24 +82,24 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeDepartment = await _context.InstitudeDepartment.FindAsync(id);
-            if (institudeDepartment == null)
+            var InstituteDepartment = await _context.InstituteDepartment.FindAsync(id);
+            if (InstituteDepartment == null)
             {
                 return NotFound();
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", institudeDepartment.DisciplineId);
-            ViewData["InstitudeId"] = new SelectList(_context.Institude, "InstitudeId", "Name", institudeDepartment.InstitudeId);
-            return View(institudeDepartment);
+            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", InstituteDepartment.DisciplineId);
+            ViewData["InstituteFacultyId"] = new SelectList(_context.InstituteFaculty, "InstituteFacultyId", "Name", InstituteDepartment.InstituteFacultyId);
+            return View(InstituteDepartment);
         }
 
-        // POST: InstitudeDepartments/Edit/5
+        // POST: InstituteDepartments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstitudeDepartmentId,Name,InstitudeId,DisciplineId,Code,Description")] InstitudeDepartment institudeDepartment)
+        public async Task<IActionResult> Edit(int id, [Bind("InstituteDepartmentId,Name,InstituteFacultyId,DisciplineId,Code,Description")] InstituteDepartment InstituteDepartment)
         {
-            if (id != institudeDepartment.InstitudeDepartmentId)
+            if (id != InstituteDepartment.InstituteDepartmentId)
             {
                 return NotFound();
             }
@@ -108,12 +108,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 try
                 {
-                    _context.Update(institudeDepartment);
+                    _context.Update(InstituteDepartment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstitudeDepartmentExists(institudeDepartment.InstitudeDepartmentId))
+                    if (!InstituteDepartmentExists(InstituteDepartment.InstituteDepartmentId))
                     {
                         return NotFound();
                     }
@@ -124,12 +124,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", institudeDepartment.DisciplineId);
-            ViewData["InstitudeId"] = new SelectList(_context.Institude, "InstitudeId", "Name", institudeDepartment.InstitudeId);
-            return View(institudeDepartment);
+            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "Name", InstituteDepartment.DisciplineId);
+            ViewData["InstituteFacultyId"] = new SelectList(_context.InstituteFaculty, "InstituteFacultyId", "Name", InstituteDepartment.InstituteFacultyId);
+            return View(InstituteDepartment);
         }
 
-        // GET: InstitudeDepartments/Delete/5
+        // GET: InstituteDepartments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,32 +137,32 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeDepartment = await _context.InstitudeDepartment
+            var InstituteDepartment = await _context.InstituteDepartment
                 .Include(i => i.Discipline)
-                .Include(i => i.Institude)
-                .FirstOrDefaultAsync(m => m.InstitudeDepartmentId == id);
-            if (institudeDepartment == null)
+                .Include(i => i.InstituteFaculty)
+                .FirstOrDefaultAsync(m => m.InstituteDepartmentId == id);
+            if (InstituteDepartment == null)
             {
                 return NotFound();
             }
 
-            return View(institudeDepartment);
+            return View(InstituteDepartment);
         }
 
-        // POST: InstitudeDepartments/Delete/5
+        // POST: InstituteDepartments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var institudeDepartment = await _context.InstitudeDepartment.FindAsync(id);
-            _context.InstitudeDepartment.Remove(institudeDepartment);
+            var InstituteDepartment = await _context.InstituteDepartment.FindAsync(id);
+            _context.InstituteDepartment.Remove(InstituteDepartment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstitudeDepartmentExists(int id)
+        private bool InstituteDepartmentExists(int id)
         {
-            return _context.InstitudeDepartment.Any(e => e.InstitudeDepartmentId == id);
+            return _context.InstituteDepartment.Any(e => e.InstituteDepartmentId == id);
         }
     }
 }

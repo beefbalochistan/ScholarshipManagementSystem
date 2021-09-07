@@ -12,22 +12,22 @@ using ScholarshipManagementSystem.Models.Domain.MasterSetup;
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
     [AllowAnonymous]
-    public class InstitudeTypesController : Controller
+    public class InstituteTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InstitudeTypesController(ApplicationDbContext context)
+        public InstituteTypesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: InstitudeTypes
+        // GET: InstituteTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.InstitudeType.ToListAsync());
+            return View(await _context.InstituteType.ToListAsync());
         }
 
-        // GET: InstitudeTypes/Details/5
+        // GET: InstituteTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,39 +35,39 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeType = await _context.InstitudeType
-                .FirstOrDefaultAsync(m => m.InstitudeTypeId == id);
-            if (institudeType == null)
+            var InstituteType = await _context.InstituteType
+                .FirstOrDefaultAsync(m => m.InstituteTypeId == id);
+            if (InstituteType == null)
             {
                 return NotFound();
             }
 
-            return View(institudeType);
+            return View(InstituteType);
         }
 
-        // GET: InstitudeTypes/Create
+        // GET: InstituteTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: InstitudeTypes/Create
+        // POST: InstituteTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InstitudeTypeId,Name,Description")] InstitudeType institudeType)
+        public async Task<IActionResult> Create([Bind("InstituteTypeId,Name,Description")] InstituteType InstituteType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(institudeType);
+                _context.Add(InstituteType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(institudeType);
+            return View(InstituteType);
         }
 
-        // GET: InstitudeTypes/Edit/5
+        // GET: InstituteTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +75,22 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeType = await _context.InstitudeType.FindAsync(id);
-            if (institudeType == null)
+            var InstituteType = await _context.InstituteType.FindAsync(id);
+            if (InstituteType == null)
             {
                 return NotFound();
             }
-            return View(institudeType);
+            return View(InstituteType);
         }
 
-        // POST: InstitudeTypes/Edit/5
+        // POST: InstituteTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstitudeTypeId,Name,Description")] InstitudeType institudeType)
+        public async Task<IActionResult> Edit(int id, [Bind("InstituteTypeId,Name,Description")] InstituteType InstituteType)
         {
-            if (id != institudeType.InstitudeTypeId)
+            if (id != InstituteType.InstituteTypeId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 try
                 {
-                    _context.Update(institudeType);
+                    _context.Update(InstituteType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstitudeTypeExists(institudeType.InstitudeTypeId))
+                    if (!InstituteTypeExists(InstituteType.InstituteTypeId))
                     {
                         return NotFound();
                     }
@@ -115,10 +115,10 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(institudeType);
+            return View(InstituteType);
         }
 
-        // GET: InstitudeTypes/Delete/5
+        // GET: InstituteTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +126,30 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var institudeType = await _context.InstitudeType
-                .FirstOrDefaultAsync(m => m.InstitudeTypeId == id);
-            if (institudeType == null)
+            var InstituteType = await _context.InstituteType
+                .FirstOrDefaultAsync(m => m.InstituteTypeId == id);
+            if (InstituteType == null)
             {
                 return NotFound();
             }
 
-            return View(institudeType);
+            return View(InstituteType);
         }
 
-        // POST: InstitudeTypes/Delete/5
+        // POST: InstituteTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var institudeType = await _context.InstitudeType.FindAsync(id);
-            _context.InstitudeType.Remove(institudeType);
+            var InstituteType = await _context.InstituteType.FindAsync(id);
+            _context.InstituteType.Remove(InstituteType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstitudeTypeExists(int id)
+        private bool InstituteTypeExists(int id)
         {
-            return _context.InstitudeType.Any(e => e.InstitudeTypeId == id);
+            return _context.InstituteType.Any(e => e.InstituteTypeId == id);
         }
     }
 }

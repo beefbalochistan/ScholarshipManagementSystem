@@ -9,7 +9,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -18,7 +18,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "FaxNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -30,7 +30,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "PhoneNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -41,7 +41,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.AlterColumn<int>(
                 name: "FaxNo",
                 schema: "master",
-                table: "Institude",
+                table: "Institute",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
