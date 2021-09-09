@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210910113643_rename_column_calculat")]
+    partial class rename_column_calculat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -897,13 +899,10 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<float>("MSThreshold")
                         .HasColumnType("real");
 
-                    b.Property<float>("Master1stYSlot")
+                    b.Property<float>("Master1stYThreshold")
                         .HasColumnType("real");
 
-                    b.Property<float>("Master2ndYSlot")
-                        .HasColumnType("real");
-
-                    b.Property<float>("MasterThreshold")
+                    b.Property<float>("MasterSlot")
                         .HasColumnType("real");
 
                     b.Property<float>("MatricThreshold")
@@ -1009,12 +1008,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("SlotGraduationPROFCalculationMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SlotMSCalculationMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SlotMasterCalculationMethod")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("SlotMetric")

@@ -48,7 +48,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: DegreeLevels/Create
         public IActionResult Create()
         {
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Code");
+            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DegreeLevelId,Name,Code,DegreeId")] DegreeLevel degreeLevel)
+        public async Task<IActionResult> Create([Bind("DegreeLevelId,Name,Code,Year,DegreeId")] DegreeLevel degreeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Code", degreeLevel.DegreeId);
+            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", degreeLevel.DegreeId);
             return View(degreeLevel);
         }
 
@@ -82,7 +82,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Code", degreeLevel.DegreeId);
+            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", degreeLevel.DegreeId);
             return View(degreeLevel);
         }
 
@@ -91,7 +91,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DegreeLevelId,Name,Code,DegreeId")] DegreeLevel degreeLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("DegreeLevelId,Name,Year,Code,DegreeId")] DegreeLevel degreeLevel)
         {
             if (id != degreeLevel.DegreeLevelId)
             {
@@ -118,7 +118,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Code", degreeLevel.DegreeId);
+            ViewData["DegreeId"] = new SelectList(_context.Degree, "DegreeId", "Name", degreeLevel.DegreeId);
             return View(degreeLevel);
         }
 

@@ -13,7 +13,8 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Key]
         public int DegreeLevelId { get; set; }        
         public string Name { get; set; }
-        public string Code { get; set; }        
+        public string Code { get; set; }
+        public int Year { get; set; }
 
         [ForeignKey("Degree")]
         [Display(Name = "Degree")]

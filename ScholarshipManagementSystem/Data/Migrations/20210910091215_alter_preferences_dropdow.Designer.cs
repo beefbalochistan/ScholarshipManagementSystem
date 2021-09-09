@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210910091215_alter_preferences_dropdow")]
+    partial class alter_preferences_dropdow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,9 +463,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
                     b.HasKey("DegreeLevelId");
 
                     b.HasIndex("DegreeId");
@@ -493,7 +492,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Slot")
+                    b.Property<float>("Threshold")
                         .HasColumnType("real");
 
                     b.HasKey("DegreeScholarshipLevelId");
@@ -897,10 +896,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<float>("MSThreshold")
                         .HasColumnType("real");
 
-                    b.Property<float>("Master1stYSlot")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Master2ndYSlot")
+                    b.Property<float>("MasterSlot")
                         .HasColumnType("real");
 
                     b.Property<float>("MasterThreshold")
@@ -993,6 +989,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<float>("SlotBacholar1Y")
                         .HasColumnType("real");
 
+                    b.Property<string>("SlotCalculationMethod")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("SlotDAE1Y")
                         .HasColumnType("real");
 
@@ -1007,15 +1006,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<float>("SlotFAFSc2Y")
                         .HasColumnType("real");
-
-                    b.Property<string>("SlotGraduationPROFCalculationMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SlotMSCalculationMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SlotMasterCalculationMethod")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("SlotMetric")
                         .HasColumnType("real");

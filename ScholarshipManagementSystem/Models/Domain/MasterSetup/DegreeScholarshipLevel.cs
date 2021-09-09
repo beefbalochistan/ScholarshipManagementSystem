@@ -18,7 +18,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public int SchemeLevelId { get; set; }
         public bool IsActive { get; set; } = true;
         public int Enrollment { get; set; }
-        public float Threshold { get; set; }
+        public float Slot { get; set; }
         [ForeignKey("DegreeLevel")]
         [Display(Name = "DegreeLevel")]
         public int DegreeLevelId { get; set; }

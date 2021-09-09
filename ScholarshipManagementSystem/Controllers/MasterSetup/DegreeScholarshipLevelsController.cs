@@ -22,7 +22,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: DegreeScholarshipLevels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SchemeLevelDegreeLevel.Include(d => d.DegreeLevel).Include(d => d.SchemeLevel);
+            var applicationDbContext = _context.DegreeScholarshipLevel.Include(d => d.DegreeLevel).Include(d => d.SchemeLevel);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var degreeScholarshipLevel = await _context.SchemeLevelDegreeLevel
+            var degreeScholarshipLevel = await _context.DegreeScholarshipLevel
                 .Include(d => d.DegreeLevel)
                 .Include(d => d.SchemeLevel)
                 .FirstOrDefaultAsync(m => m.DegreeScholarshipLevelId == id);
@@ -59,7 +59,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DegreeScholarshipLevelId,Name,SchemeLevelId,IsActive,Enrollment,Threshold,DegreeLevelId")] DegreeScholarshipLevel degreeScholarshipLevel)
+        public async Task<IActionResult> Create([Bind("DegreeScholarshipLevelId,Name,SchemeLevelId,IsActive,Enrollment,Slot,DegreeLevelId")] DegreeScholarshipLevel degreeScholarshipLevel)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var degreeScholarshipLevel = await _context.SchemeLevelDegreeLevel.FindAsync(id);
+            var degreeScholarshipLevel = await _context.DegreeScholarshipLevel.FindAsync(id);
             if (degreeScholarshipLevel == null)
             {
                 return NotFound();
@@ -95,7 +95,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DegreeScholarshipLevelId,Name,SchemeLevelId,IsActive,Enrollment,Threshold,DegreeLevelId")] DegreeScholarshipLevel degreeScholarshipLevel)
+        public async Task<IActionResult> Edit(int id, [Bind("DegreeScholarshipLevelId,Name,SchemeLevelId,IsActive,Enrollment,Slot,DegreeLevelId")] DegreeScholarshipLevel degreeScholarshipLevel)
         {
             if (id != degreeScholarshipLevel.DegreeScholarshipLevelId)
             {
@@ -135,7 +135,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var degreeScholarshipLevel = await _context.SchemeLevelDegreeLevel
+            var degreeScholarshipLevel = await _context.DegreeScholarshipLevel
                 .Include(d => d.DegreeLevel)
                 .Include(d => d.SchemeLevel)
                 .FirstOrDefaultAsync(m => m.DegreeScholarshipLevelId == id);
@@ -152,15 +152,15 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var degreeScholarshipLevel = await _context.SchemeLevelDegreeLevel.FindAsync(id);
-            _context.SchemeLevelDegreeLevel.Remove(degreeScholarshipLevel);
+            var degreeScholarshipLevel = await _context.DegreeScholarshipLevel.FindAsync(id);
+            _context.DegreeScholarshipLevel.Remove(degreeScholarshipLevel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DegreeScholarshipLevelExists(int id)
         {
-            return _context.SchemeLevelDegreeLevel.Any(e => e.DegreeScholarshipLevelId == id);
+            return _context.DegreeScholarshipLevel.Any(e => e.DegreeScholarshipLevelId == id);
         }
     }
 }

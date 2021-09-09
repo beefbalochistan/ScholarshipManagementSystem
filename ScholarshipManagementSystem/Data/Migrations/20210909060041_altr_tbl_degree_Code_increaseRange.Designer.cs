@@ -1110,7 +1110,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevelDegreeLevel", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
                 {
                     b.Property<int>("SchemeLevelDegreeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1141,7 +1141,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasIndex("SchemeLevelId");
 
-                    b.ToTable("SchemeLevelDegreeLevel", "scholar");
+                    b.ToTable("DegreeScholarshipLevel", "scholar");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
@@ -1631,7 +1631,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Scheme");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevelDegreeLevel", b =>
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
                 {
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel", "DegreeLevel")
                         .WithMany()

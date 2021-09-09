@@ -369,11 +369,16 @@
                                                 <label asp-for="SQSEVIBachelorClassQoutaPER" class="control-label"></label>
                                                 <input asp-for="SQSEVIBachelorClassQoutaPER" class="form-control" />
                                                 <span asp-validation-for="SQSEVIBachelorClassQoutaPER" class="text-danger"></span>
-                                            </div>                                           
+                                            </div>
                                             <div class="form-group">
                                                 <label asp-for="GraduationPROF5thYSlot" class="control-label"></label>
                                                 <input asp-for="GraduationPROF5thYSlot" class="form-control" />
                                                 <span asp-validation-for="GraduationPROF5thYSlot" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotGraduationPROFCalculationMethod" class="control-label"></label>
+                                                <select asp-for="SlotGraduationPROFCalculationMethod" class="form-control" asp-items="ViewBag.ddList"></select>
+                                                <span asp-validation-for="SlotGraduationPROFCalculationMethod" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -414,9 +419,9 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="MasterThreshold" class="control-label"></label>
-                                                <input asp-for="MasterThreshold" class="form-control" />
-                                                <span asp-validation-for="MasterThreshold" class="text-danger"></span>
+                                                <label asp-for="Master1stYSlot" class="control-label"></label>
+                                                <input asp-for="Master1stYSlot" class="form-control" />
+                                                <span asp-validation-for="Master1stYSlot" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
                                                 <label asp-for="SQSOMSMasterQoutaPER" class="control-label"></label>
@@ -424,15 +429,20 @@
                                                 <span asp-validation-for="SQSOMSMasterQoutaPER" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
-                                                <label asp-for="MasterSlot" class="control-label"></label>
-                                                <input asp-for="MasterSlot" class="form-control" />
-                                                <span asp-validation-for="MasterSlot" class="text-danger"></span>
+                                                <label asp-for="Master2ndYSlot" class="control-label"></label>
+                                                <input asp-for="Master2ndYSlot" class="form-control" />
+                                                <span asp-validation-for="Master2ndYSlot" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
                                                 <input type="submit" value="Save" class="btn btn-primary" />
                                             </div>
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="MasterThreshold" class="control-label"></label>
+                                                <input asp-for="MasterThreshold" class="form-control" />
+                                                <span asp-validation-for="MasterThreshold" class="text-danger"></span>
+                                            </div>
                                             <div class="form-group">
                                                 <label asp-for="IOMSMasterQoutaPER" class="control-label"></label>
                                                 <input asp-for="IOMSMasterQoutaPER" class="form-control" />
@@ -454,6 +464,11 @@
                                                 <label asp-for="SchemeMasterStipend" class="control-label"></label>
                                                 <input asp-for="SchemeMasterStipend" class="form-control" />
                                                 <span asp-validation-for="SchemeMasterStipend" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotMasterCalculationMethod" class="control-label"></label>
+                                                <select asp-for="SlotMasterCalculationMethod" class="form-control" asp-items="ViewBag.ddList"></select>
+                                                <span asp-validation-for="SlotMasterCalculationMethod" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -505,6 +520,11 @@
                                                 <label asp-for="SQSEVIMSQoutaPER" class="control-label"></label>
                                                 <input asp-for="SQSEVIMSQoutaPER" class="form-control" />
                                                 <span asp-validation-for="SQSEVIMSQoutaPER" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SlotMSCalculationMethod" class="control-label"></label>
+                                                <select asp-for="SlotMSCalculationMethod" class="form-control" asp-items="ViewBag.ddList"></select>
+                                                <span asp-validation-for="SlotMSCalculationMethod" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

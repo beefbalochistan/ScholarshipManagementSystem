@@ -40,6 +40,6 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel> DAEInstituteQoutaBySchemeLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Faculty> Faculty { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel> DegreeLevel { get; set; }
-        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel> SchemeLevelDegreeLevel { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel> DegreeScholarshipLevel { get; set; }
     }
 }

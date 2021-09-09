@@ -32,10 +32,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Code)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Degree.Code)
+                @Html.DisplayFor(modelItem => item.Degree.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DegreeLevelId">Edit</a> |

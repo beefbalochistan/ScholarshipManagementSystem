@@ -42,8 +42,8 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public float BSProfThresholdForClass { get; set; }
         [Display(Name = "Bachelor Threshold For District")]
         public float BSProfDistrictThresholdFor1stY { get; set; }        
-        [Display(Name = "Master Threshold")]
-        public float MasterThreshold { get; set; }
+        [Display(Name = "Master 1stY Threshold")]
+        public float MasterThreshold { get; set; }        
         [Display(Name = "MS Threshold")]
         public float MSThreshold { get; set; }
         [Display(Name = "PhD Threshold")]
@@ -147,8 +147,16 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public float GraduationPROF4thYSlot { get; set; }
         [Display(Name = "Graduation PROF 5th Slot")]
         public float GraduationPROF5thYSlot { get; set; }
-        [Display(Name = "Slot Master")]
-        public float MasterSlot { get; set; }
+        [Display(Name = "Slot Graduation PROF Calculation Method")]
+        public string SlotGraduationPROFCalculationMethod { get; set; }
+        [Display(Name = "Slot 1stY Master")]
+        public float Master1stYSlot { get; set; }
+        [Display(Name = "Slot 2ndY Master")]
+        public float Master2ndYSlot { get; set; }
+        [Display(Name = "Slot Master Calculation Method")]
+        public string SlotMasterCalculationMethod { get; set; }
+        [Display(Name = "Slot MS/M.Phil Calculation Method")]
+        public string SlotMSCalculationMethod { get; set; }
         [Display(Name = "Slot MS")]
         public float MSSlot { get; set; }
     }

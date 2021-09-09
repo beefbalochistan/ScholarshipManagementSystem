@@ -7,7 +7,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SchemeLevelDegreeLevel",
+                name: "DegreeScholarshipLevel",
                 schema: "scholar");
 
             migrationBuilder.CreateTable(
@@ -63,7 +63,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 schema: "master");
 
             migrationBuilder.CreateTable(
-                name: "SchemeLevelDegreeLevel",
+                name: "DegreeScholarshipLevel",
                 schema: "scholar",
                 columns: table => new
                 {
@@ -98,13 +98,13 @@ namespace ScholarshipManagementSystem.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SchemeLevelDegreeLevel_DegreeLevelId",
                 schema: "scholar",
-                table: "SchemeLevelDegreeLevel",
+                table: "DegreeScholarshipLevel",
                 column: "DegreeLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SchemeLevelDegreeLevel_SchemeLevelId",
                 schema: "scholar",
-                table: "SchemeLevelDegreeLevel",
+                table: "DegreeScholarshipLevel",
                 column: "SchemeLevelId");
         }
     }

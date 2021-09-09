@@ -28,6 +28,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
 
             var preference = await _context.Preference.FindAsync(id);
+            var list = new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="By Total Slot", Value = "By Total Slot" },
+                    new SelectListItem{ Text="By Enrollment", Value = "By Enrollment" },
+                    new SelectListItem{ Text="By Degree Level Slot", Value = "By Degree Level Slot" },                    
+                    new SelectListItem{ Text="By Equal Threshold", Value = "By Equal Threshold" },                    
+                };
+            ViewData["ddList"] = list;
             if (preference == null)
             {
                 return NotFound();
