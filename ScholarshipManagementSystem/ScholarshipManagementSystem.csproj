@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\GazResultUpload\Index.cshtml" />
+    <None Include="Views\ResultUploadType\Create.cshtml" />
+    <None Include="Views\ResultUploadType\Delete.cshtml" />
+    <None Include="Views\ResultUploadType\Details.cshtml" />
+    <None Include="Views\ResultUploadType\Edit.cshtml" />
+    <None Include="Views\ResultUploadType\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.9" />
@@ -17,6 +26,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.2.0.59" />
+    <PackageReference Include="System.Data.OleDb" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 
 </Project>
