@@ -25,6 +25,16 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
             return View(await applicationDbContext.ToListAsync());
         }
+        [HttpPost]
+        public JsonResult AjaxPostCall()
+        {
+            _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [scholar].[DistrictQoutaBySchemeLevel]");
+            _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [dbo].[DAEInstituteQoutaBySchemeLevel]");
+            _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [scholar].[DegreeLevelQoutaBySchemeLevel]");
+            _context.Database.ExecuteSqlRaw("delete [scholar].[SchemeLevelPolicy]");
+            _context.Database.ExecuteSqlRaw("delete [scholar].[PolicySRCForum]");
+            return Json("1");
+        }
         public async Task<IActionResult> PolicyFiscalYear()
         {
             var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
@@ -164,9 +174,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 Obj.SlotAllocate = degreeLevel.Slot;
                 Obj.StipendAmount = Stipend;
                 Obj.Threshold = 0;                
-                _context.Add(Obj);
-                await _context.SaveChangesAsync();
-            }            
+                _context.Add(Obj);                
+            }
+            await _context.SaveChangesAsync();
             return 1;
         }
         private async Task<int> ByEqualThresholdSlotAllocation(int SRCForumId, int SchemeLevelPolicyId, int schemeLevelId, int Stipend, float Threshold)
@@ -184,9 +194,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 Obj.SlotAllocate = Threshold;
                 Obj.StipendAmount = Stipend;
                 Obj.Threshold = Threshold;
-                _context.Add(Obj);
-                await _context.SaveChangesAsync();
+                _context.Add(Obj);                
             }
+            await _context.SaveChangesAsync();
             return 1;
         }
         private async Task<int> ByTotalSlot_SlotAllocation(float DOMS, int SRCForumId, int SchemeLevelPolicyId, int schemeLevelId, int Stipend, float Threshold)
@@ -204,9 +214,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 Obj.SlotAllocate = preDegreeLevelSlot;
                 Obj.StipendAmount = Stipend;
                 Obj.Threshold = 0;
-                _context.Add(Obj);
-                await _context.SaveChangesAsync();
+                _context.Add(Obj);                
             }
+            await _context.SaveChangesAsync();
             return 1;
         }
         private async Task<int> DAEInstituteSlotAllocation(float DOMSSlot, int SRCId,int SchemeLvevePolicylId, float DAEThreshold, int Stipend, int TotalEnrollment, string year)
@@ -256,14 +266,14 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 Obj.SlotAllocate = degreeLevel.Enrollment / OnePercentEnrollment * OnePercentDOMSQouta;
                 Obj.StipendAmount = Stipend;
                 Obj.Threshold = 0;
-                _context.Add(Obj);
-                await _context.SaveChangesAsync();
+                _context.Add(Obj);                
             }
+            await _context.SaveChangesAsync();
             return 1;
         }
         private async Task<bool> GenerateSchemeLevelPolicy(int SRCForumId)
         {
-            var preferences = _context.Preference.Find(4);            
+            var preferences = _context.Preference.Find(4);      //Hard Code KDA      
 
             var SchemeLevels = _context.SchemeLevel.Where(a => a.IsActive == true).OrderBy(a=>a.SchemeId).Select(x => new { x.SchemeLevelId, x.Name }).ToList();            
             foreach(var schemeLevel in SchemeLevels)

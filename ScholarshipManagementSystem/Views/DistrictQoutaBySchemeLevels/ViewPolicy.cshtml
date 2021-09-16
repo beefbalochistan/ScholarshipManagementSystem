@@ -1,0 +1,342 @@
+﻿@model ScholarshipManagementSystem.Models.ViewModels.ViewPolicy
+
+@{
+    ViewData["Title"] = "ViewPolicy";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<!-- Responsive datatable examples -->
+<link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    td,
+    th {
+        padding: 10px;
+        border-bottom: 2px solid #8ebf42;
+        text-align: center;
+    }
+</style>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-condensed" id="myTable" style=" border-spacing: 0; width: 100%;">
+            <thead>
+                <tr style="background-color:mediumseagreen;color:white">
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).Scheme)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).SchemeLevel)
+                    </th>
+                    <th>
+                        Monthly Stipend
+                    </th>
+                    <th>Payable Months</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).Amount)
+                    </th>                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).POMS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DOMS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).SQSOMS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).SQSEVIs)
+                    </th>
+                    <th>
+                        Additional Slot
+                    </th>
+                    <th>
+                        Total Slot
+                    </th>
+                    <th>Total Budget(M)</th>
+                </tr>
+            </thead>
+            <tbody class="panel">
+                @{
+                    int counter = 1; int lastQualificationId = Model.IntermediatePolicyList.ElementAt(0).QualificationLevelId; 
+                    string lastQualificationLevelName = Model.IntermediatePolicyList.ElementAt(0).QualificationLevel;
+                    double POMS = 0, DOMS = 0, SQSOMS = 0, SQSEVIs = 0, AdditionalSlot = 0, totalSlot = 0, totalAmount = 0;
+                    @foreach (var item in Model.IntermediatePolicyList)
+                    {
+                        @if (lastQualificationId != item.QualificationLevelId)
+                        {
+                <tr>
+                    <th>@lastQualificationLevelName</th>
+                    <th>S-TOTAL</th>
+                    <th>@(Model.IntermediatePolicyList.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount)/12)</th>
+                    <th>@(12*(Model.IntermediatePolicyList.Count(a => a.QualificationLevelId == lastQualificationId)))</th>
+                    <th>@(Model.IntermediatePolicyList.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount))</th>
+                    <th>
+                        @{ POMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.POMS);}
+                        @(Math.Round(POMS,2))
+                    </th>
+                    <th>
+                        @{ DOMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.DOMS);}
+                        @(Math.Round(DOMS,2))
+                    </th>
+                    <th>
+                        @{ SQSOMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.SQSOMS);}
+                        @(Math.Round(SQSOMS,2))
+                    </th>
+                    <th>
+                        @{ SQSEVIs = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.SQSEVIs);}
+                        @(Math.Round(SQSEVIs))
+                    </th>
+                    <th>
+                        @{
+                            if (lastQualificationId == 1)
+                            {
+                                AdditionalSlot = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == 1).Sum(a => a.DistrictAdditionalSlot);
+                            }
+                            else if(lastQualificationId == 2)
+                            {
+                                AdditionalSlot = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == 2).Sum(a => a.DistrictAdditionalSlot);
+                            }
+                            else if (lastQualificationId == 3)
+                            {
+                                AdditionalSlot = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == 3).Sum(a => a.DAEAdditionalSlot);
+                            }
+                            else if (lastQualificationId == 4)
+                            {
+                                AdditionalSlot = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == 4).Sum(a => a.DistrictAdditionalSlot);
+                            }
+                        }
+                        @(Math.Round(AdditionalSlot,2))
+                    </th>
+                    <th>
+                        @{ totalSlot = AdditionalSlot + POMS + DOMS + SQSOMS + SQSEVIs;}
+                        @(Math.Round((totalSlot),2))
+                    </th>
+                    <th>@(Math.Round((Convert.ToDouble(Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Max(a => a.Amount)) * totalSlot)/1000000f,2))</th>
+                </tr>
+                                lastQualificationId = item.QualificationLevelId;
+                                lastQualificationLevelName = item.QualificationLevel;
+                            }
+                        <tr data-toggle="collapse" data-target=@("#demo"+counter) data-parent="#myTable" style="cursor:pointer;background-color:lightskyblue">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.QualificationLevel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SchemeLevel)
+                            </td>
+                            <td>
+                                @(item.Amount/12)
+                            </td>
+                            <td>
+                                12
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.POMS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DOMS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SQSOMS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SQSEVIs)
+                            </td>
+                            <td>
+                                @(Math.Round(item.DistrictAdditionalSlot,2))
+                            </td>
+                            <td>
+                                @{ double totalslot = (Convert.ToDouble(item.POMS) + Convert.ToDouble(item.DOMS) + Convert.ToDouble(item.SQSOMS) + Convert.ToDouble(item.SQSEVIs) + item.DistrictAdditionalSlot);}
+                                @(Math.Round(totalslot, 2))
+                            </td>
+                            <td>@(Math.Round((Convert.ToDouble(item.Amount) * totalslot)/1000000f,2))</td>
+                        </tr>
+
+                        <tr id=@("demo"+counter) class="collapse">
+                            <td colspan="8" class="hiddenRow">
+                                @if (item.QualificationLevelId <= 2 || item.SchemeLevelId == 9 || item.QualificationLevelId == 4)
+                                {
+                                    <table class="table table-condensed" style=" border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr style="background-color:lightgray">
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).District)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).CurrentYearPopulation)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).DistrictPopulationSlot)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).MPI)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).MPIDifferenceFromStatndard)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).DistrictMPISlot)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DistrictPolicyDetailViewList.ElementAt(0).DistrictAdditionalSlot)
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="panel">
+                                            @foreach (var itemdistrict in item.DistrictPolicyDetailViewList.Where(a => a.SchemeLevelPolicyId == item.SchemeLevelPolicyId).OrderBy(a => a.District.Name))
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.District.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.CurrentYearPopulation)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.DistrictPopulationSlot)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.MPI)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.MPIDifferenceFromStatndard)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.DistrictMPISlot)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemdistrict.DistrictAdditionalSlot)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                }
+                                else if (item.QualificationLevelId == 3)
+                                {
+                                    <table class="table table-condensed" style=" border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr style="background-color:lightgray">
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).DAEInstitute)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).Year)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).ClassEnrollment)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).SlotAllocate)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).InstituteAdditionalSlot)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).StipendAmount)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IntermediatePolicyList.ElementAt(0).DAEPolicyDetailViewList.ElementAt(0).Threshold)
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="panel">
+                                            @foreach (var itemInstitute in item.DAEPolicyDetailViewList.Where(a => a.SchemeLevelPolicyId == item.SchemeLevelPolicyId))
+                                            {
+                                                <tr>
+                                                    <td style="min-width:400px">
+                                                        @Html.DisplayFor(modelItem => itemInstitute.DAEInstituteName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.Year)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.ClassEnrollment)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.SlotAllocate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.InstituteAdditionalSlot)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.StipendAmount)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => itemInstitute.Threshold)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                }
+                            </td>
+                        </tr>
+                        counter++;                        
+                    }                        
+                }
+            <tr>
+                <th>@lastQualificationLevelName</th>
+                <th>S-TOTAL</th>
+                <th>@(Model.IntermediatePolicyList.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount)/12)</th>
+                <th>@(12*(Model.IntermediatePolicyList.Count(a => a.QualificationLevelId == lastQualificationId)))</th>
+                <th>
+                    @{ totalAmount = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.Amount);}
+                    @(totalAmount)
+                </th>
+                <th>
+                    @{ POMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.POMS);}
+                    @(Math.Round(POMS,2))
+                </th>
+                <th>
+                    @{ DOMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.DOMS);}
+                    @(Math.Round(DOMS))
+                </th>
+                <th>
+                    @{ SQSOMS = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.SQSOMS);}
+                    @(Math.Round(SQSOMS,2))
+                </th>
+                <th>
+                    @{ SQSEVIs = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.SQSEVIs);}
+                    @(Math.Round(SQSEVIs))
+                </th>
+                <th>
+                    @{                       
+                        AdditionalSlot = Model.IntermediatePolicyList.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.DistrictAdditionalSlot);                                            
+                    }
+                    @(Math.Round(AdditionalSlot,2))
+                </th>
+                <th>     
+                    @{ totalSlot = AdditionalSlot + POMS + DOMS + SQSOMS + SQSEVIs;}
+                    @(Math.Round((totalSlot),2))
+                </th>
+                <th>@(Math.Round((totalSlot*(Model.IntermediatePolicyList.Where(a=>a.QualificationLevelId == lastQualificationId).Max(a=>a.Amount))/1000000),2))</th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#datatable').DataTable({
+            "order": []
+        });
+
+    });
+</script>

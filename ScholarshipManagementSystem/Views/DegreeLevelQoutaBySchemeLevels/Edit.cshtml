@@ -1,0 +1,70 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>DegreeLevelQoutaBySchemeLevel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DegreeLevelQoutaBySchemeLevelId" />
+            <div class="form-group">
+                <label asp-for="DegreeScholarshipLevelId" class="control-label"></label>
+                <select asp-for="DegreeScholarshipLevelId" class="form-control" asp-items="ViewBag.DegreeScholarshipLevelId"></select>
+                <span asp-validation-for="DegreeScholarshipLevelId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClassEnrollment" class="control-label"></label>
+                <input asp-for="ClassEnrollment" class="form-control" />
+                <span asp-validation-for="ClassEnrollment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SlotAllocate" class="control-label"></label>
+                <input asp-for="SlotAllocate" class="form-control" />
+                <span asp-validation-for="SlotAllocate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalSlotAllocate" class="control-label"></label>
+                <input asp-for="AdditionalSlotAllocate" class="form-control" />
+                <span asp-validation-for="AdditionalSlotAllocate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StipendAmount" class="control-label"></label>
+                <input asp-for="StipendAmount" class="form-control" />
+                <span asp-validation-for="StipendAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Threshold" class="control-label"></label>
+                <input asp-for="Threshold" class="form-control" />
+                <span asp-validation-for="Threshold" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PolicySRCForumId" class="control-label"></label>
+                <select asp-for="PolicySRCForumId" class="form-control" asp-items="ViewBag.PolicySRCForumId"></select>
+                <span asp-validation-for="PolicySRCForumId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SchemeLevelPolicyId" class="control-label"></label>
+                <select asp-for="SchemeLevelPolicyId" class="form-control" asp-items="ViewBag.SchemeLevelPolicyId"></select>
+                <span asp-validation-for="SchemeLevelPolicyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

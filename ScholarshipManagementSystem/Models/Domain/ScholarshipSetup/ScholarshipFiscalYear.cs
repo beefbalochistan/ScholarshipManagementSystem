@@ -11,6 +11,7 @@ namespace ScholarshipManagementSystem.Models.Domain.ScholarshipSetup
     public class ScholarshipFiscalYear
     {
         [Key]
+        [Display(Name = "Fiscal Year")]
         public int ScholarshipFiscalYearId { get; set; }
         [Required]
         public string Name { get; set; }

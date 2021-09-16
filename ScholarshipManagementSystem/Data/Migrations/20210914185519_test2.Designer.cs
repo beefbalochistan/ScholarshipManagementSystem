@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210914185519_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1202,48 +1204,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DAEInstituteQoutaBySchemeLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
-                {
-                    b.Property<int>("DegreeLevelQoutaBySchemeLevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<float>("AdditionalSlotAllocate")
-                        .HasColumnType("real");
-
-                    b.Property<int>("ClassEnrollment")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DegreeScholarshipLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PolicySRCForumId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchemeLevelPolicyId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("SlotAllocate")
-                        .HasColumnType("real");
-
-                    b.Property<int>("StipendAmount")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Threshold")
-                        .HasColumnType("real");
-
-                    b.HasKey("DegreeLevelQoutaBySchemeLevelId");
-
-                    b.HasIndex("DegreeScholarshipLevelId");
-
-                    b.HasIndex("PolicySRCForumId");
-
-                    b.HasIndex("SchemeLevelPolicyId");
-
-                    b.ToTable("DegreeLevelQoutaBySchemeLevel", "scholar");
-                });
-
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
@@ -1897,33 +1857,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("DAEInstitute");
-
-                    b.Navigation("SchemeLevelPolicy");
-
-                    b.Navigation("SRCForum");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
-                        .WithMany()
-                        .HasForeignKey("DegreeScholarshipLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
-                        .WithMany()
-                        .HasForeignKey("PolicySRCForumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DegreeScholarshipLevel");
 
                     b.Navigation("SchemeLevelPolicy");
 

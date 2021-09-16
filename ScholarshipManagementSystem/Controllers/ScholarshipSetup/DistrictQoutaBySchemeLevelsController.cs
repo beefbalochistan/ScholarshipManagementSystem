@@ -1,12 +1,15 @@
 ﻿
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
 using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
+using ScholarshipManagementSystem.Models.ViewModels;
 
 namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 {
@@ -26,7 +29,159 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(d => d.District).Include(d => d.SRCForum);
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> ViewPolicy(int id)
+        {            
+            
+            List<PolicyView> PolicyList = new List<PolicyView>();
+            string sql = "EXEC[scholar].[PolicyView] @PolicySRCForumId";
+            List<SqlParameter> parms = new List<SqlParameter>
+                    {
+                        new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
+                    };
+            var sp_policyView = _context.PolicyView.FromSqlRaw<PolicyView>(sql, parms.ToArray()).ToList();
+            foreach (var schemeLevel in sp_policyView)
+            {
+                PolicyView Obj = new PolicyView();
+                Obj.Amount = schemeLevel.Amount;
+                Obj.DAEAdditionalSlot = schemeLevel.DAEAdditionalSlot;
+                Obj.DegreeAdditionalSlot = schemeLevel.DegreeAdditionalSlot;
+                Obj.DistrictAdditionalSlot = schemeLevel.DistrictAdditionalSlot;
+                Obj.DOMS = schemeLevel.DOMS;
+                Obj.POMS = schemeLevel.POMS;
+                Obj.SQSOMS = schemeLevel.SQSOMS;
+                Obj.SQSEVIs = schemeLevel.SQSEVIs;
+                Obj.InstituteId = schemeLevel.InstituteId;
+                Obj.OrderBy = schemeLevel.OrderBy;
+                Obj.PolicyForum = schemeLevel.PolicyForum;
+                Obj.PolicySRCForumId = schemeLevel.PolicySRCForumId;
+                Obj.PolicyYear = schemeLevel.PolicyYear;
+                Obj.QualificationLevel = schemeLevel.QualificationLevel;
+                Obj.QualificationLevelId = schemeLevel.QualificationLevelId;
+                Obj.Scheme = schemeLevel.Scheme;
+                Obj.SchemeId = schemeLevel.SchemeId;
+                Obj.SchemeLevel = schemeLevel.SchemeLevel;
+                Obj.SchemeLevelCode = schemeLevel.SchemeLevelCode;
+                Obj.SchemeLevelId = schemeLevel.SchemeLevelId;
+                Obj.SchemeLevelPolicyId = schemeLevel.SchemeLevelPolicyId;
+                Obj.ScholarshipSlot = schemeLevel.ScholarshipSlot;
+                Obj.Year = schemeLevel.Year;                              
+                if (schemeLevel.QualificationLevelId == 1 || schemeLevel.QualificationLevelId == 2 || schemeLevel.QualificationLevelId == 4 || schemeLevel.SchemeLevelId == 9)
+                {                                    
+                    var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(a => a.District).Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a => a.PolicySRCForumId == schemeLevel.PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == schemeLevel.SchemeLevelId).ToList();
+                    List<PolicyDetailView> PolicyDetailList = new List<PolicyDetailView>();
+                    foreach (var district in applicationDbContext)
+                    {
+                        PolicyDetailView PDVObj = new PolicyDetailView();
+                        PDVObj.CurrentYearPopulation = district.CurrentYearPopulation;
+                        PDVObj.DistrictAdditionalSlot = district.DistrictAdditionalSlot;
+                        PDVObj.DistrictId = district.DistrictId;
+                        PDVObj.District = district.District;
+                        PDVObj.DistrictMPISlot = district.DistrictMPISlot;
+                        PDVObj.DistrictPopulationSlot = district.DistrictPopulationSlot;
+                        PDVObj.DistrictQoutaBySchemeLevelId = district.DistrictQoutaBySchemeLevelId;
+                        PDVObj.MPI = district.MPI;
+                        PDVObj.MPIDifferenceFromStatndard = district.MPIDifferenceFromStatndard;
+                        PDVObj.PolicySRSForumId = district.PolicySRCForumId;
+                        PDVObj.SchemeLevelPolicyId = district.SchemeLevelPolicyId;
+                        PDVObj.StipendAmount = district.StipendAmount;
+                        PDVObj.Threshold = district.Threshold;
+                        PolicyDetailList.Add(PDVObj);
+                    }                    
+                    Obj.DistrictPolicyDetailViewList = PolicyDetailList.ToList();
+                    PolicyList.Add(Obj);
+                }
+                else if(schemeLevel.QualificationLevelId == 3)
+                {                   
+                    var applicationDbContext = _context.DAEInstituteQoutaBySchemeLevel.Include(a => a.DAEInstitute).Where(a => a.PolicySRCForumId == schemeLevel.PolicySRCForumId).ToList();
+                    List<DAEPolicyDetailView> PolicyDetailList = new List<DAEPolicyDetailView>();
+                    foreach (var daeInstitute in applicationDbContext)
+                    {
+                        DAEPolicyDetailView DPDObj = new DAEPolicyDetailView();
+                        DPDObj.ClassEnrollment = daeInstitute.ClassEnrollment;
+                        DPDObj.DAEInstituteId = daeInstitute.DAEInstituteId;
+                        DPDObj.DAEInstituteName = daeInstitute.DAEInstitute.Name;
+                        DPDObj.DAEInstituteQoutaBySchemeLevelId = daeInstitute.DAEInstituteQoutaBySchemeLevelId;
+                        DPDObj.InstituteAdditionalSlot = daeInstitute.InstituteAdditionalSlot;
+                        DPDObj.SchemeLevelPolicyId = daeInstitute.SchemeLevelPolicyId;
+                        DPDObj.SlotAllocate = daeInstitute.SlotAllocate;
+                        DPDObj.StipendAmount = daeInstitute.StipendAmount;
+                        DPDObj.InstituteAdditionalSlot = daeInstitute.InstituteAdditionalSlot;
+                        DPDObj.Threshold = daeInstitute.Threshold;
+                        DPDObj.Year = daeInstitute.Year;
+                        DPDObj.PolicySRCForumId = daeInstitute.PolicySRCForumId;                        
+                        PolicyDetailList.Add(DPDObj);
+                    }                    
+                    Obj.DAEPolicyDetailViewList = PolicyDetailList.ToList();
+                    PolicyList.Add(Obj);
+                }
+                
+            }
 
+            //------------------------------------Degree------------------------------
+            List<PolicyView> PolicyList2 = new List<PolicyView>();
+            string sql2 = "EXEC[scholar].[DegreePolicyView] @PolicySRCForumId";
+            List<SqlParameter> parms2 = new List<SqlParameter>
+                    {
+                        new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
+                    };
+            PolicyList2 = _context.PolicyView.FromSqlRaw<PolicyView>(sql2, parms2.ToArray()).ToList();
+            //------------------------------------------------------------------------
+            foreach (var schemeLevel in PolicyList2)
+            {
+                PolicyView PVObj = new PolicyView();
+                PVObj.Amount = schemeLevel.Amount;
+                PVObj.DAEAdditionalSlot = schemeLevel.DAEAdditionalSlot;                
+                PVObj.DegreeAdditionalSlot = schemeLevel.DegreeAdditionalSlot;
+                PVObj.DistrictAdditionalSlot = schemeLevel.DistrictAdditionalSlot;
+                PVObj.DOMS = schemeLevel.DOMS;
+                PVObj.POMS = schemeLevel.POMS;
+                PVObj.SQSOMS = schemeLevel.SQSOMS;
+                PVObj.SQSEVIs = schemeLevel.SQSEVIs;
+                PVObj.InstituteId = schemeLevel.InstituteId;
+                PVObj.OrderBy = schemeLevel.OrderBy;
+                PVObj.PolicyForum = schemeLevel.PolicyForum;
+                PVObj.PolicySRCForumId = schemeLevel.PolicySRCForumId;
+                PVObj.PolicyYear = schemeLevel.PolicyYear;
+                PVObj.QualificationLevel = schemeLevel.QualificationLevel;
+                PVObj.QualificationLevelId = schemeLevel.QualificationLevelId;
+                PVObj.Scheme = schemeLevel.Scheme;
+                PVObj.SchemeId = schemeLevel.SchemeId;
+                PVObj.SchemeLevel = schemeLevel.SchemeLevel;
+                PVObj.SchemeLevelCode = schemeLevel.SchemeLevelCode;
+                PVObj.SchemeLevelId = schemeLevel.SchemeLevelId;
+                PVObj.SchemeLevelPolicyId = schemeLevel.SchemeLevelPolicyId;
+                PVObj.ScholarshipSlot = schemeLevel.ScholarshipSlot;
+                PVObj.Year = schemeLevel.Year;
+                if (schemeLevel.SchemeLevelId >= 10)//Hard KDA
+                {
+                    var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(a => a.District).Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.PolicySRCForumId == schemeLevel.PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == schemeLevel.SchemeLevelId).ToList();
+                    List<PolicyDetailView> PolicyDetailList = new List<PolicyDetailView>();
+                    foreach (var district in applicationDbContext)
+                    {
+                        PolicyDetailView PDVObj = new PolicyDetailView();
+                        PDVObj.CurrentYearPopulation = district.CurrentYearPopulation;
+                        PDVObj.DistrictAdditionalSlot = district.DistrictAdditionalSlot;
+                        PDVObj.DistrictId = district.DistrictId;
+                        PDVObj.District = district.District;
+                        PDVObj.DistrictMPISlot = district.DistrictMPISlot;
+                        PDVObj.DistrictPopulationSlot = district.DistrictPopulationSlot;
+                        PDVObj.DistrictQoutaBySchemeLevelId = district.DistrictQoutaBySchemeLevelId;
+                        PDVObj.MPI = district.MPI;
+                        PDVObj.MPIDifferenceFromStatndard = district.MPIDifferenceFromStatndard;
+                        PDVObj.PolicySRSForumId = district.PolicySRCForumId;
+                        PDVObj.SchemeLevelPolicyId = district.SchemeLevelPolicyId;
+                        PDVObj.StipendAmount = district.StipendAmount;
+                        PDVObj.Threshold = district.Threshold;
+                        PolicyDetailList.Add(PDVObj);
+                    }
+                    PVObj.DistrictPolicyDetailViewList = PolicyDetailList.ToList();
+                    PolicyList.Add(PVObj);
+                }
+            }
+            ViewPolicy ViewPolicyObj = new ViewPolicy();
+            ViewPolicyObj.IntermediatePolicyList = PolicyList.OrderBy(a=>a.SchemeId).ToList();            
+            return View(ViewPolicyObj);
+        }
         // GET: DistrictQoutaBySchemeLevels/Details/5
         public async Task<IActionResult> Details(int? id)
         {

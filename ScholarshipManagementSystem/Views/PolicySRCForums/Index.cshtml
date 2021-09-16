@@ -19,21 +19,28 @@
     <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Sweet Alert-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <div class="checkout-tabs">
         <div class="row">
             <div class="col-lg-2">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">                    
                     <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
                         <i class="bx bxs-grid-alt d-block check-nav-icon mt-4 mb-2"></i>
                         <p class="font-weight-bold mb-4">List of Policy SRC Forum</p>
                     </a>
                     <a class="nav-link" role="tab" asp-action="Create" asp-controller="PolicySRCForums" aria-controls="v-pills-privacy" aria-selected="false">
-                        <i class="bx bx-list-plus d-block check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">Add New SRC Forum</p>
+                        <img src="~/assets/images/processing.gif" height="60" />
+                        <p class="font-weight-bold mb-4">Generate New Policy</p>
                     </a>
                     <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
                         <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
                         <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                    <a class="nav-link">
+                        <i class="bx bx-help-circle d-block check-nav-icon mt-4 mb-2"></i>
+                        <input type="button" class="btn btn-primary waves-effect waves-light" id="reset" value="Reset" />
                     </a>
                 </div>
             </div>
@@ -43,21 +50,21 @@
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
                                 <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
-                                    <h4 class="mt-2 card-title">List of Policy SRC Forum</h4>
+                                    <h4 class="mt-2 card-title">List of Policy SRC Forum </h4>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th>
+                                                    Fiscal Year
+                                                </th>
+                                                <th>
                                                     @Html.DisplayNameFor(model => model.Name)
                                                 </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Description)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Code)
-                                                </th>
+                                                @* <th>
+                                                        @Html.DisplayNameFor(model => model.Code)
+                                                    </th>*@
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.IsEndorse)
                                                 </th>
@@ -67,70 +74,89 @@
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.PolicyDocumentAttachmentPath)
                                                 </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.OtherAttachment)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.CreatedOn)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
-                                                </th>
+                                                @* <th>
+                                                        @Html.DisplayNameFor(model => model.OtherAttachment)
+                                                    </th>*@
+                                                <th>Detail</th>
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <th>Edit</th>
-                                                }
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
-                                                {
-                                                    <th>Delete</th>
                                                 }
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var item in Model)
                                             {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Description)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Code)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IsEndorse)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.SRCMinutesAttachmentPath)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.PolicyDocumentAttachmentPath)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.OtherAttachment)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Code)
-                                                </td>
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
-                                                {
+                                                <tr>
                                                     <td>
-                                                        <a asp-action="Edit" asp-route-id="@item.PolicySRCForumId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
                                                     </td>
-                                                }
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+                                                    @* <td>
+                                                            @Html.DisplayFor(modelItem => item.Description)
+                                                        </td>*@
+                                                    @* <td>
+                                                            @Html.DisplayFor(modelItem => item.Code)
+                                                        </td>*@
+                                                    <td>
+                                                        @{
+                                                            if (item.IsEndorse == true)
+                                                            {
+                                                                <p style="color:green">Yes</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p style="color:orange">No</p>
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.IsEndorse == true)
+                                                            {
+                                                                <a style="color:green">View</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p style="color:orange">N/A</p>
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.IsEndorse == true)
+                                                            {
+                                                                <a style="color:green">View</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p style="color:orange">N/A</p>
+                                                            }
+                                                        }
+                                                    </td>
+                                                    @*<td>
+                                                            @Html.DisplayFor(modelItem => item.OtherAttachment)
+                                                        </td>*@
+                                                    @*<td>
+                                                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                                                        </td>*@
+                                                    <td><a>View</a></td>
+                                                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                    {
+                                                        <td>
+                                                            <a asp-action="Edit" asp-route-id="@item.PolicySRCForumId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                        </td>
+                                                    }
 
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
-                                                {
-                                                    <td>
-                                                        <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.PolicySRCForumId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
-                                                    </td>
-                                                }
-                                            </tr>
+                                                    @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+                                                        {
+                                                            <td>
+                                                                <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.PolicySRCForumId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                            </td>
+                                                        }*@
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -221,3 +247,49 @@ else
         </div>
     </div>
 }
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<!-- Sweet Alerts js -->
+<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<!-- Sweet alert init js-->
+<script src="~/assets/js/pages/sweet-alerts.init.js"></script>
+<script type="text/javascript">
+    $(function () {
+       
+        $("#reset").click(function () {
+            Swal.fire({
+                title: "Reset!",
+                text: "Recent created policy has been reset!",
+                type: "success", showCancelButton: !0,
+                confirmButtonColor: "#556ee6",
+                cancelButtonColor: "#f46a6a"
+            });
+            setTimeout(
+                function () {
+                    location.reload(true);
+                }, 2000);
+            $.ajax({
+                type: "POST",
+                url: "/PolicySRCForums/AjaxPostCall",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        //alert("Reset Successfully!");                                                                        
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }                
+            });            
+        });
+    });
+
+    @*$("#sa-success").click(function () {        
+       
+    });*@
+</script>
