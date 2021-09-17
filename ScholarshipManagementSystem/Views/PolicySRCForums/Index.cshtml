@@ -142,11 +142,11 @@
                                                     @*<td>
                                                             @Html.DisplayFor(modelItem => item.CreatedOn)
                                                         </td>*@
-                                                    <td><a>View</a></td>
+                                                    <td><a asp-controller="DistrictQoutaBySchemeLevels" asp-action="ViewPolicy" asp-route-id="@item.PolicySRCForumId">View</a></td>
                                                     @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                     {
                                                         <td>
-                                                            <a asp-action="Edit" asp-route-id="@item.PolicySRCForumId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                            <a href="#" @*asp-action="Edit" asp-route-id="@item.PolicySRCForumId"*@ class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                         </td>
                                                     }
 
