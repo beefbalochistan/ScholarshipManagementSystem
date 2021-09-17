@@ -127,6 +127,13 @@ public static class Permissions
             public const string Create = "Permissions.DistrictQoutaBySchemeLevel.Create";
             public const string Edit = "Permissions.DistrictQoutaBySchemeLevel.Edit";
             public const string Delete = "Permissions.DistrictQoutaBySchemeLevel.Delete";
-        }   
+        }
+        public static class ResultUploadType
+        {
+            public const string View = "Permissions.ResultUploadType.View";
+            public const string Create = "Permissions.ResultUploadType.Create";
+            public const string Edit = "Permissions.ResultUploadType.Edit";
+            public const string Delete = "Permissions.ResultUploadType.Delete";
+        }
     }
 }

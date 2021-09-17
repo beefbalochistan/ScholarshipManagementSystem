@@ -52,6 +52,10 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel> DegreeLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel> DegreeScholarshipLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel> DegreeLevelQoutaBySchemeLevel { get; set; }
-        
+
+        public DbSet<ResultUploadType> ResultUploadType { get; set; }
+        public DbSet<ResultUpload> ResultUpload { get; set; }
+        public DbSet<GazResultHssc> GazResultHssc { get; set; }
+        public DbSet<GazResultSsc> GazResultSsc { get; set; }
     }
 }
