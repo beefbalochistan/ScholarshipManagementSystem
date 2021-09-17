@@ -14,6 +14,12 @@ namespace ScholarshipManagementSystem.Data
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<DegreeSecondLevel>().HasNoKey();
+            modelBuilder.Entity<DegreeThirdLevel>().HasNoKey();
+        }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience> Provience { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Division> Division { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.District> District { get; set; }
@@ -31,6 +37,8 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment> SchemeLevelPayment { get; set; }        
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel> DistrictQoutaBySchemeLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.ViewModels.PolicyView> PolicyView { get; set; }        
+        public virtual DbSet<ScholarshipManagementSystem.Models.ViewModels.DegreeSecondLevel> DegreeSecondLevel { get; set; }        
+        public virtual DbSet<ScholarshipManagementSystem.Models.ViewModels.DegreeThirdLevel> DegreeThirdLevel { get; set; }        
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy> SchemeLevelPolicy { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum> PolicySRCForum { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference> Preference { get; set; }        

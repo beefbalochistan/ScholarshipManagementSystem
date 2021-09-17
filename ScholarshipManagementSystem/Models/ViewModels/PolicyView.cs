@@ -39,6 +39,8 @@ namespace ScholarshipManagementSystem.Models.ViewModels
         public double DegreeAdditionalSlot { get; set; }
         public ICollection<PolicyDetailView> DistrictPolicyDetailViewList { get;set;}
         public ICollection<DAEPolicyDetailView> DAEPolicyDetailViewList { get;set;}
+        [NotMapped]
+        public List<DegreeSecondLevel> DegreeSecondLevelList { get;set;}
     }
 
     public class PolicyDetailView
@@ -85,5 +87,32 @@ namespace ScholarshipManagementSystem.Models.ViewModels
         public virtual DAEInstitute DAEInstitute { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual PolicySRCForum SRCForum { get; set; }
+    }
+
+    public partial class DegreeSecondLevel
+    {        
+        public int SchemeLevelId { get; set; }
+        public int SchemeId { get; set; }
+        public int InstituteId { get; set; }
+        public int CurrentYear { get; set; }
+        public string Scheme { get; set; }
+        public string SchemeLevel { get; set; }
+        public int DegreeLevel { get; set; }
+        [NotMapped]
+        public List<DegreeThirdLevel> DegreeThirdLevelList { get; set; }
+    }
+
+    public partial class DegreeThirdLevel
+    {
+        public int DegreeScholarshipLevelId { get; set; }
+        public string DegreeScholarshipLevel { get; set; }
+        public int InstituteId { get; set; }
+        public int SchemeId { get; set; }
+        public int CurrentYear { get; set; }
+        public int ClassEnrollment { get; set; }
+        public float SlotAllocate { get; set; }
+        public float Threshold { get; set; }
+        public int StipendAmount { get; set; }
+        public float AdditionalSlotAllocate { get; set; }
     }
 }
