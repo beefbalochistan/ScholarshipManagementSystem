@@ -47,7 +47,6 @@ namespace ScholarshipManagementSystem.Data
 
         public DbSet<ResultUploadType> ResultUploadType { get; set; }
         public DbSet<ResultUpload> ResultUpload { get; set; }
-        public DbSet<GazResultHssc> GazResultHssc { get; set; }
-        public DbSet<GazResultSsc> GazResultSsc { get; set; }
+        public DbSet<GazResult> GazResult { get; set; } 
     }
 }

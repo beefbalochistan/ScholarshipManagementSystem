@@ -109,14 +109,9 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 //Insert the Data read from the Excel file to Database Table.
                 conString = this.Configuration.GetConnectionString("DefaultConnection");
                 bool ResultStatus = false;
-              if (model.ResultUploadTypeId == "1")
-                {
-                    ResultStatus= BluckResultHSSC(conString, dt);
-                }
-                else if (model.ResultUploadTypeId == "2")
-                {
-                    ResultStatus= BluckResultSSC(conString, dt);
-                }
+             
+                    ResultStatus= BluckResult(conString, dt);
+               
               if (ResultStatus)
                 {
                     ViewBag.Message = "Data Saved ... ";
@@ -131,7 +126,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             return View(model);
         }
         #region "BluckResult" 
-        private bool BluckResultHSSC(string conString, DataTable dt)
+        private bool BluckResult(string conString, DataTable dt)
         {
             try
             {
@@ -140,7 +135,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
                     {
                         //Set the database table name.
-                        sqlBulkCopy.DestinationTableName = "[master].[GazResultHssc]";
+                        sqlBulkCopy.DestinationTableName = "[master].[GazResult]";
                         //// Map the Excel columns
                         sqlBulkCopy.ColumnMappings.Add("Roll_NO", "Roll_NO");
                         sqlBulkCopy.ColumnMappings.Add("REG_NO", "REG_NO");
@@ -166,40 +161,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
             return true ;
         }
-        private bool BluckResultSSC(string conString, DataTable dt)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(conString))
-                {
-                    using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
-                    {
-                        //Set the database table name.
-                        sqlBulkCopy.DestinationTableName = "[master].[GazResultSsc]";
-                        //// Map the Excel columns
-                        sqlBulkCopy.ColumnMappings.Add("Roll_NO", "Roll_NO");
-                        sqlBulkCopy.ColumnMappings.Add("REG_NO", "REG_NO");
-                        sqlBulkCopy.ColumnMappings.Add("Name", "Name");
-                        sqlBulkCopy.ColumnMappings.Add("Father_Name", "Father_Name");
-                        sqlBulkCopy.ColumnMappings.Add("Institute", "Institute");
-                        sqlBulkCopy.ColumnMappings.Add("Group", "Group");
-                        sqlBulkCopy.ColumnMappings.Add("candidate_district", "candidate_district");
-                        sqlBulkCopy.ColumnMappings.Add("institute_district", "institute_district");
-                        sqlBulkCopy.ColumnMappings.Add("Marks_", "Marks_"); 
-                        sqlBulkCopy.ColumnMappings.Add("Pass_Fail", "Pass_Fail");
-                        sqlBulkCopy.ColumnMappings.Add("Remarks", "Remarks");
-                        con.Open();
-                        sqlBulkCopy.WriteToServer(dt);
-                        con.Close();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
+     
         #endregion
         private SelectList PopulateResultUploadType()
         {

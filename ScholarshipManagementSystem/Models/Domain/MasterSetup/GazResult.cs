@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
 {
-    [Table("GazResultSsc", Schema = "master")]
-    public class GazResultSsc
+    [Table("GazResult", Schema = "master")]
+    public class GazResult
     {
         [Key]
-        public int GazResultSscId { get; set; } 
+        public int GazResultId { get; set; } 
         public string Roll_NO { get; set; } 
         public string REG_NO { get; set; }
         public string Name { get; set; } 
         public string Father_Name { get; set; }
         public string Institute { get; set; }
+        public string Institute_District { get; set; }
         public string Group { get; set; }
-        public string candidate_district { get; set; }
-        public string institute_district { get; set; }
-        public string Marks_ { get; set; } 
+        public string Candidate_District { get; set; }
+        public string Marks_ { get; set; }
+        public string Type { get; set; }
         public string Pass_Fail { get; set; }
         public string Remarks { get; set; }
 
