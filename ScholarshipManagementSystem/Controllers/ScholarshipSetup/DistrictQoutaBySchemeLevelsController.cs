@@ -113,7 +113,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     }                    
                     Obj.DAEPolicyDetailViewList = PolicyDetailList.ToList();
                     PolicyList.Add(Obj);
-                }
+                }                
                 
             }
 
@@ -121,12 +121,12 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             List<PolicyView> PolicyList2 = new List<PolicyView>();
             string sql2 = "EXEC[scholar].[DegreePolicyView] @PolicySRCForumId";
             List<SqlParameter> parms2 = new List<SqlParameter>
-                    {
-                        new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
-                    };
-            PolicyList2 = _context.PolicyView.FromSqlRaw<PolicyView>(sql2, parms2.ToArray()).ToList();
+            {
+                new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
+            };
+            var degreeResult = _context.PolicyView.FromSqlRaw<PolicyView>(sql2, parms2.ToArray()).ToList();
             //------------------------------------------------------------------------
-            foreach (var schemeLevel in PolicyList2)
+            foreach (var schemeLevel in degreeResult)
             {
                 PolicyView PVObj = new PolicyView();
                 PVObj.Amount = schemeLevel.Amount;
@@ -152,35 +152,63 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 PVObj.SchemeLevelPolicyId = schemeLevel.SchemeLevelPolicyId;
                 PVObj.ScholarshipSlot = schemeLevel.ScholarshipSlot;
                 PVObj.Year = schemeLevel.Year;
-                if (schemeLevel.SchemeLevelId >= 10)//Hard KDA
-                {
-                    var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(a => a.District).Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.PolicySRCForumId == schemeLevel.PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == schemeLevel.SchemeLevelId).ToList();
-                    List<PolicyDetailView> PolicyDetailList = new List<PolicyDetailView>();
-                    foreach (var district in applicationDbContext)
+                if (schemeLevel.SchemeId >= 4)//Hard KDA
+                {                    
+                    string query = "EXEC[scholar].[DegreeSecondLevel] @SchemeId, @CurrentYear, @PolicySRCForumId";
+                    List<SqlParameter> parameters = new List<SqlParameter>
                     {
-                        PolicyDetailView PDVObj = new PolicyDetailView();
-                        PDVObj.CurrentYearPopulation = district.CurrentYearPopulation;
-                        PDVObj.DistrictAdditionalSlot = district.DistrictAdditionalSlot;
-                        PDVObj.DistrictId = district.DistrictId;
-                        PDVObj.District = district.District;
-                        PDVObj.DistrictMPISlot = district.DistrictMPISlot;
-                        PDVObj.DistrictPopulationSlot = district.DistrictPopulationSlot;
-                        PDVObj.DistrictQoutaBySchemeLevelId = district.DistrictQoutaBySchemeLevelId;
-                        PDVObj.MPI = district.MPI;
-                        PDVObj.MPIDifferenceFromStatndard = district.MPIDifferenceFromStatndard;
-                        PDVObj.PolicySRSForumId = district.PolicySRCForumId;
-                        PDVObj.SchemeLevelPolicyId = district.SchemeLevelPolicyId;
-                        PDVObj.StipendAmount = district.StipendAmount;
-                        PDVObj.Threshold = district.Threshold;
-                        PolicyDetailList.Add(PDVObj);
+                        new SqlParameter { ParameterName = "@SchemeId", Value = schemeLevel.SchemeId }, 
+                        new SqlParameter { ParameterName = "@CurrentYear", Value = schemeLevel.Year },
+                        new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
+                    };
+                    var sp_result_degreeSecondLevel = _context.DegreeSecondLevel.FromSqlRaw<DegreeSecondLevel>(query, parameters.ToArray()).ToList();
+                    //---------------------------Third Leyer-----------------------------------------
+                    string sp_degree_third_level = "EXEC[scholar].[DegreeThirdLevel] @SchemeId, @PolicySRCForumId";
+                    List<SqlParameter> sp_degree_third_level_parameters = new List<SqlParameter>
+                    {
+                        new SqlParameter { ParameterName = "@SchemeId", Value = schemeLevel.SchemeId },                        
+                        new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
+                    };
+                    var sp_result_degreeThirdLevel = _context.DegreeThirdLevel.FromSqlRaw<DegreeThirdLevel>(sp_degree_third_level, sp_degree_third_level_parameters.ToArray()).ToList();
+                    //-------------------------------------------------------------------------------
+                    List<DegreeSecondLevel> DegreeSecondLevelList = new List<DegreeSecondLevel>();
+                    foreach (var degreeLevel in sp_result_degreeSecondLevel)
+                    {
+                        DegreeSecondLevel DSLObj = new DegreeSecondLevel();
+                        DSLObj.DegreeLevel = degreeLevel.DegreeLevel;
+                        DSLObj.Scheme = degreeLevel.Scheme;
+                        DSLObj.SchemeId = degreeLevel.SchemeId;
+                        DSLObj.InstituteId = degreeLevel.InstituteId;
+                        DSLObj.CurrentYear = degreeLevel.CurrentYear;
+                        DSLObj.SchemeLevel = degreeLevel.SchemeLevel;
+                        DSLObj.SchemeLevelId = degreeLevel.SchemeLevelId;
+
+                        //-----------------Third Leyer Implementation-----------------
+                        List<DegreeThirdLevel> DegreeThirdLevelList = new List<DegreeThirdLevel>();
+                        foreach (var degreeLeveldetail in sp_result_degreeThirdLevel.Where(a=>a.SchemeId == degreeLevel.SchemeId && a.CurrentYear == degreeLevel.CurrentYear && a.InstituteId == degreeLevel.InstituteId))
+                        {
+                            DegreeThirdLevel DTLObj = new DegreeThirdLevel();
+                            DTLObj.AdditionalSlotAllocate = degreeLeveldetail.AdditionalSlotAllocate;
+                            DTLObj.ClassEnrollment = degreeLeveldetail.ClassEnrollment;
+                            DTLObj.CurrentYear = degreeLeveldetail.CurrentYear;
+                            DTLObj.DegreeScholarshipLevelId = degreeLeveldetail.DegreeScholarshipLevelId;
+                            DTLObj.DegreeScholarshipLevel = degreeLeveldetail.DegreeScholarshipLevel;
+                            DTLObj.InstituteId = degreeLeveldetail.InstituteId;
+                            DTLObj.SchemeId = degreeLeveldetail.SchemeId;
+                            DTLObj.SlotAllocate = degreeLeveldetail.SlotAllocate;
+                            DTLObj.StipendAmount = degreeLeveldetail.StipendAmount;
+                            DTLObj.Threshold = degreeLeveldetail.Threshold;
+                            DegreeThirdLevelList.Add(DTLObj);
+                        }
+                        //------------------------------------------------------------
+                        DSLObj.DegreeThirdLevelList = DegreeThirdLevelList;
+                        DegreeSecondLevelList.Add(DSLObj);
                     }
-                    PVObj.DistrictPolicyDetailViewList = PolicyDetailList.ToList();
+                    PVObj.DegreeSecondLevelList = DegreeSecondLevelList.ToList();
                     PolicyList.Add(PVObj);
                 }
-            }
-            ViewPolicy ViewPolicyObj = new ViewPolicy();
-            ViewPolicyObj.IntermediatePolicyList = PolicyList.OrderBy(a=>a.SchemeId).ToList();            
-            return View(ViewPolicyObj);
+            }                                 
+            return View(PolicyList.OrderBy(a => a.SchemeId).ToList());
         }
         // GET: DistrictQoutaBySchemeLevels/Details/5
         public async Task<IActionResult> Details(int? id)

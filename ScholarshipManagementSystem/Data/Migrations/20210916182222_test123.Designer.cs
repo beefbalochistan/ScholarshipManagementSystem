@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210916182222_test123")]
+    partial class test123
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -650,54 +652,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Faculty", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.GazResult", b =>
-                {
-                    b.Property<int>("GazResultId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Candidate_District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Father_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute_District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Marks_")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pass_Fail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("REG_NO")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Roll_NO")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GazResultId");
-
-                    b.ToTable("GazResult", "master");
-                });
-
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", b =>
                 {
                     b.Property<int>("InstituteId")
@@ -1115,58 +1069,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("QualificationLevelId");
 
                     b.ToTable("QualificationLevel", "master");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultUpload", b =>
-                {
-                    b.Property<int>("FilesUploadId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ResultUploadTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("VFile")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("FilesUploadId");
-
-                    b.HasIndex("ResultUploadTypeId");
-
-                    b.ToTable("ResultUpload", "master");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultUploadType", b =>
-                {
-                    b.Property<int>("ResultUploadTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ResultUploadTypeId");
-
-                    b.ToTable("ResultUploadType", "master");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage", b =>
@@ -1980,17 +1882,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Faculty");
 
                     b.Navigation("Institute");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultUpload", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultUploadType", "ResultUploadType")
-                        .WithMany()
-                        .HasForeignKey("ResultUploadTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResultUploadType");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", b =>
