@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +26,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         {
             var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
             return View(await applicationDbContext.ToListAsync());
-        }
+        }        
         [HttpPost]
         public JsonResult AjaxPostCall()
         {
@@ -93,7 +95,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     var IsPreviousSRCEndoursed = _context.PolicySRCForum.Count(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId && a.IsEndorse == false);
                     if(IsPreviousSRCEndoursed > 0)
                     {
-                        ViewBag.message = "First Endourse Policy before adding new SRC!";
+                        ViewBag.message = "First endourse previous policy before adding new SRC of same fiscal year!";
                         ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
                         return View(policySRCForum);
                     }
@@ -112,7 +114,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     _context.Add(policySRCForum);
                     await _context.SaveChangesAsync();
                     var MaxId = _context.PolicySRCForum.Max(a => a.PolicySRCForumId);
-                    await GenerateSchemeLevelPolicy(MaxId);
+                    await GenerateSchemeLevelPolicy(MaxId);                    
                 }                
                 
                 return RedirectToAction(nameof(Index));
@@ -199,10 +201,11 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             await _context.SaveChangesAsync();
             return 1;
         }
-        private async Task<int> ByTotalSlot_SlotAllocation(float DOMS, int SRCForumId, int SchemeLevelPolicyId, int schemeLevelId, int Stipend, float Threshold)
+        private async Task<int> ByTotalSlot_SlotAllocation(float DOMS, int SRCForumId, int SchemeLevelPolicyId, int schemeLevelId, int Stipend, float Threshold, int qualificationLevelId, int year)
         {
+            var DepartmentCount = _context.DegreeScholarshipLevel.Include(a => a.DegreeLevel.Degree).Count(a => a.DegreeLevel.Degree.QualificationLevelId == qualificationLevelId && a.DegreeLevel.Year == year && a.IsActive == true);
             var schemeLevelDepartments = _context.DegreeScholarshipLevel.Where(a => a.SchemeLevelId == schemeLevelId && a.IsActive == true).ToList();
-            var preDegreeLevelSlot = DOMS / schemeLevelDepartments.Count();
+            var preDegreeLevelSlot = DOMS / DepartmentCount;
             foreach (var degreeLevel in schemeLevelDepartments)
             {
                 DegreeLevelQoutaBySchemeLevel Obj = new DegreeLevelQoutaBySchemeLevel();
@@ -510,7 +513,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         _context.Add(Obj);
                         await _context.SaveChangesAsync();
                         var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeBacholarStipend, preferences.BSProfThresholdForClass);
+                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeBacholarStipend, preferences.BSProfThresholdForClass, currentScheme.QualificationLevelId, degreeLevelYear);
                     }
                     else if (preferences.SlotGraduationPROFCalculationMethod == "By Enrollment")
                     {
@@ -591,7 +594,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         _context.Add(Obj);
                         await _context.SaveChangesAsync();
                         var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeMasterStipend, preferences.MasterThreshold);
+                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeBacholarStipend, preferences.BSProfThresholdForClass, currentScheme.QualificationLevelId, degreeLevelYear);
                     }
                     else if (preferences.SlotMasterCalculationMethod == "By Enrollment")
                     {
@@ -672,7 +675,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         _context.Add(Obj);
                         await _context.SaveChangesAsync();
                         var MaxId = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeMSStipend, preferences.MSThreshold);
+                        await ByTotalSlot_SlotAllocation(DOMS, SRCForumId, MaxId, schemeLevel.SchemeLevelId, preferences.SchemeBacholarStipend, preferences.BSProfThresholdForClass, currentScheme.QualificationLevelId, degreeLevelYear);
                     }
                     else if (preferences.SlotMSCalculationMethod == "By Enrollment")
                     {
@@ -717,6 +720,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 return NotFound();
             }
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
+            policySRCForum.IsEndorse = true;
             return View(policySRCForum);
         }        
         // POST: PolicySRCForums/Edit/5
@@ -724,7 +728,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PolicySRCForumId,Name,Description,Code,IsEndorse,SRCMinutesAttachmentPath,PolicyDocumentAttachmentPath,OtherAttachment,CreatedOn,ScholarshipFiscalYearId")] PolicySRCForum policySRCForum)
+        public async Task<IActionResult> Edit(int id, PolicySRCForum policySRCForum, IFormFile minutesFile, IFormFile policydocFile, IFormFile otherFile)
         {
             if (id != policySRCForum.PolicySRCForumId)
             {
@@ -735,6 +739,87 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 try
                 {
+                    if (minutesFile != null && minutesFile.Length > 0)
+                    {
+                        var fiscalYear = _context.ScholarshipFiscalYear.Find(policySRCForum.ScholarshipFiscalYearId).Name;
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Policy\\" + fiscalYear + "\\SRCMinutes" + policySRCForum.PolicySRCForumId + "\\");
+                        string fileName = Path.GetFileName(minutesFile.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "SRCMinutes" + randomNumber.ToString() + fileName;
+                        policySRCForum.SRCMinutesAttachmentPath = Path.Combine("/Documents/Policy/",fiscalYear,"SRCMinutes" + policySRCForum.PolicySRCForumId.ToString(), fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await minutesFile.CopyToAsync(stream);
+                        }
+                        //-----------------------------------                                                                 
+                    }
+                    if (policydocFile != null && policydocFile.Length > 0)
+                    {
+                        var fiscalYear = _context.ScholarshipFiscalYear.Find(policySRCForum.ScholarshipFiscalYearId).Name;
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Policy\\" + fiscalYear + "\\Policy" + policySRCForum.PolicySRCForumId + "\\");
+                        string fileName = Path.GetFileName(policydocFile.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Policy" + randomNumber.ToString() + fileName;
+                        policySRCForum.PolicyDocumentAttachmentPath = Path.Combine("/Documents/Policy/", fiscalYear, "Policy" + policySRCForum.PolicySRCForumId.ToString(), fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await policydocFile.CopyToAsync(stream);
+                        }
+                        //-----------------------------------                                                                 
+                    }
+                    if (otherFile != null && otherFile.Length > 0)
+                    {
+                        var fiscalYear = _context.ScholarshipFiscalYear.Find(policySRCForum.ScholarshipFiscalYearId).Name;
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Policy\\" + fiscalYear + "\\PolicyOther" + policySRCForum.PolicySRCForumId + "\\");
+                        string fileName = Path.GetFileName(otherFile.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "PolicyDoc" + randomNumber.ToString() + fileName;
+                        policySRCForum.OtherAttachment = Path.Combine("/Documents/Policy/", fiscalYear, "PolicyOther" + policySRCForum.PolicySRCForumId.ToString(), fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await otherFile.CopyToAsync(stream);
+                        }
+                        //-----------------------------------                                                                 
+                    }
                     _context.Update(policySRCForum);
                     await _context.SaveChangesAsync();
                 }

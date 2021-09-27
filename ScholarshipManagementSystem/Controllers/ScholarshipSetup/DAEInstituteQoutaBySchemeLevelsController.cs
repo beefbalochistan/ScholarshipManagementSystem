@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -99,37 +100,34 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DAEInstituteQoutaBySchemeLevelPolicyId,DAEInstituteId,ClassEnrollment,SlotAllocate,StipendAmount,Threshold,PolicySRCForumId,SchemeLevelPolicyId,InstituteAdditionalSlot")] DAEInstituteQoutaBySchemeLevel dAEInstituteQoutaBySchemeLevel)
+        public async Task<IActionResult> Edit(int daePolicyId, int daeSelectedValue, /*float populationSlot, float MPISlot,*/ float daeAdditionalSlot)
         {
-            if (id != dAEInstituteQoutaBySchemeLevel.DAEInstituteQoutaBySchemeLevelId)
+            if (daeSelectedValue == 0)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(dAEInstituteQoutaBySchemeLevel);
-                    await _context.SaveChangesAsync();
+                    var dAEInstituteQoutaBySchemeLevel = await _context.DAEInstituteQoutaBySchemeLevel.FindAsync(daeSelectedValue);
+                    if(dAEInstituteQoutaBySchemeLevel.InstituteAdditionalSlot != daeAdditionalSlot)
+                    {
+                        var Obj = new DAEInstituteQoutaBySchemeLevel();
+                        Obj = dAEInstituteQoutaBySchemeLevel;
+                        Obj.InstituteAdditionalSlot = daeAdditionalSlot;
+                        //_context.Update(districtQoutaBySchemeLevel);
+                        _context.Entry(dAEInstituteQoutaBySchemeLevel).CurrentValues.SetValues(Obj);
+                        await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DAEInstituteQoutaBySchemeLevelExists(dAEInstituteQoutaBySchemeLevel.DAEInstituteQoutaBySchemeLevelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ViewPolicy", "DistrictQoutaBySchemeLevels", new { id = daePolicyId });
             }
-            ViewData["DAEInstituteId"] = new SelectList(_context.DAEInstitute, "DAEInstituteId", "Name", dAEInstituteQoutaBySchemeLevel.DAEInstituteId);
-            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Name", dAEInstituteQoutaBySchemeLevel.PolicySRCForumId);
-            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy, "SchemeLevelPolicyId", "Name", dAEInstituteQoutaBySchemeLevel.SchemeLevelPolicyId);
-            return View(dAEInstituteQoutaBySchemeLevel);
+            return View();
         }
 
         // GET: DAEInstituteQoutaBySchemeLevels/Delete/5

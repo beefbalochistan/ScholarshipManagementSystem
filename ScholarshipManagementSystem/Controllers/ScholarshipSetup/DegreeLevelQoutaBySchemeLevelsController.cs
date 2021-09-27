@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -99,37 +100,34 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DegreeLevelQoutaBySchemeLevelId,DegreeScholarshipLevelId,ClassEnrollment,SlotAllocate,AdditionalSlotAllocate,StipendAmount,Threshold,PolicySRCForumId,SchemeLevelPolicyId")] DegreeLevelQoutaBySchemeLevel degreeLevelQoutaBySchemeLevel)
+        public async Task<IActionResult> Edit(int degreePolicyId, int degreeSelectedValue, /*float populationSlot, float MPISlot,*/ float degreeAdditionalSlot)
         {
-            if (id != degreeLevelQoutaBySchemeLevel.DegreeLevelQoutaBySchemeLevelId)
+            if (degreeSelectedValue == 0)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(degreeLevelQoutaBySchemeLevel);
-                    await _context.SaveChangesAsync();
+                    var degreeLevelQoutaBySchemeLevel = await _context.DegreeLevelQoutaBySchemeLevel.FindAsync(degreeSelectedValue);
+                    if (degreeLevelQoutaBySchemeLevel.AdditionalSlotAllocate != degreeAdditionalSlot)
+                    {
+                        var Obj = new DegreeLevelQoutaBySchemeLevel();
+                        Obj = degreeLevelQoutaBySchemeLevel;
+                        Obj.AdditionalSlotAllocate = degreeAdditionalSlot;
+                        //_context.Update(districtQoutaBySchemeLevel);
+                        _context.Entry(degreeLevelQoutaBySchemeLevel).CurrentValues.SetValues(Obj);
+                        await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DegreeLevelQoutaBySchemeLevelExists(degreeLevelQoutaBySchemeLevel.DegreeLevelQoutaBySchemeLevelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ViewPolicy", "DistrictQoutaBySchemeLevels", new { id = degreePolicyId });
             }
-            ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId", degreeLevelQoutaBySchemeLevel.DegreeScholarshipLevelId);
-            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Name", degreeLevelQoutaBySchemeLevel.PolicySRCForumId);
-            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy, "SchemeLevelPolicyId", "SchemeLevelPolicyId", degreeLevelQoutaBySchemeLevel.SchemeLevelPolicyId);
-            return View(degreeLevelQoutaBySchemeLevel);
+            return View();
         }
 
         // GET: DegreeLevelQoutaBySchemeLevels/Delete/5

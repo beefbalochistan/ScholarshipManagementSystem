@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,15 +31,16 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> ViewPolicy(int id)
-        {            
-            
+        {
+            ViewBag.policyId = id;
+            ViewBag.IsEndorse = _context.PolicySRCForum.Find(id).IsEndorse;
             List<PolicyView> PolicyList = new List<PolicyView>();
             string sql = "EXEC[scholar].[PolicyView] @PolicySRCForumId";
             List<SqlParameter> parms = new List<SqlParameter>
                     {
                         new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
                     };
-            var sp_policyView = _context.PolicyView.FromSqlRaw<PolicyView>(sql, parms.ToArray()).ToList();
+            var sp_policyView = await _context.PolicyView.FromSqlRaw<PolicyView>(sql, parms.ToArray()).ToListAsync();
             foreach (var schemeLevel in sp_policyView)
             {
                 PolicyView Obj = new PolicyView();
@@ -124,7 +126,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
             };
-            var degreeResult = _context.PolicyView.FromSqlRaw<PolicyView>(sql2, parms2.ToArray()).ToList();
+            var degreeResult = await _context.PolicyView.FromSqlRaw<PolicyView>(sql2, parms2.ToArray()).ToListAsync();
             //------------------------------------------------------------------------
             foreach (var schemeLevel in degreeResult)
             {
@@ -161,7 +163,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         new SqlParameter { ParameterName = "@CurrentYear", Value = schemeLevel.Year },
                         new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
                     };
-                    var sp_result_degreeSecondLevel = _context.DegreeSecondLevel.FromSqlRaw<DegreeSecondLevel>(query, parameters.ToArray()).ToList();
+                    var sp_result_degreeSecondLevel = await _context.DegreeSecondLevel.FromSqlRaw<DegreeSecondLevel>(query, parameters.ToArray()).ToListAsync();
                     //---------------------------Third Leyer-----------------------------------------
                     string sp_degree_third_level = "EXEC[scholar].[DegreeThirdLevel] @SchemeId, @PolicySRCForumId";
                     List<SqlParameter> sp_degree_third_level_parameters = new List<SqlParameter>
@@ -169,7 +171,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                         new SqlParameter { ParameterName = "@SchemeId", Value = schemeLevel.SchemeId },                        
                         new SqlParameter { ParameterName = "@PolicySRCForumId", Value = id }
                     };
-                    var sp_result_degreeThirdLevel = _context.DegreeThirdLevel.FromSqlRaw<DegreeThirdLevel>(sp_degree_third_level, sp_degree_third_level_parameters.ToArray()).ToList();
+                    var sp_result_degreeThirdLevel = await _context.DegreeThirdLevel.FromSqlRaw<DegreeThirdLevel>(sp_degree_third_level, sp_degree_third_level_parameters.ToArray()).ToListAsync();
                     //-------------------------------------------------------------------------------
                     List<DegreeSecondLevel> DegreeSecondLevelList = new List<DegreeSecondLevel>();
                     foreach (var degreeLevel in sp_result_degreeSecondLevel)
@@ -192,8 +194,10 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                             DTLObj.ClassEnrollment = degreeLeveldetail.ClassEnrollment;
                             DTLObj.CurrentYear = degreeLeveldetail.CurrentYear;
                             DTLObj.DegreeScholarshipLevelId = degreeLeveldetail.DegreeScholarshipLevelId;
+                            DTLObj.DegreeLevelQoutaBySchemeLevelId = degreeLeveldetail.DegreeLevelQoutaBySchemeLevelId;
                             DTLObj.DegreeScholarshipLevel = degreeLeveldetail.DegreeScholarshipLevel;
                             DTLObj.InstituteId = degreeLeveldetail.InstituteId;
+                            DTLObj.InstituteName = degreeLeveldetail.InstituteName;
                             DTLObj.SchemeId = degreeLeveldetail.SchemeId;
                             DTLObj.SlotAllocate = degreeLeveldetail.SlotAllocate;
                             DTLObj.StipendAmount = degreeLeveldetail.StipendAmount;
@@ -279,9 +283,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DistrictQoutaBySchemeLevelId,DistrictId,Threshold,CurrentYearPopulation,SchemeLevelPolicyId,DistrictPopulationSlot,DistrictMPISlot,PolicySRCForumId,MPI")] DistrictQoutaBySchemeLevel districtQoutaBySchemeLevel)
+        public async Task<IActionResult> Edit(int districtPolicyId, int districtSelectedValue, /*float populationSlot, float MPISlot,*/ float districtAdditionalSlot)
         {
-            if (id != districtQoutaBySchemeLevel.DistrictQoutaBySchemeLevelId)
+            if (districtSelectedValue == 0)
             {
                 return NotFound();
             }
@@ -290,25 +294,27 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 try
                 {
-                    _context.Update(districtQoutaBySchemeLevel);
-                    await _context.SaveChangesAsync();
+                    var districtQoutaBySchemeLevel = await _context.DistrictQoutaBySchemeLevel.FindAsync(districtSelectedValue);
+
+                    /*districtQoutaBySchemeLevel.DistrictPopulationSlot = populationSlot;
+                    districtQoutaBySchemeLevel.DistrictMPISlot = MPISlot;*/
+                    if(districtQoutaBySchemeLevel.DistrictAdditionalSlot != districtAdditionalSlot)
+                    {
+                        var Obj = new DistrictQoutaBySchemeLevel();
+                        Obj = districtQoutaBySchemeLevel;
+                        Obj.DistrictAdditionalSlot = districtAdditionalSlot;
+                        //_context.Update(districtQoutaBySchemeLevel);
+                        _context.Entry(districtQoutaBySchemeLevel).CurrentValues.SetValues(Obj);
+                        await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DistrictQoutaBySchemeLevelExists(districtQoutaBySchemeLevel.DistrictQoutaBySchemeLevelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", districtQoutaBySchemeLevel.DistrictId);
-            ViewData["PolicySRCForumId"] = new SelectList(_context.PolicySRCForum, "PolicySRCForumId", "Code", districtQoutaBySchemeLevel.PolicySRCForumId);
-            return View(districtQoutaBySchemeLevel);
+                return RedirectToAction("ViewPolicy", "DistrictQoutaBySchemeLevels", new { id = districtPolicyId });
+            }           
+            return View();
         }
 
         // GET: DistrictQoutaBySchemeLevels/Delete/5

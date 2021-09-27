@@ -51,15 +51,20 @@ namespace ScholarshipManagementSystem.Models.ViewModels
         [Display(Name = "District")]
         public int DistrictId { get; set; }        
         public float Threshold { get; set; }
+        [Display(Name = "Population")]
         public int CurrentYearPopulation { get; set; }
         public int PolicySRSForumId { get; set; }
         public float MPI { get; set; }
+        [Display(Name = "MPI Slot")]
         public float DistrictMPISlot { get; set; }
+        [Display(Name = "Population Slot")]
         public float DistrictPopulationSlot { get; set; }
+        [Display(Name = "Additional Slot")]
         public float DistrictAdditionalSlot { get; set; }
         public int PolicySRCForumId { get; set; }
         public int SchemeLevelPolicyId { get; set; }        
         public int StipendAmount { get; set; }
+        [Display(Name = "MPI Difference")]
         public float MPIDifferenceFromStatndard { get; set; }                  
         public virtual District District { get; set; }        
     }
@@ -104,9 +109,12 @@ namespace ScholarshipManagementSystem.Models.ViewModels
 
     public partial class DegreeThirdLevel
     {
+
+        public int DegreeLevelQoutaBySchemeLevelId { get; set; }
         public int DegreeScholarshipLevelId { get; set; }
         public string DegreeScholarshipLevel { get; set; }
         public int InstituteId { get; set; }
+        public string InstituteName { get; set; }
         public int SchemeId { get; set; }
         public int CurrentYear { get; set; }
         public int ClassEnrollment { get; set; }
