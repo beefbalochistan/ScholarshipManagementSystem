@@ -25,6 +25,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.PolicySRCForum.Include(p => p.ScholarshipFiscalYear);
+            ViewBag.IsEndourse = _context.PolicySRCForum.Count(a => a.IsEndorse == false);
             return View(await applicationDbContext.ToListAsync());
         }        
         [HttpPost]

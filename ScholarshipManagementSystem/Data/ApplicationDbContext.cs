@@ -5,6 +5,7 @@ using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
 using ScholarshipManagementSystem.Models;
 using ScholarshipManagementSystem.Models.Domain.AutoSMSApi;
 using ScholarshipManagementSystem.Models.ViewModels;
+using ScholarshipManagementSystem.Models.Domain.Student;
 
 namespace ScholarshipManagementSystem.Data
 {
@@ -52,9 +53,14 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel> DegreeLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel> DegreeScholarshipLevel { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel> DegreeLevelQoutaBySchemeLevel { get; set; }
-
-        public DbSet<ResultUploadType> ResultUploadType { get; set; }
-        public DbSet<ResultUpload> ResultUpload { get; set; }
-        public DbSet<GazResult> GazResult { get; set; } 
+           
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.BEEFSection> BEEFSection { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel> ColumnLabel { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository> ResultRepository { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer> ResultContainer { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.ExcelColumnName> ExcelColumnName { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SelectionCriteria> SelectionCriteria { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Operator> Operator { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.Student.Applicant> Applicant { get; set; }
     }
 }

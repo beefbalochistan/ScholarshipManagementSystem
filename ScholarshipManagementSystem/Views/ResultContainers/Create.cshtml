@@ -1,0 +1,109 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>ResultContainer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ResultRepositoryId" class="control-label"></label>
+                <select asp-for="ResultRepositoryId" class ="form-control" asp-items="ViewBag.ResultRepositoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColumnLabelId" class="control-label"></label>
+                <select asp-for="ColumnLabelId" class ="form-control" asp-items="ViewBag.ColumnLabelId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="C1" class="control-label"></label>
+                <input asp-for="C1" class="form-control" />
+                <span asp-validation-for="C1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C2" class="control-label"></label>
+                <input asp-for="C2" class="form-control" />
+                <span asp-validation-for="C2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C3" class="control-label"></label>
+                <input asp-for="C3" class="form-control" />
+                <span asp-validation-for="C3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C4" class="control-label"></label>
+                <input asp-for="C4" class="form-control" />
+                <span asp-validation-for="C4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C5" class="control-label"></label>
+                <input asp-for="C5" class="form-control" />
+                <span asp-validation-for="C5" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C6" class="control-label"></label>
+                <input asp-for="C6" class="form-control" />
+                <span asp-validation-for="C6" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C7" class="control-label"></label>
+                <input asp-for="C7" class="form-control" />
+                <span asp-validation-for="C7" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C8" class="control-label"></label>
+                <input asp-for="C8" class="form-control" />
+                <span asp-validation-for="C8" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C9" class="control-label"></label>
+                <input asp-for="C9" class="form-control" />
+                <span asp-validation-for="C9" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C10" class="control-label"></label>
+                <input asp-for="C10" class="form-control" />
+                <span asp-validation-for="C10" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C11" class="control-label"></label>
+                <input asp-for="C11" class="form-control" />
+                <span asp-validation-for="C11" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C12" class="control-label"></label>
+                <input asp-for="C12" class="form-control" />
+                <span asp-validation-for="C12" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C13" class="control-label"></label>
+                <input asp-for="C13" class="form-control" />
+                <span asp-validation-for="C13" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C14" class="control-label"></label>
+                <input asp-for="C14" class="form-control" />
+                <span asp-validation-for="C14" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="C15" class="control-label"></label>
+                <input asp-for="C15" class="form-control" />
+                <span asp-validation-for="C15" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

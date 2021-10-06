@@ -1,0 +1,305 @@
+﻿@model ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+
+@{
+    ViewData["Title"] = "Edit";
+    ViewBag.pageTitle = "Repository";
+    ViewBag.Title = "Container";
+    ViewBag.pTitle = "Container";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+@if (true)
+{
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link" asp-action="Index" asp-controller="ResultContainters" asp-route-id="@ViewBag.PID" aria-selected="true">
+                        <i class="bx bxs-grid-alt check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">List of Result Record</p>
+                    </a>
+                    <a class="nav-link active" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false">
+                        <i class="bx bxs-edit d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Edit Record</p>
+                    </a>
+                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                        <p class="font-weight-bold mb-4">Support</p>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h4 class="mt-2 card-title">Edit Record</h4>
+                                        </div>
+                                        @*<div class="col-sm-6">
+                    <div class="text-sm-right">
+                        <a asp-action="Index" type="button" class="btn btn-primary btn-rounded waves-effect waves-light mr-2">Back to List</a>
+                    </div>
+                </div>*@<!-- end col-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="ResultContainerId" />
+                                        <input type="hidden" asp-for="ColumnLabelId" />
+                                        <input type="hidden" asp-for="ResultRepositoryId" />
+                                        <input type="hidden" asp-for="IsOnCriteria" />
+                                        <input type="hidden" asp-for="IsSelected" />
+
+                                        @{
+                                            if (Model.ColumnLabel.C1 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C1</label>
+                                                    <input asp-for="C1" class="form-control" />
+                                                    <span asp-validation-for="C1" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C4 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C4</label>
+                                                    <input asp-for="C4" class="form-control" />
+                                                    <span asp-validation-for="C4" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C7 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C7</label>
+                                                    <input asp-for="C7" class="form-control" />
+                                                    <span asp-validation-for="C7" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C10 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C10</label>
+                                                    <input asp-for="C10" class="form-control" />
+                                                    <span asp-validation-for="C10" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C13 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C13</label>
+                                                    <input asp-for="C13" class="form-control" />
+                                                    <span asp-validation-for="C13" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        <div class="form-group">
+                                            <input type="submit" value="Save" class="btn btn-primary" />                                            
+                                        </div>
+                                        <div class="form-group">                                            
+                                            <a asp-action="Index" asp-route-id="@ViewBag.PID">Back to List</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        @{
+                                            if (Model.ColumnLabel.C2 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C2</label>
+                                                    <input asp-for="C2" class="form-control" />
+                                                    <span asp-validation-for="C2" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C5 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C5</label>
+                                                    <input asp-for="C5" class="form-control" />
+                                                    <span asp-validation-for="C5" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C8 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C8</label>
+                                                    <input asp-for="C8" class="form-control" />
+                                                    <span asp-validation-for="C8" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C11 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C11</label>
+                                                    <input asp-for="C11" class="form-control" />
+                                                    <span asp-validation-for="C11" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C14 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C14</label>
+                                                    <input asp-for="C14" class="form-control" />
+                                                    <span asp-validation-for="C14" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="col-md-4">
+                                        @{
+                                            if (Model.ColumnLabel.C3 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C3</label>
+                                                    <input asp-for="C3" class="form-control" />
+                                                    <span asp-validation-for="C3" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C6 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C6</label>
+                                                    <input asp-for="C6" class="form-control" />
+                                                    <span asp-validation-for="C6" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C9 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C9</label>
+                                                    <input asp-for="C9" class="form-control" />
+                                                    <span asp-validation-for="C9" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C12 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C12</label>
+                                                    <input asp-for="C12" class="form-control" />
+                                                    <span asp-validation-for="C12" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.ColumnLabel.C15 != "")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label">@Model.ColumnLabel.C15</label>
+                                                    <input asp-for="C15" class="form-control" />
+                                                    <span asp-validation-for="C15" class="text-danger"></span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                                    <h4 class="card-title mb-5">Support</h4>
+
+                                    <div class="faq-box media mb-4">
+                                        <div class="faq-icon mr-3">
+                                            <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15">Where can I get some?</h5>
+                                            <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental</p>
+                                        </div>
+                                    </div>
+                                    <div class="faq-box media mb-4">
+                                        <div class="faq-icon mr-3">
+                                            <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15">Where does it come from?</h5>
+                                            <p class="text-muted">Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-box media mb-4">
+                                        <div class="faq-icon mr-3">
+                                            <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15">Why do we use it?</h5>
+                                            <p class="text-muted">Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                                        </div>
+                                    </div>
+                                    <div class="faq-box media mb-4">
+                                        <div class="faq-icon mr-3">
+                                            <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15">Where can I get some?</h5>
+                                            <p class="text-muted">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-box media">
+                                        <div class="faq-icon mr-3">
+                                            <i class="bx bx-help-circle font-size-20 text-success"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="font-size-15">What is Lorem Ipsum?</h5>
+                                            <p class="text-muted">New common language will be more simple and regular than the existing European languages. It will be as simple as occidental.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

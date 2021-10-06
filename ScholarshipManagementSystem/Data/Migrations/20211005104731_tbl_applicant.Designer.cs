@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211005104731_tbl_applicant")]
+    partial class tbl_applicant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1798,11 +1800,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("ProvienceId")
                         .HasColumnType("int");
 
-                    b.Property<float>("ReceivedCGPA")
-                        .HasColumnType("real");
+                    b.Property<string>("ReceivedCGPA")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReceivedMarks")
-                        .HasColumnType("int");
+                    b.Property<string>("ReceivedMarks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RelationWithCareTaker")
                         .HasColumnType("nvarchar(max)");
@@ -1837,11 +1839,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("TelephoneWithCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TotalGPA")
-                        .HasColumnType("real");
+                    b.Property<string>("TotalGPA")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalMarks")
-                        .HasColumnType("int");
+                    b.Property<string>("TotalMarks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");

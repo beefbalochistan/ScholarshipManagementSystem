@@ -1,0 +1,148 @@
+﻿@model IEnumerable<ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+
+@{
+    ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "Result";
+    ViewBag.Title = "Repository";
+    ViewBag.pTitle = "Repository";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+@if (true)
+{
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <div class="checkout-tabs">
+        <div class="row">            
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">List of Result</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.SchemeLevel)
+                                                </th>
+                                                <th>Data Cleaned</th>
+                                                <th>Criteria Applied</th>
+                                                <th>Action</th>
+                                                <th>View</th>
+                                                @* @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                    {
+                                                        <th>Edit</th>
+                                                    }
+                                                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+                                                    {
+                                                        <th>Delete</th>
+                                                    }*@
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
+                                                </td>
+                                                <td>
+                                                @{
+                    if (item.IsDataCleaned)
+                    {
+                        <img src="~/assets/images/tick.png" height="20" alt="Yes" />
+                    }
+                    else
+                    {
+                                                <img src="~/assets/images/cross.png" height="20" alt="Yes" />
+                    }
+                                                }
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        if (item.IsSelctionCriteriaApplied)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="20" alt="Yes" />
+                                                        }
+                                                        else
+                                                        {
+                                                <img src="~/assets/images/cross.png" height="20" alt="Yes" />
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a asp-action="Index" asp-controller="ResultContainers" class="btn btn-primary btn-sm btn-rounded" asp-route-id="@item.ResultRepositoryId">View Result</a>
+                                                </td>
+                                                <td>
+                                                    @*<a asp-action="Index" asp-controller="SelectionCriterias" class="btn btn-primary btn-sm btn-rounded" asp-route-id="@item.ResultRepositoryId">View</a>*@
+                                                    <a asp-action="Details" asp-controller="ResultContainers" class="btn-sm btn-success" asp-route-id="@item.ResultRepositoryId">Detail</a>
+                                                </td>
+                                                @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+        {
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DistrictId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+            </td>
+        }
+
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+        {
+            <td>
+                <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.DistrictId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+            </td>
+        }*@
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

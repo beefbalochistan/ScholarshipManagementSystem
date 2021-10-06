@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211004120232_alter_resultcontainer_criteria")]
+    partial class alter_resultcontainer_criteria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1240,9 +1242,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<bool>("IsOnCriteria")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("bit");
-
                     b.Property<int>("ResultRepositoryId")
                         .HasColumnType("int");
 
@@ -1264,12 +1263,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDataCleaned")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSelctionCriteriaApplied")
-                        .HasColumnType("bit");
 
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
@@ -1699,9 +1692,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("ExcelColumnNameId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OperatorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ResultRepositoryId")
                         .HasColumnType("int");
 
@@ -1709,154 +1699,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasIndex("ExcelColumnNameId");
 
-                    b.HasIndex("OperatorId");
-
                     b.HasIndex("ResultRepositoryId");
 
                     b.ToTable("SelectionCriteria", "ScholarshipSetup");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.Student.Applicant", b =>
-                {
-                    b.Property<int>("ApplicantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicantReferenceNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BFormCNIC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteFax")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteFocalDesignation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteFocalEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteFocalMobile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteFocalPerson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteHOD")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsituteName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentInsitutePhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DegreeScholarshipLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherCareTakerCNIC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherMobile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HomeAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameBoardUniversity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldInstitudeNameAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Picture")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("ProvienceId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("ReceivedCGPA")
-                        .HasColumnType("real");
-
-                    b.Property<int>("ReceivedMarks")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RelationWithCareTaker")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Religion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RollNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScanDocument")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScanOtherDocument")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SchemeLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SelectedMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SelectionStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentMobile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TehsilName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TelephoneWithCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("TotalGPA")
-                        .HasColumnType("real");
-
-                    b.Property<int>("TotalMarks")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Year")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ApplicantId");
-
-                    b.HasIndex("DegreeScholarshipLevelId");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("ProvienceId");
-
-                    b.HasIndex("SchemeLevelId");
-
-                    b.ToTable("Applicant", "Student");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>
@@ -2527,12 +2372,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Operator", "Operator")
-                        .WithMany()
-                        .HasForeignKey("OperatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
@@ -2541,44 +2380,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Navigation("ExcelColumnName");
 
-                    b.Navigation("Operator");
-
                     b.Navigation("ResultRepository");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.Student.Applicant", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
-                        .WithMany()
-                        .HasForeignKey("DegreeScholarshipLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", "Provience")
-                        .WithMany()
-                        .HasForeignKey("ProvienceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DegreeScholarshipLevel");
-
-                    b.Navigation("District");
-
-                    b.Navigation("Provience");
-
-                    b.Navigation("SchemeLevel");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>

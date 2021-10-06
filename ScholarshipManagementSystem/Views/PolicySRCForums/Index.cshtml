@@ -19,19 +19,21 @@
     <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-  
+    <!-- Sweet Alert-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
     <div class="checkout-tabs">
         <div class="row">
             <div class="col-lg-2">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">                    
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
                         <i class="bx bxs-grid-alt d-block check-nav-icon mt-4 mb-2"></i>
                         <p class="font-weight-bold mb-4">List of Policy SRC Forum</p>
                     </a>
-                    <a class="nav-link" role="tab" asp-action="Create" asp-controller="PolicySRCForums" aria-controls="v-pills-privacy" aria-selected="false">
+                    <button class="nav-link" role="tab" id="createPolicy">
                         <img src="~/assets/images/processing.gif" height="60" />
                         <p class="font-weight-bold mb-4">Generate New Policy</p>
-                    </a>
+                    </button>
                     <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
                         <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
                         <p class="font-weight-bold mb-4">Support</p>
@@ -85,99 +87,99 @@
                                         <tbody>
                                             @foreach (var item in Model)
                                             {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Name)
-                                                </td>
-                                                @* <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>*@
-                                                @* <td>
-            @Html.DisplayFor(modelItem => item.Code)
-        </td>*@
-                                                <td>
-                                                    @{
-                                                        if (item.IsEndorse == true)
-                                                        {
-                                                            <p style="color:green">Yes</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p style="color:orange">No</p>
-                                                        }
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        if (item.IsEndorse == true)
-                                                        {
-                                                            if (item.SRCMinutesAttachmentPath != null)
-                                                            {
-                                                                <a href="@item.SRCMinutesAttachmentPath" class="btn-sm btn-info" target="_blank">View Minutes</a>                                                                                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                <p style="color:orange">Not Uploaded</p>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <p style="color:orange">N/A</p>
-                                                        }
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        if (item.IsEndorse == true)
-                                                        {
-                                                            if (item.PolicyDocumentAttachmentPath != null)
-                                                            {
-                                                                <a href="@item.PolicyDocumentAttachmentPath" class="btn-sm btn-info" target="_blank">View Policy</a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <p style="color:orange">Not Uploaded</p>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <p style="color:orange">N/A</p>
-                                                        }
-                                                    }
-                                                </td>
-                                                @*<td>
-                                                    @Html.DisplayFor(modelItem => item.OtherAttachment)
-                                                </td>*@
-                                                                                        @*<td>
-                                                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                                                </td>*@
-                                                <td><a asp-controller="DistrictQoutaBySchemeLevels" asp-action="ViewPolicy" asp-route-id="@item.PolicySRCForumId">View</a></td>
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
-                                                {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+                                                    @* <td>
+                                                            @Html.DisplayFor(modelItem => item.Description)
+                                                        </td>*@
+                                                    @* <td>
+                                                            @Html.DisplayFor(modelItem => item.Code)
+                                                        </td>*@
                                                     <td>
                                                         @{
-                                                            if (item.IsEndorse == false)
+                                                            if (item.IsEndorse == true)
                                                             {
-                                                                <a asp-action="Edit" asp-route-id="@item.PolicySRCForumId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                                <p style="color:green">Yes</p>
                                                             }
                                                             else
                                                             {
-                                                                <i class="bx bx-lock-alt d-block check-nav-icon" style="font-size:20px"></i>
+                                                                <p style="color:orange">No</p>
                                                             }
                                                         }
                                                     </td>
-                                                }
-
-                                                @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
-                                                {
                                                     <td>
-                                                        <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.PolicySRCForumId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                        @{
+                                                            if (item.IsEndorse == true)
+                                                            {
+                                                                if (item.SRCMinutesAttachmentPath != null)
+                                                                {
+                                                                    <a href="@item.SRCMinutesAttachmentPath" class="btn-sm btn-info" target="_blank">View Minutes</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p style="color:orange">Not Uploaded</p>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p style="color:orange">N/A</p>
+                                                            }
+                                                        }
                                                     </td>
-                                                }*@
-                                            </tr>
+                                                    <td>
+                                                        @{
+                                                            if (item.IsEndorse == true)
+                                                            {
+                                                                if (item.PolicyDocumentAttachmentPath != null)
+                                                                {
+                                                                    <a href="@item.PolicyDocumentAttachmentPath" class="btn-sm btn-info" target="_blank">View Policy</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p style="color:orange">Not Uploaded</p>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p style="color:orange">N/A</p>
+                                                            }
+                                                        }
+                                                    </td>
+                                                    @*<td>
+                                                            @Html.DisplayFor(modelItem => item.OtherAttachment)
+                                                        </td>*@
+                                                    @*<td>
+                                                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                                                        </td>*@
+                                                    <td><a asp-controller="DistrictQoutaBySchemeLevels" asp-action="ViewPolicy" asp-route-id="@item.PolicySRCForumId">View</a></td>
+                                                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                    {
+                                                        <td>
+                                                            @{
+                                                                if (item.IsEndorse == false)
+                                                                {
+                                                                    <a asp-action="Edit" asp-route-id="@item.PolicySRCForumId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="bx bx-lock-alt d-block check-nav-icon" style="font-size:20px"></i>
+                                                                }
+                                                            }
+                                                        </td>
+                                                    }
+
+                                                    @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+                                                        {
+                                                            <td>
+                                                                <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.PolicySRCForumId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                            </td>
+                                                        }*@
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -268,12 +270,17 @@ else
         </div>
     </div>
 }
+@*<script src="~/assets/libs/jquery/jquery.min.js"></script>*@
+<!-- Sweet Alerts js -->
+<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
+<!-- Sweet alert init js-->
+<script src="~/assets/js/pages/sweet-alerts.init.js"></script>
 <script type="text/javascript">
- 
+
     $(function () {
-       
-        $("#reset").click(function () {           
+
+        $("#reset").click(function () {
             $.ajax({
                 type: "POST",
                 url: "/PolicySRCForums/AjaxPostCall",
@@ -284,7 +291,8 @@ else
                 },
                 success: function (response) {
                     if (response != null) {
-                        alert("Reset Successfully!");                                                                        
+                        alert("Reset Successfully!");
+                        location.reload(true);
                     } else {
                         alert("Something went wrong");
                     }
@@ -294,11 +302,25 @@ else
                 },
                 error: function (response) {
                     alert(response.responseText);
-                }                
-            });            
+                }
+            });
+        });
+
+        $("#createPolicy").click(function () {
+            if (@ViewBag.IsEndourse == 0) {
+                window.location.replace("/PolicySRCForums/Create");
+            }
+            else {
+                Swal.fire({
+                    type: 'warning',
+                    title: "First endourse previous policy before creating new one!",
+                    showConfirmButton: false,
+                    timer: 2200
+                })
+            }
         });
     });
-   
+
 </script>
 
 

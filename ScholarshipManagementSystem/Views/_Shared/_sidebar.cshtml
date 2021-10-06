@@ -20,17 +20,17 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         @* <li>
-            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
-            <ul class="sub-menu" aria-expanded="true">
-                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
-            <ul class="sub-menu" aria-expanded="true">
-                <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-            </ul>
-        </li>*@
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
+                    </ul>
+                </li>*@
                         <li>
                             <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                                 <i class="bx bxs-yin-yang"></i>
@@ -180,22 +180,10 @@
                                 <i class="bx bxs-dizzy"></i>
                                 <span key="t-calendar">Preferences</span>
                             </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="ResultUploadType" class=" waves-effect">
-                                <i class="bx bxs-dizzy"></i>
-                                <span key="t-calendar">Result Upload Type</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="GazResultUpload" class=" waves-effect">
-                                <i class="bx bxs-dizzy"></i>
-                                <span key="t-calendar">Gaz Result Upload</span>
-                            </a>
-                        </li>
+                        </li>                       
                     </ul>
                 </li>
-              
+
 
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
@@ -209,8 +197,36 @@
                             <li><a asp-action="Index" asp-controller="Users" key="t-invoice-list">View Users</a></li>
                             <li><a asp-action="Index" asp-controller="Roles" key="t-invoice-detail">Roles</a></li>
                         </ul>
-                    </li>                    
+                    </li>
+
                 }
+                <li class="menu-title" key="t-menu">Compile Result</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bxs-user"></i>
+                        <span key="t-invoices">Result</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <a asp-action="Index" asp-controller="ResultRepositories" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar">View Results</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Create" asp-controller="ResultRepositories" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar">Import Result</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="ExcelColumnNames" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar">Column Name</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
                     <li class="menu-title" key="t-menu">SMS Management</li>
@@ -223,7 +239,8 @@
                             <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>
                             <li><a asp-action="Index" asp-controller="SMSAPIServiceAuditTrails" key="t-invoice-detail">Reporting</a></li>
                         </ul>
-                    </li>                    
+                    </li>
+
                 }
                 <li class="menu-title" key="t-menu">Menu</li>
 

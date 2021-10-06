@@ -30,10 +30,35 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             var applicationDbContext = _context.DistrictQoutaBySchemeLevel.Include(d => d.District).Include(d => d.SRCForum);
             return View(await applicationDbContext.ToListAsync());
         }
+        /*public ActionResult PDFUsingRotativa()
+        {
+            var studList = GetList(); //Get Student List
+
+            string header = Server.MapPath("~/Staticpage/Header.html");//Path of Header.html File
+            string footer = Server.MapPath("~/Staticpage/Footer.html");//Path of Footer.html File
+
+            string customSwitches = string.Format("--header-html  \"{0}\" " +
+                                   "--header-spacing \"0\" " +
+                                   "--footer-html \"{1}\" " +
+                                   "--footer-spacing \"10\" " +
+                                   "--page-offset 0 --footer-center [page] --footer-font-size 8 " + //get paging in center of footer
+                                   "--header-font-size \"10\" ", header, footer);
+
+            //Show View as PDF
+            return new Rotativa.ViewAsPdf("PDFUsingRotativa", studList)
+            {
+
+                CustomSwitches = customSwitches
+
+            };
+
+        }*/
         public async Task<IActionResult> ViewPolicy(int id)
         {
-            ViewBag.policyId = id;
-            ViewBag.IsEndorse = _context.PolicySRCForum.Find(id).IsEndorse;
+            ViewBag.policyId = id;            
+            var Info = _context.PolicySRCForum.Include(a=>a.ScholarshipFiscalYear).Where(a=>a.PolicySRCForumId == id).FirstOrDefault();
+            ViewBag.FY = Info.ScholarshipFiscalYear.Name;
+            ViewBag.IsEndorse = Info.IsEndorse;
             List<PolicyView> PolicyList = new List<PolicyView>();
             string sql = "EXEC[scholar].[PolicyView] @PolicySRCForumId";
             List<SqlParameter> parms = new List<SqlParameter>

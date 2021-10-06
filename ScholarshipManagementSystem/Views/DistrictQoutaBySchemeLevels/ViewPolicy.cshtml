@@ -15,12 +15,20 @@
         border-bottom: 2px solid #8ebf42;
         text-align: center;
     }
+    .container-fluid{
+        padding-left:0;
+        padding-right:0;
+    }
+    .page-title-box{
+        padding:0;
+    }
 </style>
-<div class="">
+
+<div class="table-responsive">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Accordion example</h4>
-            <p class="card-title-desc">Extend the default collapse behavior to create an accordion.</p>
+            <h4 class="card-title" style="font-size:16px">Summary of Annual Scholarship Policy &amp; Plan FY: @ViewBag.FY</h4>
+            @*<p class="card-title-desc">Extend the default collapse behavior to create an accordion.</p>*@
             <div id="accordion">
                 <table class="table table-condensed" id="myTable" style=" border-spacing: 0; width: 100%;">
                    
@@ -39,7 +47,7 @@
                                 }
                                 @if (lastQualificationId == item.QualificationLevelId && showheader)
                                 {
-                                    <tr style="background-color:mediumseagreen;color:white">
+                                    <tr style="background-color:mediumseagreen;color:white;">                                        
                                         <th>
                                             @Html.DisplayNameFor(model => model.Scheme)
                                         </th>
@@ -74,8 +82,8 @@
                                         <th>Total Budget(M)</th>
                                     </tr>
                                     showheader = false;
-                                    <tr>
-                                        <th>@lastQualificationLevelName</th>
+                                    <tr style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px">                                        
+                                        <th style="text-align:left;min-width:180px;background-color:gainsboro">@item.SchemeId. @lastQualificationLevelName</th>
                                         <th>S-TOTAL</th>
                                         <th>@(Model.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount)/12)</th>
                                         <th>@(12*(Model.Count(a => a.QualificationLevelId == lastQualificationId)))</th>
@@ -128,7 +136,7 @@
 
                                 <tr data-toggle="collapse" data-target=@("#demo"+counter) data-parent="#myTable" style="cursor:pointer;background-color:lightskyblue">
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.QualificationLevel)
+                                        @*@Html.DisplayFor(modelItem => item.QualificationLevel)*@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.SchemeLevel)
@@ -226,9 +234,14 @@
                                                             <td>
                                                                 @(Math.Round(itemdistrict.DistrictAdditionalSlot,3))
                                                             </td>
-                                                            <td>
-                                                                <button type="button" onclick="getDistrictId(@itemdistrict.DistrictQoutaBySchemeLevelId, @itemdistrict.DistrictAdditionalSlot, '@itemdistrict.District.Name')" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDistrictPolicy">Update</button>
-                                                            </td>
+                                                            @{ 
+                                                                if (!ViewBag.IsEndorse)
+                                                                {
+                                                                    <td>
+                                                                        <button type="button" onclick="getDistrictId(@itemdistrict.DistrictQoutaBySchemeLevelId, @itemdistrict.DistrictAdditionalSlot, '@itemdistrict.District.Name')" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDistrictPolicy">Update</button>
+                                                                    </td>
+                                                                }
+                                                            }                                                            
                                                         </tr>
                                                     }
                                                 </tbody>
@@ -295,9 +308,14 @@
                                                             <td>
                                                                 @(Math.Round(itemInstitute.Threshold,3))
                                                             </td>
-                                                            <td>
-                                                                <button type="button" onclick="getDAEId(@itemInstitute.DAEInstituteQoutaBySchemeLevelId, @itemInstitute.InstituteAdditionalSlot, @itemInstitute.DAEInstituteName)" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDAEPolicy">Update</button>
-                                                            </td>
+                                                            @{ 
+                                                                if (!ViewBag.IsEndorse)
+                                                                {
+                                                                    <td>
+                                                                        <button type="button" onclick="getDAEId(@itemInstitute.DAEInstituteQoutaBySchemeLevelId, @itemInstitute.InstituteAdditionalSlot, @itemInstitute.DAEInstituteName)" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDAEPolicy">Update</button>
+                                                                    </td>
+                                                                }
+                                                            }                                                            
                                                         </tr>
                                                     }
                                                 </tbody>
@@ -350,8 +368,7 @@
                                                                             </th>
                                                                             <th>
                                                                                 @Html.DisplayNameFor(innerModel => degreeLevel.DegreeThirdLevelList.ElementAt(0).AdditionalSlotAllocate)
-                                                                            </th>
-                                                                            <th>
+                                                                            </th>                                                                            
                                                                                 @{
                                                                                     if (!ViewBag.IsEndorse)
                                                                                     {
@@ -359,36 +376,41 @@
                                                                                         Action
                                                                                     </th>
                                                                                 }
-                                                                                }
-                                                                                </th>
+                                                                                }                                                                                
                                                                             </tr>
                                                                     </thead>
                                                                     <tbody class="panel">
                                                                         @foreach (var thirdlevel in degreeLevel.DegreeThirdLevelList)
                                                                         {
-                                                                            <tr>
-                                                                                <td style="text-align: left">
-                                                                                    @Html.DisplayFor(modelItem => thirdlevel.DegreeScholarshipLevel)
-                                                                                </td>
-                                                                                <td>
-                                                                                    @Html.DisplayFor(modelItem => thirdlevel.ClassEnrollment)
-                                                                                </td>
-                                                                                <td>
-                                                                                    @(Math.Round(thirdlevel.SlotAllocate,3))
-                                                                                </td>
-                                                                                <td>
-                                                                                    @(Math.Round(thirdlevel.Threshold,3))
-                                                                                </td>
-                                                                                <td>
-                                                                                    @Html.DisplayFor(modelItem => thirdlevel.StipendAmount)
-                                                                                </td>
-                                                                                <td>
-                                                                                    @(Math.Round(thirdlevel.AdditionalSlotAllocate,3))
-                                                                                </td>
-                                                                                <td>
-                                                                                    <button type="button" onclick="getDegreeId(@thirdlevel.DegreeLevelQoutaBySchemeLevelId, @thirdlevel.AdditionalSlotAllocate, '@thirdlevel.InstituteName')" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDegreePolicy">Update</button>
-                                                                                </td>
-                                                                            </tr>
+                                                                        <tr>
+                                                                            <td style="text-align: left">
+                                                                                @Html.DisplayFor(modelItem => thirdlevel.DegreeScholarshipLevel)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => thirdlevel.ClassEnrollment)
+                                                                            </td>
+                                                                            <td>
+                                                                                @(Math.Round(thirdlevel.SlotAllocate,3))
+                                                                            </td>
+                                                                            <td>
+                                                                                @(Math.Round(thirdlevel.Threshold,3))
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => thirdlevel.StipendAmount)
+                                                                            </td>
+                                                                            <td>
+                                                                                @(Math.Round(thirdlevel.AdditionalSlotAllocate,3))
+                                                                            </td>
+                                                                            @{
+                                                                                if (!ViewBag.IsEndorse)
+                                                                                {
+                                                                                    <td>
+                                                                                        <button type="button" onclick="getDegreeId(@thirdlevel.DegreeLevelQoutaBySchemeLevelId, @thirdlevel.AdditionalSlotAllocate, '@thirdlevel.InstituteName')" class="btn-sm btn-info waves-effect waves-light" data-toggle="modal" data-target="#ModalDegreePolicy">Update</button>
+                                                                                    </td>
+                                                                                }
+                                                                            }
+
+                                                                        </tr>
                                                                         }
                                                                     </tbody>
                                                                 </table>
@@ -530,8 +552,7 @@
         $("#ModalDAEPolicyTitle").text("Update Policy - " + title + " Additional Slot");
         alert(clicked_id);
     }
-    function getDegreeId(clicked_id, addSlot, title) {
-        alert("test");
+    function getDegreeId(clicked_id, addSlot, title) {        
         this.clickId = clicked_id;
         $("input[name='degreeSelectedValue']").val(clicked_id);
         $("input[name='degreeAdditionalSlot']").val(addSlot);

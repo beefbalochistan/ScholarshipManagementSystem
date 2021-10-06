@@ -1,0 +1,251 @@
+﻿@model ScholarshipManagementSystem.Models.ViewModels.ViewUploadedResult
+@using ScholarshipManagementSystem.Models.Domain.MasterSetup;
+
+<h1>Test</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @{
+                if (Model.columnLabel.C1 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C1)
+                    </th>
+                }
+            }
+
+            @{
+                if (Model.columnLabel.C2 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C2)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C3 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C3)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C4 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C4)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C5 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C5)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C6 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C6)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C7 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C7)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C8 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C8)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C9 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C9)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C10 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C10)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C11 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C11)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C12 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C12)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C13 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C13)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C14 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C14)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C15 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C15)
+                    </th>
+                }
+            }
+            @* <th>
+            @Html.DisplayFor(model => model.columnLabel.ResultRepository)
+        </th>
+        <th>
+            @Html.DisplayFor(model => model.columnLabel.ColumnLabel)
+        </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.resultContainerList)
+        {
+        <tr>
+            @if (Model.columnLabel.C1 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C1)
+                </td>
+            }
+            @if (Model.columnLabel.C2 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C2)
+                </td>
+            }
+            @if (Model.columnLabel.C3 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C3)
+                </td>
+            }
+            @if (Model.columnLabel.C4 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C4)
+                </td>
+            }
+            @if (Model.columnLabel.C5 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C5)
+                </td>
+            }
+            @if (Model.columnLabel.C6 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C6)
+                </td>
+            }
+            @if (Model.columnLabel.C7 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C7)
+                </td>
+            }
+            @if (Model.columnLabel.C8 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C8)
+                </td>
+            }
+            @if (Model.columnLabel.C9 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C9)
+                </td>
+            }
+            @if (Model.columnLabel.C10 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C10)
+                </td>
+            }
+            @if (Model.columnLabel.C11 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C11)
+                </td>
+            }
+            @if (Model.columnLabel.C12 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C12)
+                </td>
+            }
+            @if (Model.columnLabel.C13 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C13)
+                </td>
+            }
+            @if (Model.columnLabel.C14 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C14)
+                </td>
+            }
+            @if (Model.columnLabel.C15 != "")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.C15)
+                </td>
+            }
+
+            @*<td>
+            @Html.DisplayFor(modelItem => item.ResultRepository.ResultRepositoryId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ColumnLabel.ColumnLabelId)
+        </td>*@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ResultContainerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ResultContainerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ResultContainerId">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

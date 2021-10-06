@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SelectionCriteria>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id="@ViewBag.Id">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Condition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Operator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResultRepository.SchemeLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExcelColumnName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Operator.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResultRepository.SchemeLevel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SelectionCriteriaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SelectionCriteriaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SelectionCriteriaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
