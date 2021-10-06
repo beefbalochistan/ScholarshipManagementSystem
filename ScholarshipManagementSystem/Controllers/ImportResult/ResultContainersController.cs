@@ -106,7 +106,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.SelectedMethod = "POMS";
                 applicant.TotalMarks = 1100;//KDA
                 applicant.SelectionStatus = "Pending";
-                applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + ;
+                applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code;
             }
            
             return RedirectToAction(nameof(Details), new { id });
