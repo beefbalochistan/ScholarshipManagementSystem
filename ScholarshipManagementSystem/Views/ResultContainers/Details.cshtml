@@ -18,69 +18,98 @@
 <div class="checkout-tabs">
     <div class="row">
         <div class="col-lg-4">
-            <div class="card bg-success text-white-50">
-                <div class="card-body">
-                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Result Cleaned</h5>
-                    @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
-                    @{
-                        if (ViewBag.IsDataCleaned == false)
-                        {
-                            <button type="button" class="btn btn-dark waves-effect waves-light" >
+
+            @{
+                if (ViewBag.IsDataCleaned == false)
+                {
+                    <div class="card bg-warning text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Result Cleaned</h5>
+                            <button type="button" class="btn btn-dark waves-effect waves-light">
                                 <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Clean
                             </button>
-                        }
-                        else
-                        {
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card bg-success text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Result Cleaned</h5>
                             <button type="button" class="btn btn-dark waves-effect waves-light" disabled="disabled">
                                 <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Cleaned
                             </button>
-                        }
-                    }
-
-                </div>
-            </div>
+                        </div>
+                    </div>                   
+                }
+            }
         </div>
         <div class="col-lg-4">
-            <div class="card bg-warning text-white-50">
-                <div class="card-body">
-                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Selection Criteria Applied</h5>
-                    @{
-                        if (ViewBag.IsDataCleaned == false)
-                        {
-                            if (ViewBag.IsDataCleaned == true)
-                            {
+
+            @{
+                if (ViewBag.IsDataCleaned == false)
+                {
+                    if (ViewBag.IsSelctionCriteriaApplied == false)
+                    {
+                        <div class="card bg-warning text-white-50">
+                            <div class="card-body">
+                                <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Selection Criteria Applied</h5>
                                 <a asp-action="ApplyCriteria" asp-route-id="@ViewBag.Id" asp-controller="ResultContainers" class="btn btn-dark waves-effect waves-light">
                                     <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Apply
                                 </a>
-                            }
-                            else
-                            {
-                                <button class="btn btn-dark waves-effect waves-light" disabled="disabled">
-                                    <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Data is Un-Cleaned
-                                </button>
-                            }
-                        }
-                        else
-                        {
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                    <div class="card bg-success text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Selection Criteria Applied</h5>
                             <button type="button" class="btn btn-dark waves-effect waves-light" disabled="disabled">
                                 <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Applied
                             </button>
-                        }
+                        </div>
+                    </div>
                     }
-
-                </div>
-            </div>
+                }
+                else
+                {                    
+                    <div class="card bg-warning text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Selection Criteria Applied</h5>
+                            <button class="btn btn-dark waves-effect waves-light" disabled="disabled">
+                                <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Data is Un-Cleaned
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
         </div>
-        <div class="col-lg-4">
-            <div class="card bg-warning text-white-50">
-                <div class="card-body">
-                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Generate First Merit List</h5>
-                    @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
-                <a asp-action="MeritGenerator" asp-controller="ResultContainers" asp-route-SLId="@ViewBag.SLId" asp-route-id="@ViewBag.Id" asp-route-FYearId="@ViewBag.FYearId" type="button" class="btn btn-dark waves-effect waves-light">
-                    <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Generate Merit List
-                </a>
-                </div>
-            </div>
+        <div class="col-lg-4">            
+            @{
+                if (ViewBag.IsDataCleaned == true && ViewBag.IsSelctionCriteriaApplied == true)
+                {
+                    <div class="card bg-warning text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Generate First Merit List</h5>
+                            <a asp-action="MeritGenerator" asp-controller="ResultContainers" asp-route-SLId="@ViewBag.SLId" asp-route-id="@ViewBag.Id" asp-route-FYearId="@ViewBag.FYearId" type="button" class="btn btn-dark waves-effect waves-light">
+                                <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Generate Merit List
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card bg-danger text-white-50">
+                        <div class="card-body">
+                            <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-alert-outline mr-3"></i> Generate First Merit List</h5>
+                            <button type="button" class="btn btn-dark waves-effect waves-light" disabled="disabled">
+                                <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> N/A
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
     <div class="row">
@@ -93,7 +122,7 @@
                                 <h4 class="mt-2 card-title">Detail of Result Record</h4>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                @*<table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead style="text-align:center">
                                         <tr>
                                             @{
@@ -423,7 +452,7 @@
 
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>*@
                             </div>
                         </div>
                     </div>

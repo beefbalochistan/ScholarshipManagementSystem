@@ -12,30 +12,30 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
     {
         [Key]
         public int ResultContainerId { get; set; }       
-        public string C1 { get; set; }
-        public string C2 { get; set; }
-        public string C3 { get; set; }
-        public string C4 { get; set; }
-        public string C5 { get; set; }
-        public string C6 { get; set; }
-        public string C7 { get; set; }
-        public string C8 { get; set; }
-        public string C9 { get; set; }
-        public string C10 { get; set; }
-        public string C11 { get; set; }
-        public string C12 { get; set; }
-        public string C13 { get; set; }
-        public string C14 { get; set; }
-        public string C15 { get; set; }
+        public string Roll_NO { get; set; }
+        public string REG_NO { get; set; }
+        public string Name { get; set; }
+        public string Father_Name { get; set; }
+        public string Institute { get; set; }
+        public string Group { get; set; }
+        public string Candidate_District { get; set; }
+        public string Institute_District { get; set; }                
+        public string Marks_ { get; set; }
+        public string Pass_Fail { get; set; }
+        public string Remarks { get; set; }        
+        public string CNIC { get; set; }        
+        public string CGPA { get; set; }        
+        public int DistrictId { get; set; }
         [ForeignKey("ResultRepository")]
         [Display(Name = "ResultRepository")]
         public int ResultRepositoryId { get; set; }
         [ForeignKey("ColumnLabel")]
         [Display(Name = "ColumnLabel")]
-        public int ColumnLabelId { get; set; }
+        //public int ColumnLabelId { get; set; }
         public bool IsOnCriteria { get; set; } = false;
         public bool IsSelected { get; set; } = false;
         public virtual ResultRepository ResultRepository { get; set; }
-        public virtual ColumnLabel ColumnLabel { get; set; }
+        //public virtual ColumnLabel ColumnLabel { get; set; }
+        public virtual District District { get; set; }
     }
 }

@@ -22,24 +22,8 @@
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <div class="checkout-tabs">
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
-                        <i class="bx bxs-grid-alt d-block check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">List of Result Record</p>
-                    </a>
-                   @* <a class="nav-link" role="tab" asp-action="Create" asp-controller="ResultRepositories" aria-controls="v-pills-privacy" aria-selected="false">
-                        <i class="bx bx-list-plus d-block check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">Add New Result</p>
-                    </a>*@
-                    <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
-                        <i class="bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
-                        <p class="font-weight-bold mb-4">Support</p>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-10">
+        <div class="row">            
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="tab-content" id="v-pills-tabContent">
@@ -49,7 +33,7 @@
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                        <thead>
+                                        <thead style="text-align:center">
                                             <tr>
                                                 @{
                                                     <th>
@@ -58,7 +42,7 @@
                                                     if (Model.columnLabel.C1 != "")
                                                     {
                                                         <th>
-                                                            @Html.DisplayFor(model => model.resultContainerList.ElementAt(0).ColumnLabel.C1)
+                                                            @Html.DisplayFor(model => model.columnLabel.C1)
                                                         </th>
                                                     }
                                                 }
@@ -158,23 +142,7 @@
                                                             @Html.DisplayFor(model => model.columnLabel.C13)
                                                         </th>
                                                     }
-                                                }
-                                                @{
-                                                    if (Model.columnLabel.C14 != "")
-                                                    {
-                                                        <th>
-                                                            @Html.DisplayFor(model => model.columnLabel.C14)
-                                                        </th>
-                                                    }
-                                                }
-                                                @{
-                                                    if (Model.columnLabel.C15 != "")
-                                                    {
-                                                        <th>
-                                                            @Html.DisplayFor(model => model.columnLabel.C15)
-                                                        </th>
-                                                    }
-                                                }                                            
+                                                }                                                                                      
                                             </tr>
                                         </thead>
                                         <tbody style="text-align:center">
@@ -348,33 +316,7 @@
                                                     <span><b>(@Model.compileResult.ElementAt(12))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
                                                 }
                                             </td>
-                                                }
-                                                @if (Model.columnLabel.C14 != "")
-                                                {
-                                            <td>
-                                                @if (@Model.compileResult.ElementAt(13) == 0)
-                                                {
-                                                    <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                }
-                                                else
-                                                {
-                                                    <span><b>(@Model.compileResult.ElementAt(13))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                }
-                                            </td>
-                                                }
-                                                @if (Model.columnLabel.C15 != "")
-                                                {
-                                            <td>
-                                                @if (@Model.compileResult.ElementAt(14) == 0)
-                                                {
-                                                    <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                }
-                                                else
-                                                {
-                                                    <span><b>(@Model.compileResult.ElementAt(14))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                }
-                                            </td>
-                                                }
+                                                }                                                
 
                                             </tr>
                                         </tbody>
@@ -388,7 +330,7 @@
                                                     if (Model.columnLabel.C1 != "")
                                                     {
                                                         <th>
-                                                            @Html.DisplayFor(model => model.resultContainerList.ElementAt(0).ColumnLabel.C1)
+                                                            @Html.DisplayFor(model => model.columnLabel.C1)
                                                         </th>
                                                     }
                                                 }
@@ -488,23 +430,7 @@
                                                             @Html.DisplayFor(model => model.columnLabel.C13)
                                                         </th>
                                                     }
-                                                }
-                                                @{
-                                                    if (Model.columnLabel.C14 != "")
-                                                    {
-                                                        <th>
-                                                            @Html.DisplayFor(model => model.columnLabel.C14)
-                                                        </th>
-                                                    }
-                                                }
-                                                @{
-                                                    if (Model.columnLabel.C15 != "")
-                                                    {
-                                                        <th>
-                                                            @Html.DisplayFor(model => model.columnLabel.C15)
-                                                        </th>
-                                                    }
-                                                }
+                                                }                                                
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <th></th>
@@ -518,166 +444,94 @@
                                                     @if (Model.columnLabel.C1 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C1)
+                                                            @Html.DisplayFor(modelItem => item.Roll_NO)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C2 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C2)
+                                                            @Html.DisplayFor(modelItem => item.REG_NO)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C3 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C3)
+                                                            @Html.DisplayFor(modelItem => item.Name)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C4 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C4)
+                                                            @Html.DisplayFor(modelItem => item.Father_Name)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C5 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C5)
+                                                            @Html.DisplayFor(modelItem => item.Institute)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C6 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C6)
+                                                            @Html.DisplayFor(modelItem => item.Group)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C7 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C7)
+                                                            @Html.DisplayFor(modelItem => item.Candidate_District)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C8 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C8)
+                                                            @Html.DisplayFor(modelItem => item.Institute_District)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C9 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C9)
+                                                            @Html.DisplayFor(modelItem => item.Marks_)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C10 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C10)
+                                                            @Html.DisplayFor(modelItem => item.Pass_Fail)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C11 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C11)
+                                                            @Html.DisplayFor(modelItem => item.Remarks)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C12 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C12)
+                                                            @Html.DisplayFor(modelItem => item.CNIC)
                                                         </td>
                                                     }
                                                     @if (Model.columnLabel.C13 != "")
                                                     {
                                                         <td>
-                                                            @Html.DisplayFor(modelItem => item.C13)
+                                                            @Html.DisplayFor(modelItem => item.CGPA)
                                                         </td>
-                                                    }
-                                                    @if (Model.columnLabel.C14 != "")
-                                                    {
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.C14)
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C15 != "")
-                                                    {
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.C15)
-                                                        </td>
-                                                    }
+                                                    }                                                   
 
                                                     @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                     {
                                                         <td>
                                                             <a asp-action="Edit" asp-route-id="@item.ResultContainerId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                         </td>
-                                                    }
-
-                                                    @* @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
-                            {
-                                <td>
-                                    <a class="text-danger ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" asp-action="Delete" asp-route-id="@item.DistrictId"> <i class="mdi mdi-trash-can font-size-18"></i></a>
-                                </td>
-                            }*@
+                                                    }                                                   
                                                 </tr>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
-                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
-                                    <h4 class="mt-2 card-title">Support</h4>
-                                </div>
-
-                                <div class="faq-box media mb-4">
-                                    <div class="faq-icon mr-3">
-                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-15">Where can I get some?</h5>
-                                        <p class="text-muted">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental</p>
-                                    </div>
-                                </div>
-                                <div class="faq-box media mb-4">
-                                    <div class="faq-icon mr-3">
-                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-15">Where does it come from?</h5>
-                                        <p class="text-muted">Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators.</p>
-                                    </div>
-                                </div>
-
-                                <div class="faq-box media mb-4">
-                                    <div class="faq-icon mr-3">
-                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-15">Why do we use it?</h5>
-                                        <p class="text-muted">Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
-                                    </div>
-                                </div>
-                                <div class="faq-box media mb-4">
-                                    <div class="faq-icon mr-3">
-                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-15">Where can I get some?</h5>
-                                        <p class="text-muted">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages.</p>
-                                    </div>
-                                </div>
-
-                                <div class="faq-box media">
-                                    <div class="faq-icon mr-3">
-                                        <i class="bx bx-help-circle font-size-20 text-success"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-15">What is Lorem Ipsum?</h5>
-                                        <p class="text-muted">New common language will be more simple and regular than the existing European languages. It will be as simple as occidental.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>

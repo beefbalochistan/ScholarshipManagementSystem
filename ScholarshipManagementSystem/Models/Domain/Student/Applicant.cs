@@ -34,7 +34,7 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         public int SchemeLevelId { get; set; }
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "DegreeScholarshipLevel")]
-        public int DegreeScholarshipLevelId { get; set; }
+        public int? DegreeScholarshipLevelId { get; set; }
         public string ApplicantReferenceNo { get; set; }        
         public string TehsilName { get; set; }        
         public string Gender { get; set; }        

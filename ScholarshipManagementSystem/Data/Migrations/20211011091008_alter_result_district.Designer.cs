@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211011091008_alter_result_district")]
+    partial class alter_result_district
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,12 +411,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("ColumnLabelId");
-
-                    b.HasIndex("ResultRepositoryId");
 
                     b.ToTable("ColumnLabel", "ImportResult");
                 });
@@ -1194,29 +1191,56 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CGPA")
+                    b.Property<string>("C1")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CNIC")
+                    b.Property<string>("C10")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Candidate_District")
+                    b.Property<string>("C11")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C12")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C13")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C14")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C15")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C9")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ColumnLabelId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Father_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute_District")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsOnCriteria")
                         .HasColumnType("bit");
@@ -1224,28 +1248,12 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<bool>("IsSelected")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Marks_")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pass_Fail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("REG_NO")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ResultRepositoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Roll_NO")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ResultContainerId");
+
+                    b.HasIndex("ColumnLabelId");
 
                     b.HasIndex("DistrictId");
 
@@ -2162,17 +2170,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
-                        .WithMany()
-                        .HasForeignKey("ResultRepositoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResultRepository");
-                });
-
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", b =>
                 {
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
@@ -2325,6 +2322,12 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer", b =>
                 {
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", "ColumnLabel")
+                        .WithMany()
+                        .HasForeignKey("ColumnLabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
@@ -2336,6 +2339,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ColumnLabel");
 
                     b.Navigation("District");
 

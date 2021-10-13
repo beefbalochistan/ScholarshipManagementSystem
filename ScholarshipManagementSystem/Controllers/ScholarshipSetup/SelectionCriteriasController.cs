@@ -52,30 +52,38 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 
         // GET: SelectionCriterias/Create
         public IActionResult Create(int id)
-        {
-            Type type = typeof(ColumnLabel);
-            PropertyInfo[] properties = type.GetProperties();
-            var record = _context.ColumnLabel.Find(_context.ResultContainer.Where(a => a.ResultRepositoryId == id).Max(a => a.ColumnLabelId));
+        {            
             var excelColumns = _context.ExcelColumnName.ToList();
-            List<ExcelColumnName> activeExcelColumn = new List<ExcelColumnName>();
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.GetValue(record).ToString() != "")
-                {
-                    foreach (var column in excelColumns)
-                    {
-                        if (property.GetValue(record).ToString() == column.Name) // check obj has value for that particular property
-                        {
-                            ExcelColumnName excelColumnName = new ExcelColumnName();
-                            excelColumnName.Name = column.Name;
-                            excelColumnName.ExcelColumnNameId = column.ExcelColumnNameId;
-                            activeExcelColumn.Add(excelColumnName);
-                        }
-                    }
-                }
-            }                        
+            var record = _context.ColumnLabel.Where(a => a.ResultRepositoryId == id).FirstOrDefault();            
+            List<SelectListItem> Listitems = new List<SelectListItem>(); 
+            if(record.C1 != "")
+                Listitems.Add(new SelectListItem { Text = record.C1, Value = excelColumns.ElementAt(0).ExcelColumnNameId.ToString() });
+            if (record.C2 != "")
+                Listitems.Add(new SelectListItem { Text = record.C2, Value = excelColumns.ElementAt(1).ExcelColumnNameId.ToString() });
+            if (record.C3 != "")
+                Listitems.Add(new SelectListItem { Text = record.C3, Value = excelColumns.ElementAt(2).ExcelColumnNameId.ToString() });
+            if (record.C4 != "")
+                Listitems.Add(new SelectListItem { Text = record.C4, Value = excelColumns.ElementAt(3).ExcelColumnNameId.ToString() });
+            if (record.C5 != "")
+                Listitems.Add(new SelectListItem { Text = record.C5, Value = excelColumns.ElementAt(4).ExcelColumnNameId.ToString() });
+            if (record.C6 != "")
+                Listitems.Add(new SelectListItem { Text = record.C6, Value = excelColumns.ElementAt(5).ExcelColumnNameId.ToString() });
+            if (record.C7 != "")
+                Listitems.Add(new SelectListItem { Text = record.C7, Value = excelColumns.ElementAt(6).ExcelColumnNameId.ToString() });
+            if (record.C8 != "")
+                Listitems.Add(new SelectListItem { Text = record.C8, Value = excelColumns.ElementAt(7).ExcelColumnNameId.ToString() });
+            if (record.C9 != "")
+                Listitems.Add(new SelectListItem { Text = record.C9, Value = excelColumns.ElementAt(8).ExcelColumnNameId.ToString() });
+            if (record.C10 != "")
+                Listitems.Add(new SelectListItem { Text = record.C10, Value = excelColumns.ElementAt(9).ExcelColumnNameId.ToString() });
+            if (record.C11 != "")
+                Listitems.Add(new SelectListItem { Text = record.C11, Value = excelColumns.ElementAt(10).ExcelColumnNameId.ToString() });
+            if (record.C12 != "")
+                Listitems.Add(new SelectListItem { Text = record.C12, Value = excelColumns.ElementAt(11).ExcelColumnNameId.ToString() });
+            if (record.C13 != "")
+                Listitems.Add(new SelectListItem { Text = record.C13, Value = excelColumns.ElementAt(12).ExcelColumnNameId.ToString() });
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository.Include(a => a.SchemeLevel).Where(a => a.ResultRepositoryId == id), "SchemeLevelId", "SchemeLevel.Name");
-            ViewData["ExcelColumnNameId"] = new SelectList(activeExcelColumn, "ExcelColumnNameId", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(Listitems, "Value", "Text");
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
             SelectionCriteria obj = new SelectionCriteria();
             obj.ResultRepositoryId = id;
@@ -93,9 +101,38 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 _context.Add(selectionCriteria);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = selectionCriteria.ResultRepositoryId});
             }
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteria.ExcelColumnNameId);
+            var excelColumns = _context.ExcelColumnName.ToList();
+            var record = _context.ColumnLabel.Where(a => a.ResultRepositoryId == selectionCriteria.ResultRepositoryId).FirstOrDefault();
+            List<SelectListItem> Listitems = new List<SelectListItem>();
+            if (record.C1 != "")
+                Listitems.Add(new SelectListItem { Text = record.C1, Value = excelColumns.ElementAt(0).ExcelColumnNameId.ToString() });
+            if (record.C2 != "")
+                Listitems.Add(new SelectListItem { Text = record.C2, Value = excelColumns.ElementAt(1).ExcelColumnNameId.ToString() });
+            if (record.C3 != "")
+                Listitems.Add(new SelectListItem { Text = record.C3, Value = excelColumns.ElementAt(2).ExcelColumnNameId.ToString() });
+            if (record.C4 != "")
+                Listitems.Add(new SelectListItem { Text = record.C4, Value = excelColumns.ElementAt(3).ExcelColumnNameId.ToString() });
+            if (record.C5 != "")
+                Listitems.Add(new SelectListItem { Text = record.C5, Value = excelColumns.ElementAt(4).ExcelColumnNameId.ToString() });
+            if (record.C6 != "")
+                Listitems.Add(new SelectListItem { Text = record.C6, Value = excelColumns.ElementAt(5).ExcelColumnNameId.ToString() });
+            if (record.C7 != "")
+                Listitems.Add(new SelectListItem { Text = record.C7, Value = excelColumns.ElementAt(6).ExcelColumnNameId.ToString() });
+            if (record.C8 != "")
+                Listitems.Add(new SelectListItem { Text = record.C8, Value = excelColumns.ElementAt(7).ExcelColumnNameId.ToString() });
+            if (record.C9 != "")
+                Listitems.Add(new SelectListItem { Text = record.C9, Value = excelColumns.ElementAt(8).ExcelColumnNameId.ToString() });
+            if (record.C10 != "")
+                Listitems.Add(new SelectListItem { Text = record.C10, Value = excelColumns.ElementAt(9).ExcelColumnNameId.ToString() });
+            if (record.C11 != "")
+                Listitems.Add(new SelectListItem { Text = record.C11, Value = excelColumns.ElementAt(10).ExcelColumnNameId.ToString() });
+            if (record.C12 != "")
+                Listitems.Add(new SelectListItem { Text = record.C12, Value = excelColumns.ElementAt(11).ExcelColumnNameId.ToString() });
+            if (record.C13 != "")
+                Listitems.Add(new SelectListItem { Text = record.C13, Value = excelColumns.ElementAt(12).ExcelColumnNameId.ToString() });            
+            ViewData["ExcelColumnNameId"] = new SelectList(Listitems, "Value", "Text", selectionCriteria.ExcelColumnNameId);            
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteria.OperatorId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", selectionCriteria.ResultRepositoryId);
             return View(selectionCriteria);

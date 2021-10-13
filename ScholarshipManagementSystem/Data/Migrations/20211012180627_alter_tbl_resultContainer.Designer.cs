@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211012180627_alter_tbl_resultContainer")]
+    partial class alter_tbl_resultContainer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,12 +411,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("ColumnLabelId");
-
-                    b.HasIndex("ResultRepositoryId");
 
                     b.ToTable("ColumnLabel", "ImportResult");
                 });
@@ -1203,6 +1200,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("Candidate_District")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ColumnLabelId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
@@ -1246,6 +1246,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResultContainerId");
+
+                    b.HasIndex("ColumnLabelId");
 
                     b.HasIndex("DistrictId");
 
@@ -2162,17 +2164,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", b =>
-                {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
-                        .WithMany()
-                        .HasForeignKey("ResultRepositoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResultRepository");
-                });
-
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", b =>
                 {
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
@@ -2325,6 +2316,12 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer", b =>
                 {
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", "ColumnLabel")
+                        .WithMany()
+                        .HasForeignKey("ColumnLabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
@@ -2336,6 +2333,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ColumnLabel");
 
                     b.Navigation("District");
 

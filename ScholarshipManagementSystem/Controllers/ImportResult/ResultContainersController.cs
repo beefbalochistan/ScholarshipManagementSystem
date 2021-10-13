@@ -25,11 +25,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
 
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
-        {            
+        {
             ViewUploadedResult viewUploadedResult = new ViewUploadedResult();
-            var applicationDbContext = await _context.ResultContainer.Include(r => r.ColumnLabel).Include(r => r.ResultRepository).Where(a => a.ResultRepositoryId == id).ToListAsync();
+            var applicationDbContext = await _context.ResultContainer.Include(r => r.ResultRepository).Where(a => a.ResultRepositoryId == id).ToListAsync();
             viewUploadedResult.resultContainerList = applicationDbContext;
-            ColumnLabel obj = await _context.ColumnLabel.FindAsync(applicationDbContext.Max(a=>a.ColumnLabelId));
+            ColumnLabel obj = await _context.ColumnLabel.Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
             viewUploadedResult.columnLabel = obj;
             //-----------------------------------------
             List<int> statistics = new List<int>();
@@ -38,13 +38,10 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             int counter = 0;
             int columnCount = 0;
             bool IsDataCleaned = true;
-            var desiredTable = applicationDbContext.GroupBy(o => o.C1,
-                                        o => 1, // don't need the whole object
-                                        (key, g) => new { key, count = g.Sum() }).Where(a=>a.count > 1);
-            var desiredDictionary = applicationDbContext.ToDictionary(x => x.ResultContainerId, x => x.C3);
+           
             foreach (PropertyInfo property in properties)
             {
-                if (columnCount > 0 && columnCount < 16)
+                if (columnCount > 0 && columnCount < 13)//KDA Hard
                 {
                     counter = 0;
                     foreach (var record in applicationDbContext)
@@ -62,12 +59,12 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             viewUploadedResult.compileResult = statistics;
             //-----------------------------------------
             ResultRepository currentRepositoryResult = await _context.ResultRepository.FindAsync(id);
-            if(currentRepositoryResult.IsDataCleaned != IsDataCleaned)
+            if (currentRepositoryResult.IsDataCleaned != IsDataCleaned)
             {
                 currentRepositoryResult.IsDataCleaned = IsDataCleaned;
                 _context.Update(currentRepositoryResult);
                 await _context.SaveChangesAsync();
-            }           
+            }
             //-----------------------------------------
             return View(viewUploadedResult);
         }
@@ -86,160 +83,134 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         }
         public async Task<IActionResult> MeritGenerator(int id, int SLId, int FYearId)
         {
-            var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.PolicySRCForum).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
+            var currentPolicy = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
             //var POML = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true).Take((int)currentPolicy.POMS);
-            //---------------Get Column ---------------------------------
-            ColumnLabel columnLabel = _context.ColumnLabel.Find(_context.ResultContainer.Where(a => a.ResultRepositoryId == id).Max(a => a.ColumnLabelId));            
-            string markColumnName = GetPropertyName(columnLabel, "Marks_");                                          
+            //---------------Get Column ---------------------------------                                                         
             //-----------------------------------------------------------
             //var POMLCandidates = _context.ResultContainer.OrderBy(x =>((string)x.GetType().GetProperty(markColumnName).GetValue(x, null)));
-            var POMLCandidates = _context.ResultContainer.Where(a=>a.ResultRepositoryId == id && a.IsOnCriteria == true).OrderByDescending(x => EF.Property<object>(x, markColumnName)).Take((int)currentPolicy.POMS).ToList();
-
+            var POMLCandidates = _context.ResultContainer.Where(a=>a.ResultRepositoryId == id && a.IsOnCriteria == true).OrderByDescending(x => x.Marks_).Take((int)Math.Round(currentPolicy.POMS)).ToList();
+            int counter = 1;
             foreach(var result in POMLCandidates)
             {
                 Applicant applicant = new Applicant();
-                applicant.Name = result.GetType().GetProperty(GetPropertyName(columnLabel, "Name")).GetValue(result, null).ToString();
-                applicant.DistrictId = _context.District.Where(a=>a.Name == result.GetType().GetProperty(GetPropertyName(columnLabel, "Name")).GetValue(result, null).ToString()).Select(a=>a.DivisionId).FirstOrDefault();
-                applicant.FatherName = result.GetType().GetProperty(GetPropertyName(columnLabel, "Father_Name")).GetValue(result, null).ToString();
-                applicant.ReceivedMarks = (int)result.GetType().GetProperty(GetPropertyName(columnLabel, "Marks_")).GetValue(result, null);
-                applicant.RollNumber = result.GetType().GetProperty(GetPropertyName(columnLabel, "Roll_NO")).GetValue(result, null).ToString();
+                applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                applicant.Name = result.Name;
+                applicant.DistrictId = result.DistrictId;
+                applicant.ProvienceId = _context.District.Include(a=>a.Division.Provience).Where(a=>a.DistrictId == applicant.DistrictId).Select(a=>a.Division.ProvienceId).FirstOrDefault();
+                applicant.FatherName = result.Father_Name;
+                applicant.ReceivedMarks = int.Parse(result.Marks_);
+                applicant.RollNumber = result.Roll_NO;
                 applicant.SelectedMethod = "POMS";
                 applicant.TotalMarks = 1100;//KDA
+                applicant.SchemeLevelId = SLId;
                 applicant.SelectionStatus = "Pending";
-                applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code;
+                _context.Add(applicant);
+                ResultContainer currentResult = new ResultContainer();
+                currentResult = result;
+                currentResult.IsSelected = true;
+                _context.Update(currentResult);
+                counter++;
             }
-           
+            await _context.SaveChangesAsync();
+            //--------------------------------------------------------------
+            var districts = _context.District.Where(a=>a.IsActive == true).ToList();
+            var SRCForumId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == FYearId && a.IsEndorse == true).Max(a => a.PolicySRCForumId);
+            var districtQouta = _context.DistrictQoutaBySchemeLevel.Include(a=>a.SchemeLevelPolicy).Where(a => a.PolicySRCForumId == SRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SLId).ToList();            
+            float DOMS = 0;
+            foreach (var district in districts)
+            {
+                DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                var DOMSCandidates = _context.ResultContainer.Where(a=> a.Candidate_District == district.Name).OrderByDescending(x => x.Marks_).Take((int)Math.Round(DOMS)).ToList();
+                foreach (var result in DOMSCandidates)
+                {
+                    Applicant applicant = new Applicant();
+                    applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                    applicant.Name = result.Name;
+                    applicant.DistrictId = result.DistrictId;
+                    applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                    applicant.FatherName = result.Father_Name;
+                    applicant.ReceivedMarks = int.Parse(result.Marks_);
+                    applicant.RollNumber = result.Roll_NO;
+                    applicant.SelectedMethod = "DOSM";
+                    applicant.TotalMarks = 1100;//KDA
+                    applicant.SchemeLevelId = SLId;
+                    applicant.SelectionStatus = "Pending";
+                    _context.Add(applicant);
+                    ResultContainer currentResult = new ResultContainer();
+                    currentResult = result;
+                    currentResult.IsSelected = true;
+                    _context.Update(currentResult);
+                    counter++;
+                }                
+            }
+            await _context.SaveChangesAsync();
+            //----------------------------POMS 50%----------------------------------
+            POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true).OrderByDescending(x => x.Marks_).Take((int)Math.Round((currentPolicy.POMS/2))).ToList();            
+            foreach (var result in POMLCandidates)
+            {
+                Applicant applicant = new Applicant();
+                applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                applicant.Name = result.Name;
+                applicant.DistrictId = result.DistrictId;
+                applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                applicant.FatherName = result.Father_Name;
+                applicant.ReceivedMarks = int.Parse(result.Marks_);
+                applicant.RollNumber = result.Roll_NO;
+                applicant.SelectedMethod = "POMS";
+                applicant.TotalMarks = 1100;//KDA
+                applicant.SchemeLevelId = SLId;
+                applicant.SelectionStatus = "Waiting";
+                _context.Add(applicant);
+                ResultContainer currentResult = new ResultContainer();
+                currentResult = result;
+                currentResult.IsSelected = true;
+                _context.Update(currentResult);
+                counter++;
+            }
+            await _context.SaveChangesAsync();
+            //-------------------------DOMS 50%-------------------------------------                                                
+            foreach (var district in districts)
+            {
+                DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                var DOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round((DOMS/2))).ToList();
+                foreach (var result in DOMSCandidates)
+                {
+                    Applicant applicant = new Applicant();
+                    applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                    applicant.Name = result.Name;
+                    applicant.DistrictId = result.DistrictId;
+                    applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                    applicant.FatherName = result.Father_Name;
+                    applicant.ReceivedMarks = int.Parse(result.Marks_);
+                    applicant.RollNumber = result.Roll_NO;
+                    applicant.SelectedMethod = "DOMS";
+                    applicant.TotalMarks = 1100;//KDA
+                    applicant.SchemeLevelId = SLId;
+                    applicant.SelectionStatus = "Waiting";
+                    _context.Add(applicant);
+                    ResultContainer currentResult = new ResultContainer();
+                    currentResult = result;
+                    currentResult.IsSelected = true;
+                    _context.Update(currentResult);
+                    counter++;
+                }
+            }
+            await _context.SaveChangesAsync();
+            //--------------------------------------------------------------
             return RedirectToAction(nameof(Details), new { id });
         }
         public async Task<IActionResult> ApplyCriteria(int id)
-        {
-            int currentColumn = 0;
+        {            
             ResultRepository currentRepository = _context.ResultRepository.Find(id);
             var currentCriteria = await _context.SelectionCriteria.Include(a=>a.Operator).Where(a => a.ResultRepositoryId == id).ToListAsync();
             foreach(var criteria in currentCriteria)
             {
                 var columnName = _context.ExcelColumnName.Find(criteria.ExcelColumnNameId).Name;
-                var columnLabel = _context.ColumnLabel.Find(_context.ResultContainer.Where(a=>a.ResultRepositoryId == id).Select(a=>a.ColumnLabelId).FirstOrDefault());
-                if(columnLabel.C1 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C1 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid="+ id +")");
+                
+                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE " + columnName + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid="+ id +")");
                     currentRepository.IsSelctionCriteriaApplied = true;
                     _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 1;
-                }
-                else if(columnLabel.C2 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C2 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 2;
-                }
-                else if (columnLabel.C3 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C3 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 3;
-                }
-                else if (columnLabel.C4 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C4 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 4;
-                }
-                else if (columnLabel.C5 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C5 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 5;
-                }
-                else if (columnLabel.C6 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C6 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 6;
-                }
-                else if (columnLabel.C7 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C7 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 7;
-                }
-                else if (columnLabel.C8 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C8 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 8;
-                }
-                else if (columnLabel.C9 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C9 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 9;
-                }
-                else if (columnLabel.C10 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C10 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 10;
-                }
-                else if (columnLabel.C11 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C11 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 11;
-                }
-                else if (columnLabel.C12 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C12 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 12;
-                }
-                else if (columnLabel.C13 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C13 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 13;
-                }
-                else if (columnLabel.C14 == columnName)
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C14 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 14;
-                }
-                else
-                {
-                    _context.Database.ExecuteSqlRaw("Update Importresult.ResultContainer set IsOnCriteria=1 where ResultContainerId in (Select ResultcontainerId from ImportResult.ResultContainer WHERE C15 " + criteria.Operator.Name + " " + criteria.Condition + " and resultrepositoryid=" + id + ")");
-                    currentRepository.IsSelctionCriteriaApplied = true;
-                    _context.Update(currentRepository);
-                    await _context.SaveChangesAsync();
-                    currentColumn = 15;
-                }                
+                    await _context.SaveChangesAsync();                                          
             }
             return RedirectToAction(nameof(Details), new { id});
         }
@@ -251,48 +222,18 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return NotFound();
             }
             ViewBag.Id = id;            
-            ViewUploadedResult viewUploadedResult = new ViewUploadedResult();
-            var applicationDbContext = await _context.ResultContainer.Include(r => r.ColumnLabel).Include(r => r.ResultRepository).Where(a => a.ResultRepositoryId == id).ToListAsync();
-            viewUploadedResult.resultContainerList = applicationDbContext;
-            ColumnLabel obj = await _context.ColumnLabel.FindAsync(_context.ResultContainer.Max(a => a.ColumnLabelId));
-            viewUploadedResult.columnLabel = obj;
+            ViewUploadedResult viewUploadedResult = new ViewUploadedResult();                                
             //-----------------------------------------
-            List<int> statistics = new List<int>();
-            Type type = typeof(ResultContainer);
-            PropertyInfo[] properties = type.GetProperties();
-            int counter = 0;
-            int columnCount = 0;
-            bool IsDataCleaned = true;
-            var desiredTable = applicationDbContext.GroupBy(o => o.C1,
-                                        o => 1, // don't need the whole object
-                                        (key, g) => new { key, count = g.Sum() }).Where(a => a.count > 1);
-            var desiredDictionary = applicationDbContext.ToDictionary(x => x.ResultContainerId, x => x.C3);
-            foreach (PropertyInfo property in properties)
-            {
-                if (columnCount > 0 && columnCount < 16)
-                {
-                    counter = 0;
-                    foreach (var record in applicationDbContext)
-                    {
-                        if (property.GetValue(record) == null) // check obj has value for that particular property
-                        {
-                            counter++;
-                            IsDataCleaned = false;
-                        }
-                    }
-                    statistics.Add(counter);
-                }
-                columnCount++;
-            }
-            viewUploadedResult.compileResult = statistics;
+           
+            bool IsDataCleaned = true;            
             //-----------------------------------------
             ResultRepository currentRepositoryResult = await _context.ResultRepository.FindAsync(id);
-            /*if (currentRepositoryResult.IsDataCleaned != IsDataCleaned)
+            if (currentRepositoryResult.IsDataCleaned != IsDataCleaned)
             {
                 currentRepositoryResult.IsDataCleaned = IsDataCleaned;
                 _context.Update(currentRepositoryResult);
                 await _context.SaveChangesAsync();
-            }*/
+            }
             ViewBag.IsDataCleaned = currentRepositoryResult.IsDataCleaned;
             ViewBag.IsSelctionCriteriaApplied = currentRepositoryResult.IsSelctionCriteriaApplied;
             ViewBag.FYearId = currentRepositoryResult.ScholarshipFiscalYearId;
@@ -313,15 +254,14 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ResultContainerId,ResultRepositoryId,ColumnLabelId,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,C15,IsOnCriteria,IsSelected")] ResultContainer resultContainer)
+        public async Task<IActionResult> Create(ResultContainer resultContainer)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(resultContainer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ColumnLabelId"] = new SelectList(_context.ColumnLabel, "ColumnLabelId", "ColumnLabelId", resultContainer.ColumnLabelId);
+            }            
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", resultContainer.ResultRepositoryId);
             return View(resultContainer);
         }
@@ -334,13 +274,12 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return NotFound();
             }
 
-            var resultContainer = await _context.ResultContainer.Include(a=>a.ColumnLabel).Where(a=>a.ResultContainerId == id).FirstOrDefaultAsync();
+            var resultContainer = await _context.ResultContainer.Where(a=>a.ResultContainerId == id).FirstOrDefaultAsync();
             ViewBag.PID = resultContainer.ResultRepositoryId;
             if (resultContainer == null)
             {
                 return NotFound();
-            }
-            ViewData["ColumnLabelId"] = new SelectList(_context.ColumnLabel, "ColumnLabelId", "ColumnLabelId", resultContainer.ColumnLabelId);
+            }            
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", resultContainer.ResultRepositoryId);
             return View(resultContainer);
         }
@@ -350,7 +289,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResultContainerId,ResultRepositoryId,ColumnLabelId,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,C15,IsOnCriteria,IsSelected")] ResultContainer resultContainer)
+        public async Task<IActionResult> Edit(int id, ResultContainer resultContainer)
         {
             if (id != resultContainer.ResultContainerId)
             {
@@ -379,8 +318,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ColumnLabelId"] = new SelectList(_context.ColumnLabel, "ColumnLabelId", "ColumnLabelId", resultContainer.ColumnLabelId);
+            }            
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", resultContainer.ResultRepositoryId);
             return View(resultContainer);
         }
@@ -393,8 +331,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return NotFound();
             }
 
-            var resultContainer = await _context.ResultContainer
-                .Include(r => r.ColumnLabel)
+            var resultContainer = await _context.ResultContainer                
                 .Include(r => r.ResultRepository)
                 .FirstOrDefaultAsync(m => m.ResultContainerId == id);
             if (resultContainer == null)

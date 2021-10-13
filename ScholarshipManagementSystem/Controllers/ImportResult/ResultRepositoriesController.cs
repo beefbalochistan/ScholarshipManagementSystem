@@ -53,6 +53,19 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
 
             return View(resultRepository);
         }
+        private string GetPropertyName(dynamic obj, string column)
+        {
+            Type type = obj.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.GetValue(obj).ToString() == column) // check obj has value for that particular property
+                {
+                    return property.Name;
+                }
+            }
+            return "";
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ResultRepository resultRepository, IFormFile batchUsers, List<string> selectedColumn)
@@ -69,7 +82,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         // convert to a stream
                         var stream = batchUsers.OpenReadStream();
 
-                        List<ResultContainer> resultContainer = new List<ResultContainer>();
+                        //List<ResultContainer> resultContainer = new List<ResultContainer>();
 
                         try
                         {
@@ -90,55 +103,57 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                         }
                                     }
                                 }
-
+                                //-------------------------------------------------------
+                                List<string> columnNameList = new List<string>();
+                                int counter = 0;
+                                for (var val = 1; val <= 13; val++)//KDA Hard
+                                {
+                                    if (counter < columnList.Count && val == columnList.ElementAt(counter))
+                                    {
+                                        columnNameList.Add(selectedColumn.ElementAt(counter).ToString());
+                                        counter++;
+                                    }
+                                    else
+                                    {
+                                        columnNameList.Add("");
+                                    }
+                                }
+                                var columnLabel = new ColumnLabel()
+                                {
+                                    C1 = columnNameList.ElementAt(0),
+                                    C2 = columnNameList.ElementAt(1),
+                                    C3 = columnNameList.ElementAt(2),
+                                    C4 = columnNameList.ElementAt(3),
+                                    C5 = columnNameList.ElementAt(4),
+                                    C6 = columnNameList.ElementAt(5),
+                                    C7 = columnNameList.ElementAt(6),
+                                    C8 = columnNameList.ElementAt(7),
+                                    C9 = columnNameList.ElementAt(8),
+                                    C10 = columnNameList.ElementAt(9),
+                                    C11 = columnNameList.ElementAt(10),
+                                    C12 = columnNameList.ElementAt(11),
+                                    C13 = columnNameList.ElementAt(12),                                    
+                                    IsActive = true,
+                                    ResultRepositoryId = MaxResultRespositoryId
+                                };
+                                _context.Add(columnLabel);
+                                await _context.SaveChangesAsync();                                
                                 if (columnList.Count == selectedColumn.Count)
                                 {
-                                    //-------------------------------------------------------
-                                    List<string> columnNameList = new List<string>();
-                                    for (var val = 0; val < 15; val++)//KDA Hard
+                                    //-------------------------------------------------------                                    
+                                    var districts = _context.District.Select(a=> new District {DistrictId = a.DistrictId, Name = a.Name.ToLower() }).ToList();                                                                  
+                                    for (var row = 2; row < rowCount; row++)
                                     {
-                                        if (val < selectedColumn.Count)
-                                        {
-                                            columnNameList.Add(selectedColumn.ElementAt(val).ToString());
-                                        }
-                                        else
-                                        {
-                                            columnNameList.Add("");
-                                        }
-                                    }
-                                    var columnLabel = new ColumnLabel()
-                                    {
-                                        C1 = columnNameList.ElementAt(0),
-                                        C2 = columnNameList.ElementAt(1),
-                                        C3 = columnNameList.ElementAt(2),
-                                        C4 = columnNameList.ElementAt(3),
-                                        C5 = columnNameList.ElementAt(4),
-                                        C6 = columnNameList.ElementAt(5),
-                                        C7 = columnNameList.ElementAt(6),
-                                        C8 = columnNameList.ElementAt(7),
-                                        C9 = columnNameList.ElementAt(8),
-                                        C10 = columnNameList.ElementAt(9),
-                                        C11 = columnNameList.ElementAt(10),
-                                        C12 = columnNameList.ElementAt(11),
-                                        C13 = columnNameList.ElementAt(12),
-                                        C14 = columnNameList.ElementAt(13),
-                                        C15 = columnNameList.ElementAt(14),
-                                        IsActive = true
-                                    };
-                                    _context.Add(columnLabel);
-                                    await _context.SaveChangesAsync();
-                                    int MaxColumnLabelId = _context.ColumnLabel.Max(a => a.ColumnLabelId);
-                                    //-----------------------------------------------------------                                
-                                    for (var row = 2; row <= 5000; row++)
-                                    {
-                                        List<string> specificExcelRow = new List<string>();
+                                        counter = 0;
                                         try
                                         {
-                                            for (var val = 0; val < 15; val++)//KDA Hard
+                                            List<string> specificExcelRow = new List<string>();
+                                            for (var val = 1; val <= 13; val++)//KDA Hard
                                             {
-                                                if (val < selectedColumn.Count)
+                                                if (counter < columnList.Count && val == columnList.ElementAt(counter))
                                                 {
-                                                    specificExcelRow.Add(worksheet.Cells[row, columnList.ElementAt(val)].Value?.ToString());
+                                                    specificExcelRow.Add(worksheet.Cells[row, columnList.ElementAt(counter)].Value?.ToString());
+                                                    counter++;
                                                 }
                                                 else
                                                 {
@@ -147,45 +162,44 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                             }
 
                                             var result = new ResultContainer()
-                                            {
-                                                ColumnLabelId = MaxColumnLabelId,
+                                            {      
+                                                //ColumnLabelId = 43,
                                                 ResultRepositoryId = MaxResultRespositoryId,
-                                                C1 = specificExcelRow.ElementAt(0),
-                                                C2 = specificExcelRow.ElementAt(1),
-                                                C3 = specificExcelRow.ElementAt(2),
-                                                C4 = specificExcelRow.ElementAt(3),
-                                                C5 = specificExcelRow.ElementAt(4),
-                                                C6 = specificExcelRow.ElementAt(5),
-                                                C7 = specificExcelRow.ElementAt(6),
-                                                C8 = specificExcelRow.ElementAt(7),
-                                                C9 = specificExcelRow.ElementAt(8),
-                                                C10 = specificExcelRow.ElementAt(9),
-                                                C11 = specificExcelRow.ElementAt(10),
-                                                C12 = specificExcelRow.ElementAt(11),
-                                                C13 = specificExcelRow.ElementAt(12),
-                                                C14 = specificExcelRow.ElementAt(13),
-                                                C15 = specificExcelRow.ElementAt(14)
-                                            };
-                                            /*Type type = typeof(ResultContainer);
-                                            PropertyInfo[] properties = type.GetProperties();
-                                            foreach (PropertyInfo property in properties)
+                                                Roll_NO = specificExcelRow.ElementAt(0),
+                                                REG_NO = specificExcelRow.ElementAt(1),
+                                                Name = specificExcelRow.ElementAt(2),
+                                                Father_Name = specificExcelRow.ElementAt(3),
+                                                Institute = specificExcelRow.ElementAt(4),
+                                                Group = specificExcelRow.ElementAt(5),
+                                                Candidate_District = specificExcelRow.ElementAt(6),
+                                                Institute_District = specificExcelRow.ElementAt(7),                                                                                                
+                                                Marks_ = specificExcelRow.ElementAt(8),
+                                                Pass_Fail = specificExcelRow.ElementAt(9),
+                                                Remarks = specificExcelRow.ElementAt(10),                                                
+                                                CNIC = specificExcelRow.ElementAt(11),                                                
+                                                CGPA = specificExcelRow.ElementAt(12),                                                
+                                                DistrictId = 1
+                                            };                                                                             
+                                            string districtName = result.Candidate_District.ToLower();
+                                            if (districts.Count(a => a.Name == districtName) != 0)
                                             {
-                                                var temp = property;
-                                                if(property.Name == result.C1)
+                                                try
                                                 {
-                                                    result.C1 = specificExcelRow.ElementAt(0);
+                                                    result.DistrictId = districts.Where(a => a.Name == districtName).Max(a => a.DistrictId);
+                                                }        
+                                                catch(Exception ex)
+                                                {                                                    
+                                                    ViewBag.Message = ex.Message.ToString();
                                                 }
-                                            }*/
-
-                                            resultContainer.Add(result);
+                                            }
                                             await _context.AddAsync(result);
                                         }
                                         catch (Exception ex)
                                         {
-                                            Console.WriteLine(ex.Message);
+                                            ViewBag.Message = ex.Message.ToString();
                                         }
-                                    }
-                                    await _context.SaveChangesAsync();
+                                    }                                    
+                                    await _context.SaveChangesAsync();                                   
                                 }
                                 else
                                 {
