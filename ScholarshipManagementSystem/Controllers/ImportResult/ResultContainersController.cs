@@ -22,14 +22,29 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             _context = context;
         }
-
+        public IActionResult ReloadEvents(int id, int RRId)
+        {
+            return ViewComponent("FilterResult", new { id, RRId });
+        }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
+        {
+            ViewBag.RRId = id;
+            ViewUploadedResult viewUploadedResult = new ViewUploadedResult();
+            var applicationDbContext = await _context.ResultContainer.Include(r => r.ResultRepository).Where(a => a.ResultRepositoryId == id && a.DistrictId == 1).ToListAsync();
+            viewUploadedResult.resultContainerList = applicationDbContext;
+            ColumnLabel obj = await _context.ColumnLabel.Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
+            viewUploadedResult.columnLabel = obj;
+            //-----------------------------------------
+            ViewData["DistrictId"] = new SelectList(_context.District.Where(a=>a.IsActive == true), "DistrictId", "Name");
+            return View(viewUploadedResult);
+        }
+        public async Task<IActionResult> CompileResult(int id)
         {
             ViewUploadedResult viewUploadedResult = new ViewUploadedResult();
             var applicationDbContext = await _context.ResultContainer.Include(r => r.ResultRepository).Where(a => a.ResultRepositoryId == id).ToListAsync();
             viewUploadedResult.resultContainerList = applicationDbContext;
-            ColumnLabel obj = await _context.ColumnLabel.Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
+            ColumnLabel obj = await _context.ColumnLabel.Where(a => a.ResultRepositoryId == id).FirstOrDefaultAsync();
             viewUploadedResult.columnLabel = obj;
             //-----------------------------------------
             List<int> statistics = new List<int>();
@@ -38,7 +53,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             int counter = 0;
             int columnCount = 0;
             bool IsDataCleaned = true;
-           
+
             foreach (PropertyInfo property in properties)
             {
                 if (columnCount > 0 && columnCount < 13)//KDA Hard
@@ -87,8 +102,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             //var POML = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true).Take((int)currentPolicy.POMS);
             //---------------Get Column ---------------------------------                                                         
             //-----------------------------------------------------------
-            //var POMLCandidates = _context.ResultContainer.OrderBy(x =>((string)x.GetType().GetProperty(markColumnName).GetValue(x, null)));
-            var POMLCandidates = _context.ResultContainer.Where(a=>a.ResultRepositoryId == id && a.IsOnCriteria == true).OrderByDescending(x => x.Marks_).Take((int)Math.Round(currentPolicy.POMS)).ToList();
+            //var POMLCandidates = _context.ResultContainer.OrderBjy(x =>((string)x.GetType().GetProperty(markColumnName).GetValue(x, null)));
+            var POMLCandidates = _context.ResultContainer.Where(a=>a.ResultRepositoryId == id && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round(currentPolicy.POMS)).ToList();
             int counter = 1;
             foreach(var result in POMLCandidates)
             {
@@ -102,7 +117,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectedMethod = "POMS";
                 applicant.TotalMarks = 1100;//KDA
-                applicant.SchemeLevelId = SLId;
+                applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Pending";
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
@@ -119,8 +134,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             float DOMS = 0;
             foreach (var district in districts)
             {
-                DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
-                var DOMSCandidates = _context.ResultContainer.Where(a=> a.Candidate_District == district.Name).OrderByDescending(x => x.Marks_).Take((int)Math.Round(DOMS)).ToList();
+                DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId && a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId).Sum(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                var DOMSCandidates = _context.ResultContainer.Where(a=> a.Candidate_District == district.Name && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round(DOMS)).ToList();
                 foreach (var result in DOMSCandidates)
                 {
                     Applicant applicant = new Applicant();
@@ -133,7 +148,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectedMethod = "DOSM";
                     applicant.TotalMarks = 1100;//KDA
-                    applicant.SchemeLevelId = SLId;
+                    applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Pending";
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
@@ -145,7 +160,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             }
             await _context.SaveChangesAsync();
             //----------------------------POMS 50%----------------------------------
-            POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true).OrderByDescending(x => x.Marks_).Take((int)Math.Round((currentPolicy.POMS/2))).ToList();            
+            POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round((currentPolicy.POMS/2))).ToList();            
             foreach (var result in POMLCandidates)
             {
                 Applicant applicant = new Applicant();
@@ -158,7 +173,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectedMethod = "POMS";
                 applicant.TotalMarks = 1100;//KDA
-                applicant.SchemeLevelId = SLId;
+                applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Waiting";
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
@@ -185,7 +200,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectedMethod = "DOMS";
                     applicant.TotalMarks = 1100;//KDA
-                    applicant.SchemeLevelId = SLId;
+                    applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Waiting";
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
@@ -195,6 +210,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     counter++;
                 }
             }
+            await _context.SaveChangesAsync();
+
+            ResultRepository resultRepository = await _context.ResultRepository.FindAsync(id);
+            resultRepository.IsMeritListGenerated = true;
+            await _context.AddAsync(resultRepository);
             await _context.SaveChangesAsync();
             //--------------------------------------------------------------
             return RedirectToAction(nameof(Details), new { id });
@@ -225,9 +245,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             ViewUploadedResult viewUploadedResult = new ViewUploadedResult();                                
             //-----------------------------------------
            
-            bool IsDataCleaned = true;            
+            bool IsDataCleaned = true;
             //-----------------------------------------
-            ResultRepository currentRepositoryResult = await _context.ResultRepository.FindAsync(id);
+            var currentRepositoryResult = await _context.ResultRepository.Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
             if (currentRepositoryResult.IsDataCleaned != IsDataCleaned)
             {
                 currentRepositoryResult.IsDataCleaned = IsDataCleaned;
@@ -236,8 +256,16 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             }
             ViewBag.IsDataCleaned = currentRepositoryResult.IsDataCleaned;
             ViewBag.IsSelctionCriteriaApplied = currentRepositoryResult.IsSelctionCriteriaApplied;
+            ViewBag.IsMeritListGenerated = currentRepositoryResult.IsMeritListGenerated;
+            ViewBag.IsSelctionCriteriaDefined = _context.SelectionCriteria.Count(a=>a.ResultRepositoryId == id);
             ViewBag.FYearId = currentRepositoryResult.ScholarshipFiscalYearId;
-            ViewBag.SLId = currentRepositoryResult.SchemeLevelId;
+            ViewBag.SLId = currentRepositoryResult.SchemeLevelPolicy.SchemeLevelId;
+            ViewBag.SLName = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.Name;
+            if(currentRepositoryResult.IsSelctionCriteriaApplied == true)
+            {
+
+            }
+            //var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
             return View(viewUploadedResult);
         }
 
@@ -317,7 +345,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { resultContainer.ResultRepositoryId});
             }            
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", resultContainer.ResultRepositoryId);
             return View(resultContainer);

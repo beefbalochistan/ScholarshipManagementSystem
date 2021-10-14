@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211013120218_altr_tbl_resultcontainer")]
+    partial class altr_tbl_resultcontainer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1265,9 +1267,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDataCleaned")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMeritListGenerated")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSelctionCriteriaApplied")

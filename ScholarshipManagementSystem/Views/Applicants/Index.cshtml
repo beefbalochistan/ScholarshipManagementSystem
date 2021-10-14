@@ -128,7 +128,7 @@
                 @Html.DisplayNameFor(model => model.District)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SchemeLevel)
+                @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Provience)
@@ -257,7 +257,7 @@
                 @Html.DisplayFor(modelItem => item.District.Code)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
+                @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Provience.Code)

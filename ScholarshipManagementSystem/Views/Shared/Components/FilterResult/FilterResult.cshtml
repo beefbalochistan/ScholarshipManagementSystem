@@ -1,0 +1,249 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model ScholarshipManagementSystem.Models.ViewModels.ViewUploadedResult
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            @{
+                if (Model.columnLabel.C1 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C1)
+                    </th>
+                }
+            }
+
+            @{
+                if (Model.columnLabel.C2 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C2)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C3 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C3)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C4 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C4)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C5 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C5)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C6 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C6)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C7 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C7)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C8 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C8)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C9 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C9)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C10 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C10)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C11 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C11)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C12 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C12)
+                    </th>
+                }
+            }
+            @{
+                if (Model.columnLabel.C13 != "")
+                {
+                    <th>
+                        @Html.DisplayFor(model => model.columnLabel.C13)
+                    </th>
+                }
+            }
+            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.resultContainerList)
+        {
+            <tr>
+                @if (Model.columnLabel.C1 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Roll_NO)
+                    </td>
+                }
+                @if (Model.columnLabel.C2 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.REG_NO)
+                    </td>
+                }
+                @if (Model.columnLabel.C3 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                }
+                @if (Model.columnLabel.C4 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Father_Name)
+                    </td>
+                }
+                @if (Model.columnLabel.C5 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Institute)
+                    </td>
+                }
+                @if (Model.columnLabel.C6 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Group)
+                    </td>
+                }
+                @if (Model.columnLabel.C7 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Candidate_District)
+                    </td>
+                }
+                @if (Model.columnLabel.C8 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Institute_District)
+                    </td>
+                }
+                @if (Model.columnLabel.C9 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Marks_)
+                    </td>
+                }
+                @if (Model.columnLabel.C10 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pass_Fail)
+                    </td>
+                }
+                @if (Model.columnLabel.C11 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remarks)
+                    </td>
+                }
+                @if (Model.columnLabel.C12 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CNIC)
+                    </td>
+                }
+                @if (Model.columnLabel.C13 != "")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CGPA)
+                    </td>
+                }
+
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ResultContainerId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+
+
+
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- Buttons examples -->
+<script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="~/assets/libs/jszip/jszip.min.js"></script>
+<script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+<!-- Datatable init js -->
+<script src="~/assets/js/pages/datatables.init.js"></script>
+

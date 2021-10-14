@@ -11,7 +11,6 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-
 @if (true)
 {
     <!-- DataTables -->
@@ -38,7 +37,7 @@
                                                     @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.SchemeLevel)
+                                                    @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
                                                 </th>
                                                 <th>Data Cleaned</th>
                                                 <th>Criteria Applied</th>
@@ -62,19 +61,20 @@
                                                     @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
+                                                    @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
                                                 </td>
                                                 <td>
-                                                @{
-                    if (item.IsDataCleaned)
-                    {
-                        <img src="~/assets/images/tick.png" height="20" alt="Yes" />
-                    }
-                    else
-                    {
-                                                <img src="~/assets/images/cross.png" height="20" alt="Yes" />
-                    }
-                                                }
+                                                    @{
+                                                        if (item.IsDataCleaned)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="20" alt="Yes" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/assets/images/cross.png" height="20" alt="Yes" />
+                                                        }
+                                                    }
+                                                    <a asp-action="CompileResult" asp-controller="ResultContainers" class="btn-sm btn-info" asp-route-id="@item.ResultRepositoryId">Compile Report</a>
                                                 </td>
                                                 <td>
                                                     @{
@@ -86,11 +86,10 @@
                                                         {
                                                             <img src="~/assets/images/cross.png" height="20" alt="Yes" />
                                                         }
-                                                    }
-                                                    <a asp-action="Index" asp-controller="SelectionCriterias" class="btn-sm btn-info" asp-route-id="@item.ResultRepositoryId">View Criteria</a>
+                                                    }                                                    
                                                 </td>
                                                 <td>
-                                                    <a asp-action="Index" asp-controller="ResultContainers" class="btn-sm btn-info" asp-route-id="@item.ResultRepositoryId">View Result</a>
+                                                    <a asp-action="Index" asp-controller="ResultContainers" class="btn-sm btn-success" asp-route-id="@item.ResultRepositoryId">View Result</a>
                                                 </td>
                                                 <td>
                                                     @*<a asp-action="Index" asp-controller="SelectionCriterias" class="btn btn-primary btn-sm btn-rounded" asp-route-id="@item.ResultRepositoryId">View</a>*@

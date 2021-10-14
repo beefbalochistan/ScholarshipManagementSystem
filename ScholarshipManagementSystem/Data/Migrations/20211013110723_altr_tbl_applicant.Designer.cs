@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211013110723_altr_tbl_applicant")]
+    partial class altr_tbl_applicant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1267,13 +1269,10 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<bool>("IsDataCleaned")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsMeritListGenerated")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsSelctionCriteriaApplied")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SchemeLevelPolicyId")
+                    b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScholarshipFiscalYearId")
@@ -1284,7 +1283,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasKey("ResultRepositoryId");
 
-                    b.HasIndex("SchemeLevelPolicyId");
+                    b.HasIndex("SchemeLevelId");
 
                     b.HasIndex("ScholarshipFiscalYearId");
 
@@ -1856,8 +1855,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.HasIndex("ProvienceId");
 
-                    b.HasIndex("SchemeLevelPolicyId");
-
                     b.ToTable("Applicant", "Student");
                 });
 
@@ -2347,9 +2344,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
+                        .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2359,7 +2356,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SchemeLevelPolicy");
+                    b.Navigation("SchemeLevel");
 
                     b.Navigation("ScholarshipFiscalYear");
                 });
@@ -2577,19 +2574,11 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("DegreeScholarshipLevel");
 
                     b.Navigation("District");
 
                     b.Navigation("Provience");
-
-                    b.Navigation("SchemeLevelPolicy");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>

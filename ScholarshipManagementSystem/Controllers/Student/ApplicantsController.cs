@@ -22,7 +22,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // GET: Applicants
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience).Include(a => a.SchemeLevel);
+            var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +38,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 .Include(a => a.DegreeScholarshipLevel)
                 .Include(a => a.District)
                 .Include(a => a.Provience)
-                .Include(a => a.SchemeLevel)
+                /*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/
                 .FirstOrDefaultAsync(m => m.ApplicantId == id);
             if (applicant == null)
             {
@@ -54,7 +54,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId");
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code");
             ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Code");
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name");
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevelPolicy.SchemeLevel.Name");
             return View();
         }
 
@@ -74,7 +74,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId", applicant.DegreeScholarshipLevelId);
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", applicant.DistrictId);
             ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Code", applicant.ProvienceId);
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", applicant.SchemeLevelId);
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a=>a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevelPolicy.SchemeLevel.Name", applicant.SchemeLevelPolicyId);
             return View(applicant);
         }
 
@@ -94,7 +94,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId", applicant.DegreeScholarshipLevelId);
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", applicant.DistrictId);
             ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Code", applicant.ProvienceId);
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", applicant.SchemeLevelId);
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevelPolicy.SchemeLevel.Name", applicant.SchemeLevelPolicyId);
             return View(applicant);
         }
 
@@ -133,7 +133,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId", applicant.DegreeScholarshipLevelId);
             ViewData["DistrictId"] = new SelectList(_context.District, "DistrictId", "Code", applicant.DistrictId);
             ViewData["ProvienceId"] = new SelectList(_context.Provience, "ProvienceId", "Code", applicant.ProvienceId);
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", applicant.SchemeLevelId);
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevelPolicy.SchemeLevel.Name", applicant.SchemeLevelPolicyId);
             return View(applicant);
         }
 
@@ -149,7 +149,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 .Include(a => a.DegreeScholarshipLevel)
                 .Include(a => a.District)
                 .Include(a => a.Provience)
-                .Include(a => a.SchemeLevel)
+                /*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/
                 .FirstOrDefaultAsync(m => m.ApplicantId == id);
             if (applicant == null)
             {

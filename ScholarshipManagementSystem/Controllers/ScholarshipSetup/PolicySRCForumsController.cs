@@ -72,9 +72,9 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         }
 
         // GET: PolicySRCForums/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name");
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear.Where(a=>a.ScholarshipFiscalYearId == id), "ScholarshipFiscalYearId", "Name");
             PolicySRCForum obj = new PolicySRCForum();
             obj.CreatedOn = DateTime.Now;
             obj.IsEndorse = false;
@@ -97,7 +97,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     if(IsPreviousSRCEndoursed > 0)
                     {
                         ViewBag.message = "First endourse previous policy before adding new SRC of same fiscal year!";
-                        ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
+                        ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId), "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
                         return View(policySRCForum);
                     }
                     else
@@ -705,6 +705,44 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         }
         private async Task<bool> GenerateDuplicateSchemeLevelPolicy(int SRCForumId, int FYId)
         {
+            var SRCForumObj = await _context.PolicySRCForum.FindAsync(SRCForumId);
+            _context.Add(SRCForumObj);
+            _context.SaveChanges();
+            var MaxSRCForumId = _context.PolicySRCForum.Max(a=>a.PolicySRCForumId);
+
+            var currentSchemeLevelPolicy = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == SRCForumId).ToList();
+            foreach(var policy in currentSchemeLevelPolicy)
+            {
+                SRCForumObj.PolicySRCForumId = MaxSRCForumId;
+                _context.Add(SRCForumObj);
+                _context.SaveChanges();
+                var MaxSchemeLevelPolicy = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
+
+                var districtQoutaExist = _context.DistrictQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
+                var dAEQoutaExist = _context.DAEInstituteQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
+                var degreeQoutaExist = _context.DegreeLevelQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
+                if(districtQoutaExist > 0)
+                {
+                    var districtQoutaBySchemeLevel = _context.DistrictQoutaBySchemeLevel.Where(a => a.PolicySRCForumId == SRCForumId && a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId).ToList();
+                    foreach (var district in districtQoutaBySchemeLevel)
+                    {/*
+                        SRCForumObj.PolicySRCForumId = MaxSRCForumId;
+                        SRCForumObj.PolicySRCForumId = MaxSRCForumId;
+                        _context.Add(SRCForumObj);
+                        _context.SaveChanges();*/
+                    }
+                }
+                else if(degreeQoutaExist > 0)
+                {
+
+                }
+                else if(dAEQoutaExist > 0)
+                {
+
+                }
+            }
+            
+            
             return true;
         }
         // GET: PolicySRCForums/Edit/5
@@ -720,7 +758,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 return NotFound();
             }
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId), "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
             policySRCForum.IsEndorse = true;
             return View(policySRCForum);
         }        
@@ -837,7 +875,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId), "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
             return View(policySRCForum);
         }
 

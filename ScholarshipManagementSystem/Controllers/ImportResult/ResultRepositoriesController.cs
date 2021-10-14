@@ -26,7 +26,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: ResultRepositories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevel).Include(r => r.ScholarshipFiscalYear);
+            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel).Include(r => r.ScholarshipFiscalYear);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -43,7 +43,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
 
             var resultRepository = await _context.ResultRepository
-                .Include(r => r.SchemeLevel)
+                .Include(r => r.SchemeLevelPolicy.SchemeLevel)
                 .Include(r => r.ScholarshipFiscalYear)
                 .FirstOrDefaultAsync(m => m.ResultRepositoryId == id);
             if (resultRepository == null)
@@ -72,7 +72,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         {
             if (ModelState.IsValid)
             {
-                if (_context.ResultRepository.Count(a => a.ScholarshipFiscalYearId == resultRepository.ScholarshipFiscalYearId && a.SchemeLevelId == resultRepository.SchemeLevelId) == 0)
+                if (_context.ResultRepository.Include(a=>a.SchemeLevelPolicy).Count(a => a.ScholarshipFiscalYearId == resultRepository.ScholarshipFiscalYearId && a.SchemeLevelPolicy.SchemeLevelId == resultRepository.SchemeLevelPolicyId) == 0)
                 {
                     if (batchUsers?.Length > 0)
                     {
@@ -206,7 +206,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
 
                                 }
                             }
-                            return RedirectToAction("Index", "ResultContainers", new { id = MaxResultRespositoryId });
+                            //return RedirectToAction("Index", "ResultContainers", new { id = MaxResultRespositoryId });
+                            return RedirectToAction(nameof(Index));
                         }
                         catch (Exception ex)
                         {
@@ -215,17 +216,17 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     }
                 }                    
             }
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelId);
+            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelPolicy.SchemeLevelId);
             ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name");
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", resultRepository.ScholarshipFiscalYearId);
-            ViewBag.Message = "Record already exist of " + _context.ScholarshipFiscalYear.Find(resultRepository.ScholarshipFiscalYearId).Name + " Fiscal Year of Scheme " + _context.SchemeLevel.Find(resultRepository.SchemeLevelId).Name;
+            ViewBag.Message = "Record already exist of " + _context.ScholarshipFiscalYear.Find(resultRepository.ScholarshipFiscalYearId).Name + " Fiscal Year of Scheme " + _context.SchemeLevel.Find(resultRepository.SchemeLevelPolicy.SchemeLevelId).Name;
             resultRepository.CreatedOn = DateTime.Now.Date;
             return View(resultRepository);            
         }
         // GET: ResultRepositories/Create
         public IActionResult Create()
         {
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name");
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a=>a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name");
             ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name");
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code");
             ResultRepository obj = new ResultRepository();
@@ -272,7 +273,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelId);
+            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelPolicy.SchemeLevelId);
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", resultRepository.ScholarshipFiscalYearId);
             return View(resultRepository);
         }
@@ -309,7 +310,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelId);
+            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelPolicy.SchemeLevelId);
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", resultRepository.ScholarshipFiscalYearId);
             return View(resultRepository);
         }
@@ -323,7 +324,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
 
             var resultRepository = await _context.ResultRepository
-                .Include(r => r.SchemeLevel)
+                .Include(r => r.SchemeLevelPolicy.SchemeLevel)
                 .Include(r => r.ScholarshipFiscalYear)
                 .FirstOrDefaultAsync(m => m.ResultRepositoryId == id);
             if (resultRepository == null)

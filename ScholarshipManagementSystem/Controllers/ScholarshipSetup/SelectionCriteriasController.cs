@@ -25,7 +25,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         public async Task<IActionResult> Index(int id)
         {
             ViewBag.Id = id;
-            var applicationDbContext = _context.SelectionCriteria.Include(s => s.ExcelColumnName).Include(s => s.Operator).Include(s => s.ResultRepository.SchemeLevel).Where(a=>a.ResultRepositoryId == id);
+            var applicationDbContext = _context.SelectionCriteria.Include(s => s.ExcelColumnName).Include(s => s.Operator).Include(s => s.ResultRepository.SchemeLevelPolicy.SchemeLevel).Where(a=>a.ResultRepositoryId == id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -82,7 +82,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 Listitems.Add(new SelectListItem { Text = record.C12, Value = excelColumns.ElementAt(11).ExcelColumnNameId.ToString() });
             if (record.C13 != "")
                 Listitems.Add(new SelectListItem { Text = record.C13, Value = excelColumns.ElementAt(12).ExcelColumnNameId.ToString() });
-            ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository.Include(a => a.SchemeLevel).Where(a => a.ResultRepositoryId == id), "SchemeLevelId", "SchemeLevel.Name");
+            ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ResultRepositoryId == id), "ResultRepositoryId", "SchemeLevelPolicy.SchemeLevel.Name");
             ViewData["ExcelColumnNameId"] = new SelectList(Listitems, "Value", "Text");
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
             SelectionCriteria obj = new SelectionCriteria();

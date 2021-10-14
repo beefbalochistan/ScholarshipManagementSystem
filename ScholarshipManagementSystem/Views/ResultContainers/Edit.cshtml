@@ -49,175 +49,121 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                   @* <div class="col-md-4">
+                                    <div class="col-md-4">
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <input type="hidden" asp-for="ResultContainerId" />
-                                        <input type="hidden" asp-for="ColumnLabelId" />
                                         <input type="hidden" asp-for="ResultRepositoryId" />
                                         <input type="hidden" asp-for="IsOnCriteria" />
                                         <input type="hidden" asp-for="IsSelected" />
 
+
+                                        <div class="form-group">
+                                            <label asp-for="Roll_NO" class="control-label"></label>
+                                            <input asp-for="Roll_NO" class="form-control" readonly="readonly" />
+                                            <span asp-validation-for="Roll_NO" class="text-danger"></span>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label asp-for="REG_NO" class="control-label"></label>
+                                            <input asp-for="REG_NO" class="form-control" />
+                                            <span asp-validation-for="REG_NO" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Marks_" class="control-label"></label>
+                                            <input asp-for="Marks_" class="form-control" />
+                                            <span asp-validation-for="Marks_" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="CNIC" class="control-label"></label>
+                                            <input asp-for="CNIC" class="form-control" />
+                                            <span asp-validation-for="CNIC" class="text-danger"></span>
+                                        </div>
+
+
+
                                         @{
-                                            if (Model.ColumnLabel.C1 != "")
+                                            if (Model.Institute != "")
                                             {
                                                 <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C1</label>
-                                                    <input asp-for="RollNo" class="form-control" />
-                                                    <span asp-validation-for="RollNo" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C4 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C4</label>
-                                                    <input asp-for="C4" class="form-control" />
-                                                    <span asp-validation-for="C4" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C7 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C7</label>
-                                                    <input asp-for="C7" class="form-control" />
-                                                    <span asp-validation-for="C7" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C10 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C10</label>
-                                                    <input asp-for="C10" class="form-control" />
-                                                    <span asp-validation-for="C10" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C13 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C13</label>
-                                                    <input asp-for="C13" class="form-control" />
-                                                    <span asp-validation-for="C13" class="text-danger"></span>
+                                                    <label asp-for="Institute" class="control-label"></label>
+                                                    <input asp-for="Institute" class="form-control" />
+                                                    <span asp-validation-for="Institute" class="text-danger"></span>
                                                 </div>
                                             }
                                         }
                                         <div class="form-group">
-                                            <input type="submit" value="Save" class="btn btn-primary" />                                            
+                                            <input type="submit" value="Save" class="btn btn-primary" />
                                         </div>
-                                        <div class="form-group">                                            
+                                        <div class="form-group">
                                             <a asp-action="Index" asp-route-id="@ViewBag.PID">Back to List</a>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="control-label"></label>
+                                            <input asp-for="Name" class="form-control" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
                                         @{
-                                            if (Model.ColumnLabel.C2 != "")
+                                            if (Model.Group != "")
                                             {
                                                 <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C2</label>
-                                                    <input asp-for="C2" class="form-control" />
-                                                    <span asp-validation-for="C2" class="text-danger"></span>
+                                                    <label asp-for="Group" class="control-label"></label>
+                                                    <input asp-for="Group" class="form-control" />
+                                                    <span asp-validation-for="Group" class="text-danger"></span>
                                                 </div>
                                             }
                                         }
+
+                                        <div class="form-group">
+                                            <label asp-for="Candidate_District" class="control-label"></label>
+                                            <input asp-for="Candidate_District" class="form-control" readonly="readonly" />
+                                            <span asp-validation-for="Candidate_District" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Pass_Fail" class="control-label"></label>
+                                            <input asp-for="Pass_Fail" class="form-control" />
+                                            <span asp-validation-for="Pass_Fail" class="text-danger"></span>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Father_Name" class="control-label"></label>
+                                            <input asp-for="Father_Name" class="form-control" />
+                                            <span asp-validation-for="Father_Name" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Institute_District" class="control-label"></label>
+                                            <input asp-for="Institute_District" class="form-control" readonly="readonly" />
+                                            <span asp-validation-for="Institute_District" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Remarks" class="control-label"></label>
+                                            <input asp-for="Remarks" class="form-control" />
+                                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                                        </div>
+
+
+                                       
+
                                         @{
-                                            if (Model.ColumnLabel.C5 != "")
+                                            if (Model.CGPA != "")
                                             {
                                                 <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C5</label>
-                                                    <input asp-for="C5" class="form-control" />
-                                                    <span asp-validation-for="C5" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C8 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C8</label>
-                                                    <input asp-for="C8" class="form-control" />
-                                                    <span asp-validation-for="C8" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C11 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C11</label>
-                                                    <input asp-for="C11" class="form-control" />
-                                                    <span asp-validation-for="C11" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C14 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C14</label>
-                                                    <input asp-for="C14" class="form-control" />
-                                                    <span asp-validation-for="C14" class="text-danger"></span>
+                                                    <label asp-for="CGPA" class="control-label"></label>
+                                                    <input asp-for="CGPA" class="form-control" />
+                                                    <span asp-validation-for="CGPA" class="text-danger"></span>
                                                 </div>
                                             }
                                         }
                                     </div>
-                                    <div class="col-md-4">
-                                        @{
-                                            if (Model.ColumnLabel.C3 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C3</label>
-                                                    <input asp-for="C3" class="form-control" />
-                                                    <span asp-validation-for="C3" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C6 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C6</label>
-                                                    <input asp-for="C6" class="form-control" />
-                                                    <span asp-validation-for="C6" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C9 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C9</label>
-                                                    <input asp-for="C9" class="form-control" />
-                                                    <span asp-validation-for="C9" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C12 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C12</label>
-                                                    <input asp-for="C12" class="form-control" />
-                                                    <span asp-validation-for="C12" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ColumnLabel.C15 != "")
-                                            {
-                                                <div class="form-group">
-                                                    <label class="control-label">@Model.ColumnLabel.C15</label>
-                                                    <input asp-for="C15" class="form-control" />
-                                                    <span asp-validation-for="C15" class="text-danger"></span>
-                                                </div>
-                                            }
-                                        }
-                                    </div>*@
                                 </div>
                                 </div>
                                 <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">

@@ -1,4 +1,5 @@
 ﻿using ScholarshipManagementSystem.Models.Domain.MasterSetup;
+using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,9 +30,9 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         [ForeignKey("Provience")]
         [Display(Name = "Provience")]
         public int ProvienceId { get; set; }
-        [ForeignKey("SchemeLevel")]
-        [Display(Name = "SchemeLevel")]
-        public int SchemeLevelId { get; set; }
+        [ForeignKey("SchemeLevelPolicy")]
+        [Display(Name = "Scheme Level Policy")]
+        public int SchemeLevelPolicyId { get; set; }
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "DegreeScholarshipLevel")]
         public int? DegreeScholarshipLevelId { get; set; }
@@ -63,7 +64,7 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         public string SelectionStatus { get; set; }
         public string SelectedMethod { get; set; }
         public virtual District District { get; set; }
-        public virtual SchemeLevel SchemeLevel { get; set; }
+        public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
     }

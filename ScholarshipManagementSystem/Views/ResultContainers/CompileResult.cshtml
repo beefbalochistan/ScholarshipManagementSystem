@@ -1,0 +1,356 @@
+﻿@model ScholarshipManagementSystem.Models.ViewModels.ViewUploadedResult
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+
+@{
+    ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "Result";
+    ViewBag.Title = "Repository";
+    ViewBag.pTitle = "Repository";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+@if (true)
+{
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">List of Result Record</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead style="text-align:center">
+                                            <tr>
+                                                @{
+                                                    <th>
+                                                        <text>Indicator</text>
+                                                    </th>
+                                                    if (Model.columnLabel.C1 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C1)
+                                                        </th>
+                                                    }
+                                                }
+
+                                                @{
+                                                    if (Model.columnLabel.C2 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C2)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C3 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C3)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C4 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C4)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C5 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C5)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C6 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C6)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C7 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C7)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C8 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C8)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C9 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C9)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C10 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C10)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C11 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C11)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C12 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C12)
+                                                        </th>
+                                                    }
+                                                }
+                                                @{
+                                                    if (Model.columnLabel.C13 != "")
+                                                    {
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.columnLabel.C13)
+                                                        </th>
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody style="text-align:center">
+                                            <tr>
+                                                <td><b><i class="bx bx-right-arrow"></i> NULL</b></td>
+                                                @if (Model.columnLabel.C1 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(0) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(0))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C2 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(1) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(1))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C3 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(2) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(2))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C4 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(3) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(3))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C5 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(4) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(4))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C6 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(5) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(5))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C7 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(6) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(6))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C8 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(7) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(7))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C9 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(8) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(8))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C10 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(9) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(9))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C11 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(10) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(10))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C12 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(11) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(11))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+                                                @if (Model.columnLabel.C13 != "")
+                                                {
+                                                    <td>
+                                                        @if (@Model.compileResult.ElementAt(12) == 0)
+                                                        {
+                                                            <img src="~/assets/images/tick.png" height="15" alt="Pass" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><b>(@Model.compileResult.ElementAt(12))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
+                                                        }
+                                                    </td>
+                                                }
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -18,14 +18,15 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         [Display(Name = "Fiscal Year")]
         public int ScholarshipFiscalYearId { get; set; }
         [Display(Name = "Scheme Level")]
-        public int SchemeLevelId { get; set; }
+        public int SchemeLevelPolicyId { get; set; }
         [Display(Name = "Uploaded Date")]
         [DataType(DataType.Date)]
         public DateTime CreatedOn { get; set; }
         public bool IsSelctionCriteriaApplied { get; set; } = false;
         public bool IsDataCleaned { get; set; } = false;
+        public bool IsMeritListGenerated { get; set; } = false;
 
         public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
-        public virtual SchemeLevel SchemeLevel { get; set; }
+        public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
     }
 }
