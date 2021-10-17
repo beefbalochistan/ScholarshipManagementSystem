@@ -26,6 +26,10 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             return ViewComponent("FilterResult", new { id, RRId });
         }
+        public IActionResult ReloadEventMeritList(int id, int SLPId, string selectedMethod, string selectedStatus)
+        {
+            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus });
+        }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
         {
@@ -116,9 +120,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.ReceivedMarks = int.Parse(result.Marks_);
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectedMethod = "POMS";
+                applicant.RegisterationNumber = result.REG_NO;
+                applicant.EntryThrough = "System";
                 applicant.TotalMarks = 1100;//KDA
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
-                applicant.SelectionStatus = "Pending";
+                applicant.SelectionStatus = "Selected";
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -147,9 +153,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.ReceivedMarks = int.Parse(result.Marks_);
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectedMethod = "DOSM";
+                    applicant.RegisterationNumber = result.REG_NO;
+                    applicant.EntryThrough = "System";
                     applicant.TotalMarks = 1100;//KDA
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
-                    applicant.SelectionStatus = "Pending";
+                    applicant.SelectionStatus = "Selected";
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;
@@ -172,9 +180,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.ReceivedMarks = int.Parse(result.Marks_);
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectedMethod = "POMS";
+                applicant.RegisterationNumber = result.REG_NO;
+                applicant.EntryThrough = "System";
                 applicant.TotalMarks = 1100;//KDA
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
-                applicant.SelectionStatus = "Waiting";
+                applicant.SelectionStatus = "Awaited";
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -199,9 +209,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.ReceivedMarks = int.Parse(result.Marks_);
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectedMethod = "DOMS";
+                    applicant.RegisterationNumber = result.REG_NO;
+                    applicant.EntryThrough = "System";
                     applicant.TotalMarks = 1100;//KDA
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
-                    applicant.SelectionStatus = "Waiting";
+                    applicant.SelectionStatus = "Awaited";
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;
@@ -214,7 +226,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
 
             ResultRepository resultRepository = await _context.ResultRepository.FindAsync(id);
             resultRepository.IsMeritListGenerated = true;
-            await _context.AddAsync(resultRepository);
+            _context.Update(resultRepository);
             await _context.SaveChangesAsync();
             //--------------------------------------------------------------
             return RedirectToAction(nameof(Details), new { id });
@@ -260,12 +272,33 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             ViewBag.IsSelctionCriteriaDefined = _context.SelectionCriteria.Count(a=>a.ResultRepositoryId == id);
             ViewBag.FYearId = currentRepositoryResult.ScholarshipFiscalYearId;
             ViewBag.SLId = currentRepositoryResult.SchemeLevelPolicy.SchemeLevelId;
+            ViewBag.SLPId = currentRepositoryResult.SchemeLevelPolicyId;
             ViewBag.SLName = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.Name;
             if(currentRepositoryResult.IsSelctionCriteriaApplied == true)
             {
 
             }
-            //var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
+            var list1 = new List<SelectListItem>
+            {
+               new SelectListItem{ Text="All", Value = "All", Selected = true },
+               new SelectListItem{ Text="Selected", Value = "Selected" },
+               new SelectListItem{ Text="Awaited", Value = "Awaited" },
+            };
+            ViewData["ddStatusList"] = list1;
+            var list2 = new List<SelectListItem>
+            {
+               new SelectListItem{ Text="All", Value = "All", Selected = true },
+               new SelectListItem{ Text="POMS", Value = "POMS" },
+               new SelectListItem{ Text="DOMS", Value = "DOMS" },
+               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
+               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
+            };
+            ViewData["ddMethodList"] = list2;           
+            var districtList = _context.District.Where(a => a.IsActive == true).ToList();
+            districtList.Insert(0, new District { DistrictId = 0, Name = "All" }); 
+            ViewData["DistrictId"] = new SelectList(districtList, "DistrictId", "Name");
+            var currentPolicy = _context.SchemeLevelPolicy.Find(currentRepositoryResult.SchemeLevelPolicyId);
+            viewUploadedResult.schemeLevelPolicy = currentPolicy;
             return View(viewUploadedResult);
         }
 

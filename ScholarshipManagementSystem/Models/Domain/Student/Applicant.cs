@@ -51,6 +51,7 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         public string CurrentInsituteFax { get; set; }        
         public string CurrentInsituteAddress { get; set; }        
         public string RollNumber { get; set; }        
+        public string RegisterationNumber { get; set; }        
         public int TotalMarks { get; set; }        
         public float TotalGPA { get; set; }        
         public int ReceivedMarks { get; set; }        
@@ -63,6 +64,7 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         public string ScanOtherDocument { get; set; }
         public string SelectionStatus { get; set; }
         public string SelectedMethod { get; set; }
+        public string EntryThrough { get; set; }
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }

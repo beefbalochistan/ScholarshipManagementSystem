@@ -52,25 +52,25 @@
                         if (ViewBag.IsSelctionCriteriaApplied == false)
                         {
                             <div class="card bg-warning text-white-50">
-                                                <div class="card-body">
-                                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Selection Criteria Applied</h5>
-                                                    @if (ViewBag.IsSelctionCriteriaDefined == 0)
-                                                    {
-                                                        <a asp-action="Index" asp-route-id="@ViewBag.Id" asp-controller="SelectionCriterias" class="btn btn-dark waves-effect waves-light">
-                                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Define Criteria
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a asp-action="ApplyCriteria" asp-route-id="@ViewBag.Id" asp-controller="ResultContainers" class="btn btn-dark waves-effect waves-light">
-                                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Apply
-                                                        </a>
-                                                        <a asp-action="Index" asp-route-id="@ViewBag.Id" asp-controller="SelectionCriterias" class="btn btn-dark waves-effect waves-light float-right">
-                                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> View
-                                                        </a>
-                                                    }
+                                <div class="card-body">
+                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Selection Criteria Applied</h5>
+                                    @if (ViewBag.IsSelctionCriteriaDefined == 0)
+                                    {
+                                        <a asp-action="Index" asp-route-id="@ViewBag.Id" asp-controller="SelectionCriterias" class="btn btn-dark waves-effect waves-light">
+                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Define Criteria
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ApplyCriteria" asp-route-id="@ViewBag.Id" asp-controller="ResultContainers" class="btn btn-dark waves-effect waves-light">
+                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Apply
+                                        </a>
+                                        <a asp-action="Index" asp-route-id="@ViewBag.Id" asp-controller="SelectionCriterias" class="btn btn-dark waves-effect waves-light float-right">
+                                            <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> View
+                                        </a>
+                                    }
 
-                                                </div>
+                                </div>
                             </div>
                         }
                         else
@@ -103,24 +103,24 @@
                     if (ViewBag.IsDataCleaned == true && ViewBag.IsSelctionCriteriaApplied == true)
                     {
                         <div class="card bg-warning text-white-50">
-                                            <div class="card-body">
+                            <div class="card-body">
 
-                                                @if (ViewBag.IsMeritListGenerated == true)
-                                                {
-                                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Generate First Merit List</h5>
-                                                    <button type="button" class="btn btn-dark waves-effect waves-light" disabled="disabled" style="cursor:no-drop">
-                                                        <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Merit List Generated
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-information mr-3"></i> Generate First Merit List</h5>
-                                                    <a asp-action="MeritGenerator" asp-controller="ResultContainers" asp-route-SLId="@ViewBag.SLId" asp-route-id="@ViewBag.Id" asp-route-FYearId="@ViewBag.FYearId" type="button" class="btn btn-dark waves-effect waves-light" style="cursor:no-drop">
-                                                        <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Generate Merit List
-                                                    </a>
-                                                }
+                                @if (ViewBag.IsMeritListGenerated == true)
+                                {
+                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-check-all mr-3"></i> Generate First Merit List</h5>
+                                    <button type="button" class="btn btn-dark waves-effect waves-light" disabled="disabled" style="cursor:no-drop">
+                                        <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Merit List Generated
+                                    </button>
+                                }
+                                else
+                                {
+                                    <h5 class="mt-0 mb-4 text-white"><i class="mdi mdi-information mr-3"></i> Generate First Merit List</h5>
+                                    <a asp-action="MeritGenerator" asp-controller="ResultContainers" asp-route-SLId="@ViewBag.SLId" asp-route-id="@ViewBag.Id" asp-route-FYearId="@ViewBag.FYearId" type="button" class="btn btn-dark waves-effect waves-light">
+                                        <i class="bx bx-loader bx-spin font-size-16 align-middle mr-2"></i> Generate Merit List
+                                    </a>
+                                }
 
-                                            </div>
+                            </div>
                         </div>
                     }
                     else
@@ -146,338 +146,45 @@
                                 <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
                                     <h4 class="mt-2 card-title">Detail of Result Records - <span style="color: black"><u>@ViewBag.SLName Scheme Level</u></span></h4>
                                 </div>
-                                <div class="table-responsive">
-                                    @*<table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                            <thead style="text-align:center">
-                                                <tr>
-                                                    @{
-                                                        <th>
-                                                            <text>Indicator</text>
-                                                        </th>
-                                                        if (Model.columnLabel.C1 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.resultContainerList.ElementAt(0).ColumnLabel.C1)
-                                                            </th>
-                                                        }
-                                                    }
-
-                                                    @{
-                                                        if (Model.columnLabel.C2 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C2)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C3 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C3)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C4 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C4)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C5 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C5)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C6 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C6)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C7 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C7)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C8 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C8)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C9 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C9)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C10 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C10)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C11 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C11)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C12 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C12)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C13 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C13)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C14 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C14)
-                                                            </th>
-                                                        }
-                                                    }
-                                                    @{
-                                                        if (Model.columnLabel.C15 != "")
-                                                        {
-                                                            <th>
-                                                                @Html.DisplayFor(model => model.columnLabel.C15)
-                                                            </th>
-                                                        }
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody style="text-align:center">
-                                                <tr>
-                                                    <td><b><i class="bx bx-right-arrow"></i> NULL</b></td>
-                                                    @if (Model.columnLabel.C1 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(0) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(0))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C2 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(1) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(1))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C3 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(2) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(2))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C4 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(3) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(3))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C5 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(4) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(4))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C6 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(5) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(5))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C7 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(6) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(6))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C8 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(7) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(7))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C9 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(8) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(8))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C10 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(9) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(9))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C11 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(10) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(10))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C12 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(11) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(11))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C13 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(12) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(12))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C14 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(13) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(13))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-                                                    @if (Model.columnLabel.C15 != "")
-                                                    {
-                                                        <td>
-                                                            @if (@Model.compileResult.ElementAt(14) == 0)
-                                                            {
-                                                                <img src="~/assets/images/tick.png" height="15" alt="Pass" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <span><b>(@Model.compileResult.ElementAt(14))</b> </span> <img src="~/assets/images/Cross.png" height="15" alt="Fail" />
-                                                            }
-                                                        </td>
-                                                    }
-
-                                                </tr>
-                                            </tbody>
-                                        </table>*@
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <div class="row">
+                                        <div class="col-md-2">POMS: @Model.schemeLevelPolicy.POMS</div>
+                                        <div class="col-md-2">DOMS: @Model.schemeLevelPolicy.DOMS</div>
+                                        <div class="col-md-2">SQSOMS: @Model.schemeLevelPolicy.SQSOMS</div>
+                                        <div class="col-md-2">SQSEVIs: @Model.schemeLevelPolicy.SQSEVIs</div>                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">District</label>
+                                            <select id="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Selection Method</label>
+                                            <select id="SMethodId" class="form-control" asp-items="ViewBag.ddMethodList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Selected Status</label>
+                                            <select id="SStatusId" class="form-control" asp-items="ViewBag.ddStatusList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="padding-top:30px" id="loading">
+                                        <img src="~/assets/images/loading.gif" height="25" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label">Manually</label>
+                                        <a asp-action="Create" asp-controller="Applicants" class="btn btn-primary waves-effect waves-light">
+                                            <i class="bx bx-user-plus font-size-16 align-middle mr-2"></i> Add Applicant
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive" id="events">
+                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = "All", selectedStatus = "All" }))
                                 </div>
                             </div>
                         </div>
@@ -516,46 +223,119 @@ else
 
 
 @*<div class="card">
-    <div class="card-body">
-        <h4 class="card-title mb-4 float-sm-left">Fullfill Selection Criteria - DistrictWise</h4>        
-        <div class="clearfix"></div>
+        <div class="card-body">
+            <h4 class="card-title mb-4 float-sm-left">Fullfill Selection Criteria - DistrictWise</h4>
+            <div class="clearfix"></div>
 
-        <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+            <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+        </div>
     </div>
-</div>
 *@
 
-<script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>
 
+@section Scripts
+{
+    @*<script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>*@
 <script>
+
     $(document).ready(function () {
-        var options = {
-            chart: {
-                height: 359,
-                type: "bar",
-                stacked: !0,
-                toolbar: { show: !1 },
-                zoom: { enabled: !0 }
+        $("#loading").hide();
+    });
+    $('#DistrictId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var val = $(this).val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritList", "ResultContainers")',
+            data: {
+                id: val,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS
             },
-            plotOptions: {
-                bar: { horizontal: !1, columnWidth: "15%", endingShape: "rounded" }
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
+    });
+    $('#SMethodId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var val = $("#DistrictId").val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritList", "ResultContainers")',
+            data: {
+                id: val,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS
             },
-            dataLabels: { enabled: !1 },
-            series: [
-                {
-                    name: "Applicate", data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
-                },
-                {
-                    name: "Non Applicable", data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
-                },
-                ],
-            xaxis: {
-                categories: ["Awaran", "Barkhan", "Chaghi", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
+    });
+    $('#SStatusId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var val = $("#DistrictId").val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritList", "ResultContainers")',
+            data: {
+                id: val,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS
             },
-            colors: ["#556ee6", "#f1b44c"],//, "#34c38f"],
-            legend: { position: "bottom" },
-            fill: { opacity: 1 }
-        },
-        chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options); chart.render(); options = { chart: { height: 180, type: "radialBar", offsetY: -10 }, plotOptions: { radialBar: { startAngle: -135, endAngle: 135, dataLabels: { name: { fontSize: "13px", color: void 0, offsetY: 60 }, value: { offsetY: 22, fontSize: "16px", color: void 0, formatter: function (e) { return e + "%" } } } } }, colors: ["#556ee6"], fill: { type: "gradient", gradient: { shade: "dark", shadeIntensity: .15, inverseColors: !1, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 65, 91] } }, stroke: { dashArray: 4 }, series: [67], labels: ["Series A"] }; (chart = new ApexCharts(document.querySelector("#radialBar-chart"), options)).render();
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
     });
 </script>
+
+    @*<script>
+        $(document).ready(function () {
+            var options = {
+                chart: {
+                    height: 359,
+                    type: "bar",
+                    stacked: !0,
+                    toolbar: { show: !1 },
+                    zoom: { enabled: !0 }
+                },
+                plotOptions: {
+                    bar: { horizontal: !1, columnWidth: "15%", endingShape: "rounded" }
+                },
+                dataLabels: { enabled: !1 },
+                series: [
+                    {
+                        name: "Applicate", data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
+                    },
+                    {
+                        name: "Non Applicable", data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
+                    },
+                ],
+                xaxis: {
+                    categories: ["Awaran", "Barkhan", "Chaghi", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                },
+                colors: ["#556ee6", "#f1b44c"],//, "#34c38f"],
+                legend: { position: "bottom" },
+                fill: { opacity: 1 }
+            },
+                chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options); chart.render(); options = { chart: { height: 180, type: "radialBar", offsetY: -10 }, plotOptions: { radialBar: { startAngle: -135, endAngle: 135, dataLabels: { name: { fontSize: "13px", color: void 0, offsetY: 60 }, value: { offsetY: 22, fontSize: "16px", color: void 0, formatter: function (e) { return e + "%" } } } } }, colors: ["#556ee6"], fill: { type: "gradient", gradient: { shade: "dark", shadeIntensity: .15, inverseColors: !1, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 65, 91] } }, stroke: { dashArray: 4 }, series: [67], labels: ["Series A"] }; (chart = new ApexCharts(document.querySelector("#radialBar-chart"), options)).render();
+        });
+    </script>*@
+}

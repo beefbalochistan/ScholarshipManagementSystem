@@ -16,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.2.0.59" />
     <PackageReference Include="System.Data.OleDb" Version="4.7.1" />
