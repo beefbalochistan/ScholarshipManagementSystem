@@ -184,7 +184,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive" id="events">
-                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = "All", selectedStatus = "All" }))
+                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All" }))
                                 </div>
                             </div>
                         </div>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211026085759_add_tbl_selectionmethod")]
+    partial class add_tbl_selectionmethod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1849,8 +1851,8 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("SchemeLevelPolicyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SelectionMethodId")
-                        .HasColumnType("int");
+                    b.Property<string>("SelectedMethod")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
@@ -1882,8 +1884,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasIndex("ProvienceId");
 
                     b.HasIndex("SchemeLevelPolicyId");
-
-                    b.HasIndex("SelectionMethodId");
 
                     b.ToTable("Applicant", "Student");
                 });
@@ -2610,12 +2610,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SelectionMethod", "SelectionMethod")
-                        .WithMany()
-                        .HasForeignKey("SelectionMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("DegreeScholarshipLevel");
 
                     b.Navigation("District");
@@ -2623,8 +2617,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Provience");
 
                     b.Navigation("SchemeLevelPolicy");
-
-                    b.Navigation("SelectionMethod");
                 });
 
             modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>

@@ -74,13 +74,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                new SelectListItem{ Text="Female", Value = "Female" },
             };
             ViewData["ddGenderList"] = genderList;
-            var list = new List<SelectListItem>
-            {
-               new SelectListItem{ Text="Select", Value = "0", Selected = true },            
-               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
-               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
-            };
-            ViewData["ddMethodList"] = list;
+            
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod.Where(a=>a.SelectionMethodId > 2), "SelectionMethodId", "Name");
             var provienceList = _context.Provience.ToList();            
             ViewData["DistrictId"] = new SelectList(_context.District.Where(a=>a.DistrictId == 0), "DistrictId", "Name");
             provienceList.Insert(0, new Provience { ProvienceId = 0, Name = "Select" });
@@ -89,7 +84,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name");
 
             Applicant applicant = new Applicant();
-            applicant.SelectionStatus = "Selected";
+            applicant.SelectionStatus = "Pending";
             applicant.EntryThrough = "Manual";
             applicant.SchemeLevelPolicyId = SLPId;
             applicant.DateOfBirth = DateTime.Now.Date;
@@ -163,7 +158,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
                 _context.Update(resultRepository);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "ResultContainers", new { id = resultRepository.ResultRepositoryId});
             }
             var genderList = new List<SelectListItem>
             {
@@ -171,13 +166,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                new SelectListItem{ Text="Female", Value = "Female" },
             };
             ViewData["ddGenderList"] = genderList;
-            var list = new List<SelectListItem>
-            {
-               new SelectListItem{ Text="Select", Value = "0", Selected = true },
-               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
-               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
-            };
-            ViewData["ddMethodList"] = list;
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod, "SelectionMethodId", "Name");
             var provienceList = _context.Provience.ToList();
             ViewData["DistrictId"] = new SelectList(_context.District.Where(a => a.DistrictId == 0), "DistrictId", "Name");
             provienceList.Insert(0, new Provience { ProvienceId = 0, Name = "Select" });
@@ -207,13 +196,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();
             string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
             ViewBag.QrCodeUri = QrUri;
-            var list = new List<SelectListItem>
-            {
-               new SelectListItem{ Text="Select", Value = "0", Selected = true },
-               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
-               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
-            };
-            ViewData["ddMethodList"] = list;
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod, "SelectionMethodId", "Name", applicant.SelectionMethodId);
             var genderList = new List<SelectListItem>
             {
                new SelectListItem{ Text="Male", Value = "Male", Selected = true },
@@ -226,10 +209,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DistrictId"] = new SelectList(_context.District.Include(a=>a.Division).Where(a => a.Division.ProvienceId == applicant.ProvienceId), "DistrictId", "Name", applicant.DistrictId);
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId");
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name", applicant.SchemeLevelPolicyId);
-            string imreBase64Data = Convert.ToBase64String(applicant.Picture);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-            //Passing image data in viewbag to view  
-            ViewBag.ImageData = imgDataURL;
+            if(applicant.Picture != null)
+            {
+                string imreBase64Data = Convert.ToBase64String(applicant.Picture);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                //Passing image data in viewbag to view  
+                ViewBag.ImageData = imgDataURL;
+            }            
             return View(applicant);
         }
 
@@ -308,13 +294,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();
             string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
             ViewBag.QrCodeUri = QrUri;
-            var list = new List<SelectListItem>
-            {
-               new SelectListItem{ Text="Select", Value = "0", Selected = true },
-               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
-               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
-            };
-            ViewData["ddMethodList"] = list;
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod, "SelectionMethodId", "Name", applicant.SelectionMethodId);
             var genderList = new List<SelectListItem>
             {
                new SelectListItem{ Text="Male", Value = "Male", Selected = true },
@@ -327,10 +307,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["DistrictId"] = new SelectList(_context.District.Include(a => a.Division).Where(a => a.Division.ProvienceId == applicant.ProvienceId), "DistrictId", "Name", applicant.DistrictId);
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId");
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name", applicant.SchemeLevelPolicyId);
-            string imreBase64Data = Convert.ToBase64String(applicant.Picture);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-            //Passing image data in viewbag to view  
-            ViewBag.ImageData = imgDataURL;
+            if(applicant.Picture != null)
+            {
+                string imreBase64Data = Convert.ToBase64String(applicant.Picture);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                //Passing image data in viewbag to view  
+                ViewBag.ImageData = imgDataURL;
+            }           
             return View(applicant);
         }
 

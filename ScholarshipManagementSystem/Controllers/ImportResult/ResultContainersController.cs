@@ -119,7 +119,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.FatherName = result.Father_Name;
                 applicant.ReceivedMarks = int.Parse(result.Marks_);
                 applicant.RollNumber = result.Roll_NO;
-                applicant.SelectedMethod = "POMS";
+                applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
                 applicant.EntryThrough = "System";
                 applicant.TotalMarks = 1100;//KDA
@@ -152,7 +152,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.FatherName = result.Father_Name;
                     applicant.ReceivedMarks = int.Parse(result.Marks_);
                     applicant.RollNumber = result.Roll_NO;
-                    applicant.SelectedMethod = "DOSM";
+                    applicant.SelectionMethodId = 2;// "DOSM";
                     applicant.RegisterationNumber = result.REG_NO;
                     applicant.EntryThrough = "System";
                     applicant.TotalMarks = 1100;//KDA
@@ -179,7 +179,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.FatherName = result.Father_Name;
                 applicant.ReceivedMarks = int.Parse(result.Marks_);
                 applicant.RollNumber = result.Roll_NO;
-                applicant.SelectedMethod = "POMS";
+                applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
                 applicant.EntryThrough = "System";
                 applicant.TotalMarks = 1100;//KDA
@@ -208,7 +208,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.FatherName = result.Father_Name;
                     applicant.ReceivedMarks = int.Parse(result.Marks_);
                     applicant.RollNumber = result.Roll_NO;
-                    applicant.SelectedMethod = "DOMS";
+                    applicant.SelectionMethodId = 2;// "DOMS";
                     applicant.RegisterationNumber = result.REG_NO;
                     applicant.EntryThrough = "System";
                     applicant.TotalMarks = 1100;//KDA

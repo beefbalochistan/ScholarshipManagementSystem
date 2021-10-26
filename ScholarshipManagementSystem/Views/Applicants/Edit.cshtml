@@ -69,7 +69,9 @@
                             </div>
                             <div><img src="~/assets/images/BEEF.png" width="90" style="margin-right:10px" /></div>
                         </div>
-                        <br />
+                        <div style="width:120px">                            
+                            <b>Status: </b> <u> @Model.SelectionStatus </u>
+                        </div>
                         <div class="title-hr" style="margin-bottom: 10px">
                             <span class="hr fix"></span>
                             <span>Basic Information</span>
@@ -77,20 +79,22 @@
                         </div>
                         <form asp-action="Edit" enctype="multipart/form-data">
                             @*<div class="form-group">
-                                    <label for="formrow-firstname-input">First name</label>
-                                    <input type="text" class="form-control" id="formrow-firstname-input">
-                                </div>*@
+                <label for="formrow-firstname-input">First name</label>
+                <input type="text" class="form-control" id="formrow-firstname-input">
+            </div>*@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="row">
                                 <input type="hidden" asp-for="ApplicantId" />
                                 <input type="hidden" asp-for="SchemeLevelPolicyId" />
                                 <input type="hidden" asp-for="ScanDocument" />
+                                <input type="hidden" asp-for="SelectionMethodId" />
                                 <input type="hidden" asp-for="SelectionStatus" />
+                                <input type="hidden" asp-for="ApplicantReferenceNo" />
                                 <input type="hidden" asp-for="EntryThrough" />
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Selection Method</label>
-                                        <select asp-for="SelectedMethod" disabled="disabled" class="form-control inputSelect" asp-items="ViewBag.ddMethodList"></select>
+                                        <select style="background-color:lightgray" asp-for="SelectionMethodId" disabled="disabled" class="form-control inputSelect" asp-items="ViewBag.ddMethodList"></select>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="ApplicantReferenceNo" class="control-label"></label>
@@ -160,7 +164,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label asp-for="DateOfBirth" class="control-label"></label>
-                                        <input asp-for="DateOfBirth" type="text" class="form-control inputBox" placeholder="dd M, yyyy" data-date-format="dd M, yyyy" data-provide="datepicker">
+                                        <input asp-for="DateOfBirth" type="text" class="form-control inputBox">
                                     </div><!-- input-group -->
                                 </div>
                                 <div class="col-lg-3">
@@ -351,7 +355,7 @@
                                 <div class="col-md-3">
                                     <div class="text-center" style="margin-top:10px">
                                         <div class="custom-file text-left">
-                                            <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedDocument" id="scannedDocument" required>
+                                            <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedDocument" id="scannedDocument">
                                             <label class="custom-file-label">Scanned Documents</label>
                                         </div>
                                     </div>
@@ -372,10 +376,10 @@
                                 <div class="col-md-3">
                                     <div class="text-center" style="margin-top:10px">
                                         <div class="custom-file text-left">
-                                            <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedOtherDocument" id="scannedOtherDocument" required>
+                                            <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedOtherDocument" id="scannedOtherDocument">
                                             <label class="custom-file-label">Other Documents</label>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                 </div>
                                 @{
                                     if (Model.ScanOtherDocument != null)

@@ -96,12 +96,13 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         [Display(Name = "Selection Status")]
         public string SelectionStatus { get; set; }
         [Display(Name = "Selected Method")]
-        public string SelectedMethod { get; set; }
+        public int SelectionMethodId { get; set; }
         [Display(Name = "Entry Through")]
         public string EntryThrough { get; set; }
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }
+        public virtual SelectionMethod SelectionMethod { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
     }
 }

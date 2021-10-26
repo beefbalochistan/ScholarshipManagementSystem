@@ -31,7 +31,7 @@
             @Html.DisplayNameFor(model => model.ReceivedMarks)
         </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.SelectedMethod)
+                @Html.DisplayNameFor(model => model.SelectionMethod)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SelectionStatus)
@@ -60,7 +60,7 @@
             @Html.DisplayFor(modelItem => item.ReceivedMarks)
         </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.SelectedMethod)
+                @Html.DisplayFor(modelItem => item.SelectionMethod.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SelectionStatus)

@@ -18,16 +18,16 @@ namespace ScholarshipManagementSystem.Component.CompileResult
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id, int SLPId, string selectedMethod, string selectedStatus)
+        public async Task<IViewComponentResult> InvokeAsync(int id, int SLPId, int selectedMethod, string selectedStatus)
         {            
             var applicationDbContext = await _context.Applicant.Include(r => r.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicyId == SLPId).ToListAsync();
             if (id != 0)
             {
                 applicationDbContext = applicationDbContext.Where(a => a.DistrictId == id).ToList();
             }     
-            if(selectedMethod != "All")
+            if(selectedMethod != 0)
             {
-                applicationDbContext = applicationDbContext.Where(a => a.SelectedMethod == selectedMethod).ToList();
+                applicationDbContext = applicationDbContext.Where(a => a.SelectionMethodId == selectedMethod).ToList();
             }
             if (selectedStatus != "All")
             {

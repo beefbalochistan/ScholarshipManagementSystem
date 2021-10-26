@@ -62,5 +62,6 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SelectionCriteria> SelectionCriteria { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.Operator> Operator { get; set; }
         public DbSet<ScholarshipManagementSystem.Models.Domain.Student.Applicant> Applicant { get; set; }
+        public DbSet<ScholarshipManagementSystem.Models.Domain.MasterSetup.SelectionMethod> SelectionMethod { get; set; }
     }
 }
