@@ -25,6 +25,7 @@ namespace ScholarshipManagementSystem.Models.Domain.MasterSetup
         public bool IsSelctionCriteriaApplied { get; set; } = false;
         public bool IsDataCleaned { get; set; } = false;
         public bool IsMeritListGenerated { get; set; } = false;
+        public int currentCounter { get; set; }
 
         public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }

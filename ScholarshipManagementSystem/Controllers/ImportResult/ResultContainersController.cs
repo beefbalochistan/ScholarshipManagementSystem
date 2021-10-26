@@ -145,7 +145,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 foreach (var result in DOMSCandidates)
                 {
                     Applicant applicant = new Applicant();
-                    applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                    applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0');
                     applicant.Name = result.Name;
                     applicant.DistrictId = result.DistrictId;
                     applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
@@ -226,6 +226,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
 
             ResultRepository resultRepository = await _context.ResultRepository.FindAsync(id);
             resultRepository.IsMeritListGenerated = true;
+            resultRepository.currentCounter = counter;
             _context.Update(resultRepository);
             await _context.SaveChangesAsync();
             //--------------------------------------------------------------

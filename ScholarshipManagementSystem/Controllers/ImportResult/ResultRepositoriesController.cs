@@ -283,7 +283,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResultRepositoryId,resultFilePath,ScholarshipFiscalYearId,SchemeLevelId,CreatedOn,IsSelctionCriteriaApplied,IsDataCleaned")] ResultRepository resultRepository)
+        public async Task<IActionResult> Edit(int id, [Bind("ResultRepositoryId,resultFilePath,ScholarshipFiscalYearId,SchemeLevelId,currentCounter,CreatedOn,IsSelctionCriteriaApplied,IsDataCleaned")] ResultRepository resultRepository)
         {
             if (id != resultRepository.ResultRepositoryId)
             {

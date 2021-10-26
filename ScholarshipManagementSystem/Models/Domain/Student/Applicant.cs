@@ -14,15 +14,24 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
     {
         [Key]
         public int ApplicantId { get; set; }       
-        public string Name { get; set; }        
+        public string Name { get; set; }
+        [Display(Name = "Father Name")]
         public string FatherName { get; set; }
+        [Display(Name = "Date of Birth")]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
+        [Display(Name = "B-Form/CNIC")]
         public string BFormCNIC { get; set; }
+        [Display(Name = "Father/CareTaker CNIC")]
         public string FatherCareTakerCNIC { get; set; }
+        [Display(Name = "Applicant Mobile")]
         public string StudentMobile { get; set; }
+        [Display(Name = "Father Mobile")]
         public string FatherMobile { get; set; }
+        [Display(Name = "Relation With Care Taker")]
         public string RelationWithCareTaker { get; set; }
         public string Religion { get; set; }
+        [Display(Name = "Home Address")]
         public string HomeAddress { get; set; }
         [ForeignKey("District")]
         [Display(Name = "District")]
@@ -36,34 +45,59 @@ namespace ScholarshipManagementSystem.Models.Domain.Student
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "DegreeScholarshipLevel")]
         public int? DegreeScholarshipLevelId { get; set; }
-        public string ApplicantReferenceNo { get; set; }        
+        [Display(Name = "Reference#")]
+        public string ApplicantReferenceNo { get; set; }
+        [Display(Name = "Tehsil Name")]
         public string TehsilName { get; set; }        
         public string Gender { get; set; }        
         public string Email { get; set; }        
-        public string Year { get; set; }        
-        public string CurrentInsituteName { get; set; }        
-        public string CurrentInsituteHOD { get; set; }        
-        public string CurrentInsituteFocalPerson { get; set; }        
-        public string CurrentInsituteFocalDesignation { get; set; }        
-        public string CurrentInsituteFocalMobile { get; set; }        
-        public string CurrentInsituteFocalEmail { get; set; }        
-        public string CurrentInsitutePhone { get; set; }        
-        public string CurrentInsituteFax { get; set; }        
-        public string CurrentInsituteAddress { get; set; }        
-        public string RollNumber { get; set; }        
-        public string RegisterationNumber { get; set; }        
+        public string Year { get; set; }
+        [Display(Name = "Insitute Name")]
+        public string CurrentInsituteName { get; set; }
+        [Display(Name = "Insitute HOD")]
+        public string CurrentInsituteHOD { get; set; }
+        [Display(Name = "Focal Person Name")]
+        public string CurrentInsituteFocalPerson { get; set; }
+        [Display(Name = "Focal Person Designation")]
+        public string CurrentInsituteFocalDesignation { get; set; }
+        [Display(Name = "Focal Person Mobile")]
+        public string CurrentInsituteFocalMobile { get; set; }
+        [Display(Name = "Focal Person Email")]
+        public string CurrentInsituteFocalEmail { get; set; }
+        [Display(Name = "Insitute Phone")]
+        public string CurrentInsitutePhone { get; set; }
+        [Display(Name = "Insitute Fax")]
+        public string CurrentInsituteFax { get; set; }
+        [Display(Name = "Insitute Address")]
+        public string CurrentInsituteAddress { get; set; }
+        [Display(Name = "Roll No")]
+        public string RollNumber { get; set; }
+        [Display(Name = "Registeration#")]
+        public string RegisterationNumber { get; set; }
+        [Display(Name = "Total Marks")]
         public int TotalMarks { get; set; }        
-        public float TotalGPA { get; set; }        
-        public int ReceivedMarks { get; set; }        
-        public float ReceivedCGPA { get; set; }        
-        public string OldInstitudeNameAddress { get; set; }        
-        public string NameBoardUniversity { get; set; }        
-        public string TelephoneWithCode { get; set; }
+        [Display(Name = "Total GPA")]
+        public float TotalGPA { get; set; }
+        [Display(Name = "Received Marks")]
+        public int ReceivedMarks { get; set; }
+        [Display(Name = "Received CGPA")]
+        public float ReceivedCGPA { get; set; }
+        [Display(Name = "Old Institude Name With Address")]
+        public string OldInstitudeNameAddress { get; set; }
+        [Display(Name = "Board/University")]
+        public string NameBoardUniversity { get; set; }
+        [Display(Name = "Telephone")]
+        public string TelephoneWithCode { get; set; }        
         public byte[] Picture { get; set; }
+        [Display(Name = "Scan Document")]
         public string ScanDocument { get; set; }
+        [Display(Name = "Scanned Other Document")]
         public string ScanOtherDocument { get; set; }
+        [Display(Name = "Selection Status")]
         public string SelectionStatus { get; set; }
+        [Display(Name = "Selected Method")]
         public string SelectedMethod { get; set; }
+        [Display(Name = "Entry Through")]
         public string EntryThrough { get; set; }
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
