@@ -26,9 +26,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             return ViewComponent("FilterResult", new { id, RRId });
         }
-        public IActionResult ReloadEventMeritList(int id, int SLPId, string selectedMethod, string selectedStatus)
+        public IActionResult ReloadEventMeritList(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId)
         {
-            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus });
+            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus, RRId });
         }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)

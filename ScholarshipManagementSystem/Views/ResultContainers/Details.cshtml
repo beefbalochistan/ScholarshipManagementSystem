@@ -11,7 +11,11 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
 @if (true)
 {
@@ -151,7 +155,7 @@
                                         <div class="col-md-2">POMS: @Model.schemeLevelPolicy.POMS</div>
                                         <div class="col-md-2">DOMS: @Model.schemeLevelPolicy.DOMS</div>
                                         <div class="col-md-2">SQSOMS: @Model.schemeLevelPolicy.SQSOMS</div>
-                                        <div class="col-md-2">SQSEVIs: @Model.schemeLevelPolicy.SQSEVIs</div>                                        
+                                        <div class="col-md-2">SQSEVIs: @Model.schemeLevelPolicy.SQSEVIs</div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -184,7 +188,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive" id="events">
-                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All" }))
+                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All", RRId = ViewBag.Id }))
                                 </div>
                             </div>
                         </div>
@@ -236,7 +240,7 @@ else
 @section Scripts
 {
     @*<script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>*@
-<script>
+    <script>
 
     $(document).ready(function () {
         $("#loading").hide();
@@ -244,6 +248,7 @@ else
     $('#DistrictId').change(function () {
         $("#loading").show();
         var slpId = '@ViewBag.SLPId';
+        var rrId = '@ViewBag.Id';
         var val = $(this).val();
         var selectedM = $("#SMethodId").val();
         var selectedS = $("#SStatusId").val();
@@ -254,7 +259,8 @@ else
                 id: val,
                 SLPId: slpId,
                 selectedMethod: selectedM,
-                selectedStatus: selectedS
+                selectedStatus: selectedS,
+                RRId: rrId
             },
             success: function (data) {
                 $("#events").html(data);
@@ -304,38 +310,38 @@ else
             }
         });
     });
-</script>
+    </script>
 
     @*<script>
-        $(document).ready(function () {
-            var options = {
-                chart: {
-                    height: 359,
-                    type: "bar",
-                    stacked: !0,
-                    toolbar: { show: !1 },
-                    zoom: { enabled: !0 }
-                },
-                plotOptions: {
-                    bar: { horizontal: !1, columnWidth: "15%", endingShape: "rounded" }
-                },
-                dataLabels: { enabled: !1 },
-                series: [
-                    {
-                        name: "Applicate", data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
+            $(document).ready(function () {
+                var options = {
+                    chart: {
+                        height: 359,
+                        type: "bar",
+                        stacked: !0,
+                        toolbar: { show: !1 },
+                        zoom: { enabled: !0 }
                     },
-                    {
-                        name: "Non Applicable", data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
+                    plotOptions: {
+                        bar: { horizontal: !1, columnWidth: "15%", endingShape: "rounded" }
                     },
-                ],
-                xaxis: {
-                    categories: ["Awaran", "Barkhan", "Chaghi", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    dataLabels: { enabled: !1 },
+                    series: [
+                        {
+                            name: "Applicate", data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
+                        },
+                        {
+                            name: "Non Applicable", data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
+                        },
+                    ],
+                    xaxis: {
+                        categories: ["Awaran", "Barkhan", "Chaghi", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    },
+                    colors: ["#556ee6", "#f1b44c"],//, "#34c38f"],
+                    legend: { position: "bottom" },
+                    fill: { opacity: 1 }
                 },
-                colors: ["#556ee6", "#f1b44c"],//, "#34c38f"],
-                legend: { position: "bottom" },
-                fill: { opacity: 1 }
-            },
-                chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options); chart.render(); options = { chart: { height: 180, type: "radialBar", offsetY: -10 }, plotOptions: { radialBar: { startAngle: -135, endAngle: 135, dataLabels: { name: { fontSize: "13px", color: void 0, offsetY: 60 }, value: { offsetY: 22, fontSize: "16px", color: void 0, formatter: function (e) { return e + "%" } } } } }, colors: ["#556ee6"], fill: { type: "gradient", gradient: { shade: "dark", shadeIntensity: .15, inverseColors: !1, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 65, 91] } }, stroke: { dashArray: 4 }, series: [67], labels: ["Series A"] }; (chart = new ApexCharts(document.querySelector("#radialBar-chart"), options)).render();
-        });
-    </script>*@
+                    chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options); chart.render(); options = { chart: { height: 180, type: "radialBar", offsetY: -10 }, plotOptions: { radialBar: { startAngle: -135, endAngle: 135, dataLabels: { name: { fontSize: "13px", color: void 0, offsetY: 60 }, value: { offsetY: 22, fontSize: "16px", color: void 0, formatter: function (e) { return e + "%" } } } } }, colors: ["#556ee6"], fill: { type: "gradient", gradient: { shade: "dark", shadeIntensity: .15, inverseColors: !1, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 65, 91] } }, stroke: { dashArray: 4 }, series: [67], labels: ["Series A"] }; (chart = new ApexCharts(document.querySelector("#radialBar-chart"), options)).render();
+            });
+        </script>*@
 }

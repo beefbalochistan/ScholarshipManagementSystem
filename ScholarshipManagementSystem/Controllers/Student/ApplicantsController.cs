@@ -45,6 +45,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 .Include(a => a.DegreeScholarshipLevel)
                 .Include(a => a.District)
                 .Include(a => a.Provience)
+                .Include(a => a.SelectionMethod)
                 /*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/
                 .FirstOrDefaultAsync(m => m.ApplicantId == id);
             if (applicant == null)
@@ -177,7 +178,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         // GET: Applicants/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int RRId)
         {
             if (id == null)
             {
@@ -215,7 +216,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
                 //Passing image data in viewbag to view  
                 ViewBag.ImageData = imgDataURL;
-            }            
+            }
+            ViewBag.RRId = RRId;
             return View(applicant);
         }
 
@@ -224,7 +226,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Applicant applicant, IFormFile scannedDocument, IFormFile picture)
+        public async Task<IActionResult> Edit(int id, Applicant applicant, IFormFile scannedDocument, IFormFile scannedOtherDocument, IFormFile picture)
         {
             if (id != applicant.ApplicantId)
             {
@@ -237,6 +239,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 {
                     var schemeInfo = _context.SchemeLevelPolicy.Include(a => a.PolicySRCForum).Where(a => a.SchemeLevelPolicyId == applicant.SchemeLevelPolicyId).FirstOrDefault();
                     var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == schemeInfo.PolicySRCForum.ScholarshipFiscalYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == schemeInfo.SchemeLevelId).FirstOrDefault();
+                    ViewBag.RRId = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == applicant.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == currentPolicy.PolicySRCForum.ScholarshipFiscalYearId).Select(a=>a.ResultRepositoryId).FirstOrDefault();                     
                     if (scannedDocument != null && scannedDocument.Length > 0)
                         {
                             var rootPath = Path.Combine(
@@ -263,6 +266,33 @@ namespace ScholarshipManagementSystem.Controllers.Student
                             }
                             //-----------------------------------                                                                 
                         }
+
+                    if (scannedOtherDocument != null && scannedOtherDocument.Length > 0)
+                    {
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Applicant\\" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "\\SchemeLevel" + currentPolicy.SchemeLevel.Code + "\\");
+                        string fileName = Path.GetFileName(scannedOtherDocument.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Document" + randomNumber.ToString() + fileName;
+                        applicant.ScanOtherDocument = Path.Combine("/Documents/Applicant/" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "/SchemeLevel" + currentPolicy.SchemeLevel.Code + "/" + fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await scannedOtherDocument.CopyToAsync(stream);
+                        }
+                        //-----------------------------------                                                                 
+                    }
                     if (picture != null && picture.Length > 0)
                         {
                             using (var dataStream = new MemoryStream())
@@ -285,7 +315,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                ViewBag.Message = "Data has been saved successfully!";                
             }
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
             QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(applicant.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
@@ -313,7 +343,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
                 //Passing image data in viewbag to view  
                 ViewBag.ImageData = imgDataURL;
-            }           
+            }            
             return View(applicant);
         }
 

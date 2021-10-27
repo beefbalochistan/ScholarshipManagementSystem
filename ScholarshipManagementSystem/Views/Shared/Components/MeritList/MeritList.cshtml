@@ -1,14 +1,11 @@
 ﻿
-@model  IEnumerable<ScholarshipManagementSystem.Models.Domain.Student.Applicant>
+@model IEnumerable<ScholarshipManagementSystem.Models.Domain.Student.Applicant>
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @using ScholarshipManagementSystem.Constants
 
-<!-- DataTables -->
-<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-<link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-<link href="~/assets/libs/datatables.net-autoFill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+
 <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
     <thead>
         <tr>
@@ -28,8 +25,8 @@
                 @Html.DisplayNameFor(model => model.FatherName)
             </th>
             @*<th>
-            @Html.DisplayNameFor(model => model.ReceivedMarks)
-        </th>*@
+                    @Html.DisplayNameFor(model => model.ReceivedMarks)
+                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.SelectionMethod)
             </th>
@@ -42,31 +39,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
+            <tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RollNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FatherName)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.ReceivedMarks)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.SelectionMethod.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SelectionStatus)
-            </td>
-            <td><a asp-action="Edit" asp-route-id="@item.ApplicantId" asp-controller="Applicants"><i class="bx bx-user"></i>Profile</a></td>
-        </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatherName)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ReceivedMarks)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectionMethod.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectionStatus)
+                </td>
+                <td><a asp-action="Edit" asp-route-id="@item.ApplicantId" asp-route-RRId="@ViewBag.RRId" asp-controller="Applicants"><i class="bx bx-user"></i>Profile</a></td>
+            </tr>
         }
     </tbody>
 </table>
@@ -95,3 +92,11 @@
 <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
 
+<script>
+    $(document).ready(function () {
+        //$('#datatable-buttons').dataTable().fnClearTable();
+        $('#datatable-buttons').dataTable().fnDestroy();
+        $("#datatable").DataTable(),
+        $("#datatable-buttons").DataTable({ lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"] }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

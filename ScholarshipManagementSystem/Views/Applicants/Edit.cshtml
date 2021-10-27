@@ -63,14 +63,20 @@
                                 <h4><b>BALOCHISTAN EDUCATION ENDOWMENT FUND (BEEF)</b></h4>
                                 <h6>A Company Setup Under Section 42 of the Companies Act, 2017</h6>
                                 <h6><b>SCHOLARSHIP APPLICATION FORM PARTIAL FUNDED SCHEME</b></h6>
+                                @{
+                                    if (ViewBag.Message != null)
+                                    {
+                                        <span class="text-center" style="font-weight:bold;color:darkred"> @ViewBag.Message</span>
+                                    }
+                                }
                             </div>
                             <div>
                                 <img src="@ViewBag.QrCodeUri" class="img-thumbnail" width="100" />
                             </div>
                             <div><img src="~/assets/images/BEEF.png" width="90" style="margin-right:10px" /></div>
-                        </div>
-                        <div style="width:120px">                            
-                            <b>Status: </b> <u> @Model.SelectionStatus </u>
+                        </div>                     
+                        <div class="d-flex justify-content-between">
+                            <b>Status: <u>@Model.SelectionStatus</u></b>                                                      
                         </div>
                         <div class="title-hr" style="margin-bottom: 10px">
                             <span class="hr fix"></span>
@@ -87,6 +93,8 @@
                                 <input type="hidden" asp-for="ApplicantId" />
                                 <input type="hidden" asp-for="SchemeLevelPolicyId" />
                                 <input type="hidden" asp-for="ScanDocument" />
+                                <input type="hidden" asp-for="ScanOtherDocument" />
+                                <input type="hidden" asp-for="Picture" />
                                 <input type="hidden" asp-for="SelectionMethodId" />
                                 <input type="hidden" asp-for="SelectionStatus" />
                                 <input type="hidden" asp-for="ApplicantReferenceNo" />
@@ -164,7 +172,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label asp-for="DateOfBirth" class="control-label"></label>
-                                        <input asp-for="DateOfBirth" type="text" class="form-control inputBox">
+                                        <input asp-for="DateOfBirth" type="date" class="form-control inputBox">
                                     </div><!-- input-group -->
                                 </div>
                                 <div class="col-lg-3">
@@ -362,6 +370,9 @@
                                     <div class="form-group" style="margin-top:10px">
                                         <button type="submit" class="btn btn-primary w-md">Submit</button>
                                     </div>
+                                    <div>
+                                        <a asp-action="Details" asp-controller="ResultContainers" asp-route-id="@ViewBag.RRId">Back to List</a>
+                                    </div>
                                 </div>
                                 @{
                                     if (Model.ScanDocument != null)
@@ -427,9 +438,7 @@
         </div>
     </div>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section scripts{
 
