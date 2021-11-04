@@ -19,18 +19,6 @@
                         <span key="t-layouts">Scholarships</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        @* <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Partial Scholarship</a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">Fully Scholarship</a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href=@Url.Action("Index", "LayoutsLightSidebar") key="t-light-sidebar">Light Sidebar</a></li>
-                    </ul>
-                </li>*@
                         <li>
                             <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                                 <i class="bx bxs-yin-yang"></i>
@@ -63,9 +51,6 @@
                         </li>
                     </ul>
                 </li>
-
-
-
                 <li class="menu-title" key="t-menu">Master Setup</li>
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -180,10 +165,9 @@
                                 <i class="bx bxs-dizzy"></i>
                                 <span key="t-calendar">Preferences</span>
                             </a>
-                        </li>                       
+                        </li>
                     </ul>
                 </li>
-
 
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
@@ -220,11 +204,31 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="ExcelColumnNames" class=" waves-effect">
-                                <i class="bx bxs-dizzy"></i>
-                                <span key="t-calendar">Column Name</span>
+                            <a asp-action="CollectForm" asp-controller="Applicants" class=" waves-effect">
+                                <i class="bx bxs-file-doc"></i>
+                                <span key="t-calendar">Form Collection</span>
                             </a>
                         </li>
+                        @*<li>
+                    <a asp-action="Index" asp-controller="ExcelColumnNames" class=" waves-effect">
+                        <i class="bx bxs-dizzy"></i>
+                        <span key="t-calendar">Column Name</span>
+                    </a>
+                </li>*@
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bxs-user"></i>
+                        <span key="t-invoices">Applicant</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar"> Applicant Tracking</span>
+                            </a>
+                        </li>                                          
                     </ul>
                 </li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)

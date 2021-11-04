@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using ScholarshipManagementSystem.Enums;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-using ScholarshipManagementSystem.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System;
 using System.Threading.Tasks;
 

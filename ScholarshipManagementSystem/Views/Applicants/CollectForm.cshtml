@@ -1,0 +1,421 @@
+﻿@model DAL.Models.Domain.Student.Applicant
+@{
+    ViewData["Title"] = "CollectForm";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="FetchDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnSuccessText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnFailedText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <h5 class="card-title mb-4">Scan QR Code</h5>
+                <div class="form-inline">
+                    <label class="sr-only" for="inlineFormemail2">Email</label>
+                    <div class="input-group mb-2 mr-sm-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Applicant</div>
+                        </div>
+                        <input id="txtbox" type="text" class="form-control" placeholder="Reference#">
+                    </div>
+                    <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
+                    <button type="button" class="btn btn-outline-primary waves-effect btn-label waves-light mb-2 ml-5" data-toggle="modal" data-target="#exampleModal"><i class="bx bx-add-to-queue label-icon"></i> Add New SQS Applicant</button>
+                    <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- end row -->
+
+<div class="card" id="applicantinformation">
+    <div class="card-body">
+        <h4 class="card-title">Applicant Information</h4>
+        <input type="hidden" id="applicantId" />
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Selection Method</label>
+                    <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Scheme</label>
+                    <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Roll#</label>
+                    <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Father Name</label>
+                    <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="attachment">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Attachment Check List</h4>
+                <div class="col-lg-12">
+                    <div class="mt-4">
+                        <h5 class="font-size-14">
+                            <i class="mdi mdi-arrow-right text-primary mr-1"></i>
+                        </h5>
+
+                        <div>
+                            <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                <input type="checkbox" class="custom-control-input" id="fourPicture" checked>
+                                <label class="custom-control-label" for="fourPicture"> Pictures(Four)</label>
+                            </div>
+                            <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                <input type="checkbox" class="custom-control-input" id="dmc" checked>
+                                <label class="custom-control-label" for="dmc"> DMC/Transcripts</label>
+                            </div>
+                            <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                <input type="checkbox" class="custom-control-input" id="cnic" checked>
+                                <label class="custom-control-label" for="cnic"> CNIC/B-Form</label>
+                            </div>
+                            <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                <input type="checkbox" class="custom-control-input" id="guardiancnic" checked>
+                                <label class="custom-control-label" for="guardiancnic"> Father/Mother/Guardian CNIC</label>
+                            </div>
+                            <div id="sqs" style="display:none">
+                                <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="deathCertificate" checked>
+                                    <label class="custom-control-label" for="deathCertificate"> Father Death Certificate</label>
+                                </div>
+                                <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="paySlip" checked>
+                                    <label class="custom-control-label" for="paySlip"> BPS(1-6) Payslip</label>
+                                </div>
+                                <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="affidavit" checked>
+                                    <label class="custom-control-label" for="affidavit"> Affidavit(Mother)</label>
+                                </div>
+                                <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="minorityCertificate">
+                                    <label class="custom-control-label" for="minorityCertificate"> Minority Certificate</label>
+                                </div>
+                            </div>
+                            <div id="mobilenorequired" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <div id="mobilenorequiredtext"></div>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="input-group mb-2 mr-sm-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Mobile Number</div>
+                                </div>
+                                <input style="max-width:200px" id="mobileno" type="number" class="form-control" required placeholder="03xxxxxxxxx" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2" style="max-width:10%">
+                                    <button id="btnSubmit" onclick="updateForm()" type="button" class="btn btn-success waves-effect btn-label waves-light mb-2"><i class="bx bx-upload label-icon"></i> Submit</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="submitspinner" class="row">
+                                        <div class="col-md-2">
+                                            <div class="spinner-border text-success mt-1" role="status">
+                                                <span class="sr-only">Sending...</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="col-1 mt-1">
+                                                <img src="~/assets/images/smsicon.png" width="30" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form method="post" asp-action="CreatePopup" asp-controller="Applicants">
+    <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Applicant Reference ID</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">Selected Method</label>
+                        <select id="SelectedMethodId" class="form-control" asp-items="ViewBag.SelectedMethodId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Fiscal Year</label>
+                        <select id="ScholarshipFiscalYearId" class="form-control" asp-items="ViewBag.ScholarshipFiscalYearId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SchemeLevelPolicyId" class="control-label"></label>
+                        <select id="SchemeLevelId" class="form-control" asp-items="ViewBag.SchemeLevelPolicyId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" asp-for="Name" class="form-control" required/>
+                    </div>
+                    @*<div class="form-group">
+            <label>Country:</label>
+            <select asp-for="BFormCNIC" class="form-control">
+                <option value="">Please select</option>
+                <option value="India">India</option>
+                <option value="China">China</option>
+                <option value="Australia">Australia</option>
+                <option value="France">France</option>
+                <option value="Unites States">Unites States</option>
+                <option value="Russia">Russia</option>
+                <option value="Canada">Canada</option>
+            </select>
+        </div>*@
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@if (Model != null)
+{
+    <script type="text/javascript">
+            $(function () {
+                alert("Inserted Customer ID: " + @Model.ApplicantId);
+            });
+    </script>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnSearchForm').prop('disabled', true);
+            $('#applicantinformation').hide();
+            $('#attachment').hide();
+            $('#submitspinner').hide();
+            $('#txtbox').keyup(function (event) {
+                var refLength = $("#txtbox").val().length;
+                if (refLength == 13) {
+                    $('#btnSearchForm').prop('disabled', false);
+                } else {
+                    $('#btnSearchForm').prop('disabled', true);
+                }
+                if (event.keyCode === 13 && refLength == 13) {
+                    fetch();
+                }
+            });
+            $("#btnSearchForm").click(function () {
+                fetch();
+            });
+
+            $("#ScholarshipFiscalYearId").change(function () {                
+                $.get("/Applicants/GetSchemeLevels", { FYId: $("#ScholarshipFiscalYearId").val() }, function (data) {
+                    $("#SchemeLevelId").empty();
+                    $("#SchemeLevelId").append('<option value="0">Select...</option>');
+                    console.log(data);
+                    $.each(data, function (index, row) {
+                        console.log(row);
+                        $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+            });
+        });
+        function validate_input(inputText) {
+            if (inputText.length == 11) {
+                var patt = /^([0][3][0-9]{9})/;
+                debugger;
+                if (patt.test(inputText)) {
+                    return true;
+                }
+                else {
+                    alert("message");
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+        function fetch() {
+            var refno = $("#txtbox").val();
+            $('#fetchspinner').show();
+            $.ajax({
+                type: "POST",
+                url: "/Applicants/AjaxApplicantInformation",
+                data: { refno: refno },
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $('#applicantinformation').show();
+                        $('#attachment').show();
+                        $('#name').val(response.name);
+                        $('#rollno').val(response.rollNumber);
+                        $('#fathername').val(response.fatherName);
+                        $('#scheme').val(response.homeAddress);
+                        $('#selectionMethodName').val(response.religion);
+                        $('#applicantId').val(response.applicantId);
+                        if (response.isFormSubmitted) {
+                            $('#applicantinformation').show();
+                            $('#attachment').hide();
+                            $('#sqs').hide();
+                            $('#FetchDataOnSuccess').show();
+                            $('#FetchDataOnSuccessText').text("Applicant form has been already submitted!");
+                        }
+                        else {
+                            if (response.selectionMethodId > 2) {
+                                $('#sqs').show();
+                            } else {
+                                $('#sqs').hide();
+                            }
+                            $("#txtbox").val('');
+                            $('#btnSearchForm').prop('disabled', true);
+                            $('#FetchDataOnSuccess').show();
+                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");
+                            $('#FetchDataOnFailed').hide();
+                        }
+
+                    } else {
+                        $('#applicantinformation').hide();
+                        $('#attachment').hide();
+                        $('#sqs').hide();
+                        $('#FetchDataOnSuccess').hide();
+                        $('#FetchDataOnFailed').show();
+                        $('#FetchDataOnFailedText').text("Applicant data not found!");
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                    }
+                    $('#fetchspinner').hide();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        function updateForm() {
+            var applicantId = $("#applicantId").val();
+            var mobileno = $("#mobileno").val();
+            var fourPicture = $("#fourPicture").is(':checked');
+            var dmc = $("#dmc").is(':checked');
+            var cnic = $("#cnic").is(':checked');
+            var guardiancnic = $("#guardiancnic").is(':checked');
+            var paySlip = $("#paySlip").is(':checked');
+            var deathCertificate = $("#deathCertificate").is(':checked');
+            var affidavit = $("#affidavit").is(':checked');
+            var minorityCertificate = $("#minorityCertificate").is(':checked');
+            $('#mobilenorequired').hide();
+            if (validate_input(mobileno)) {
+                $('#mobilenorequired').hide();
+                $('#submitspinner').show();
+                $('#btnSubmit').prop('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    url: "/Applicants/AjaxApplicantSubmit",
+                    data: { applicantId: applicantId, fourPicture: fourPicture, dmc: dmc, cnic: cnic, guardiancnic: guardiancnic, paySlip: paySlip, deathCertificate: deathCertificate, affidavit: affidavit, minorityCertificate: minorityCertificate, mobileno: mobileno },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            if (response.isValid) {
+                                $('#FetchDataOnSuccess').show();
+                                $('#FetchDataOnFailed').hide();
+                                $('#FetchDataOnSuccessText').text("Form submitted successfully!");
+                                $('#applicantinformation').hide();
+                                $('#attachment').hide();
+                                $('#sqs').show();
+                            } else {
+                                $('#FetchDataOnSuccess').hide();
+                                $('#FetchDataOnFailed').show();
+                                $('#FetchDataOnFailedText').text("Something went wrong!");
+                            }
+                        } else {
+                            $('#applicantinformation').hide();
+                            $('#attachment').hide();
+                            $('#sqs').show();
+                            $('#FetchDataOnFailed').show();
+                            $('#FetchDataOnSuccess').hide();
+                            $('#FetchDataOnFailedText').text("Something went wrong!");
+                        }
+                        $('#btnSubmit').prop('disabled', false);
+                        $('#submitspinner').hide();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+            } else {
+                $('#mobilenorequiredtext').text("Invalid mobile no!");
+                $('#mobilenorequired').show();
+            }
+        }
+        (function ($) {
+            function Index() {
+                var $this = this;
+                function initialize() {
+                    $(".popup").on('click', function (e) {
+                        modelPopup(this);
+                    });
+                    function modelPopup(reff) {
+                        var url = $(reff).data('url');
+                        $.get(url).done(function (data) {
+                            debugger;
+                            $('#modal-create-edit-user').find(".modal-dialog").html(data);
+                            $('#modal-create-edit-user > .modal', data).modal("show");
+                        });
+                    }
+                }
+                $this.init = function () {
+                    initialize();
+                };
+            }
+            $(function () {
+                var self = new Index();
+                self.init();
+            });
+        }(jQuery));
+    </script>
+}

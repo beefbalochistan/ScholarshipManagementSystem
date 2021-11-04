@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScholarshipManagementSystem.Constants;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;

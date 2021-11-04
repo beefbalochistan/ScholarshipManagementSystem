@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewData["Title"] = "CollectForm";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="FetchDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnSuccessText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnFailedText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <h5 class="card-title mb-4">Scan QR Code</h5>
+                <div class="form-inline">
+                    <label class="sr-only" for="inlineFormemail2">Email</label>
+                    <div class="input-group mb-2 mr-sm-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Applicant</div>
+                        </div>
+                        <input id="txtbox" type="text" class="form-control" placeholder="Reference#">
+                    </div>
+                    <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
+                    <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- end row -->
+
+<div class="card" id="applicantinformation">
+    <div class="card-body">
+        <h4 class="card-title">Applicant Information</h4>
+        <input type="hidden" id="applicantId" />
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Selection Method</label>
+                    <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Scheme</label>
+                    <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Roll#</label>
+                    <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Father Name</label>
+                    <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnSearchForm').prop('disabled', true);
+            $('#applicantinformation').hide();           
+            $('#txtbox').keyup(function (event) {
+                var refLength = $("#txtbox").val().length;
+                if (refLength == 13) {
+                    $('#btnSearchForm').prop('disabled', false);
+                } else {
+                    $('#btnSearchForm').prop('disabled', true);
+                }
+                if (event.keyCode === 13 && refLength == 13) {
+                    fetch();
+                }
+            });
+            $("#btnSearchForm").click(function () {
+                fetch();
+            });
+        });        
+        function fetch() {
+            var refno = $("#txtbox").val();
+            $('#fetchspinner').show();
+            $.ajax({
+                type: "POST",
+                url: "/Applicants/AjaxApplicantInformation",
+                data: { refno: refno },
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $('#applicantinformation').show();
+                        $('#attachment').show();
+                        $('#name').val(response.name);
+                        $('#rollno').val(response.rollNumber);
+                        $('#fathername').val(response.fatherName);
+                        $('#scheme').val(response.homeAddress);
+                        $('#selectionMethodName').val(response.religion);
+                        $('#applicantId').val(response.applicantId);
+                        if (response.isFormSubmitted) {
+                            $('#applicantinformation').show();                          
+                            $('#FetchDataOnSuccess').show();
+                            $('#FetchDataOnSuccessText').text("Applicant form has been already submitted!");
+                        }
+                        else {                           
+                            $("#txtbox").val('');
+                            $('#btnSearchForm').prop('disabled', true);
+                            $('#FetchDataOnSuccess').show();
+                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");
+                            $('#FetchDataOnFailed').hide();
+                        }
+
+                    } else {
+                        $('#applicantinformation').hide();                      
+                        $('#FetchDataOnSuccess').hide();
+                        $('#FetchDataOnFailed').show();
+                        $('#FetchDataOnFailedText').text("Applicant data not found!");
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                    }
+                    $('#fetchspinner').hide();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }        
+    </script>
+}

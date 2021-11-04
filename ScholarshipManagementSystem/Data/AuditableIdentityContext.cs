@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ScholarshipManagementSystem.Models;
-using System;
+using DAL.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using ScholarshipManagementSystem.Models;
 
 namespace ScholarshipManagementSystem.Data
 {

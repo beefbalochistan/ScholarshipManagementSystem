@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System.Linq;
 using System.Threading.Tasks;
 

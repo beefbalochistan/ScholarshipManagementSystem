@@ -1,4 +1,4 @@
-﻿@model ScholarshipManagementSystem.Models.Domain.Student.Applicant
+﻿@model DAL.Models.Domain.Student.Applicant
 
 @{
     ViewData["Title"] = "Create";
@@ -366,8 +366,7 @@
                 return false;
             })
         });
-        function ShowImagePreview(input) {
-            debugger;
+        function ShowImagePreview(input) {            
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
@@ -377,7 +376,7 @@
             }
         }
         $("#picture").change(function () {
-            alert("test")
+            //alert("test")
             ShowImagePreview(this);
         });
     </script>

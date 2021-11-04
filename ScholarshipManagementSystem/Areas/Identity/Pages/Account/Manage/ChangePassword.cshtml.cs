@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ScholarshipManagementSystem.Common;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models;
-using ScholarshipManagementSystem.Models.Domain.AutoSMSApi;
+using DAL.Models;
+using SMSService.Models.Domain.AutoSMSApi;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account.Manage
 {

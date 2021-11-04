@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
-using ScholarshipManagementSystem.Models.ViewModels;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.ViewModels;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {

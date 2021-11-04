@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
+using DAL.Models.Domain.MasterSetup;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 

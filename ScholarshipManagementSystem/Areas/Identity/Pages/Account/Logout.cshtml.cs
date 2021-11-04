@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 {

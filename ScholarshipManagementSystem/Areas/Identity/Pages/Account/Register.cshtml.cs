@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using ScholarshipManagementSystem.Services;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account

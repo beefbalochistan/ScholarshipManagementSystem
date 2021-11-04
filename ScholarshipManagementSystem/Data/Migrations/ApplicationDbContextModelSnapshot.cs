@@ -19,138 +19,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ApplicationUser", b =>
+            modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -227,115 +96,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Audit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AffectedColumns")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NewValues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldValues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrimaryKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TableName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditLogs");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIService", b =>
-                {
-                    b.Property<int>("SMSAPIServiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BalanceEnquiryURL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mask")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PackageExpiryURL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SendSMSURL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SMSAPIServiceId");
-
-                    b.ToTable("SMSAPIService", "sms");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail", b =>
-                {
-                    b.Property<int>("SMSAPIServiceAuditTrailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DestinationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MessageFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResponseMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResponseType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SendOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TextLength")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SMSAPIServiceAuditTrailId");
-
-                    b.ToTable("SMSAPIServiceAuditTrail", "sms");
-                });
-
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.BEEFSection", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BEEFSection", b =>
                 {
                     b.Property<int>("BEEFSectionId")
                         .ValueGeneratedOnAdd()
@@ -354,7 +115,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("BEEFSection", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ColumnLabel", b =>
                 {
                     b.Property<int>("ColumnLabelId")
                         .ValueGeneratedOnAdd()
@@ -419,7 +180,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ColumnLabel", "ImportResult");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
                 {
                     b.Property<int>("DAEInstituteId")
                         .ValueGeneratedOnAdd()
@@ -489,7 +250,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DAEInstitute", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Degree", b =>
                 {
                     b.Property<int>("DegreeId")
                         .ValueGeneratedOnAdd()
@@ -529,7 +290,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Degree", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DegreeLevel", b =>
                 {
                     b.Property<int>("DegreeLevelId")
                         .ValueGeneratedOnAdd()
@@ -555,7 +316,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DegreeLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
                 {
                     b.Property<int>("DegreeScholarshipLevelId")
                         .ValueGeneratedOnAdd()
@@ -589,7 +350,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DegreeScholarshipLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Discipline", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Discipline", b =>
                 {
                     b.Property<int>("DisciplineId")
                         .ValueGeneratedOnAdd()
@@ -613,7 +374,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Discipline", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.District", b =>
                 {
                     b.Property<int>("DistrictId")
                         .ValueGeneratedOnAdd()
@@ -645,7 +406,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("District", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DistrictDetail", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DistrictDetail", b =>
                 {
                     b.Property<int>("DistrictDetailId")
                         .ValueGeneratedOnAdd()
@@ -684,7 +445,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DistrictDetail", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Division", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Division", b =>
                 {
                     b.Property<int>("DivisionId")
                         .ValueGeneratedOnAdd()
@@ -713,7 +474,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Division", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ExcelColumnName", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ExcelColumnName", b =>
                 {
                     b.Property<int>("ExcelColumnNameId")
                         .ValueGeneratedOnAdd()
@@ -728,7 +489,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ExcelColumnName", "ImportResult");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Faculty", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Faculty", b =>
                 {
                     b.Property<int>("FacultyId")
                         .ValueGeneratedOnAdd()
@@ -749,7 +510,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Faculty", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Institute", b =>
                 {
                     b.Property<int>("InstituteId")
                         .ValueGeneratedOnAdd()
@@ -804,7 +565,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Institute", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.InstituteDepartment", b =>
                 {
                     b.Property<int>("InstituteDepartmentId")
                         .ValueGeneratedOnAdd()
@@ -849,7 +610,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("InstituteDepartment", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteFaculty", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.InstituteFaculty", b =>
                 {
                     b.Property<int>("InstituteFacultyId")
                         .ValueGeneratedOnAdd()
@@ -886,7 +647,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("InstituteFaculty", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteType", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.InstituteType", b =>
                 {
                     b.Property<int>("InstituteTypeId")
                         .ValueGeneratedOnAdd()
@@ -905,7 +666,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("InstituteType", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Operator", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Operator", b =>
                 {
                     b.Property<int>("OperatorId")
                         .ValueGeneratedOnAdd()
@@ -924,7 +685,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Operator", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Preference", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Preference", b =>
                 {
                     b.Property<int>("PreferenceId")
                         .ValueGeneratedOnAdd()
@@ -1143,7 +904,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Preference", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Provience", b =>
                 {
                     b.Property<int>("ProvienceId")
                         .ValueGeneratedOnAdd()
@@ -1164,7 +925,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Provience", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.QualificationLevel", b =>
                 {
                     b.Property<int>("QualificationLevelId")
                         .ValueGeneratedOnAdd()
@@ -1187,7 +948,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("QualificationLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultContainer", b =>
                 {
                     b.Property<int>("ResultContainerId")
                         .ValueGeneratedOnAdd()
@@ -1254,7 +1015,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ResultContainer", "ImportResult");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultRepository", b =>
                 {
                     b.Property<int>("ResultRepositoryId")
                         .ValueGeneratedOnAdd()
@@ -1294,7 +1055,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ResultRepository", "ImportResult");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SMSMassage", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SMSMassage", b =>
                 {
                     b.Property<int>("SMSMassageTypeId")
                         .ValueGeneratedOnAdd()
@@ -1315,7 +1076,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SMSMassage", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Scheme", b =>
                 {
                     b.Property<int>("SchemeId")
                         .ValueGeneratedOnAdd()
@@ -1339,7 +1100,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Scheme", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SchemeLevel", b =>
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1382,7 +1143,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevel", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SelectionMethod", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionMethod", b =>
                 {
                     b.Property<int>("SelectionMethodId")
                         .ValueGeneratedOnAdd()
@@ -1398,7 +1159,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SelectionMethod", "master");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1443,7 +1204,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DAEInstituteQoutaBySchemeLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DegreeLevelQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1485,7 +1246,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DegreeLevelQoutaBySchemeLevel", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1536,7 +1297,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DistrictQoutaBySchemeLevel", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
                 {
                     b.Property<int>("PolicySRCForumId")
                         .ValueGeneratedOnAdd()
@@ -1578,7 +1339,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("PolicySRCForum", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
                 {
                     b.Property<int>("SchemeLevelPaymentId")
                         .ValueGeneratedOnAdd()
@@ -1621,7 +1382,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevelPayment", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", b =>
                 {
                     b.Property<int>("SchemeLevelPolicyId")
                         .ValueGeneratedOnAdd()
@@ -1664,7 +1425,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevelPolicy", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.Scholarship", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.Scholarship", b =>
                 {
                     b.Property<int>("ScholarshipId")
                         .ValueGeneratedOnAdd()
@@ -1684,7 +1445,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Scholarship", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", b =>
                 {
                     b.Property<int>("ScholarshipFiscalYearId")
                         .ValueGeneratedOnAdd()
@@ -1707,7 +1468,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("ScholarshipFiscalYear", "scholar");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SelectionCriteria", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SelectionCriteria", b =>
                 {
                     b.Property<int>("SelectionCriteriaId")
                         .ValueGeneratedOnAdd()
@@ -1737,7 +1498,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SelectionCriteria", "ScholarshipSetup");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.Student.Applicant", b =>
+            modelBuilder.Entity("DAL.Models.Domain.Student.Applicant", b =>
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
@@ -1746,6 +1507,30 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<string>("ApplicantReferenceNo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Attach_Affidavit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_CNIC_BForm")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_DMC_Transcript")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_Father_Death_Certificate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_Father_Mother_Guardian_CNIC")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_Minority_Certificate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_Payslip")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Attach_Picture")
+                        .HasColumnType("bit");
 
                     b.Property<string>("BFormCNIC")
                         .HasColumnType("nvarchar(max)");
@@ -1806,6 +1591,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
 
                     b.Property<string>("HomeAddress")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsFormSubmitted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -1888,7 +1676,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Applicant", "Student");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.DAEPolicyDetailView", b =>
                 {
                     b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -1941,7 +1729,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DAEPolicyDetailView");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DegreeSecondLevel", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.DegreeSecondLevel", b =>
                 {
                     b.Property<int>("CurrentYear")
                         .HasColumnType("int");
@@ -1967,7 +1755,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DegreeSecondLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DegreeThirdLevel", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.DegreeThirdLevel", b =>
                 {
                     b.Property<float>("AdditionalSlotAllocate")
                         .HasColumnType("real");
@@ -2008,7 +1796,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("DegreeThirdLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.PolicyDetailView", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.PolicyDetailView", b =>
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -2063,7 +1851,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("PolicyDetailView");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.PolicyView", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.PolicyView", b =>
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
@@ -2141,60 +1929,254 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("PolicyView");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ColumnLabel", b =>
+            modelBuilder.Entity("SMSService.Models.Domain.AutoSMSApi.SMSAPIService", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.Property<int>("SMSAPIServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BalanceEnquiryURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageExpiryURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendSMSURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSAPIServiceId");
+
+                    b.ToTable("SMSAPIService", "sms");
+                });
+
+            modelBuilder.Entity("SMSService.Models.Domain.AutoSMSApi.SMSAPIServiceAuditTrail", b =>
+                {
+                    b.Property<int>("SMSAPIServiceAuditTrailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DestinationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TextLength")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSAPIServiceAuditTrailId");
+
+                    b.ToTable("SMSAPIServiceAuditTrail", "sms");
+                });
+
+            modelBuilder.Entity("ScholarshipManagementSystem.Models.Audit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AffectedColumns")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimaryKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ColumnLabel", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2203,9 +2185,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ResultRepository");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2214,15 +2196,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("District");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Degree", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Discipline", "Discipline")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Discipline", "Discipline")
                         .WithMany()
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", "QualificationLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.QualificationLevel", "QualificationLevel")
                         .WithMany()
                         .HasForeignKey("QualificationLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2233,9 +2215,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("QualificationLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DegreeLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Degree", "Degree")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Degree", "Degree")
                         .WithMany()
                         .HasForeignKey("DegreeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2244,15 +2226,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Degree");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeLevel", "DegreeLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeLevel", "DegreeLevel")
                         .WithMany()
                         .HasForeignKey("DegreeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2263,9 +2245,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SchemeLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.District", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Division", "Division")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Division", "Division")
                         .WithMany()
                         .HasForeignKey("DivisionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2274,9 +2256,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Division");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.DistrictDetail", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DistrictDetail", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2285,9 +2267,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("District");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Division", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Division", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", "Provience")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Provience", "Provience")
                         .WithMany()
                         .HasForeignKey("ProvienceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2296,15 +2278,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Provience");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Institute", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteType", "InstituteType")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.InstituteType", "InstituteType")
                         .WithMany()
                         .HasForeignKey("InstituteTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", "Provience")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Provience", "Provience")
                         .WithMany()
                         .HasForeignKey("ProvienceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2315,15 +2297,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Provience");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteDepartment", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.InstituteDepartment", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Discipline", "Discipline")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Discipline", "Discipline")
                         .WithMany()
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteFaculty", "InstituteFaculty")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.InstituteFaculty", "InstituteFaculty")
                         .WithMany()
                         .HasForeignKey("InstituteFacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2334,15 +2316,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("InstituteFaculty");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.InstituteFaculty", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.InstituteFaculty", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Faculty", "Faculty")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Faculty", "Faculty")
                         .WithMany()
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", "Institute")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Institute", "Institute")
                         .WithMany()
                         .HasForeignKey("InstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2353,15 +2335,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Institute");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultContainer", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultContainer", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2372,15 +2354,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ResultRepository");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultRepository", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
                         .WithMany()
                         .HasForeignKey("ScholarshipFiscalYearId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2391,9 +2373,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ScholarshipFiscalYear");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Scheme", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.Scholarship", "Scholarship")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.Scholarship", "Scholarship")
                         .WithMany()
                         .HasForeignKey("ScholarshipId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2402,21 +2384,21 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Scholarship");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SchemeLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Institute", "Institute")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Institute", "Institute")
                         .WithMany()
                         .HasForeignKey("InstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.QualificationLevel", "QualificationLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.QualificationLevel", "QualificationLevel")
                         .WithMany()
                         .HasForeignKey("QualificationLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Scheme", "Scheme")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Scheme", "Scheme")
                         .WithMany()
                         .HasForeignKey("SchemeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2429,21 +2411,21 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("Scheme");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
                         .WithMany()
                         .HasForeignKey("DAEInstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
                         .WithMany()
                         .HasForeignKey("PolicySRCForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2456,21 +2438,21 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SRCForum");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
                         .WithMany()
                         .HasForeignKey("DegreeScholarshipLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
                         .WithMany()
                         .HasForeignKey("PolicySRCForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2483,21 +2465,21 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SRCForum");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
                         .WithMany()
                         .HasForeignKey("PolicySRCForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2510,9 +2492,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SRCForum");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
                         .WithMany()
                         .HasForeignKey("ScholarshipFiscalYearId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2521,15 +2503,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ScholarshipFiscalYear");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPayment", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
                         .WithMany()
                         .HasForeignKey("ScholarshipFiscalYearId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2540,15 +2522,15 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ScholarshipFiscalYear");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "PolicySRCForum")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", "PolicySRCForum")
                         .WithMany()
                         .HasForeignKey("PolicySRCForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2559,21 +2541,21 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SchemeLevel");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SelectionCriteria", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SelectionCriteria", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ExcelColumnName", "ExcelColumnName")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.ExcelColumnName", "ExcelColumnName")
                         .WithMany()
                         .HasForeignKey("ExcelColumnNameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Operator", "Operator")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Operator", "Operator")
                         .WithMany()
                         .HasForeignKey("OperatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2586,31 +2568,31 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("ResultRepository");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.Domain.Student.Applicant", b =>
+            modelBuilder.Entity("DAL.Models.Domain.Student.Applicant", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
                         .WithMany()
                         .HasForeignKey("DegreeScholarshipLevelId");
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.Provience", "Provience")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Provience", "Provience")
                         .WithMany()
                         .HasForeignKey("ProvienceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.SelectionMethod", "SelectionMethod")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SelectionMethod", "SelectionMethod")
                         .WithMany()
                         .HasForeignKey("SelectionMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2627,25 +2609,25 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SelectionMethod");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.DAEPolicyDetailView", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.DAEPolicyDetailView", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
                         .WithMany()
                         .HasForeignKey("DAEInstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", "SRCForum")
                         .WithMany()
                         .HasForeignKey("PolicySRCForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.ViewModels.PolicyView", null)
+                    b.HasOne("DAL.Models.ViewModels.PolicyView", null)
                         .WithMany("DAEPolicyDetailViewList")
                         .HasForeignKey("PolicyViewSchemeLevelId");
 
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
                         .WithMany()
                         .HasForeignKey("SchemeLevelPolicyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2658,22 +2640,73 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SRCForum");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.PolicyDetailView", b =>
+            modelBuilder.Entity("DAL.Models.ViewModels.PolicyDetailView", b =>
                 {
-                    b.HasOne("ScholarshipManagementSystem.Models.Domain.MasterSetup.District", "District")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScholarshipManagementSystem.Models.ViewModels.PolicyView", null)
+                    b.HasOne("DAL.Models.ViewModels.PolicyView", null)
                         .WithMany("DistrictPolicyDetailViewList")
                         .HasForeignKey("PolicyViewSchemeLevelId");
 
                     b.Navigation("District");
                 });
 
-            modelBuilder.Entity("ScholarshipManagementSystem.Models.ViewModels.PolicyView", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("DAL.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("DAL.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("DAL.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DAL.Models.ViewModels.PolicyView", b =>
                 {
                     b.Navigation("DAEPolicyDetailViewList");
 

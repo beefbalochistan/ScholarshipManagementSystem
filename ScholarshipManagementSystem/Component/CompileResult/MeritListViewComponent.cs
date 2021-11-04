@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
-using ScholarshipManagementSystem.Models.Domain.Student;
-using ScholarshipManagementSystem.Models.ViewModels;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.Student;
+using DAL.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
+using DAL.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 {
@@ -103,10 +103,11 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     else
                     {
                         //Doublicate
+                        var oldMaxSRCForumId = _context.PolicySRCForum.Where(a=>a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId && a.IsEndorse == true).Max(a=>a.PolicySRCForumId);
                         _context.Add(policySRCForum);
                         await _context.SaveChangesAsync();
-                        var MaxId = _context.PolicySRCForum.Max(a => a.PolicySRCForumId);
-                        await GenerateDuplicateSchemeLevelPolicy(MaxId, policySRCForum.ScholarshipFiscalYearId);
+                        var MaxId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId).Max(a => a.PolicySRCForumId);
+                        await GenerateDuplicateSchemeLevelPolicy(MaxId, oldMaxSRCForumId, policySRCForum.ScholarshipFiscalYearId);
                     }
                 }
                 else
@@ -703,46 +704,58 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             return true;
 
         }
-        private async Task<bool> GenerateDuplicateSchemeLevelPolicy(int SRCForumId, int FYId)
+        private async Task<bool> GenerateDuplicateSchemeLevelPolicy(int SRCForumId, int oldSRCForumId, int FYId)
         {
-            var SRCForumObj = await _context.PolicySRCForum.FindAsync(SRCForumId);
-            _context.Add(SRCForumObj);
-            _context.SaveChanges();
-            var MaxSRCForumId = _context.PolicySRCForum.Max(a=>a.PolicySRCForumId);
-
-            var currentSchemeLevelPolicy = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == SRCForumId).ToList();
-            foreach(var policy in currentSchemeLevelPolicy)
-            {
-                SRCForumObj.PolicySRCForumId = MaxSRCForumId;
-                _context.Add(SRCForumObj);
-                _context.SaveChanges();
-                var MaxSchemeLevelPolicy = _context.SchemeLevelPolicy.Max(a => a.SchemeLevelPolicyId);
-
-                var districtQoutaExist = _context.DistrictQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
-                var dAEQoutaExist = _context.DAEInstituteQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
-                var degreeQoutaExist = _context.DegreeLevelQoutaBySchemeLevel.Count(a=>a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId);
-                if(districtQoutaExist > 0)
+            
+            var schemeLevelPolicyList = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == oldSRCForumId).ToList();
+            foreach (var schemeLevelPolicy in schemeLevelPolicyList)
+            {                
+                var currentSchemePolicy = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.Institute).Include(a=>a.SchemeLevel.QualificationLevel).Where(a=>a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).FirstOrDefault();
+                currentSchemePolicy.PolicySRCForumId = SRCForumId;
+                currentSchemePolicy.SchemeLevelPolicyId = 0;
+                _context.Add(currentSchemePolicy);
+                await _context.SaveChangesAsync();
+                var MaxSchemeLevelPolicyId = _context.SchemeLevelPolicy.Max(a=>a.SchemeLevelPolicyId);
+            
+                if (schemeLevelPolicy.SchemeLevelId == 1 || schemeLevelPolicy.SchemeLevelId == 2 || schemeLevelPolicy.SchemeLevelId == 3 || (schemeLevelPolicy.SchemeLevel.SchemeId == 3 && schemeLevelPolicy.SchemeLevel.InstituteId == 2) || (schemeLevelPolicy.SchemeLevel.SchemeId == 4 && schemeLevelPolicy.SchemeLevel.InstituteId == 2))
                 {
-                    var districtQoutaBySchemeLevel = _context.DistrictQoutaBySchemeLevel.Where(a => a.PolicySRCForumId == SRCForumId && a.SchemeLevelPolicyId == policy.SchemeLevelPolicyId).ToList();
-                    foreach (var district in districtQoutaBySchemeLevel)
-                    {/*
-                        SRCForumObj.PolicySRCForumId = MaxSRCForumId;
-                        SRCForumObj.PolicySRCForumId = MaxSRCForumId;
-                        _context.Add(SRCForumObj);
-                        _context.SaveChanges();*/
+                    var districtQoutaBySchemeLevelList = _context.DistrictQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    foreach (var districtQouta in districtQoutaBySchemeLevelList)
+                    {
+                        districtQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        districtQouta.PolicySRCForumId = SRCForumId;
+                        districtQouta.DistrictQoutaBySchemeLevelId = 0;
+                        await _context.AddAsync(districtQouta);
+                    }                   
+                    await _context.SaveChangesAsync();                    
+                }
+                
+                else if (schemeLevelPolicy.SchemeLevelId == 4 || schemeLevelPolicy.SchemeLevelId == 5 || schemeLevelPolicy.SchemeLevelId == 6)// For 10th Pass DAE
+                {
+                    var districtQoutaBySchemeLevelList = _context.DAEInstituteQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    foreach (var daeQouta in districtQoutaBySchemeLevelList)
+                    {
+                        daeQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        daeQouta.PolicySRCForumId = SRCForumId;
+                        daeQouta.DAEInstituteQoutaBySchemeLevelId = 0;
+                        await _context.AddAsync(daeQouta);
                     }
+                    await _context.SaveChangesAsync();
                 }
-                else if(degreeQoutaExist > 0)
-                {
 
-                }
-                else if(dAEQoutaExist > 0)
+                else if ((schemeLevelPolicy.SchemeLevel.QualificationLevelId == 5 && schemeLevelPolicy.SchemeLevel.InstituteId != 2) || (schemeLevelPolicy.SchemeLevel.QualificationLevelId == 5 && schemeLevelPolicy.SchemeLevel.InstituteId != 2) || schemeLevelPolicy.SchemeLevel.QualificationLevelId == 6 || schemeLevelPolicy.SchemeLevel.QualificationLevelId == 7)// Degree
                 {
-
-                }
+                    var degreeLevelQoutaBySchemeLevelList = _context.DegreeLevelQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    foreach (var degreeQouta in degreeLevelQoutaBySchemeLevelList)
+                    {
+                        degreeQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        degreeQouta.PolicySRCForumId = SRCForumId;
+                        degreeQouta.DegreeLevelQoutaBySchemeLevelId = 0;
+                        await _context.AddAsync(degreeQouta);
+                    }
+                    await _context.SaveChangesAsync();
+                }              
             }
-            
-            
             return true;
         }
         // GET: PolicySRCForums/Edit/5

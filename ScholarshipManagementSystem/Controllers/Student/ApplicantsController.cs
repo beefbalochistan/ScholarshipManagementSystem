@@ -11,9 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
+using ScholarshipManagementSystem.Common;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
-using ScholarshipManagementSystem.Models.Domain.Student;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.Student;
+using SMSService.Models.Domain.AutoSMSApi;
+using DAL.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -32,7 +35,88 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
+        public IActionResult CollectForm()
+        {
+            ViewData["SelectedMethodId"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name");
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0), "SchemeLevelPolicyId", "SchemeLevel.Name");            
+            
+            var FYList = _context.ScholarshipFiscalYear.ToList();
+            FYList.Insert(0, new ScholarshipFiscalYear { ScholarshipFiscalYearId = 0, Name = "Select" });
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(FYList, "ScholarshipFiscalYearId", "Name");
 
+            var SLList = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a=> new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name}).ToList();
+            SLList.Insert(0, new SchemeLevel { SchemeLevelId = 0, Name = "Select" });
+            ViewData["SchemeLevelPolicyId"] = new SelectList(SLList, "SchemeLevelId", "Name");
+            return View();
+        }
+        public IActionResult ApplicantTracking()
+        {           
+            return View();
+        }
+        [HttpPost]
+        public JsonResult AjaxApplicantInformation(string refno)
+        {
+            var applicantInfo = _context.Applicant.Include(a=>a.SelectionMethod).Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ApplicantReferenceNo == refno).Select(a=> new Applicant { 
+                Name = a.Name,
+                FatherName = a.FatherName,
+                RollNumber = a.RollNumber,
+                HomeAddress = a.SchemeLevelPolicy.SchemeLevel.Name,
+                SelectionMethodId = a.SelectionMethodId,
+                Religion = a.SelectionMethod.Name,
+                IsFormSubmitted = a.IsFormSubmitted,
+                ApplicantId = a.ApplicantId
+            }).FirstOrDefault();
+            return Json(applicantInfo);
+        }
+        public async Task<JsonResult> AjaxApplicantSubmit(int applicantId, bool fourPicture, bool dmc, bool cnic, bool guardiancnic, bool paySlip, bool deathCertificate, bool affidavit, bool minorityCertificate, string mobileNo)
+        {
+            var applicantInfo = await _context.Applicant.FindAsync(applicantId);
+            if(applicantInfo != null)
+            {
+                applicantInfo.Attach_Picture = fourPicture;
+                applicantInfo.Attach_DMC_Transcript = dmc;
+                applicantInfo.Attach_CNIC_BForm = cnic;
+                applicantInfo.Attach_Father_Mother_Guardian_CNIC = guardiancnic;
+                if(applicantInfo.SelectionMethodId > 2)
+                {
+                    applicantInfo.Attach_Payslip = paySlip;
+                    applicantInfo.Attach_Affidavit = affidavit;
+                    applicantInfo.Attach_Minority_Certificate = minorityCertificate;
+                    applicantInfo.Attach_Father_Death_Certificate = deathCertificate;
+                }
+                applicantInfo.IsFormSubmitted = true;
+                applicantInfo.StudentMobile = mobileNo;
+                _context.Update(applicantInfo);
+                await _context.SaveChangesAsync();
+                //--------------------SMS Alert------------------------------
+                SMSAPIService ConfigObj = new SMSAPIService();
+                ConfigObj = _context.SMSAPIService.Find(1);
+                SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.SendSMSURL);                
+                var Text = "Dear "+ applicantInfo.Name +",\nWe have successfully received your application. Your reference ID is "+ applicantInfo.ApplicantReferenceNo +" and Receipt ID is "+ applicantInfo.ApplicantId +". Keep visit our website www.beef.org.pk for updates.Thanks\nBEEF.";
+                string contactNo = "92" + (mobileNo.Remove(0, 1));
+                var response = SMSObj.SendSingleSMS(Text, contactNo, "English");
+                SMSAPIServiceAuditTrail SMSRecord = new SMSAPIServiceAuditTrail();
+                SMSRecord.DestinationNumber = mobileNo;
+                SMSRecord.Language = "English";
+                SMSRecord.ResponseMessage = response;
+                SMSRecord.ResponseType = "Text";
+                SMSRecord.SendOn = DateTime.Now;
+                SMSRecord.Text = Text;
+                SMSRecord.TextLength = Text.Length;
+                SMSRecord.MessageFor = Enums.MessageFor.Employee.ToString();
+                SMSRecord.UserId = User.Identity.Name;
+                SMSRecord.SendBy = "System";
+                SMSRecord.ReferenceId = applicantInfo.ApplicantReferenceNo;
+                _context.Add(SMSRecord);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false });
+            }
+            return Json(new { isValid = true});
+        }
         // GET: Applicants/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -66,9 +150,39 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var test = Json(districtList);
             return test;
         }
+        public async Task<JsonResult> GetSchemeLevels(int FYId)
+        {
+            List<SchemeLevel> schemelevels = await _context.SchemeLevelPolicy.Include(a=>a.PolicySRCForum).Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYId).Select(a=> new SchemeLevel {SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToListAsync();
+            var schemelevelList = schemelevels.Select(m => new SelectListItem()
+            {
+                Text = m.Name.ToString(),
+                Value = m.SchemeLevelId.ToString(),
+            });
+            return Json(schemelevelList);            
+        }
+        public ActionResult CreatePopup()
+        {
+            
+            return View();
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost]        
+        public IActionResult CreatePopup(Applicant model, string FYCode)
+        {
+            model.IsFormSubmitted = false;            
+            model.EntryThrough = "Manual";
+            model.SelectionStatus = "Pending";
+           /* var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == schemeInfo.PolicySRCForum.ScholarshipFiscalYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == schemeInfo.SchemeLevelId).FirstOrDefault();
+            var resultRepository = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == model.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == currentPolicy.PolicySRCForum.ScholarshipFiscalYearId).FirstOrDefault();
+            model.ApplicantReferenceNo = FYCode + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + (++resultRepository.currentCounter).ToString().PadLeft(4, '0');*/
+            _context.Applicant.Add(model);
+            _context.SaveChanges();
+            int id = model.ApplicantId;
+            return View(model);
+        }
         // GET: Applicants/Create
         public IActionResult Create(int SLPId)
-        {
+        {            
             var genderList = new List<SelectListItem>
             {               
                new SelectListItem{ Text="Male", Value = "Male", Selected = true },
@@ -191,7 +305,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return NotFound();
             }
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
-            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(applicant.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("https://beef.org.pk/wp-content/uploads/2021/10/QRCodeBEEFForm.pdf?" + applicant.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
             QRCode QrCode = new QRCode(QrCodeInfo);
             Bitmap QrBitmap = QrCode.GetGraphic(60);
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();

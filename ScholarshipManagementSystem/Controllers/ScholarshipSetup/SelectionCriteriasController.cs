@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
-using ScholarshipManagementSystem.Models.Domain.ScholarshipSetup;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 {

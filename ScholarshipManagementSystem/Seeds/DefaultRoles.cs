@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScholarshipManagementSystem.Constants;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System.Threading.Tasks;
 
 namespace ScholarshipManagementSystem.Seeds

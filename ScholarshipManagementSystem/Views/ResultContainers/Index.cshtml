@@ -1,4 +1,4 @@
-﻿@model ScholarshipManagementSystem.Models.ViewModels.ViewUploadedResult
+﻿@model DAL.Models.ViewModels.ViewUploadedResult
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @using ScholarshipManagementSystem.Constants
@@ -43,7 +43,7 @@
                                     <h4 class="mt-2 card-title">List of Result Record</h4>
                                 </div>
                                 <div class="table-responsive" id="events">
-                                    @(await Component.InvokeAsync("FilterResult", new { id = 1, RRId = ViewBag.RRId }))
+                                    @(await Component.InvokeAsync("FilterResult", new { id = 6, RRId = ViewBag.RRId }))
                                 </div>
                             </div>
                         </div>
@@ -89,16 +89,18 @@ else
         });           
         $('#DistrictId').change(function () {
             $("#loading").show();
+            $("#DistrictId").prop("disabled", true);
             var val = $(this).val();            
              $.ajax({
             url: '@Url.Action("ReloadEvents", "ResultContainers")',
             data: {
                 id: val,
-                RRId: @ViewBag.RRId
+                RRId: @ViewBag.RRId,
             },
             success: function (data) {
-                $("#events").html(data);
                 $("#loading").hide();
+                $("#DistrictId").prop("disabled", false);
+                $("#events").html(data);                
             }
         });
         });

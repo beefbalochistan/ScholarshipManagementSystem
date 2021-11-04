@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System.Net.Mail;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account

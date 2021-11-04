@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.MasterSetup;
-using ScholarshipManagementSystem.Models.Domain.Student;
-using ScholarshipManagementSystem.Models.ViewModels;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.Student;
+using DAL.Models.ViewModels;
 
 namespace ScholarshipManagementSystem.Controllers.ImportResult
 {
@@ -40,7 +40,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             ColumnLabel obj = await _context.ColumnLabel.Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
             viewUploadedResult.columnLabel = obj;
             //-----------------------------------------
-            ViewData["DistrictId"] = new SelectList(_context.District.Where(a=>a.IsActive == true), "DistrictId", "Name");
+            ViewData["DistrictId"] = new SelectList(_context.District.Include(a=>a.Division).Where(a=>a.IsActive == true && a.Division.ProvienceId == 1).OrderBy(a=>a.Name), "DistrictId", "Name");
             return View(viewUploadedResult);
         }
         public async Task<IActionResult> CompileResult(int id)
@@ -134,14 +134,14 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             }
             await _context.SaveChangesAsync();
             //--------------------------------------------------------------
-            var districts = _context.District.Where(a=>a.IsActive == true).ToList();
+            var districts = _context.District.Include(a => a.Division).Where(a => a.IsActive == true && a.Division.ProvienceId == 1).ToList();
             var SRCForumId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == FYearId && a.IsEndorse == true).Max(a => a.PolicySRCForumId);
             var districtQouta = _context.DistrictQoutaBySchemeLevel.Include(a=>a.SchemeLevelPolicy).Where(a => a.PolicySRCForumId == SRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SLId).ToList();            
             float DOMS = 0;
             foreach (var district in districts)
             {
                 DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId && a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId).Sum(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
-                var DOMSCandidates = _context.ResultContainer.Where(a=> a.Candidate_District == district.Name && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round(DOMS)).ToList();
+                var DOMSCandidates = _context.ResultContainer.Where(a=> a.Candidate_District == district.Name && a.DistrictId == district.DistrictId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round(DOMS)).ToList();
                 foreach (var result in DOMSCandidates)
                 {
                     Applicant applicant = new Applicant();
@@ -193,11 +193,12 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 counter++;
             }
             await _context.SaveChangesAsync();
-            //-------------------------DOMS 50%-------------------------------------                                                
-            foreach (var district in districts)
-            {
-                DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
-                var DOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round((DOMS/2))).ToList();
+            //-------------------------DOMS 50%-------------------------------------
+            var districts2 = _context.District.Include(a=>a.Division).Where(a=>a.IsActive == true && a.Division.ProvienceId == 1).ToList();
+            foreach (var district2 in districts2)
+            {                
+                DOMS = districtQouta.Where(a => a.DistrictId == district2.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                var DOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == id && a.DistrictId == district2.DistrictId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => x.Marks_).Take((int)Math.Round((DOMS/2))).ToList();
                 foreach (var result in DOMSCandidates)
                 {
                     Applicant applicant = new Applicant();

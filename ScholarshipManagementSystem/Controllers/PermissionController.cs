@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ScholarshipManagementSystem.Constants;
 using ScholarshipManagementSystem.Helpers;
-using ScholarshipManagementSystem.Models;
+using DAL.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Common;
 using ScholarshipManagementSystem.Data;
-using ScholarshipManagementSystem.Models.Domain.AutoSMSApi;
+using SMSService.Models.Domain.AutoSMSApi;
 
 namespace ScholarshipManagementSystem.Controllers.AutoSMSApi
 {
