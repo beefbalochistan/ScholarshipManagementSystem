@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211105100409_applicant_applicantcurrentstatusId")]
+    partial class applicant_applicantcurrentstatusId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1716,32 +1718,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("Applicant", "Student");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantAttachment", b =>
-                {
-                    b.Property<int>("ApplicantAttachmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ApplicantAttachmentId");
-
-                    b.HasIndex("ApplicantId");
-
-                    b.ToTable("ApplicantAttachment", "Student");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantCurrentStatus", b =>
                 {
                     b.Property<int>("ApplicantCurrentStatusId")
@@ -2750,17 +2726,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("SchemeLevelPolicy");
 
                     b.Navigation("SelectionMethod");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantAttachment", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.Student.Applicant", "Applicant")
-                        .WithMany()
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Applicant");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantStudent", b =>

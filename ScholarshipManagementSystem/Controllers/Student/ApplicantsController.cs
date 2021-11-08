@@ -35,18 +35,14 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
-        public IActionResult CollectForm()
+        public IActionResult CollectForm(string id)
         {
-            ViewData["SelectedMethodId"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name");
-            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0), "SchemeLevelPolicyId", "SchemeLevel.Name");            
-            
-            var FYList = _context.ScholarshipFiscalYear.ToList();
-            FYList.Insert(0, new ScholarshipFiscalYear { ScholarshipFiscalYearId = 0, Name = "Select" });
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(FYList, "ScholarshipFiscalYearId", "Name");
-
-            var SLList = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a=> new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name}).ToList();
-            SLList.Insert(0, new SchemeLevel { SchemeLevelId = 0, Name = "Select" });
-            ViewData["SchemeLevelPolicyId"] = new SelectList(SLList, "SchemeLevelId", "Name");
+            ViewData["SelectedMethodId"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name");           
+            ViewData["DistrictId"] = new SelectList(_context.District.Where(a => a.Division.ProvienceId == 1), "DistrictId", "Name");
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0), "SchemeLevelPolicyId", "SchemeLevel.Name");                        
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name");                        
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToList(), "SchemeLevelId", "Name");
+            ViewBag.refId = id;
             return View();
         }
         public IActionResult ApplicantTracking()
@@ -64,9 +60,15 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 SelectionMethodId = a.SelectionMethodId,
                 Religion = a.SelectionMethod.Name,
                 IsFormSubmitted = a.IsFormSubmitted,
+                ScanDocument = a.ScanDocument,
+                BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),
                 ApplicantId = a.ApplicantId
             }).FirstOrDefault();
             return Json(applicantInfo);
+        }
+        public IActionResult ReloadApplicantProfileData(int id)
+        {
+            return ViewComponent("ApplicantProfileData", new { id});
         }
         public async Task<JsonResult> AjaxApplicantSubmit(int applicantId, bool fourPicture, bool dmc, bool cnic, bool guardiancnic, bool paySlip, bool deathCertificate, bool affidavit, bool minorityCertificate, string mobileNo)
         {
@@ -152,33 +154,29 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<JsonResult> GetSchemeLevels(int FYId)
         {
-            List<SchemeLevel> schemelevels = await _context.SchemeLevelPolicy.Include(a=>a.PolicySRCForum).Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYId).Select(a=> new SchemeLevel {SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToListAsync();
+            List<SchemeLevel> schemelevels = await _context.SchemeLevelPolicy.Include(a=>a.PolicySRCForum).Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == FYId).Select(a=> new SchemeLevel {SchemeLevelId = a.SchemeLevelPolicyId, Name = a.SchemeLevel.Name }).ToListAsync();
             var schemelevelList = schemelevels.Select(m => new SelectListItem()
             {
                 Text = m.Name.ToString(),
-                Value = m.SchemeLevelId.ToString(),
-            });
+                Value = m.SchemeLevelId.ToString()                
+            });// KDA Hard SchemeLevelId = SchemeLevelPolicyId
             return Json(schemelevelList);            
-        }
-        public ActionResult CreatePopup()
-        {
-            
-            return View();
-        }
+        }       
         [ValidateAntiForgeryToken]
         [HttpPost]        
-        public IActionResult CreatePopup(Applicant model, string FYCode)
+        public async Task<IActionResult> CollectForm(Applicant model, int ScholarshipFiscalYearId, int SchemeLevelPolicyId)
         {
             model.IsFormSubmitted = false;            
             model.EntryThrough = "Manual";
             model.SelectionStatus = "Pending";
-           /* var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == schemeInfo.PolicySRCForum.ScholarshipFiscalYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == schemeInfo.SchemeLevelId).FirstOrDefault();
-            var resultRepository = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == model.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == currentPolicy.PolicySRCForum.ScholarshipFiscalYearId).FirstOrDefault();
-            model.ApplicantReferenceNo = FYCode + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + (++resultRepository.currentCounter).ToString().PadLeft(4, '0');*/
+            model.ProvienceId = 1;            
+            var currentPolicy = await _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.QualificationLevel).Where(a=>a.SchemeLevelPolicyId == SchemeLevelPolicyId).FirstOrDefaultAsync();
+            var resultRepository = await _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == model.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == ScholarshipFiscalYearId).FirstOrDefaultAsync();
+            model.ApplicantReferenceNo = _context.ScholarshipFiscalYear.FindAsync(ScholarshipFiscalYearId).Result.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + (++resultRepository.currentCounter).ToString().PadLeft(4, '0');
             _context.Applicant.Add(model);
-            _context.SaveChanges();
-            int id = model.ApplicantId;
-            return View(model);
+            _context.Update(resultRepository);
+            await _context.SaveChangesAsync();                               
+            return RedirectToAction(nameof(CollectForm), new { id = model.ApplicantReferenceNo });
         }
         // GET: Applicants/Create
         public IActionResult Create(int SLPId)
@@ -269,9 +267,15 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         throw;
                     }
                 }
-                _context.Add(applicant);                                
+                _context.Add(applicant);                
                 await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
                 _context.Update(resultRepository);
+                ApplicantAttachment applicantAttachment = new ApplicantAttachment();
+                applicantAttachment.ApplicantId = applicant.ApplicantId;
+                applicantAttachment.AttachmentPath = applicant.ScanDocument;
+                applicantAttachment.Title = "Scanned Documents";
+                applicantAttachment.UploadedOn = DateTime.Now.Date;
+                _context.Add(applicantAttachment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "ResultContainers", new { id = resultRepository.ResultRepositoryId});
             }
@@ -378,8 +382,15 @@ namespace ScholarshipManagementSystem.Controllers.Student
                             {
                                 await scannedDocument.CopyToAsync(stream);
                             }
-                            //-----------------------------------                                                                 
-                        }
+                        //-----------------------------------   First time
+                        ApplicantAttachment applicantAttachment = new ApplicantAttachment();
+                        applicantAttachment.ApplicantId = applicant.ApplicantId;
+                        applicantAttachment.AttachmentPath = applicant.ScanDocument;
+                        applicantAttachment.Title = "Scanned Documents";
+                        applicantAttachment.UploadedOn = DateTime.Now.Date;
+                        _context.Add(applicantAttachment);
+                        await _context.SaveChangesAsync();
+                    }
 
                     if (scannedOtherDocument != null && scannedOtherDocument.Length > 0)
                     {
@@ -416,7 +427,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                             }
                         }                                     
                     _context.Update(applicant);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

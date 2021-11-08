@@ -63,5 +63,9 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<DAL.Models.Domain.MasterSetup.Operator> Operator { get; set; }
         public DbSet<DAL.Models.Domain.Student.Applicant> Applicant { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionMethod> SelectionMethod { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.Employee> Employee { get; set; }
+        public DbSet<DAL.Models.Domain.Student.ApplicantStudent> ApplicantStudent { get; set; }
+        public DbSet<DAL.Models.Domain.Student.ApplicantCurrentStatus> ApplicantCurrentStatus { get; set; }
+        public DbSet<DAL.Models.Domain.Student.ApplicantAttachment> ApplicantAttachment { get; set; }
     }
 }

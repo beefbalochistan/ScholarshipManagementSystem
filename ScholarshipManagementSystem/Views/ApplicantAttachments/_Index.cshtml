@@ -1,0 +1,47 @@
+﻿@model IEnumerable<DAL.Models.Domain.Student.ApplicantAttachment>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="alert alert-primary" role="alert">
+            Applicant: List of attachments
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <a data-src="@item.AttachmentPath" class="clickme" style="cursor:pointer">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8">
+        <embed id="pdfFile" src="" frameborder="0" width="100%" height="500px">
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {        
+        $(".clickme").click(function () {
+            $('#pdfFile').attr("src", $(this).attr("data-src") );
+        });
+    });
+</script>

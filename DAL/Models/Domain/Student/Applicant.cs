@@ -13,9 +13,10 @@ namespace DAL.Models.Domain.Student
     public class Applicant
     {
         [Key]
-        public int ApplicantId { get; set; }       
+        public int ApplicantId { get; set; }
+        [Required]
         public string Name { get; set; }
-        [Display(Name = "Father Name")]
+        [Display(Name = "Father Name")]        
         public string FatherName { get; set; }
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]
@@ -33,19 +34,23 @@ namespace DAL.Models.Domain.Student
         public string Religion { get; set; }
         [Display(Name = "Home Address")]
         public string HomeAddress { get; set; }
+        [Required]
         [ForeignKey("District")]
         [Display(Name = "District")]
         public int DistrictId { get; set; }
         [ForeignKey("Provience")]
         [Display(Name = "Provience")]
+        [Required]
         public int ProvienceId { get; set; }
         [ForeignKey("SchemeLevelPolicy")]
+        [Required]
         [Display(Name = "Scheme Level Policy")]
         public int SchemeLevelPolicyId { get; set; }
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "DegreeScholarshipLevel")]
         public int? DegreeScholarshipLevelId { get; set; }
         [Display(Name = "Reference#")]
+        [Required]
         public string ApplicantReferenceNo { get; set; }
         [Display(Name = "Tehsil Name")]
         public string TehsilName { get; set; }        
@@ -107,11 +112,15 @@ namespace DAL.Models.Domain.Student
         public bool Attach_Payslip { get; set; } = false;        
         public bool IsFormSubmitted { get; set; } = false;        
         public bool Attach_Affidavit { get; set; } = false;        
-        public bool Attach_Minority_Certificate { get; set; } = false;                  
+        public bool Attach_Minority_Certificate { get; set; } = false;
+        [ForeignKey("ApplicantCurrentStatus")]
+        [Display(Name = "ApplicantCurrentStatus")]
+        public int ApplicantCurrentStatusId { get; set; }
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }
         public virtual SelectionMethod SelectionMethod { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
+        public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
     }
 }

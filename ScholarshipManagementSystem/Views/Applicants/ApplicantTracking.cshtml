@@ -1,32 +1,41 @@
 ﻿
 @{
     ViewData["Title"] = "CollectForm";
+    ViewBag.Title = "Applicant";
+    ViewBag.pTitle = "Complete Profile";
+    ViewBag.pageTitle = "Applicant";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
-
-
+<style>
+    .nav-link{
+        padding: .5rem;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link rel="stylesheet" href="~/assets/libs/twitter-bootstrap-wizard/prettify.css">
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <div id="FetchDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <div id="FetchDataOnSuccessText"></div>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                @*<div id="FetchDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div id="FetchDataOnSuccessText"></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>*@
                 <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div id="FetchDataOnFailedText"></div>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <h5 class="card-title mb-4">Scan QR Code</h5>
-                <div class="form-inline">
+                @*<h5 class="card-title mb-4">Scan QR Code</h5>*@
+                <div class="col-md-10">
+                    <div class="form-inline">
                     <label class="sr-only" for="inlineFormemail2">Email</label>
                     <div class="input-group mb-2 mr-sm-3">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">Applicant</div>
+                            <div class="input-group-text">Applicant: Scan QR Code</div>
                         </div>
                         <input id="txtbox" type="text" class="form-control" placeholder="Reference#">
                     </div>
@@ -35,44 +44,219 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+                </div>                
+                <input type="hidden" id="applicantId" />
+                <div class="applicantinformation" style="display:flex;flex-wrap:wrap;margin-right:-12px;margin-left:-12px;max-height:100px">                    
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <label class="control-label">Selection Method</label>
+                            <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <label class="control-label">Scheme</label>
+                            <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <label class="control-label">Roll#</label>
+                            <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <label class="control-label">Name</label>
+                            <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <div class="form-group">
+                            <label class="control-label">Father Name</label>
+                            <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="top:-55px">
+                        <div class="text-center">
+                            @{
+                                if (true)
+                                {
+                                    <img id="pic" style="border-width: 1px; border-style: solid;" class="rounded border-2" alt="155x170" width="140" height="150" src="" data-holder-rendered="true">
+                                }
+                                else
+                                {
+                                    <img id="pic" style="border-width: 1px; border-style: solid;" class="rounded border-2" alt="155x170" width="140" height="150" src="@ViewBag.ImageData" data-holder-rendered="true">
+                                }
+                            }                           
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div><!-- end row -->
 
-<div class="card" id="applicantinformation">
+<div class="card applicantinformation">
+    <div id="progrss-wizard" class="twitter-bs-wizard">
+        <ul class="twitter-bs-wizard-nav nav-justified">
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">01</span>
+                    Selected
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">02</span>
+                    Form Submit
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">03</span>
+                    Form Entry
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">04</span>
+                    Program
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">05</span>
+                    M&amp;E
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">06</span>
+                    Audit
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">07</span>
+                    CEO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <span class="step-number mr-2">08</span>
+                    Finance
+                </a>
+            </li>
+        </ul>
+        @* <div id="bar" class="progress mt-4">
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"></div>
+            </div>*@
+
+    </div>
     <div class="card-body">
-        <h4 class="card-title">Applicant Information</h4>
-        <input type="hidden" id="applicantId" />
-        <div class="row">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="control-label">Selection Method</label>
-                    <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="control-label">Scheme</label>
-                    <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="control-label">Roll#</label>
-                    <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Name</label>
-                    <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Father Name</label>
-                    <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        @*<h4 class="card-title">Applicant Information</h4>*@
+                        @*<h4 class="card-title">Default Tabs</h4>
+                            <p class="card-title-desc">
+                                Use the tab JavaScript plugin—include
+                                it individually or through the compiled <code class="highlighter-rouge">bootstrap.js</code>
+                                file—to extend our navigational tabs and pills to create tabbable panes
+                                of local content, even via dropdown menus.
+                            </p>*@
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Profile <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#attachments" role="tab">
+                                    <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                    <span class="d-none d-sm-block">Attachments <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#recipt" role="tab">
+                                    <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                    <span class="d-none d-sm-block">Recipt Information</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
+                                    <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                    <span class="d-none d-sm-block">Messages</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#greennote" role="tab">
+                                    <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                    <span class="d-none d-sm-block">Green Note</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#paymentprocess" role="tab">
+                                    <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                    <span class="d-none d-sm-block">Payment Process</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content p-3 text-muted">
+                            <div class="tab-pane active" id="profile" role="tabpanel">
+                                <div id="fetchProfile">
+                                    Profile
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="attachments" role="tabpanel">
+                                <form class="form-inline">
+                                    <div class="input-group mb-2 mr-sm-3">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"></div>
+                                        </div>
+                                        <input class="form-control" id="title" placeholder="Enter Document Title">
+                                    </div>
+                                    <div class="input-group mb-2 mr-sm-3">
+                                        <div class="custom-file text-left">
+                                            <input accept="application/pdf" type="file" class="custom-file-input" name="AttachDocument" id="AttachDocument">
+                                            <label class="custom-file-label" style="justify-content:left">Document</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">Upload</button>
+                                </form>
+                                <br />
+                                <div id="attachmentdiv"></div>                             
+                            </div>
+                            <div class="tab-pane" id="recipt" role="tabpanel">
+                                <p class="mb-0">
+                                    recipt
+                                </p>
+                            </div>
+                            <div class="tab-pane" id="messages" role="tabpanel">
+                                <p class="mb-0">
+                                    messages
+                                </p>
+                            </div>
+                            <div class="tab-pane" id="greennote" role="tabpanel">
+                                <p class="mb-0">
+                                    greennote
+                                </p>
+                            </div>
+                            <div class="tab-pane" id="paymentprocess" role="tabpanel">
+                                <p class="mb-0">
+                                    paymentprocess
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,14 +265,18 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <!-- bs custom file input plugin -->
-    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <!-- toastr plugin -->
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
 
-    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <!-- twitter-bootstrap-wizard js -->
+    <script src="~/assets/libs/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>    
+    <!-- form wizard init -->
+    <script src="~/assets/js/pages/form-wizard.init.js"></script>
+
     <script>
         $(document).ready(function () {
             $('#btnSearchForm').prop('disabled', true);
-            $('#applicantinformation').hide();           
+            $('.applicantinformation').hide();
             $('#txtbox').keyup(function (event) {
                 var refLength = $("#txtbox").val().length;
                 if (refLength == 13) {
@@ -103,7 +291,9 @@
             $("#btnSearchForm").click(function () {
                 fetch();
             });
-        });        
+           
+            $(".loading").hide();
+        });
         function fetch() {
             var refno = $("#txtbox").val();
             $('#fetchspinner').show();
@@ -114,34 +304,38 @@
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
-                        $('#applicantinformation').show();
+                        $('.applicantinformation').show();
                         $('#attachment').show();
                         $('#name').val(response.name);
                         $('#rollno').val(response.rollNumber);
                         $('#fathername').val(response.fatherName);
                         $('#scheme').val(response.homeAddress);
                         $('#selectionMethodName').val(response.religion);
-                        $('#applicantId').val(response.applicantId);
-                        if (response.isFormSubmitted) {
-                            $('#applicantinformation').show();                          
-                            $('#FetchDataOnSuccess').show();
-                            $('#FetchDataOnSuccessText').text("Applicant form has been already submitted!");
-                        }
-                        else {                           
-                            $("#txtbox").val('');
-                            $('#btnSearchForm').prop('disabled', true);
-                            $('#FetchDataOnSuccess').show();
-                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");
-                            $('#FetchDataOnFailed').hide();
+                        $('#applicantId').val(response.applicantId);                                                
+                        $('#pdfFile').attr("src", response.scanDocument);
+                        debugger;
+                        if (response.bFormCNIC == null) {
+                            $("#pic").attr("src", "/assets/images/Profile.png");
+                        } else {
+                            $("#pic").attr("src", response.bFormCNIC );
                         }
 
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                        @*$('#FetchDataOnSuccess').show();
+                        $('#FetchDataOnSuccessText').text("Fetch data successfully!");*@
+                        $('#FetchDataOnFailed').hide();
+                        notificationme('Fetch Record Successfully!');
+                        fetchApplicantProfileData(response.applicantId);
+                        fetchApplicantAttachments(response.applicantId);
                     } else {
-                        $('#applicantinformation').hide();                      
-                        $('#FetchDataOnSuccess').hide();
+                        $('.applicantinformation').hide();
+                        @*$('#FetchDataOnSuccess').hide();*@
                         $('#FetchDataOnFailed').show();
                         $('#FetchDataOnFailedText').text("Applicant data not found!");
                         $("#txtbox").val('');
                         $('#btnSearchForm').prop('disabled', true);
+                        notificationme('Applicant data not found!');
                     }
                     $('#fetchspinner').hide();
                 },
@@ -152,6 +346,55 @@
                     alert(response.responseText);
                 }
             });
-        }        
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+        function fetchApplicantProfileData(applicantId) {
+        $(".loading").show();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadApplicantProfileData", "Applicants")',
+            data: {
+                id: applicantId
+            },
+                success: function (data) {                    
+                $("#fetchProfile").html(data);
+                $(".loading").hide();
+            }
+        });
+        }
+        function fetchApplicantAttachments(applicantId) {
+        $(".loading").show();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("_Index", "ApplicantAttachments")',
+            data: {
+                id: applicantId
+            },
+                success: function (data) {
+                    debugger;
+                $("#attachmentdiv").html(data);
+                $(".loading").hide();
+            }
+        });
+    }
     </script>
 }

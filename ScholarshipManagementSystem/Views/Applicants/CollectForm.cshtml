@@ -28,7 +28,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">Applicant</div>
                         </div>
-                        <input id="txtbox" type="text" class="form-control" placeholder="Reference#">
+                        <input id="txtbox" type="text" class="form-control" value="@ViewBag.refId" placeholder="Reference#">
                     </div>
                     <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
                     <button type="button" class="btn btn-outline-primary waves-effect btn-label waves-light mb-2 ml-5" data-toggle="modal" data-target="#exampleModal"><i class="bx bx-add-to-queue label-icon"></i> Add New SQS Applicant</button>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
+                <div class="form-group">                    
                     <label class="control-label">Scheme</label>
                     <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
                 </div>
@@ -164,46 +164,51 @@
         </div>
     </div>
 </div>
-<form method="post" asp-action="CreatePopup" asp-controller="Applicants">
+<form method="post" asp-action="CollectForm" asp-controller="Applicants" enctype="multipart/form-data" onsubmit="return(validate());">
     <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Generate Applicant Reference ID</h5>
+                    <h5 class="modal-title"><i class="bx bx-add-to-queue label-icon"></i> Generate Applicant Reference ID</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div id="SubmitDataOnModal" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div id="SubmitDataOnModalText"></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="form-group">
                         <label class="control-label">Selected Method</label>
-                        <select id="SelectedMethodId" class="form-control" asp-items="ViewBag.SelectedMethodId"></select>
+                        <select required asp-for="SelectionMethodId" class="form-control" asp-items="ViewBag.SelectedMethodId">
+                            <option value=""> - - Select - -</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Fiscal Year</label>
-                        <select id="ScholarshipFiscalYearId" class="form-control" asp-items="ViewBag.ScholarshipFiscalYearId"></select>
+                        <select id="ScholarshipFiscalYearId" name="ScholarshipFiscalYearId" class="form-control" asp-items="ViewBag.ScholarshipFiscalYearId" required>
+                            <option value=""> - - Select - -</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DistrictId" class="control-label"></label>
+                        <select required asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId">
+                            <option value=""> - - Select - -</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label asp-for="SchemeLevelPolicyId" class="control-label"></label>
-                        <select id="SchemeLevelId" class="form-control" asp-items="ViewBag.SchemeLevelPolicyId"></select>
+                        <select required asp-for="SchemeLevelPolicyId" name="SchemeLevelPolicyId" class="form-control" asp-items="ViewBag.SchemeLevelPolicyId">
+                            <option value=""> - - Select - -</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" asp-for="Name" class="form-control" required/>
+                        <label>Name:<span style="color:red">*</span></label>
+                        <input placeholder="Enter Name" type="text" asp-for="Name" class="form-control" required />
                     </div>
-                    @*<div class="form-group">
-            <label>Country:</label>
-            <select asp-for="BFormCNIC" class="form-control">
-                <option value="">Please select</option>
-                <option value="India">India</option>
-                <option value="China">China</option>
-                <option value="Australia">Australia</option>
-                <option value="France">France</option>
-                <option value="Unites States">Unites States</option>
-                <option value="Russia">Russia</option>
-                <option value="Canada">Canada</option>
-            </select>
-        </div>*@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -213,22 +218,18 @@
         </div>
     </div>
 </form>
-@if (Model != null)
-{
-    <script type="text/javascript">
-            $(function () {
-                alert("Inserted Customer ID: " + @Model.ApplicantId);
-            });
-    </script>
-}
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <!-- bs custom file input plugin -->
     <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
-    <script src="~/assets/js/pages/form-element.init.js"></script>
-    <script>
-        $(document).ready(function () {
+    <script src="~/assets/js/pages/form-element.init.js"></script> 
+<script>
+        $(document).ready(function () {            
+            if ($('#txtbox').val().length == 13) {
+                fetch();
+            }
             $('#btnSearchForm').prop('disabled', true);
             $('#applicantinformation').hide();
             $('#attachment').hide();
@@ -248,14 +249,14 @@
                 fetch();
             });
 
-            $("#ScholarshipFiscalYearId").change(function () {                
+            $("#ScholarshipFiscalYearId").change(function () {
                 $.get("/Applicants/GetSchemeLevels", { FYId: $("#ScholarshipFiscalYearId").val() }, function (data) {
-                    $("#SchemeLevelId").empty();
-                    $("#SchemeLevelId").append('<option value="0">Select...</option>');
+                    $("#SchemeLevelPolicyId").empty();
+                    $("#SchemeLevelPolicyId").append('<option value="">Select...</option>');
                     console.log(data);
                     $.each(data, function (index, row) {
                         console.log(row);
-                        $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                        $("#SchemeLevelPolicyId").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
             });
@@ -277,6 +278,7 @@
         }
         function fetch() {
             var refno = $("#txtbox").val();
+            //alert(refno);
             $('#fetchspinner').show();
             $.ajax({
                 type: "POST",
@@ -403,7 +405,7 @@
                         var url = $(reff).data('url');
                         $.get(url).done(function (data) {
                             debugger;
-                            $('#modal-create-edit-user').find(".modal-dialog").html(data);
+                            $('#modal-create-edit-user').find(".modal-dialog").html(data); i
                             $('#modal-create-edit-user > .modal', data).modal("show");
                         });
                     }
@@ -417,5 +419,22 @@
                 self.init();
             });
         }(jQuery));
-    </script>
+        function validate() {
+            var name = document.getElementById("Name").value;
+            var schemeLevelPolicyId = document.getElementById("SchemeLevelPolicyId").value;
+            var districtId = document.getElementById("DistrictId").value;
+            var selectionMethodId = document.getElementById("SelectionMethodId").value;
+            var scholarshipFiscalYearId = document.getElementById("ScholarshipFiscalYearId").value;
+            //alert(scholarshipFiscalYearId);
+            if (name.length <= 0 || schemeLevelPolicyId == "" || districtId == "" || selectionMethodId == "" || scholarshipFiscalYearId == "") {
+                $('#SubmitDataOnModal').show();
+                $('#SubmitDataOnModalText').text("All fields are mandatory!");
+                return false;
+            } else {
+                $('#SubmitDataOnModal').hide();
+            }
+        }
+</script>
+
+
 }
