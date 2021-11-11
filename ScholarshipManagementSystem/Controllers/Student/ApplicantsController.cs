@@ -124,6 +124,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 SMSRecord.UserId = User.Identity.Name;
                 SMSRecord.SendBy = "System";
                 SMSRecord.ReferenceId = applicantInfo.ApplicantReferenceNo;
+                SMSRecord.ApplicantId = applicantInfo.ApplicantId;
                 _context.Add(SMSRecord);
                 await _context.SaveChangesAsync();
                 //-----------------------------------------------------------

@@ -38,7 +38,7 @@
                                     <span key="t-calendar">Scholarship Type</span>
                                 </a>
                             </li>
-                            <li>
+                            @*<li>
                                 <a asp-action="Index" asp-controller="SchemeLevelPolicies" class=" waves-effect">
                                     <i class="bx bxs-ruler"></i>
                                     <span key="t-calendar">Scheme Policy</span>
@@ -49,7 +49,7 @@
                                     <i class="bx bx-shield-quarter"></i>
                                     <span key="t-calendar">District Qouta</span>
                                 </a>
-                            </li>
+                            </li>*@
                         </ul>
                     </li>
                 }
@@ -259,6 +259,7 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>
+                            <li><a asp-action="Index" asp-controller="Applicants" key="t-invoice-list">Configuration</a></li>
                             <li><a asp-action="Index" asp-controller="SMSAPIServiceAuditTrails" key="t-invoice-detail">Reporting</a></li>
                         </ul>
                     </li>
