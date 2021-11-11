@@ -1,5 +1,5 @@
 ﻿using DAL.Models.Domain.MasterSetup;
-
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +23,7 @@ namespace DAL.Models.Domain.Student
         [Display(Name = "Employee")]
         public int EmployeeId { get; set; }
         public string UserName { get; set; }
+        public DateTime CreatedOn  { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Applicant Applicant { get; set; }        
     }

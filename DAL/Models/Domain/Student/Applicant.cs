@@ -111,6 +111,8 @@ namespace DAL.Models.Domain.Student
         public bool Attach_Father_Death_Certificate { get; set; } = false;                     
         public bool Attach_Payslip { get; set; } = false;        
         public bool IsFormSubmitted { get; set; } = false;        
+        public bool IsFormEntered { get; set; } = false;        
+        public DateTime? FormSubmittedOnDate { get; set; }     
         public bool Attach_Affidavit { get; set; } = false;        
         public bool Attach_Minority_Certificate { get; set; } = false;
         [ForeignKey("ApplicantCurrentStatus")]

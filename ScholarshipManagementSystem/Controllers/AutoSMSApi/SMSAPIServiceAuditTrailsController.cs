@@ -24,6 +24,10 @@ namespace ScholarshipManagementSystem.Controllers.AutoSMSApi
         {
             return View(await _context.SMSAPIServiceAuditTrail.ToListAsync());
         }
+        public async Task<IActionResult> _Index(int id)
+        {
+            return PartialView(await _context.SMSAPIServiceAuditTrail.Where(a=>a.ApplicantId == id).OrderByDescending(a=>a.SMSAPIServiceAuditTrailId).ToListAsync());
+        }
 
         // GET: SMSAPIServiceAuditTrails/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -135,5 +135,17 @@ public static class Permissions
             public const string Edit = "Permissions.ResultUploadType.Edit";
             public const string Delete = "Permissions.ResultUploadType.Delete";
         }
+
+        public static class Applicant
+        {
+            public const string View = "Permissions.Applicant.View";
+            public const string Create = "Permissions.Applicant.Create";
+            public const string Edit = "Permissions.Applicant.Edit";
+            public const string Delete = "Permissions.Applicant.Delete";
+        }
+        public static class SuperUser
+        {
+            public const string View = "Permissions.SuperUser.View";            
+        }
     }
 }

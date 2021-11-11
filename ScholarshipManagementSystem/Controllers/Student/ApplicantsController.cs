@@ -49,6 +49,11 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {           
             return View();
         }
+        public IActionResult ApplicantFormEntry(string message)
+        {
+            ViewBag.message = message;
+            return View();
+        }
         [HttpPost]
         public JsonResult AjaxApplicantInformation(string refno)
         {
@@ -60,7 +65,16 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 SelectionMethodId = a.SelectionMethodId,
                 Religion = a.SelectionMethod.Name,
                 IsFormSubmitted = a.IsFormSubmitted,
-                ScanDocument = a.ScanDocument,
+                IsFormEntered = a.IsFormEntered,
+                Attach_Picture = a.Attach_Picture,                
+                Attach_Affidavit = a.Attach_Affidavit,
+                Attach_CNIC_BForm = a.Attach_CNIC_BForm,
+                Attach_DMC_Transcript = a.Attach_DMC_Transcript,
+                Attach_Father_Death_Certificate = a.Attach_Father_Death_Certificate,
+                Attach_Father_Mother_Guardian_CNIC = a.Attach_Father_Mother_Guardian_CNIC,
+                Attach_Minority_Certificate = a.Attach_Minority_Certificate,
+                Attach_Payslip = a.Attach_Payslip,                
+                FormSubmittedOnDate = a.FormSubmittedOnDate,                
                 BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),
                 ApplicantId = a.ApplicantId
             }).FirstOrDefault();
@@ -87,6 +101,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     applicantInfo.Attach_Father_Death_Certificate = deathCertificate;
                 }
                 applicantInfo.IsFormSubmitted = true;
+                applicantInfo.FormSubmittedOnDate = DateTime.Now;
                 applicantInfo.StudentMobile = mobileNo;
                 _context.Update(applicantInfo);
                 await _context.SaveChangesAsync();
@@ -296,7 +311,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         // GET: Applicants/Edit/5
-        public async Task<IActionResult> Edit(int? id, int RRId)
+        public async Task<IActionResult> Edit(int? id, int? RRId)
         {
             if (id == null)
             {
@@ -336,6 +351,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 ViewBag.ImageData = imgDataURL;
             }
             ViewBag.RRId = RRId;
+            applicant.DateOfBirth = DateTime.Now.Date;
             return View(applicant);
         }
 
@@ -470,6 +486,153 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 ViewBag.ImageData = imgDataURL;
             }            
             return View(applicant);
+        }
+
+        public async Task<IActionResult> ApplicantFormEdit(int? id, int? RRId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var applicant = await _context.Applicant.FindAsync(id);
+            if (applicant == null)
+            {
+                return NotFound();
+            }
+            QRCodeGenerator QrGenerator = new QRCodeGenerator();
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("https://beef.org.pk/wp-content/uploads/2021/10/QRCodeBEEFForm.pdf?" + applicant.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
+            QRCode QrCode = new QRCode(QrCodeInfo);
+            Bitmap QrBitmap = QrCode.GetGraphic(60);
+            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+            string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+            ViewBag.QrCodeUri = QrUri;
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod, "SelectionMethodId", "Name", applicant.SelectionMethodId);
+            var genderList = new List<SelectListItem>
+            {
+               new SelectListItem{ Text="Male", Value = "Male", Selected = true },
+               new SelectListItem{ Text="Female", Value = "Female" },
+            };
+            ViewData["ddGenderList"] = genderList;
+            var provienceList = _context.Provience.ToList();
+            provienceList.Insert(0, new Provience { ProvienceId = 0, Name = "Select" });
+            ViewData["ProvienceId"] = new SelectList(provienceList, "ProvienceId", "Name", applicant.ProvienceId);
+            ViewData["DistrictId"] = new SelectList(_context.District.Include(a => a.Division).Where(a => a.Division.ProvienceId == applicant.ProvienceId), "DistrictId", "Name", applicant.DistrictId);
+            ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId");
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name", applicant.SchemeLevelPolicyId);
+            if (applicant.Picture != null)
+            {
+                string imreBase64Data = Convert.ToBase64String(applicant.Picture);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                //Passing image data in viewbag to view  
+                ViewBag.ImageData = imgDataURL;
+            }
+            ViewBag.RRId = RRId;
+            applicant.DateOfBirth = DateTime.Now.Date;
+            return View(applicant);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicantFormEdit(int id, Applicant applicant, IFormFile scannedDocument, IFormFile scannedOtherDocument, IFormFile picture)
+        {
+            if (id != applicant.ApplicantId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var schemeInfo = _context.SchemeLevelPolicy.Include(a => a.PolicySRCForum).Where(a => a.SchemeLevelPolicyId == applicant.SchemeLevelPolicyId).FirstOrDefault();
+                    var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == schemeInfo.PolicySRCForum.ScholarshipFiscalYearId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == schemeInfo.SchemeLevelId).FirstOrDefault();
+                    ViewBag.RRId = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == applicant.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == currentPolicy.PolicySRCForum.ScholarshipFiscalYearId).Select(a => a.ResultRepositoryId).FirstOrDefault();
+                    if (scannedDocument != null && scannedDocument.Length > 0)
+                    {
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Applicant\\" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "\\SchemeLevel" + currentPolicy.SchemeLevel.Code + "\\");
+                        string fileName = Path.GetFileName(scannedDocument.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Document" + randomNumber.ToString() + fileName;
+                        applicant.ScanDocument = Path.Combine("/Documents/Applicant/" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "/SchemeLevel" + currentPolicy.SchemeLevel.Code + "/" + fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await scannedDocument.CopyToAsync(stream);
+                        }
+                        //-----------------------------------   First time
+                        ApplicantAttachment applicantAttachment = new ApplicantAttachment();
+                        applicantAttachment.ApplicantId = applicant.ApplicantId;
+                        applicantAttachment.AttachmentPath = applicant.ScanDocument;
+                        applicantAttachment.Title = "Scanned Documents";
+                        applicantAttachment.UploadedOn = DateTime.Now.Date;
+                        _context.Add(applicantAttachment);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (scannedOtherDocument != null && scannedOtherDocument.Length > 0)
+                    {
+                        var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Applicant\\" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "\\SchemeLevel" + currentPolicy.SchemeLevel.Code + "\\");
+                        string fileName = Path.GetFileName(scannedOtherDocument.FileName);
+                        fileName = fileName.Replace("&", "n");
+                        fileName = fileName.Replace(" ", "");
+                        fileName = fileName.Replace("#", "H");
+                        fileName = fileName.Replace("(", "");
+                        fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Document" + randomNumber.ToString() + fileName;
+                        applicant.ScanOtherDocument = Path.Combine("/Documents/Applicant/" + currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + "/SchemeLevel" + currentPolicy.SchemeLevel.Code + "/" + fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await scannedOtherDocument.CopyToAsync(stream);
+                        }
+                        //-----------------------------------                                                                 
+                    }
+                    if (picture != null && picture.Length > 0)
+                    {
+                        using (var dataStream = new MemoryStream())
+                        {
+                            await picture.CopyToAsync(dataStream);
+                            applicant.Picture = dataStream.ToArray();
+                        }
+                    }
+                    applicant.IsFormEntered = true;
+                    _context.Update(applicant);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicantExists(applicant.ApplicantId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }                
+                return RedirectToAction(nameof(ApplicantFormEntry), new { message = "Data has been saved successfully!" });
+            }            
+            return RedirectToAction(nameof(ApplicantFormEntry), new { message = "Invalid Input!" });
         }
 
         // GET: Applicants/Delete/5

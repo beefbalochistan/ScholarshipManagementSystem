@@ -1,0 +1,488 @@
+﻿@model DAL.Models.Domain.Student.Applicant
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+<style>
+
+    .inputSelect {
+        background-color: #F8F8F8;
+    }
+
+    .inputBox:focus, .inputBox.focus {
+        background-color: lightblue;
+        border: 1px solid blue;
+    }
+
+    .title-hr {
+        width: 100%;
+        vertical-align: middle;
+        align-items: center;
+        text-align: start;
+        display: flex;
+    }
+
+        .title-hr > span {
+            padding: 0 0.4em;
+            color: lightgray;
+        }
+
+        .title-hr > .hr {
+            border-bottom: 1px solid lightgray;
+            line-height: 0.1em;
+            margin: 0.34em 0 0.35em;
+            flex: 1 1 auto;
+        }
+
+            .title-hr > .hr.fix {
+                flex: 0 1 auto;
+            }
+
+    .modal-dialog {
+        height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
+    }
+
+    .modal-content {
+        height: 100%; /* = 100% of the .modal-dialog block */
+    }
+
+    #PdfModal {
+        height: 100%;
+    }
+</style>
+<link rel="stylesheet" href="~/assets/libs/chenfengyuan/datepicker/datepicker.min.css">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="container">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div><img src="~/assets/images/logo1.png" width="110" style="padding-top:3px" /></div>
+                            <div class="text-center" style="margin-left:30px">
+                                <h4><b>BALOCHISTAN EDUCATION ENDOWMENT FUND (BEEF)</b></h4>
+                                <h6>A Company Setup Under Section 42 of the Companies Act, 2017</h6>
+                                <h6><b>SCHOLARSHIP APPLICATION FORM PARTIAL FUNDED SCHEME</b></h6>
+                                @{
+                                    if (ViewBag.Message != null)
+                                    {
+                                        <span class="text-center" style="font-weight:bold;color:darkred"> @ViewBag.Message</span>
+                                    }
+                                }
+                            </div>
+                            <div>
+                                <img src="@ViewBag.QrCodeUri" class="img-thumbnail" width="100" />
+                            </div>
+                            <div><img src="~/assets/images/BEEF.png" width="90" style="margin-right:10px" /></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <b>Status: <u>@Model.SelectionStatus</u></b>
+                        </div>
+                        <div class="title-hr" style="margin-bottom: 10px">
+                            <span class="hr fix"></span>
+                            <span>Basic Information</span>
+                            <span class="hr"></span>
+                        </div>
+                        <form asp-action="ApplicantFormEdit" enctype="multipart/form-data">
+                            @*<div class="form-group">
+                                    <label for="formrow-firstname-input">First name</label>
+                                    <input type="text" class="form-control" id="formrow-firstname-input">
+                                </div>*@
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <input type="hidden" asp-for="ApplicantId" />
+                                <input type="hidden" asp-for="SchemeLevelPolicyId" />
+                                <input type="hidden" asp-for="ScanDocument" />
+                                <input type="hidden" asp-for="ScanOtherDocument" />
+                                <input type="hidden" asp-for="Picture" />
+                                <input type="hidden" asp-for="SelectionMethodId" />
+                                <input type="hidden" asp-for="SelectionStatus" />
+                                <input type="hidden" asp-for="ApplicantReferenceNo" />
+                                <input type="hidden" asp-for="EntryThrough" />
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Selection Method</label>
+                                        <select style="background-color:lightgray" asp-for="SelectionMethodId" disabled="disabled" class="form-control inputSelect" asp-items="ViewBag.ddMethodList"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ApplicantReferenceNo" class="control-label"></label>
+                                        <input asp-for="ApplicantReferenceNo" disabled="disabled" style="background-color:lightgray" class="form-control" />
+                                        <span asp-validation-for="ApplicantReferenceNo" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control inputBox" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Provience</label>
+                                        <select asp-for="ProvienceId" class="form-control inputSelect" asp-items="ViewBag.ProvienceId"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="RegisterationNumber" class="control-label"></label>
+                                        <input asp-for="RegisterationNumber" class="form-control inputBox" />
+                                        <span asp-validation-for="RegisterationNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="FatherName" class="control-label"></label>
+                                        <input asp-for="FatherName" class="form-control inputBox" />
+                                        <span asp-validation-for="FatherName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Local District</label>
+                                        <select asp-for="DistrictId" asp-items="@ViewBag.DistrictId" class="form-control inputSelect">
+                                            <option>-Select-</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="RollNumber" class="control-label"></label>
+                                        <input asp-for="RollNumber" class="form-control inputBox" />
+                                        <span asp-validation-for="RollNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Selection Gender</label>
+                                        <select asp-for="Gender" class="form-control inputSelect" asp-items="ViewBag.ddGenderList"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center" style="margin-top:10px">
+                                        @{
+                                            if (Model.Picture == null)
+                                            {
+                                                <img id="pic" style="border-width: 1px; border-style: solid;" class="rounded border-2" alt="155x170" width="155" height="170" src="~/assets/images/Profile.png" data-holder-rendered="true">
+                                            }
+                                            else
+                                            {
+                                                <img id="pic" style="border-width: 1px; border-style: solid;" class="rounded border-2" alt="155x170" width="155" height="170" src="@ViewBag.ImageData" data-holder-rendered="true">
+                                            }
+                                        }
+                                        <div class="custom-file text-left" style="margin-top:7px; width:170px">
+                                            <input accept="image/png, image/gif, image/jpeg" type="file" class="custom-file-input" name="picture" id="picture">
+                                            <label class="custom-file-label">Picture</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="DateOfBirth" class="control-label"></label>
+                                        <input asp-for="DateOfBirth" type="date" class="form-control inputBox">
+                                    </div><!-- input-group -->
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" class="form-control inputBox" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="StudentMobile" class="control-label"></label>
+                                        <input asp-for="StudentMobile" class="form-control inputBox" />
+                                        <span asp-validation-for="StudentMobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="FatherMobile" class="control-label"></label>
+                                        <input asp-for="FatherMobile" class="form-control inputBox" />
+                                        <span asp-validation-for="FatherMobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="FatherCareTakerCNIC" class="control-label"></label>
+                                        <input asp-for="FatherCareTakerCNIC" class="form-control inputBox" />
+                                        <span asp-validation-for="FatherCareTakerCNIC" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="Religion" class="control-label"></label>
+                                        <input asp-for="Religion" class="form-control inputBox" />
+                                        <span asp-validation-for="Religion" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="BFormCNIC" class="control-label"></label>
+                                        <input asp-for="BFormCNIC" class="form-control inputBox" />
+                                        <span asp-validation-for="BFormCNIC" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="TehsilName" class="control-label"></label>
+                                        <input asp-for="TehsilName" class="form-control inputBox" />
+                                        <span asp-validation-for="TehsilName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="Year" class="control-label"></label>
+                                        <input asp-for="Year" class="form-control inputBox" />
+                                        <span asp-validation-for="Year" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="TelephoneWithCode" class="control-label"></label>
+                                        <input asp-for="TelephoneWithCode" class="form-control inputBox" />
+                                        <span asp-validation-for="TelephoneWithCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label asp-for="OldInstitudeNameAddress" class="control-label"></label>
+                                        <input asp-for="OldInstitudeNameAddress" class="form-control inputBox" />
+                                        <span asp-validation-for="OldInstitudeNameAddress" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+                                        <label asp-for="HomeAddress" class="control-label"></label>
+                                        <input asp-for="HomeAddress" class="form-control inputBox" />
+                                        <span asp-validation-for="HomeAddress" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="RelationWithCareTaker" class="control-label"></label>
+                                        <input asp-for="RelationWithCareTaker" class="form-control inputBox" />
+                                        <span asp-validation-for="RelationWithCareTaker" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title-hr" style="margin-bottom:10px">
+                                <span class="hr fix"></span>
+                                <span>Current Insitute</span>
+                                <span class="hr"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteName" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteName" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteHOD" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteHOD" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteHOD" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteFocalPerson" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteFocalPerson" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteFocalPerson" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteFocalDesignation" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteFocalDesignation" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteFocalDesignation" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteAddress" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteAddress" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteAddress" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteFax" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteFax" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteFax" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsitutePhone" class="control-label"></label>
+                                        <input asp-for="CurrentInsitutePhone" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsitutePhone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteFocalMobile" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteFocalMobile" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteFocalMobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="CurrentInsituteFocalEmail" class="control-label"></label>
+                                        <input asp-for="CurrentInsituteFocalEmail" class="form-control inputBox" />
+                                        <span asp-validation-for="CurrentInsituteFocalEmail" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="TotalMarks" class="control-label"></label>
+                                        <input asp-for="TotalMarks" class="form-control inputBox" readonly="readonly"/>
+                                        <span asp-validation-for="TotalMarks" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label asp-for="ReceivedMarks" class="control-label"></label>
+                                        <input asp-for="ReceivedMarks" class="form-control inputBox" readonly="readonly"/>
+                                        <span asp-validation-for="ReceivedMarks" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title-hr">
+                                <span class="hr fix"></span>
+                                <span>Upload Attachments</span>
+                                <span class="hr"></span>
+                            </div>
+                            <div class="row">
+
+                                @{
+                                    if (Model.ScanDocument != null)
+                                    {
+                                        <div class="col-md-3" style="margin-top:10px">
+                                            <div class="form-group">
+                                                <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@Model.ScanDocument')" class="btn btn-info waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View Documents</button>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="text-center" style="margin-top:10px">
+                                                <div class="custom-file text-left">
+                                                    <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedDocument" id="scannedDocument">
+                                                    <label class="custom-file-label">Scanned Documents</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-top:10px">
+                                                <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                            </div>
+                                            <div>
+                                                <a asp-action="ApplicantFormEntry" asp-controller="Applicants" asp-route-id="@ViewBag.RRId">Back to List</a>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                @*@{
+                                        if (Model.ScanOtherDocument != null)
+                                        {
+                                            <div class="col-md-3" style="margin-top:10px">
+                                                <div class="form-group">
+                                                    <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@Model.ScanOtherDocument')" class="btn btn-info waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View Documents</button>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <div class="text-center" style="margin-top:10px">
+                                                    <div class="custom-file text-left">
+                                                        <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedOtherDocument" id="scannedOtherDocument">
+                                                        <label class="custom-file-label">Other Documents</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }*@
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    @*<h4 class="modal-title">Modal Header</h4>*@
+                </div>
+                <div class="modal-body">
+
+                    <8 id="pdfFile" src=""
+                       frameborder="0" width="100%" height="500px">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#ProvienceId").change(function () {
+                $("#DistrictId").empty();
+                $.get("/Applicants/GetDistricts", { provienceId: $("#ProvienceId").val() }, function (data) {
+                    $("#DistrictId").empty();
+                    $("#DistrictId").append('<option value="0">Select...</option>');
+                    console.log(data);
+                    $.each(data, function (index, row) {
+                        console.log(row);
+                        $("#DistrictId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+                return false;
+            })
+        });
+        function ShowImagePreview(input) {
+            debugger;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#pic').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#picture").change(function () {
+            ShowImagePreview(this);
+        });
+        function createModal(url) {
+            $("#pdfFile").attr("src", url);
+        }
+    </script>
+}

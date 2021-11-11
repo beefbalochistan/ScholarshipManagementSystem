@@ -11,6 +11,7 @@ namespace SMSService.Models.Domain.AutoSMSApi
         public string MessageFor { get; set; }
         public string UserId { get; set; }
         public string ReferenceId { get; set; }
+        public int ApplicantId { get; set; }
         public string Text { get; set; }
         [Display(Name = "Text Length")]
         public int TextLength { get; set; }
