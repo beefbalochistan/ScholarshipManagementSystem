@@ -69,6 +69,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 Name = a.Name,
                 FatherName = a.FatherName,
                 RollNumber = a.RollNumber,
+                ApplicantReferenceNo = a.ApplicantReferenceNo,
                 HomeAddress = a.SchemeLevelPolicy.SchemeLevel.Name,
                 SelectionMethodId = a.SelectionMethodId,
                 Religion = a.SelectionMethod.Name,
@@ -82,6 +83,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 Attach_Father_Mother_Guardian_CNIC = a.Attach_Father_Mother_Guardian_CNIC,
                 Attach_Minority_Certificate = a.Attach_Minority_Certificate,
                 Attach_Payslip = a.Attach_Payslip,                
+                StudentMobile = a.StudentMobile,                
                 FormSubmittedOnDate = a.FormSubmittedOnDate,                
                 BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),
                 ApplicantId = a.ApplicantId
@@ -142,6 +144,42 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return Json(new { isValid = false });
             }
             return Json(new { isValid = true});
+        }
+
+        public async Task<JsonResult> SendSMS(string mobileNo, string name, string message, string applicantReferenceNo, int applicantId)
+        {            
+            if (mobileNo != null)
+            {
+                mobileNo = "03327822567";
+                //--------------------SMS Alert------------------------------
+                SMSAPIService ConfigObj = new SMSAPIService();
+                ConfigObj = _context.SMSAPIService.Find(1);
+                SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.SendSMSURL);
+                var Text = "Dear " + name + ",\n" + message + "\nBEEF.";
+                string contactNo = "92" + (mobileNo.Remove(0, 1));
+                var response = SMSObj.SendSingleSMS(Text, contactNo, "English");
+                SMSAPIServiceAuditTrail SMSRecord = new SMSAPIServiceAuditTrail();
+                SMSRecord.DestinationNumber = mobileNo;
+                SMSRecord.Language = "English";
+                SMSRecord.ResponseMessage = response;
+                SMSRecord.ResponseType = "Text";
+                SMSRecord.SendOn = DateTime.Now;
+                SMSRecord.Text = Text;
+                SMSRecord.TextLength = Text.Length;
+                SMSRecord.MessageFor = Enums.MessageFor.Employee.ToString();
+                SMSRecord.UserId = User.Identity.Name;
+                SMSRecord.SendBy = "System";
+                SMSRecord.ReferenceId = applicantReferenceNo;
+                SMSRecord.ApplicantId = applicantId;
+                _context.Add(SMSRecord);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false });
+            }
+            return Json(new { isValid = true });
         }
         // GET: Applicants/Details/5
         public async Task<IActionResult> Details(int? id)
