@@ -59,7 +59,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApplicantStudentId,ApplicantId,SelectionStatus,ApplicantReferenceId,SeniorityLevel,Comments,Attachment,EmployeeId,UserName")] ApplicantStudent applicantStudent)
+        public async Task<IActionResult> Create([Bind("ApplicantStudentId,ApplicantId,SelectionStatus,ApplicantReferenceId,SeverityLevel,Comments,Attachment,EmployeeId,UserName")] ApplicantStudent applicantStudent)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApplicantStudentId,ApplicantId,SelectionStatus,ApplicantReferenceId,SeniorityLevel,Comments,Attachment,EmployeeId,UserName")] ApplicantStudent applicantStudent)
+        public async Task<IActionResult> Edit(int id, [Bind("ApplicantStudentId,ApplicantId,SelectionStatus,ApplicantReferenceId,SeverityLevel,Comments,Attachment,EmployeeId,UserName")] ApplicantStudent applicantStudent)
         {
             if (id != applicantStudent.ApplicantStudentId)
             {

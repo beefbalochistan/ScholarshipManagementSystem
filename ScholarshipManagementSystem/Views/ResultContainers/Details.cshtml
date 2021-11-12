@@ -180,12 +180,12 @@
                                     <div class="col-md-1" style="padding-top:30px" id="loading">
                                         <img src="~/assets/images/loading.gif" height="25" />
                                     </div>
-                                    <div class="col-md-2">
+                                    @*<div class="col-md-2">
                                         <label class="control-label">Manually</label>
                                         <a asp-action="Create" asp-controller="Applicants" asp-route-SLPId="@ViewBag.SLPId" class="btn btn-primary waves-effect waves-light">
                                             <i class="bx bx-user-plus font-size-16 align-middle mr-2"></i> Add Applicant
                                         </a>
-                                    </div>
+                                    </div>*@
                                 </div>
                                 <div class="table-responsive" id="events">
                                     @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All", RRId = ViewBag.Id }))

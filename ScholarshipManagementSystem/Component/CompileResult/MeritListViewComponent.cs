@@ -21,14 +21,14 @@ namespace ScholarshipManagementSystem.Component.CompileResult
 
         public async Task<IViewComponentResult> InvokeAsync(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId)
         {            
-            var applicationDbContext = await _context.Applicant.Include(a=>a.SelectionMethod).Include(r => r.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicyId == SLPId).Select(a=> new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, FatherName = a.FatherName, SelectionMethod = a.SelectionMethod, SelectionStatus = a.SelectionStatus, DistrictId = a.DistrictId }).ToListAsync();
+            var applicationDbContext = await _context.Applicant.Include(a=>a.SelectionMethod).Include(a=>a.District).Include(r => r.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicyId == SLPId).Select(a=> new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, FatherName = a.FatherName, SelectionMethod = a.SelectionMethod, SelectionStatus = a.SelectionStatus, DistrictId = a.DistrictId, TotalMarks = a.TotalMarks, ReceivedMarks = a.ReceivedMarks, District = a.District }).OrderByDescending(a=>a.ReceivedMarks).ToListAsync();
             if (id != 0)
             {
                 applicationDbContext = applicationDbContext.Where(a => a.DistrictId == id).ToList();
             }     
             if(selectedMethod != 0)
             {
-                applicationDbContext = applicationDbContext.Where(a => a.SelectionMethodId == selectedMethod).ToList();
+                applicationDbContext = applicationDbContext.Where(a => a.SelectionMethod.SelectionMethodId == selectedMethod).ToList();
             }
             if (selectedStatus != "All")
             {

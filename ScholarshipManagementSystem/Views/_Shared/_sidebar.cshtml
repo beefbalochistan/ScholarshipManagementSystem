@@ -247,6 +247,24 @@
                                 </a>
                             </li>
                         }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-file-pdf"></i>
+                                    <span key="t-calendar">File Attachment</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-message-dots"></i>
+                                    <span key="t-calendar">Send SMS</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </li>
                 <li class="menu-title" key="t-menu">SMS Management</li>
@@ -258,8 +276,7 @@
                             <span key="t-invoices">SMS Service</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>
-                            <li><a asp-action="Index" asp-controller="Applicants" key="t-invoice-list">Configuration</a></li>
+                            <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>                            
                             <li><a asp-action="Index" asp-controller="SMSAPIServiceAuditTrails" key="t-invoice-detail">Reporting</a></li>
                         </ul>
                     </li>

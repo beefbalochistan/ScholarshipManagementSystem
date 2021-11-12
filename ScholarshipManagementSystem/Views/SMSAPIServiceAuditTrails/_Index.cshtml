@@ -4,33 +4,27 @@
     <div class="col-md-6">
         @foreach (var item in Model)
         {
-
-
             <div class="chat-conversation p-3">
-                <ul class="list-unstyled" data-simplebar style="max-height: 470px;">
-                    <li>
-                        <div class="chat-day-title">
-                            @{
-                                if (item.ResponseMessage.Contains("Successfully"))
-                                {
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <i class="mdi mdi-check-all mr-2"></i>
-                                        @item.ReferenceId - @item.ResponseMessage
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <i class="mdi mdi-block-helper mr-2"></i>
-                                        @item.ReferenceId - @item.ResponseMessage
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </li>
-                    <li>
-                        <div class="conversation-list">
+                <ul class="list-unstyled" data-simplebar style="max-height: 470px;">               
+                    <li>                        
+                        <div class="conversation-list">                            
                             <div class="ctext-wrap">
+                                @{
+                                    if (item.ResponseMessage.Contains("Successfully"))
+                                    {
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <i class="mdi mdi-check-all mr-2"></i>
+                                            @item.ReferenceId - @item.ResponseMessage
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <i class="mdi mdi-block-helper mr-2"></i>
+                                            @item.ReferenceId - @item.ResponseMessage
+                                        </div>
+                                    }
+                                }
                                 <div class="conversation-name">@item.DestinationNumber</div>
                                 <p>
                                     @item.Text

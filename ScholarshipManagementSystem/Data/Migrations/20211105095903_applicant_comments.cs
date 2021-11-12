@@ -87,7 +87,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     ApplicantId = table.Column<int>(type: "int", nullable: false),
                     SelectionStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicantReferenceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SeniorityLevel = table.Column<int>(type: "int", nullable: false),
+                    SeverityLevel = table.Column<int>(type: "int", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),

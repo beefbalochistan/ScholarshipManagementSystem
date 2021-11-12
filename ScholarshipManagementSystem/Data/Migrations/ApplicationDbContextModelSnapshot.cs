@@ -1693,6 +1693,9 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("StudentMobile")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StudentMobile2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TehsilName")
                         .HasColumnType("nvarchar(max)");
 
@@ -1797,7 +1800,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeniorityLevel")
+                    b.Property<int>("SeverityLevel")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")

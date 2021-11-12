@@ -287,15 +287,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                new SelectListItem{ Text="Awaited", Value = "Awaited" },
             };
             ViewData["ddStatusList"] = list1;
-            var list2 = new List<SelectListItem>
-            {
-               new SelectListItem{ Text="All", Value = "All", Selected = true },
-               new SelectListItem{ Text="POMS", Value = "POMS" },
-               new SelectListItem{ Text="DOMS", Value = "DOMS" },
-               new SelectListItem{ Text="SQSOMS", Value = "SQSOMS" },
-               new SelectListItem{ Text="SQSEVI", Value = "SQSEVI" },
-            };
-            ViewData["ddMethodList"] = list2;           
+            var selectionMethodList = _context.SelectionMethod.ToList();
+            selectionMethodList.Insert(0, new SelectionMethod { SelectionMethodId = 0, Name = "All" });
+            ViewData["ddMethodList"] = new SelectList(selectionMethodList, "SelectionMethodId", "Name");                  
             var districtList = _context.District.Where(a => a.IsActive == true).ToList();
             districtList.Insert(0, new District { DistrictId = 0, Name = "All" }); 
             ViewData["DistrictId"] = new SelectList(districtList, "DistrictId", "Name");

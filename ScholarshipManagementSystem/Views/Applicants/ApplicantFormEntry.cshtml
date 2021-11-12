@@ -35,7 +35,7 @@
                         </button>
                     </div>
                     @{ 
-                        if(ViewBag.message != "")
+                        if(ViewBag.message != null)
                         {
                             <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <div id="FetchDataOnFailedText">@ViewBag.message</div>
@@ -174,22 +174,31 @@ else
                         $('#scheme').val(response.homeAddress);
                         $('#selectionMethodName').val(response.religion);
                         $('#applicantId').val(response.applicantId);                        
-                        $("#profilelink").attr("href", "/applicants/ApplicantFormEdit/" +  response.applicantId);
-                        if (response.isFormEntered) {
-                            $('#applicantinformation').hide();                         
-                            $('#FetchDataOnSuccess').show();
-                            $('#FetchDataOnSuccessText').text("Applicant form data already has been entered!");
-                            notificationme('Applicant form data already has been entered!');
+                        $("#profilelink").attr("href", "/applicants/ApplicantFormEdit/" + response.applicantId);
+                        if (response.isFormSubmitted) {
+                            if (response.isFormEntered) {
+                                $('#applicantinformation').hide();
+                                $('#FetchDataOnSuccess').show();
+                                $('#FetchDataOnSuccessText').text("Applicant form data already has been entered!");
+                                notificationme('Applicant form data already has been entered!');
+                            }
+                            else {
+                                $("#txtbox").val('');
+                                $('#btnSearchForm').prop('disabled', true);
+                                $('#FetchDataOnSuccess').show();
+                                $('#applicantinformation').show();
+                                $('#FetchDataOnSuccessText').text("Fetch data successfully!");
+                                notificationme("Fetch data successfully!");
+                                $('#FetchDataOnFailed').hide();
+                            }
+                        } else {
+                            $('#applicantinformation').hide();
+                            $('#FetchDataOnSuccess').hide();
+                            $('#FetchDataOnFailed').show();
+                            $('#FetchDataOnFailedText').text("Applicant Form not submitted so far on reception counter, First Add applicant receiving Form using 'Form Collection' menu option!");
+                            notificationme('Applicant Form not entered into system!');
                         }
-                        else {                            
-                            $("#txtbox").val('');
-                            $('#btnSearchForm').prop('disabled', true);
-                            $('#FetchDataOnSuccess').show();
-                            $('#applicantinformation').show();
-                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");
-                            notificationme("Fetch data successfully!");
-                            $('#FetchDataOnFailed').hide();
-                        }
+                        
 
                     } else {
                         $('#applicantinformation').hide();                       

@@ -54,6 +54,14 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.message = message;
             return View();
         }
+        public IActionResult ApplicantFileAttachment()
+        {            
+            return View();
+        }
+        public IActionResult ApplicantSendSMS()
+        {            
+            return View();
+        }
         [HttpPost]
         public JsonResult AjaxApplicantInformation(string refno)
         {
@@ -102,7 +110,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 }
                 applicantInfo.IsFormSubmitted = true;
                 applicantInfo.FormSubmittedOnDate = DateTime.Now;
-                applicantInfo.StudentMobile = mobileNo;
+                applicantInfo.StudentMobile2 = mobileNo;
                 _context.Update(applicantInfo);
                 await _context.SaveChangesAsync();
                 //--------------------SMS Alert------------------------------
@@ -489,7 +497,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             return View(applicant);
         }
 
-        public async Task<IActionResult> ApplicantFormEdit(int? id, int? RRId)
+        public async Task<IActionResult> ApplicantFormEdit(int? id)
         {
             if (id == null)
             {
@@ -527,8 +535,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
                 //Passing image data in viewbag to view  
                 ViewBag.ImageData = imgDataURL;
-            }
-            ViewBag.RRId = RRId;
+            }            
             applicant.DateOfBirth = DateTime.Now.Date;
             return View(applicant);
         }
@@ -617,6 +624,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         }
                     }
                     applicant.IsFormEntered = true;
+                    applicant.ApplicantCurrentStatusId = 2;
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();
                 }

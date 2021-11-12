@@ -223,7 +223,6 @@
     <partial name="_ValidationScriptsPartial" />
     <!-- bs custom file input plugin -->
     <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-
     <script src="~/assets/js/pages/form-element.init.js"></script> 
 <script>
         $(document).ready(function () {            
@@ -335,66 +334,67 @@
                 }
             });
         }
-    function updateForm() {
-        debugger;
-            var applicantId = $("#applicantId").val();
-            var mobileno = $("#mobileno").val();
-            var fourPicture = $("#fourPicture").is(':checked');
-            var dmc = $("#dmc").is(':checked');
-            var cnic = $("#cnic").is(':checked');
-            var guardiancnic = $("#guardiancnic").is(':checked');
-            var paySlip = $("#paySlip").is(':checked');
-            var deathCertificate = $("#deathCertificate").is(':checked');
-            var affidavit = $("#affidavit").is(':checked');
-            var minorityCertificate = $("#minorityCertificate").is(':checked');
-            $('#mobilenorequired').hide();
-            if (validate_input(mobileno)) {
+        function updateForm() {
+            debugger;
+                var applicantId = $("#applicantId").val();
+                var mobileno = $("#mobileno").val();
+                var fourPicture = $("#fourPicture").is(':checked');
+                var dmc = $("#dmc").is(':checked');
+                var cnic = $("#cnic").is(':checked');
+                var guardiancnic = $("#guardiancnic").is(':checked');
+                var paySlip = $("#paySlip").is(':checked');
+                var deathCertificate = $("#deathCertificate").is(':checked');
+                var affidavit = $("#affidavit").is(':checked');
+                var minorityCertificate = $("#minorityCertificate").is(':checked');
                 $('#mobilenorequired').hide();
-                $('#submitspinner').show();
-                $('#btnSubmit').prop('disabled', true);
-                $.ajax({
-                    type: "POST",
-                    url: "/Applicants/AjaxApplicantSubmit",
-                    data: { applicantId: applicantId, fourPicture: fourPicture, dmc: dmc, cnic: cnic, guardiancnic: guardiancnic, paySlip: paySlip, deathCertificate: deathCertificate, affidavit: affidavit, minorityCertificate: minorityCertificate, mobileno: mobileno },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response != null) {
-                            if (response.isValid) {
-                                $('#FetchDataOnSuccess').show();
-                                $('#FetchDataOnFailed').hide();
-                                $('#FetchDataOnSuccessText').text("Form submitted successfully!");
+                if (validate_input(mobileno)) {
+                    $('#mobilenorequired').hide();
+                    $('#submitspinner').show();
+                    $('#btnSubmit').prop('disabled', true);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/AjaxApplicantSubmit",
+                        data: { applicantId: applicantId, fourPicture: fourPicture, dmc: dmc, cnic: cnic, guardiancnic: guardiancnic, paySlip: paySlip, deathCertificate: deathCertificate, affidavit: affidavit, minorityCertificate: minorityCertificate, mobileno: mobileno },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    $('#FetchDataOnSuccess').show();
+                                    $('#FetchDataOnFailed').hide();
+                                    $('#FetchDataOnSuccessText').text("Form submitted successfully!");
+                                    $('#applicantinformation').hide();
+                                    $('#attachment').hide();
+                                    $('#sqs').show();
+                                    $("#mobileno").val('');
+                                } else {
+                                    $('#FetchDataOnSuccess').hide();
+                                    $('#FetchDataOnFailed').show();
+                                    $('#FetchDataOnFailedText').text("Something went wrong!");
+                                }
+                            } else {
                                 $('#applicantinformation').hide();
                                 $('#attachment').hide();
                                 $('#sqs').show();
-                            } else {
-                                $('#FetchDataOnSuccess').hide();
                                 $('#FetchDataOnFailed').show();
+                                $('#FetchDataOnSuccess').hide();
                                 $('#FetchDataOnFailedText').text("Something went wrong!");
                             }
-                        } else {
-                            $('#applicantinformation').hide();
-                            $('#attachment').hide();
-                            $('#sqs').show();
-                            $('#FetchDataOnFailed').show();
-                            $('#FetchDataOnSuccess').hide();
-                            $('#FetchDataOnFailedText').text("Something went wrong!");
+                            $('#btnSubmit').prop('disabled', false);
+                            $('#submitspinner').hide();
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
                         }
-                        $('#btnSubmit').prop('disabled', false);
-                        $('#submitspinner').hide();
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                });
+                    });
 
-            } else {
-                $('#mobilenorequiredtext').text("Invalid mobile no!");
-                $('#mobilenorequired').show();
+                } else {
+                    $('#mobilenorequiredtext').text("Invalid mobile no!");
+                    $('#mobilenorequired').show();
+                }
             }
-        }
         (function ($) {
             function Index() {
                 var $this = this;
@@ -436,6 +436,4 @@
             }
         }
 </script>
-
-
 }

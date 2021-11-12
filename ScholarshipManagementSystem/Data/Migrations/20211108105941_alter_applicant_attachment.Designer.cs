@@ -1784,7 +1784,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeniorityLevel")
+                    b.Property<int>("SeverityLevel")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")

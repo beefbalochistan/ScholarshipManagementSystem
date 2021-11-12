@@ -16,7 +16,7 @@ namespace DAL.Models.Domain.Student
         public int ApplicantId { get; set; }
         public string SelectionStatus { get; set; }
         public string ApplicantReferenceId { get; set; }
-        public int SeniorityLevel { get; set; }
+        public int SeverityLevel { get; set; }
         public string Comments { get; set; }
         public string Attachment { get; set; }
         [ForeignKey("Employee")]

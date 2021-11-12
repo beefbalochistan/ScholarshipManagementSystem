@@ -95,11 +95,24 @@
                                 <input type="hidden" asp-for="SchemeLevelPolicyId" />
                                 <input type="hidden" asp-for="ScanDocument" />
                                 <input type="hidden" asp-for="ScanOtherDocument" />
+                                <input type="hidden" asp-for="ProvienceId" />
+                                <input type="hidden" asp-for="DistrictId" />
                                 <input type="hidden" asp-for="Picture" />
                                 <input type="hidden" asp-for="SelectionMethodId" />
                                 <input type="hidden" asp-for="SelectionStatus" />
                                 <input type="hidden" asp-for="ApplicantReferenceNo" />
                                 <input type="hidden" asp-for="EntryThrough" />
+                                <input type="hidden" asp-for="IsFormSubmitted" />
+                                <input type="hidden" asp-for="FormSubmittedOnDate" />
+                                <input type="hidden" asp-for="StudentMobile2" />
+                                <input type="hidden" asp-for="Attach_Affidavit" />
+                                <input type="hidden" asp-for="Attach_CNIC_BForm" />
+                                <input type="hidden" asp-for="Attach_DMC_Transcript" />
+                                <input type="hidden" asp-for="Attach_Father_Death_Certificate" />
+                                <input type="hidden" asp-for="Attach_Father_Mother_Guardian_CNIC" />
+                                <input type="hidden" asp-for="Attach_Minority_Certificate" />
+                                <input type="hidden" asp-for="Attach_Payslip" />
+                                <input type="hidden" asp-for="Attach_Picture" />
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Selection Method</label>
@@ -119,7 +132,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Provience</label>
-                                        <select asp-for="ProvienceId" class="form-control inputSelect" asp-items="ViewBag.ProvienceId"></select>
+                                        <select disabled="disabled" asp-for="ProvienceId" class="form-control inputSelect" asp-items="ViewBag.ProvienceId"></select>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="RegisterationNumber" class="control-label"></label>
@@ -135,7 +148,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Local District</label>
-                                        <select asp-for="DistrictId" asp-items="@ViewBag.DistrictId" class="form-control inputSelect">
+                                        <select disabled="disabled" asp-for="DistrictId" asp-items="@ViewBag.DistrictId" class="form-control inputSelect">
                                             <option>-Select-</option>
                                         </select>
                                     </div>

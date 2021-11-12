@@ -4,7 +4,10 @@
 @inject IAuthorizationService AuthorizationService
 @using ScholarshipManagementSystem.Constants
 
-
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<!-- Responsive datatable examples -->
+<link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
 <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
     <thead>
@@ -18,15 +21,20 @@
                 @Html.DisplayNameFor(model => model.RollNumber)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.FatherName)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.ReceivedMarks)
-                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.ReceivedMarks)
+            </th>
+            <th>
+                Marks(%)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.SelectionMethod)
             </th>
@@ -48,14 +56,20 @@
                     @Html.DisplayFor(modelItem => item.RollNumber)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.District.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FatherName)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.ReceivedMarks)
-                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReceivedMarks)
+                </td>
+                <td>
+                    @(Math.Round((Convert.ToDouble(item.ReceivedMarks) / Convert.ToDouble(item.TotalMarks))*100f,2))%
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.SelectionMethod.Name)
                 </td>
@@ -97,6 +111,6 @@
         //$('#datatable-buttons').dataTable().fnClearTable();
         $('#datatable-buttons').dataTable().fnDestroy();
         $("#datatable").DataTable(),
-        $("#datatable-buttons").DataTable({ lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"] }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+            $("#datatable-buttons").DataTable({ lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"] }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
     });
 </script>
