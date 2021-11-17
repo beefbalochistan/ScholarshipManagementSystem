@@ -67,5 +67,7 @@ namespace ScholarshipManagementSystem.Data
         public DbSet<DAL.Models.Domain.Student.ApplicantStudent> ApplicantStudent { get; set; }
         public DbSet<DAL.Models.Domain.Student.ApplicantCurrentStatus> ApplicantCurrentStatus { get; set; }
         public DbSet<DAL.Models.Domain.Student.ApplicantAttachment> ApplicantAttachment { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.SectionComment> SectionComment { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.SeverityLevel> SeverityLevel { get; set; }
     }
 }

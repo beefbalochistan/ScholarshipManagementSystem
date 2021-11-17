@@ -98,12 +98,18 @@
     <div class="card applicantinformation">
         <div id="progrss-wizard" class="twitter-bs-wizard">
             <ul class="twitter-bs-wizard-nav nav-justified">
-                <li class="nav-item">
-                    <a class="nav-link">
-                        <span class="step-number mr-2">01</span>
-                        Selected
-                    </a>
-                </li>
+                @{
+                    for (var index = 1; index <= 8; index++)
+                    {
+                        @*<li class="nav-item">
+                            <a class="nav-link">
+                                <span class="step-number mr-2">01</span>
+                                Selected
+                            </a>
+                        </li>*@
+                    }
+                }
+
                 <li class="nav-item">
                     <a class="nav-link">
                         <span class="step-number mr-2" style="background-color: #556ee6;color:white">02</span>

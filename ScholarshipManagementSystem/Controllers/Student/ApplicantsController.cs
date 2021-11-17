@@ -144,8 +144,39 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return Json(new { isValid = false });
             }
             return Json(new { isValid = true});
+        }       
+        [HttpPost]
+        public async Task<JsonResult> UploadFile(IFormFile files, int applicantId, string title)
+        {            
+            if (files.Length > 0)
+            {
+                ApplicantAttachment obj = new ApplicantAttachment();
+                obj.ApplicantId = applicantId;
+                obj.Title = title;
+                obj.UploadedOn = DateTime.Now;
+                var rootPath = Path.Combine(
+                          Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Applicant\\Attachments\\ID" + applicantId + "\\");
+                string fileName = Path.GetFileName(files.FileName);
+                fileName = fileName.Replace("&", "n");fileName = fileName.Replace(" ", "");fileName = fileName.Replace("#", "H");fileName = fileName.Replace("(", "");fileName = fileName.Replace(")", "");
+                Random random = new Random();
+                int randomNumber = random.Next(1, 1000);
+                fileName = "Document" + randomNumber.ToString() + fileName;
+                obj.AttachmentPath = Path.Combine("/Documents/Applicant/Attachments/ID" + applicantId + "/" + fileName);//Server Path
+                string sPath = Path.Combine(rootPath);
+                if (!System.IO.Directory.Exists(sPath))
+                {
+                    System.IO.Directory.CreateDirectory(sPath);
+                }
+                string FullPathWithFileName = Path.Combine(sPath, fileName);
+                using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                {
+                    await files.CopyToAsync(stream);
+                }
+                _context.Add(obj);
+                await _context.SaveChangesAsync();
+            }            
+            return Json(new { isValid = true });
         }
-
         public async Task<JsonResult> SendSMS(string mobileNo, string name, string message, string applicantReferenceNo, int applicantId)
         {            
             if (mobileNo != null)

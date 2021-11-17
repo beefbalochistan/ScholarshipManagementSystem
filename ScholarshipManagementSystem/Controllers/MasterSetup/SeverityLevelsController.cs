@@ -5,27 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL.Models.Domain.Student;
+using DAL.Models.Domain.MasterSetup;
 using ScholarshipManagementSystem.Data;
 
-namespace ScholarshipManagementSystem.Controllers.Student
+namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
-    public class ApplicantCurrentStatusController : Controller
+    public class SeverityLevelsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ApplicantCurrentStatusController(ApplicationDbContext context)
+        public SeverityLevelsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ApplicantCurrentStatus
+        // GET: SeverityLevels
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ApplicantCurrentStatus.ToListAsync());
+            return View(await _context.SeverityLevel.ToListAsync());
         }
 
-        // GET: ApplicantCurrentStatus/Details/5
+        // GET: SeverityLevels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return NotFound();
             }
 
-            var applicantCurrentStatus = await _context.ApplicantCurrentStatus
-                .FirstOrDefaultAsync(m => m.ApplicantCurrentStatusId == id);
-            if (applicantCurrentStatus == null)
+            var severityLevel = await _context.SeverityLevel
+                .FirstOrDefaultAsync(m => m.SeverityLevelId == id);
+            if (severityLevel == null)
             {
                 return NotFound();
             }
 
-            return View(applicantCurrentStatus);
+            return View(severityLevel);
         }
 
-        // GET: ApplicantCurrentStatus/Create
+        // GET: SeverityLevels/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ApplicantCurrentStatus/Create
+        // POST: SeverityLevels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApplicantCurrentStatusId,ProcessState,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
+        public async Task<IActionResult> Create([Bind("SeverityLevelId,Level,Meaning,Color")] SeverityLevel severityLevel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(applicantCurrentStatus);
+                _context.Add(severityLevel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(applicantCurrentStatus);
+            return View(severityLevel);
         }
 
-        // GET: ApplicantCurrentStatus/Edit/5
+        // GET: SeverityLevels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return NotFound();
             }
 
-            var applicantCurrentStatus = await _context.ApplicantCurrentStatus.FindAsync(id);
-            if (applicantCurrentStatus == null)
+            var severityLevel = await _context.SeverityLevel.FindAsync(id);
+            if (severityLevel == null)
             {
                 return NotFound();
             }
-            return View(applicantCurrentStatus);
+            return View(severityLevel);
         }
 
-        // POST: ApplicantCurrentStatus/Edit/5
+        // POST: SeverityLevels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApplicantCurrentStatusId,ProcessState,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
+        public async Task<IActionResult> Edit(int id, [Bind("SeverityLevelId,Level,Meaning,Color")] SeverityLevel severityLevel)
         {
-            if (id != applicantCurrentStatus.ApplicantCurrentStatusId)
+            if (id != severityLevel.SeverityLevelId)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
             {
                 try
                 {
-                    _context.Update(applicantCurrentStatus);
+                    _context.Update(severityLevel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApplicantCurrentStatusExists(applicantCurrentStatus.ApplicantCurrentStatusId))
+                    if (!SeverityLevelExists(severityLevel.SeverityLevelId))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(applicantCurrentStatus);
+            return View(severityLevel);
         }
 
-        // GET: ApplicantCurrentStatus/Delete/5
+        // GET: SeverityLevels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return NotFound();
             }
 
-            var applicantCurrentStatus = await _context.ApplicantCurrentStatus
-                .FirstOrDefaultAsync(m => m.ApplicantCurrentStatusId == id);
-            if (applicantCurrentStatus == null)
+            var severityLevel = await _context.SeverityLevel
+                .FirstOrDefaultAsync(m => m.SeverityLevelId == id);
+            if (severityLevel == null)
             {
                 return NotFound();
             }
 
-            return View(applicantCurrentStatus);
+            return View(severityLevel);
         }
 
-        // POST: ApplicantCurrentStatus/Delete/5
+        // POST: SeverityLevels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var applicantCurrentStatus = await _context.ApplicantCurrentStatus.FindAsync(id);
-            _context.ApplicantCurrentStatus.Remove(applicantCurrentStatus);
+            var severityLevel = await _context.SeverityLevel.FindAsync(id);
+            _context.SeverityLevel.Remove(severityLevel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ApplicantCurrentStatusExists(int id)
+        private bool SeverityLevelExists(int id)
         {
-            return _context.ApplicantCurrentStatus.Any(e => e.ApplicantCurrentStatusId == id);
+            return _context.SeverityLevel.Any(e => e.SeverityLevelId == id);
         }
     }
 }

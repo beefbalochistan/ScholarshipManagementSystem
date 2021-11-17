@@ -25,6 +25,6 @@ namespace DAL.Models.Domain.Student
         public string UserName { get; set; }
         public DateTime CreatedOn  { get; set; }
         public virtual Employee Employee { get; set; }
-        public virtual Applicant Applicant { get; set; }        
+        public virtual Applicant Applicant { get; set; }
     }
 }

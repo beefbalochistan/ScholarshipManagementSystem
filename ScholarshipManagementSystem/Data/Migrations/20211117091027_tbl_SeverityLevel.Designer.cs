@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211117091027_tbl_SeverityLevel")]
+    partial class tbl_SeverityLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1189,21 +1191,16 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Property<int>("BEEFSectionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Comment")
-                        .IsRequired()
+                    b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SeverityLevelId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SectionCommentId");
 
                     b.HasIndex("BEEFSectionId");
-
-                    b.HasIndex("SeverityLevelId");
 
                     b.ToTable("SectionComment", "master");
                 });
@@ -2625,15 +2622,7 @@ namespace ScholarshipManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.SeverityLevel", "SeverityLevel")
-                        .WithMany()
-                        .HasForeignKey("SeverityLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("BEEFSection");
-
-                    b.Navigation("SeverityLevel");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>

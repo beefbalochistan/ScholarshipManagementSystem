@@ -3,20 +3,22 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScholarshipManagementSystem.Data;
 
 namespace ScholarshipManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211116093427_tbl_Section_Comments")]
+    partial class tbl_Section_Comments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.12")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
@@ -1179,35 +1181,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.ToTable("SchemeLevel", "master");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SectionComment", b =>
-                {
-                    b.Property<int>("SectionCommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BEEFSectionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SeverityLevelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SectionCommentId");
-
-                    b.HasIndex("BEEFSectionId");
-
-                    b.HasIndex("SeverityLevelId");
-
-                    b.ToTable("SectionComment", "master");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionMethod", b =>
                 {
                     b.Property<int>("SelectionMethodId")
@@ -1222,27 +1195,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.HasKey("SelectionMethodId");
 
                     b.ToTable("SelectionMethod", "master");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SeverityLevel", b =>
-                {
-                    b.Property<int>("SeverityLevelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Meaning")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SeverityLevelId");
-
-                    b.ToTable("SeverityLevel", "Master");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
@@ -2615,25 +2567,6 @@ namespace ScholarshipManagementSystem.Data.Migrations
                     b.Navigation("QualificationLevel");
 
                     b.Navigation("Scheme");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SectionComment", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
-                        .WithMany()
-                        .HasForeignKey("BEEFSectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.SeverityLevel", "SeverityLevel")
-                        .WithMany()
-                        .HasForeignKey("SeverityLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BEEFSection");
-
-                    b.Navigation("SeverityLevel");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>

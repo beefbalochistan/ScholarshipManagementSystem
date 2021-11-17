@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Value)
+                @Html.DisplayNameFor(model => model.ProcessState)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
@@ -26,7 +26,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Value)
+                @Html.DisplayFor(modelItem => item.ProcessState)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)

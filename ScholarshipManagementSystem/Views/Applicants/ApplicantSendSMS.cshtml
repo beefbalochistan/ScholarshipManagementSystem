@@ -176,8 +176,7 @@ else
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
-                        $('#applicantinformation').show();
-                        $('#attachment').show();
+                        $('#applicantinformation').show();                        
                         $('#name').val(response.name);
                         $('#rollno').val(response.rollNumber);
                         $('#refId').val(response.applicantReferenceNo);
@@ -185,8 +184,7 @@ else
                         $('#mobileno').val(response.studentMobile);
                         $('#scheme').val(response.homeAddress);
                         $('#selectionMethodName').val(response.religion);
-                        $('#applicantId').val(response.applicantId);
-                        $("#profilelink").attr("href", "/applicants/ApplicantFormEdit/" + response.applicantId);
+                        $('#applicantId').val(response.applicantId);                        
                         
                     } else {
                         $('#applicantinformation').hide();
@@ -213,8 +211,7 @@ else
             var name = $("#name").val();
             var message = $("#msgbox").val();
             var applicantReferenceNo = $("#refId").val();
-            var applicantId = $("#applicantId").val();
-            alert(mobileno);
+            var applicantId = $("#applicantId").val();            
                 $.ajax({
                     type: "POST",
                     url: "/Applicants/SendSMS",

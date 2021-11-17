@@ -1,8 +1,360 @@
 ﻿
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
 @{
-    ViewData["Title"] = "ApplicantFileAttachment";
+    ViewData["Title"] = "Applicant Attachment";
+    ViewBag.Title = "Attachment";
+    ViewBag.pTitle = "Applicant";
+    ViewBag.pageTitle = "Attachment";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
+<style>
+    .nav-link {
+        padding: .5rem;
+    }
+</style>
 
-<h1>ApplicantFileAttachment</h1>
+@if (true@*(AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.View)).Result.Succeeded*@)
+{
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link rel="stylesheet" href="~/assets/libs/twitter-bootstrap-wizard/prettify.css">
+<link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
 
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="FetchDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnSuccessText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div id="FetchDataOnFailedText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @{
+                    if (ViewBag.message != "")
+                    {
+                        <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div id="FetchDataOnFailedText">@ViewBag.message</div>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                }
+                <div class="col-md-10">
+                    <div class="form-inline">
+                        <label class="sr-only" for="inlineFormemail2">Email</label>
+                        <div class="input-group mb-2 mr-sm-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Applicant: Scan QR Code</div>
+                            </div>
+                            <input id="txtbox" type="text" class="form-control" placeholder="Reference#" required>
+                        </div>
+                        <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
+                        <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="applicantinformation" style="display:none">
+            <input type="hidden" id="mobileno" class="form-control" />            
+            <div class="row">
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">Selection Method</label>
+                        <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">Scheme</label>
+                        <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">ReferenceID</label>
+                        <input style="background-color:aliceblue" id="refId" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">Roll#</label>
+                        <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <label class="control-label">Father Name</label>
+                        <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="card-title">Attachment Panel</h4>
+                            <form action="UploadFile" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" name="dropzoneForm">
+                                <div id="UploadDataOnSuccess" style="display:none" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <div id="UploadDataOnSuccessText"></div>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div id="UploadDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <div id="UploadDataOnFailedText"></div>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <p class="card-title-desc">
+                                    <input id="title" type="text" class="form-control" placeholder="Enter Document Title..." required>
+                                </p>
+                                <div>
+                                    <input type="hidden" id="applicantId" value="100" class="form-control" />
+                                    <div class="dz-message needsclick">
+                                        Drop files here or click to upload.<br>
+                                    </div>
+                                </div>
+                                <button type="button" id="Submit" name="Submit" class="btn btn-info waves-effect waves-light m-t-5"><i class="bx bx-cloud-upload font-size-16 align-middle mr-2"></i> Upload</button>
+                            </form>
+                        </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div>
+    </div>
+</div>
+    </div>
+}
+else
+{
+<div class="account-pages my-5 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center mb-5">
+                    <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                    <h4 class="text-uppercase">Sorry, page not found</h4>
+                    @*<div class="mt-5 text-center">
+                            <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-xl-6">
+                <div>
+                    <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- toastr plugin -->
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/libs/dropzone/min/dropzone.min.js"></script>
+    <script>
+       Dropzone.autoDiscover = false;
+        $(document).ready(function () {
+            $('#UploadDataOnSuccess').hide();
+           $('#dropzoneForm').dropzone({
+               //parameter name value
+               paramName: "files",
+               //params: { 'applicantId': 10, 'title': 'abc'},
+               autoProcessQueue: false,
+               maxFiles: 1,
+               maxFilesize: 4,
+               url: "UploadFile",
+               addRemoveLinks: true,
+               dictResponseError: 'Server not Configured',
+               acceptedFiles: ".pdf",// use this to restrict file type
+               init: function () {
+                   var dropzoneForm = this;
+                   $('#Submit').on("click", function (e) {
+                       if (jQuery('#title').val() != '') {
+                           dropzoneForm.processQueue();
+                       } else {
+                           $('#UploadDataOnSuccess').hide();
+                           $('#UploadDataOnFailed').show();
+                           $('#UploadDataOnFailedText').text("Missing Document Title!");
+                       }
+                       //$('#Submit').prop('disabled', true);                       
+                   });
+                   //this function check if there is an file already uploaded
+                   // if yes it removes the first/last file
+                   this.on("addedfile", function (file) {
+                       if (this.files[1] != null) {
+                           this.removeFile(this.files[0]);
+                       }
+                   });
+                   this.on("sending", function (file, xhr, formData) {
+                       formData.append('applicantId', jQuery('#applicantId').val());
+                       formData.append('title', jQuery('#title').val());
+                      @* $("form").find("input").each(function () {
+                           formData.append($(this).attr("applicantId"), $(this).val());
+                       });*@
+                   });
+                   this.on('complete', function () {
+                       $('#UploadDataOnSuccess').show();
+                       $("#title").val('');
+                       $('#UploadDataOnFailed').hide();
+                       $('#UploadDataOnSuccessText').text("Applicant Document Uploaded successfully!");
+                       //$('#Submit').prop('disabled', false);
+                   });
+                   this.on("success",
+                       function (file) {
+                           debugger;
+                           dropzoneForm.removeFile(file);
+                       });
+               }
+           });
+       });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+           
+            $('#btnSearchForm').prop('disabled', true);
+            $('.applicantinformation').hide();
+            $('#txtbox').keyup(function (event) {
+                var refLength = $("#txtbox").val().length;
+                if (refLength == 13) {
+                    $('#btnSearchForm').prop('disabled', false);
+                } else {
+                    $('#btnSearchForm').prop('disabled', true);
+                }
+                if (event.keyCode === 13 && refLength == 13) {
+                    fetch();
+                }
+            });
+            $("#btnSearchForm").click(function () {
+                fetch();
+            });
+        });
+        function fetch() {
+            var refno = $("#txtbox").val();
+            $('#fetchspinner').show();
+            $.ajax({
+                type: "POST",
+                url: "/Applicants/AjaxApplicantInformation",
+                data: { refno: refno },
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $('#applicantinformation').show();                        
+                        $('#name').val(response.name);
+                        $('#rollno').val(response.rollNumber);
+                        $('#refId').val(response.applicantReferenceNo);
+                        $('#fathername').val(response.fatherName);                        
+                        $('#scheme').val(response.homeAddress);
+                        $('#selectionMethodName').val(response.religion);
+                        $('#applicantId').val(response.applicantId);                        
+
+                    } else {
+                        $('#applicantinformation').hide();
+                        $('#FetchDataOnSuccess').hide();
+                        $('#FetchDataOnFailed').show();
+                        $('#FetchDataOnFailedText').text("Applicant data not found!");
+                        notificationme("Applicant data not found!");
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                    }
+                    $('#fetchspinner').hide();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        function uploadAttachment() {
+                                               
+          
+            var input_file = $("#fileInput");
+                var files = input_file.prop("files")
+                var names = $.map(files, function (val) { return val.name; });
+                $.each(names, function (i, name) {
+                    console.log(name);
+                });
+            debugger;
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Applicants/ApplicantFileAttachmentPost",
+            //    data: { title: title, applicantId: applicantId},
+            //    dataType: "json",
+            //    success: function (response) {
+            //        if (response != null) {
+            //            if (response.isValid) {
+            //                $('#FetchDataOnSuccess').show();
+            //                $('#FetchDataOnFailed').hide();
+            //                $('#FetchDataOnSuccessText').text("SMS Sent successfully!");
+            //                $('#applicantinformation').hide();
+            //                $('#txtbox').val('');
+            //            } else {
+            //                $('#FetchDataOnSuccess').hide();
+            //                $('#FetchDataOnFailed').show();
+            //                $('#FetchDataOnFailedText').text("SMS Sent Failed!");
+            //            }
+            //        } else {
+            //            $('#applicantinformation').hide();
+            //            $('#FetchDataOnFailed').show();
+            //            $('#FetchDataOnSuccess').hide();
+            //            $('#FetchDataOnFailedText').text("Something went wrong!");
+            //        }
+            //        $('#btnSubmit').prop('disabled', false);
+            //        $('#submitspinner').hide();
+            //    },
+            //    failure: function (response) {
+            //        alert(response.responseText);
+            //    },
+            //    error: function (response) {
+            //        alert(response.responseText);
+            //    }
+            //});
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+    </script>
+}
