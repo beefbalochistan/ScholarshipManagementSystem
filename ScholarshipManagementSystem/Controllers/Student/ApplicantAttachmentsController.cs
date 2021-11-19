@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models.Domain.Student;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ScholarshipManagementSystem.Common;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using DAL.Models;
 using SMSService.Models.Domain.AutoSMSApi;
 
@@ -112,7 +112,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account.Manage
             SMSRecord.SendOn = DateTime.Now;
             SMSRecord.Text = Text;
             SMSRecord.TextLength = Text.Length;
-            SMSRecord.MessageFor = Enums.MessageFor.Employee.ToString();
+            SMSRecord.MessageFor = DAL.Enums.MessageFor.Employee.ToString();
             SMSRecord.UserId = user.Id;
             _context.Add(SMSRecord);
             await _context.SaveChangesAsync();

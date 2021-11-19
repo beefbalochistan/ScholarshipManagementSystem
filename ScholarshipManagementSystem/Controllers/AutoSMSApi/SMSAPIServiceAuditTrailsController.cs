@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using SMSService.Models.Domain.AutoSMSApi;
 
 namespace ScholarshipManagementSystem.Controllers.AutoSMSApi

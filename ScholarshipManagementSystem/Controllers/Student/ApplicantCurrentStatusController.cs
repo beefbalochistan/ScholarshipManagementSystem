@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models.Domain.Student;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -54,7 +54,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApplicantCurrentStatusId,ProcessState,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
+        public async Task<IActionResult> Create([Bind("ApplicantCurrentStatusId,ProcessState,ProcessValue,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApplicantCurrentStatusId,ProcessState,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
+        public async Task<IActionResult> Edit(int id, [Bind("ApplicantCurrentStatusId,ProcessState,ProcessValue,IsActive")] ApplicantCurrentStatus applicantCurrentStatus)
         {
             if (id != applicantCurrentStatus.ApplicantCurrentStatusId)
             {

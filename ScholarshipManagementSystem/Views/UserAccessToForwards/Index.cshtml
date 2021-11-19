@@ -1,0 +1,48 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.UserAccessToForward>
+
+    @{
+        ViewData["Title"] = "Index";
+        ViewBag.Title = "Access Rights";
+        ViewBag.pTitle = "Access Rights";
+        ViewBag.pageTitle = "Green Note";
+        Layout = "~/Views/_Shared/_Layout.cshtml";
+    }
+
+                      <div class="container">
+                          <div class="card">                              
+                              <div class="card-body">
+                                  <h4 class="card-title">
+                                      List of Access Permissions to Forward Green Note
+                                  </h4>
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>
+                                                  @Html.DisplayNameFor(model => model.UserId)
+                                              </th>
+                                              <th>
+                                                  @Html.DisplayNameFor(model => model.ApplicantCurrentStatus.ProcessState)
+                                              </th>
+                                              <th>@Html.DisplayNameFor(model => model.ApplicantCurrentStatus.ProcessValue)</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          @foreach (var item in Model)
+                                          {
+                                              <tr>
+                                                  <td>
+                                                      @Html.DisplayFor(modelItem => item.UserId)
+                                                  </td>
+                                                  <td>
+                                                      @Html.DisplayFor(modelItem => item.ApplicantCurrentStatus.ProcessState)
+                                                  </td>
+                                                  <td>
+                                                      @Html.DisplayFor(modelItem => item.ApplicantCurrentStatus.ProcessValue)
+                                                  </td>
+                                              </tr>
+                                          }
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using ScholarshipManagementSystem.Common;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.Student;
 using SMSService.Models.Domain.AutoSMSApi;
@@ -130,7 +130,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 SMSRecord.SendOn = DateTime.Now;
                 SMSRecord.Text = Text;
                 SMSRecord.TextLength = Text.Length;
-                SMSRecord.MessageFor = Enums.MessageFor.Employee.ToString();
+                SMSRecord.MessageFor = DAL.Enums.MessageFor.Employee.ToString();
                 SMSRecord.UserId = User.Identity.Name;
                 SMSRecord.SendBy = "System";
                 SMSRecord.ReferenceId = applicantInfo.ApplicantReferenceNo;
@@ -197,7 +197,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 SMSRecord.SendOn = DateTime.Now;
                 SMSRecord.Text = Text;
                 SMSRecord.TextLength = Text.Length;
-                SMSRecord.MessageFor = Enums.MessageFor.Employee.ToString();
+                SMSRecord.MessageFor = DAL.Enums.MessageFor.Employee.ToString();
                 SMSRecord.UserId = User.Identity.Name;
                 SMSRecord.SendBy = "System";
                 SMSRecord.ReferenceId = applicantReferenceNo;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
 using DAL.Models.ViewModels;
 

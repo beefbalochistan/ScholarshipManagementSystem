@@ -12,7 +12,8 @@ namespace DAL.Models.Domain.Student
         public class ApplicantCurrentStatus
         {
             [Key]
-            public int ApplicantCurrentStatusId { get; set; }           
+            public int ApplicantCurrentStatusId { get; set; }   
+            [Display(Name = "Process State")]
             public string ProcessState { get; set; }
             public int ProcessValue { get; set; }
             public bool IsActive { get; set; } = true;

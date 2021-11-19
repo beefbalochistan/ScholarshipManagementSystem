@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 
 [assembly: HostingStartup(typeof(ScholarshipManagementSystem.Areas.Identity.IdentityHostingStartup))]
 namespace ScholarshipManagementSystem.Areas.Identity

@@ -3,7 +3,7 @@ using DAL.Models.Domain.Student;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

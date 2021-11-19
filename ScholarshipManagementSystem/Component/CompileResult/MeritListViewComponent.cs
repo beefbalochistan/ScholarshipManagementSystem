@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.Student;
 using DAL.Models.ViewModels;

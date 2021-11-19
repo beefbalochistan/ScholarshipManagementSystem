@@ -153,6 +153,12 @@
                                                 <input tabindex="3" type="email" class="form-control" asp-for="Input.Email" id="useremail" placeholder="Enter email">
                                                 <span asp-validation-for="Input.Email" class="text-danger"></span>
                                             </div>
+                                            <div class="form-group">
+                                                <label asp-for="Input.BEEFSectionId">Section</label>
+                                                <select required asp-for="Input.BEEFSectionId" class="form-control" asp-items="ViewBag.BEEFSectionId">
+                                                    <option value=""> - - Select - -</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ScholarshipManagementSystem.Data;
+using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup

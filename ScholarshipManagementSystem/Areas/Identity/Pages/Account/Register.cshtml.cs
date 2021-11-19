@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using DAL.Models;
 using ScholarshipManagementSystem.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Repository.Data;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 {
@@ -25,16 +27,19 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
+            ApplicationDbContext context,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
             _emailSender = emailSender;
         }
 
@@ -57,6 +62,9 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+            [Required]            
+            [Display(Name = "Section")]
+            public int BEEFSectionId { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -73,6 +81,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+            ViewData["BEEFSectionId"] = new SelectList(_context.BEEFSection, "BEEFSectionId", "Name");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -89,7 +98,8 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                     UserName = userName/*Input.Email.Substring(0,Input.Email.IndexOf('@'))*/,
                     Email = Input.Email,
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName
+                    LastName = Input.LastName,
+                    BEEFSectionId = Input.BEEFSectionId
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
