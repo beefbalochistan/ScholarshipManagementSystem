@@ -53,35 +53,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
 
             return View(applicantStudent);
         }
-        
-        public async Task<JsonResult> CommentSubmit(int applicantId, string applicantRefNo, string comment, int sectionCommentId, int severityLevelId, int userAccessToForwardId, int applicantCurrentStatusId)
-        {
-            var applicantInfo = await _context.Applicant.FindAsync(applicantId);
-            var file = Request.Form.Files;
-            if (applicantId != 0 && applicantRefNo != "" && comment != "" && userAccessToForwardId != 0)
-            {
-                ApplicantStudent obj = new ApplicantStudent();
-                obj.ApplicantId = applicantId;
-                obj.ApplicantReferenceId = applicantRefNo;
-                obj.Comments = comment;
-                obj.CreatedOn = DateTime.Now;
-                if(sectionCommentId == 0)
-                {
-                    obj.SeverityLevelId = severityLevelId;
-                }
-                else
-                {
-                    obj.SeverityLevelId = _context.SectionComment.Find(sectionCommentId).SeverityLevelId;
-                }             
-                obj.ApplicantCurrentStatusId = applicantCurrentStatusId;
-                obj.UserName = User.Identity.Name;                
-                obj.UserAccessToForwardId = userAccessToForwardId;
-                _context.Add(obj);
-                await _context.SaveChangesAsync();
-                return Json(new { isValid = true });
-            }
-            return Json(new { isValid = false });
-        }
+                
         // GET: ApplicantStudents/Create
         public IActionResult Create()
         {
@@ -196,12 +168,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         [HttpPost]
-        public async Task<string> Upload_File(int applicantId, string applicantRefNo, string comment, int sectionCommentId, int severityLevelId, int userAccessToForwardId, int applicantCurrentStatusId)
+        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, string comment, int sectionCommentId, int severityLevelId, int userAccessToForwardId, int applicantCurrentStatusId, IFormFile Attachment)
         {
-            var applicantInfo = await _context.Applicant.FindAsync(applicantId);
-            var file = Request.Form.Files;
+            var applicantInfo = await _context.Applicant.FindAsync(applicantId);            
+
             if (applicantId != 0 && applicantRefNo != "" && comment != "" && userAccessToForwardId != 0)
-            {
+            {                
                 ApplicantStudent obj = new ApplicantStudent();
                 obj.ApplicantId = applicantId;
                 obj.ApplicantReferenceId = applicantRefNo;
@@ -218,6 +190,44 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantCurrentStatusId = applicantCurrentStatusId;
                 obj.UserName = User.Identity.Name;
                 obj.UserAccessToForwardId = userAccessToForwardId;
+                //----------------Upload Attachment----------------------
+                if (Attachment != null)
+                {
+                    if (Attachment.Length > 0)
+                    {
+                        //Getting FileName
+                        var fileName = Path.GetFileName(Attachment.FileName);
+                        //Getting file Extension
+                        var fileExtension = Path.GetExtension(fileName);
+                        // concatenating  FileName + FileExtension                                             
+                        using (var target = new MemoryStream())
+                        {
+                            Attachment.CopyTo(target);
+                            obj.AttachFileData = target.ToArray();
+                        }
+                        var rootPath = Path.Combine(
+                          Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Applicant\\Comments\\ID" + applicantId + "\\");                        
+                        fileName = fileName.Replace("&", "n"); fileName = fileName.Replace(" ", ""); fileName = fileName.Replace("#", "H"); fileName = fileName.Replace("(", ""); fileName = fileName.Replace(")", "");
+                        Random random = new Random();
+                        int randomNumber = random.Next(1, 1000);
+                        fileName = "Document" + randomNumber.ToString() + fileName;
+                        obj.Attachment = Path.Combine("/Documents/Applicant/Comments/ID" + applicantId + "/" + fileName);//Server Path
+                        string sPath = Path.Combine(rootPath);
+                        if (!System.IO.Directory.Exists(sPath))
+                        {
+                            System.IO.Directory.CreateDirectory(sPath);
+                        }
+                        string FullPathWithFileName = Path.Combine(sPath, fileName);
+                        using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                        {
+                            await Attachment.CopyToAsync(stream);
+                        }
+                        var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+                        obj.AttachFileName = newFileName;
+                        obj.AttachFileType = fileExtension;
+                    }
+                }
+                //-------------------------------------------------------
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
                 return "Uploaded Successfully!";
