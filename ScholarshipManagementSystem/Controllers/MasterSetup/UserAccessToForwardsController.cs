@@ -27,11 +27,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         public async Task<IActionResult> Index(string Id)
         {
             var applicationDbContext = _context.userAccessToForward.Include(u => u.ApplicantCurrentStatus).Where(a=>a.UserId == Id);
+            var user = await _userManager.Users.Where(a=>a.Id == Id).FirstOrDefaultAsync();
+            ViewBag.UserName = user.FirstName + " " + user.LastName;
+            ViewBag.Id = Id;
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Index2(string Id)
         {
-            var applicationDbContext = _context.ApplicantCurrentStatus;
+            var applicationDbContext = _context.SchemeLevel;
             ViewBag.Id = Id;
             return View(await applicationDbContext.ToListAsync());
         }

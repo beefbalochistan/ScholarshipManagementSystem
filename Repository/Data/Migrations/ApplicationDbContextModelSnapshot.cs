@@ -27,6 +27,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("ApplicantCurrentStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BEEFSectionId")
                         .HasColumnType("int");
 
@@ -1305,6 +1308,27 @@ namespace Repository.Data.Migrations
                     b.ToTable("UserAccessToForward", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel", b =>
+                {
+                    b.Property<int>("UserAccessToSchemeLevelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SchemeLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserAccessToSchemeLevelId");
+
+                    b.HasIndex("SchemeLevelId");
+
+                    b.ToTable("UserAccessToSchemeLevel", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
                 {
                     b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
@@ -1871,6 +1895,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("BEEFSectionId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1880,7 +1907,15 @@ namespace Repository.Data.Migrations
                     b.Property<int>("ProcessValue")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Visibility")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("VisibleStateNo")
+                        .HasColumnType("int");
+
                     b.HasKey("ApplicantCurrentStatusId");
+
+                    b.HasIndex("BEEFSectionId");
 
                     b.ToTable("ApplicantCurrentStatus", "Student");
                 });
@@ -1891,6 +1926,9 @@ namespace Repository.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicantCurrentStatusId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ApplicantId")
                         .HasColumnType("int");
@@ -1907,13 +1945,13 @@ namespace Repository.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeverityLevel")
+                    b.Property<int>("SeverityLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserAccessToForwardId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -1923,7 +1961,9 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("ApplicantId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("SeverityLevelId");
+
+                    b.HasIndex("UserAccessToForwardId");
 
                     b.ToTable("ApplicantStudent", "Student");
                 });
@@ -2671,6 +2711,17 @@ namespace Repository.Data.Migrations
                     b.Navigation("ApplicantCurrentStatus");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                        .WithMany()
+                        .HasForeignKey("SchemeLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SchemeLevel");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DAEInstituteQoutaBySchemeLevel", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
@@ -2888,6 +2939,17 @@ namespace Repository.Data.Migrations
                     b.Navigation("Applicant");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantCurrentStatus", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
+                        .WithMany()
+                        .HasForeignKey("BEEFSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BEEFSection");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantStudent", b =>
                 {
                     b.HasOne("DAL.Models.Domain.Student.Applicant", "Applicant")
@@ -2896,15 +2958,23 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.Employee", "Employee")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SeverityLevel", "SeverityLevel")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("SeverityLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.UserAccessToForward", "UserAccessToForward")
+                        .WithMany()
+                        .HasForeignKey("UserAccessToForwardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Applicant");
 
-                    b.Navigation("Employee");
+                    b.Navigation("SeverityLevel");
+
+                    b.Navigation("UserAccessToForward");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.DAEPolicyDetailView", b =>

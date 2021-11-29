@@ -1,0 +1,633 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+@{
+    ViewData["Title"] = "CollectForm";
+    ViewBag.Title = "Applicant";
+    ViewBag.pTitle = "Complete Profile";
+    ViewBag.pageTitle = "Applicant";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+<style>
+    .nav-link {
+        padding: .5rem;
+    }
+
+    #msgbox, p {
+        font-style: italic;
+    }
+</style>
+@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+{
+    <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div id="FetchDataOnFailedText"></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @*<h5 class="card-title mb-4">Scan QR Code</h5>*@
+                    <div class="col-md-10">
+                        <div class="form-inline">
+                            <label class="sr-only" for="inlineFormemail2">Email</label>
+                            <div class="input-group mb-2 mr-sm-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Applicant: Scan QR Code</div>
+                                </div>
+                                <input id="txtbox" type="text" class="form-control" placeholder="Reference#">
+                            </div>
+                            <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
+                            <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="applicantId" />
+                    <input type="hidden" id="refNo" />
+                    <input type="hidden" id="applicantCurrentStatusId" />
+                    <div class="applicantinformation" style="display:flex;flex-wrap:wrap;margin-right:-12px;margin-left:-12px;max-height:100px">
+                        <div class="col-md-2 mt-4">
+                            <div class="form-group">
+                                <label class="control-label">Selection Method</label>
+                                <input style="background-color:aliceblue" id="selectionMethodName" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="form-group">
+                                <label class="control-label">Scheme</label>
+                                <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="form-group">
+                                <label class="control-label">Roll#</label>
+                                <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input style="background-color:aliceblue" id="name" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="form-group">
+                                <label class="control-label">Father Name</label>
+                                <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="top:-55px">
+                            <div class="text-center">
+                                <img id="pic" style="border-width: 1px; border-style: solid;" class="rounded border-2" alt="155x170" width="140" height="150" src="" data-holder-rendered="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+
+    <div class="card applicantinformation">
+
+        <div id="progressBarDiv"></div>
+        <div class="card-body">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            @*<h4 class="card-title">Applicant Information</h4>*@
+                            @*<h4 class="card-title">Default Tabs</h4>
+                                <p class="card-title-desc">
+                                    Use the tab JavaScript plugin—include
+                                    it individually or through the compiled <code class="highlighter-rouge">bootstrap.js</code>
+                                    file—to extend our navigational tabs and pills to create tabbable panes
+                                    of local content, even via dropdown menus.
+                                </p>*@
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Profile <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#attachments" role="tab">
+                                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                        <span class="d-none d-sm-block">Attachments <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#recipt" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block">Recipt Information</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
+                                        <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                        <span class="d-none d-sm-block">SMS Inbox <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#greennote" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                        <span class="d-none d-sm-block">Green Note</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#paymentprocess" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                        <span class="d-none d-sm-block">Payment Process</span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content p-3 text-muted">
+                                <div class="tab-pane active" id="profile" role="tabpanel">
+                                    <div id="fetchProfile">
+                                        Profile
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="attachments" role="tabpanel">
+                                    @*<form class="form-inline">
+                                            <div class="input-group mb-2 mr-sm-3">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"></div>
+                                                </div>
+                                                <input class="form-control" id="title" placeholder="Enter Document Title">
+                                            </div>
+                                            <div class="input-group mb-2 mr-sm-3">
+                                                <div class="custom-file text-left">
+                                                    <input accept="application/pdf" type="file" class="custom-file-input" name="AttachDocument" id="AttachDocument">
+                                                    <label class="custom-file-label" style="justify-content:left">Document</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mb-2">Upload</button>
+                                        </form>*@
+                                    <br />
+                                    <div id="attachmentdiv"></div>
+                                </div>
+                                <div class="tab-pane" id="recipt" role="tabpanel">
+                                    <br />
+                                    <div id="reciptAlert" style="display:none" class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <i class="mdi mdi-alert-outline mr-2"></i>
+                                        Form not submit so far!
+                                    </div>
+                                    <div id="reciptCard" style="display:none">
+                                        <div class="col-lg-4">
+                                            <div class="card border border-success">
+                                                <div class="card-header bg-transparent border-success">
+                                                    <h6 class="my-0 text-success"><i class="mdi mdi-check-all mr-3"></i>Form Submitted Successfully</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h6 class="card-title mt-0">Form Information</h6>
+                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="attach_picture" disabled="disabled">
+                                                        <label class="custom-control-label" for="attach_picture"> Pictures</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="attach_dmc" disabled="disabled">
+                                                        <label class="custom-control-label" for="attach_dmc"> DMC/Transcripts</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="attach_cnic" disabled="disabled">
+                                                        <label class="custom-control-label" for="attach_cnic"> CNIC/B-Form</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="attach_guardiancnic" disabled="disabled">
+                                                        <label class="custom-control-label" for="attach_guardiancnic"> Father/Mother/Guardian CNIC</label>
+                                                    </div>
+                                                    <div id="specialAttachment" style="display:none">
+                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                            <input type="checkbox" class="custom-control-input" id="attach_death" disabled="disabled">
+                                                            <label class="custom-control-label" for="attach_death"> Father Death Certificate</label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                            <input type="checkbox" class="custom-control-input" id="attach_payslip" disabled="disabled">
+                                                            <label class="custom-control-label" for="attach_payslip"> BPS(1-6) Payslip</label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                            <input type="checkbox" class="custom-control-input" id="attach_affidavit" disabled="disabled">
+                                                            <label class="custom-control-label" for="attach_affidavit"> Affidavit(Mother)</label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
+                                                            <input type="checkbox" class="custom-control-input" id="attach_minority" disabled="disabled">
+                                                            <label class="custom-control-label" for="attach_minority"> Minority Certificate</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <label id="formsubmitdate"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="messages" role="tabpanel">
+                                    <div id="messagediv"></div>
+                                </div>
+                                <div class="tab-pane" id="greennote" role="tabpanel">
+                                    <div class="d-lg-flex">
+                                        <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                                            <i class="mdi mdi-alert-circle-outline mr-2"></i>
+                                            <b>Green Note:</b> Conversation between sections
+                                        </div>
+                                        <div class="w-100 user-chat">
+                                            <div class="card" style="overflow-y:scroll;max-height:500px">
+                                                <div style="background-color: #d6f3e9">
+                                                    <div class="chat-conversation p-3">
+                                                        <div id="greenNoteDiv"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="">
+                                            <div id="commentPortion">
+                                                <div class="form-inline pb-3">
+                                                    <div class="input-group mb-2 mr-sm-3">
+                                                        <input type="checkbox" id="switch" switch="info" />
+                                                        <label for="switch" data-on-label="ON"
+                                                               data-off-label="OFF"></label>
+                                                    </div>
+                                                    <div class="input-group mb-2 mr-sm-3">
+                                                        <select disabled="disabled" style="max-width: 400px; background-color: #F5F5F5 " id="SectionCommentId" name="SchemeLevelPolicyId" class="form-control" asp-items="ViewBag.SectionCommentId">
+                                                            <option value="0"> - - Select - -</option>
+                                                        </select>
+                                                    </div>
+                                                    <label class="control-label mr-2 severity">Severity</label>
+                                                    <div class="input-group mb-2 mr-sm-3 severity">
+                                                        <select style="max-width:120px" id="SeverityLevelId" name="SeverityLevelId" class="form-control severity" asp-items="ViewBag.SeverityLevelId">
+                                                            <option value="0"> - - Select - -</option>
+                                                        </select>
+                                                    </div>
+                                                    <label class="control-label mr-2">Forward To</label>
+                                                    <div class="input-group mb-2 mr-sm-3">
+                                                        <select style="max-width:180px" id="UserAccessToForwardId" name="UserAccessToForwardId" class="form-control" asp-items="ViewBag.UserAccessToForwardId">
+                                                            <option value="0"> - - Select - -</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="custom-control mb-2 mr-sm-3">
+                                                        <div class="custom-file">
+                                                            <input style="max-width:120px" data-toggle="tooltip" data-placement="top" title="Attach File" type="file" class="custom-file-input" id="customFile">
+                                                            <label class="custom-file-label" for="customFile"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative">
+                                                    <div id="GreenNoteOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                        <div id="GreenNoteOnFailedText"></div>
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <textarea id="msgbox" placeholder="Enter Comments..." required class="form-control" rows="5"></textarea>
+                                                </div>
+                                                <div class="form-inline pt-3">
+                                                    <div>
+                                                        <div class="">
+                                                            <button id="btnSubmit" type="button" class="btn btn-primary btn-rounded chat-send w-md waves-effect waves-light"><span class="d-none d-sm-inline-block mr-2">Submit</span> <i class="mdi mdi-send"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="paymentprocess" role="tabpanel">
+                                    <p class="mb-0">
+                                        paymentprocess
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- toastr plugin -->
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#btnSearchForm').prop('disabled', true);
+            $('.applicantinformation').hide();
+            $('#txtbox').keyup(function (event) {
+                var refLength = $("#txtbox").val().length;
+                if (refLength == 13) {
+                    $('#btnSearchForm').prop('disabled', false);
+                } else {
+                    $('#btnSearchForm').prop('disabled', true);
+                }
+                if (event.keyCode === 13 && refLength == 13) {
+                    fetch();
+                }
+            });
+            $("#btnSearchForm").click(function () {
+                fetch();
+            });
+            $(".loading").hide();
+            $("#SectionCommentId").change(function () {
+                var allMessage = $("#SectionCommentId option:selected").text();
+                var comments = allMessage.substring(0, allMessage.indexOf("-"));
+                //var my = allMessage.substring((allMessage.indexOf("-")) + 2, comments.allMessage);
+                $("#msgbox").val(comments);
+            });
+            $("#btnSubmit").click(function () {
+                debugger;
+
+                var UserAccessToForwardId = $("#UserAccessToForwardId").val();
+                var msgbox = $("#msgbox").val();
+                var applicantId = $("#applicantId").val();
+                var applicantRefNo = $("#refNo").val();
+                var SectionCommentId = 0;
+                var applicantCurrentStatusId = $("#applicantCurrentStatusId").val();
+                if (UserAccessToForwardId == 0) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
+                    return;
+                }
+                var IsPreDefinedComment = $("#switch").is(':checked');
+                debugger;
+                if (IsPreDefinedComment) {
+                    var SectionCommentId = $("#SectionCommentId").val();
+                    if (SectionCommentId == 0) {
+                        $('#GreenNoteOnFailed').show();
+                        $('#GreenNoteOnFailedText').text("Missing Pre-defined Comments!");
+                        return;
+                    }
+                } else {
+                    var SeverityLevelId = $("#SeverityLevelId").val();
+                    if (SeverityLevelId == 0) {
+                        $('#GreenNoteOnFailed').show();
+                        $('#GreenNoteOnFailedText').text("Please Select Severity Level!");
+                        return;
+                    }
+                    if (!$('#msgbox').val().length) {
+                        $('#GreenNoteOnFailed').show();
+                        $('#GreenNoteOnFailedText').text("Please Enter Comments!");
+                        return;
+                    }
+                }
+                $('#GreenNoteOnFailed').hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/ApplicantStudents/CommentSubmit",
+                    data: { applicantId: applicantId, applicantRefNo: applicantRefNo, comment: msgbox, sectionCommentId: SectionCommentId, severityLevelId: SeverityLevelId, userAccessToForwardId: UserAccessToForwardId, applicantCurrentStatusId: applicantCurrentStatusId },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            fetchApplicantComments(applicantId);
+                            $("#SectionCommentId").val(0);
+                            $("#UserAccessToForwardId").val(0);
+                            $('#msgbox').val('');
+                            $('#msgbox').focus();
+                        } else {
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+
+        function fetch() {
+            var refno = $("#txtbox").val();
+            var UserCurrentAccess = '@ViewBag.UserCurrentAccess';
+            $('#fetchspinner').show();
+            $.ajax({
+                type: "POST",
+                url: "/Applicants/AjaxApplicantInformation",
+                data: { refno: refno },
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $('.applicantinformation').show();
+                        $('#attachment').show();
+                        $('#name').val(response.name);
+                        $('#rollno').val(response.rollNumber);
+                        $('#fathername').val(response.fatherName);
+                        $('#scheme').val(response.homeAddress);
+                        $('#selectionMethodName').val(response.religion);
+                        $('#applicantId').val(response.applicantId);
+                        $('#applicantCurrentStatusId').val(response.applicantCurrentStatusId);
+                        $('#refNo').val(refno);
+                        //------------------
+                        $('#attach_picture').prop('checked', response.attach_Picture);
+                        $('#attach_dmc').prop('checked', response.attach_DMC_Transcript);
+                        $('#attach_cnic').prop('checked', response.attach_CNIC_BForm);
+                        $('#attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
+                        $('#formsubmitdate').text(response.formSubmittedOnDate);
+                        if (response.applicantCurrentStatusId == UserCurrentAccess) {
+                            $('#commentPortion').show();
+                        } else {
+                            $('#commentPortion').hide();
+                        }
+                        if (response.selectionMethodId > 2) {
+                            $('#attach_death').prop('checked', response.attach_Father_Death_Certificate);
+                            $('#attach_payslip').prop('checked', response.attach_Payslip);
+                            $('#attach_affidavit').prop('checked', response.attach_Affidavit);
+                            $('#attach_minority').prop('checked', response.attach_Minority_Certificate);
+                            $("#specialAttachment").show();
+                        } else {
+                            $("#specialAttachment").hide();
+                        }
+                        //------------------
+                        if (response.bFormCNIC == "") {
+                            $("#pic").attr("src", "/assets/images/Profile.png");
+                        } else {
+                            $("#pic").attr("src", response.bFormCNIC );
+                        }
+                        debugger;
+                        if (response.isFormSubmitted == true) {
+                            $('#reciptAlert').hide();
+                            $('#reciptCard').show();
+                        } else {
+                            $('#reciptAlert').show();
+                            $('#reciptCard').hide();
+                        }
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                        @*$('#FetchDataOnSuccess').show();
+                        $('#FetchDataOnSuccessText').text("Fetch data successfully!");*@
+                        $('#FetchDataOnFailed').hide();
+                        notificationme('Fetch Record Successfully!');
+                        fetchApplicantProgressStatus(response.applicantId, response.applicantCurrentStatusId);
+                        fetchApplicantProfileData(response.applicantId);
+                        fetchApplicantAttachments(response.applicantId);
+                        fetchApplicantMessages(response.applicantId);
+                        fetchApplicantComments(response.applicantId);
+                    } else {
+                        $('.applicantinformation').hide();
+                        @*$('#FetchDataOnSuccess').hide();*@
+                        $('#FetchDataOnFailed').show();
+                        $('#FetchDataOnFailedText').text("Applicant data not found!");
+                        $("#txtbox").val('');
+                        $('#btnSearchForm').prop('disabled', true);
+                        notificationme('Applicant data not found!');
+                    }
+                    $('#fetchspinner').hide();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+        function fetchApplicantProfileData(applicantId) {
+        $(".loading").show();
+            $.ajax({
+            url: '@Url.Action("ReloadApplicantProfileData", "Applicants")',
+            data: {
+                id: applicantId
+            },
+                success: function (data) {
+                $("#fetchProfile").html(data);
+                $(".loading").hide();
+            }
+        });
+        }
+        function fetchApplicantProgressStatus(applicantId, applicantCurrentStatusId) {
+    $(".loading").show();
+        $.ajax({
+            url: '@Url.Action("_Index", "ApplicantCurrentStatus")',
+            data: {
+                id: applicantId,
+                applicantCurrentStatusId: applicantCurrentStatusId
+            },
+                success: function (data) {
+                $("#progressBarDiv").html(data);
+                $(".loading").hide();
+            }
+        });
+    }
+        function fetchApplicantAttachments(applicantId) {
+        $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("_Index", "ApplicantAttachments")',
+                data: {
+                    id: applicantId
+                },
+                    success: function (data) {
+                    $("#attachmentdiv").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+        function fetchApplicantComments(applicantId) {
+        $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("_Index", "ApplicantStudents")',
+                data: {
+                    id: applicantId
+                },
+                success: function (data) {
+                    $("#greenNoteDiv").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+        function fetchApplicantMessages(applicantId) {
+        $(".loading").show();
+            $.ajax({
+            url: '@Url.Action("_Index", "SMSAPIServiceAuditTrails")',
+            data: {
+                id: applicantId
+            },
+                success: function (data) {
+                $("#messagediv").html(data);
+                $(".loading").hide();
+            }
+        });
+        }
+        $(function () {
+            $("#switch").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $("#SectionCommentId").prop('disabled', false);
+                    $("#SectionCommentId").css('background-color', '#fff');
+                    //$("#SeverityLevelId").prop('disabled', 'disabled');
+                    $(".severity").hide();
+                    //$("#SeverityLevelId").css('background-color', '#F5F5F5');
+                    $("#msgbox").prop('disabled', true);
+                    $("#SeverityLevelId").val(0);
+                } else {
+                    $("#msgbox").prop('disabled', false);
+                    $("#SectionCommentId").prop('disabled', true);
+                    $("#SectionCommentId").val(0);
+                    $("#SeverityLevelId").val(0);
+                    //$("#SeverityLevelId").prop('disabled', false);
+                    $(".severity").show();
+                    $("#SectionCommentId").css('background-color', '#F5F5F5');
+                    //$("#SeverityLevelId").css('background-color', '#fff');
+                }
+            });
+        });
+    </script>
+}

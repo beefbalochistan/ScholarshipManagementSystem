@@ -1,0 +1,44 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.SchemeLevel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-title">
+        User Access To Forward
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        Assign Rights
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int counter = 1;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox  custom-checkbox-success mb-3">
+                                <input type="checkbox" class="custom-control-input" id=@("chkbox" + counter)>
+                                <label class="custom-control-label" for=@("chkbox" + counter)></label>
+                            </div>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

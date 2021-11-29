@@ -7,6 +7,6 @@ namespace ScholarshipManagementSystem.Services
 {
     public interface IEmailSender
     {
-        bool SendEmail(string email, string subject, string message);
+        Task<bool> SendEmail(string email, string subject, string message);
     }
 }

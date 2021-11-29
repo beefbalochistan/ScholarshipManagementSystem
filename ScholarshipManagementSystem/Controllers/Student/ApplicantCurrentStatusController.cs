@@ -24,7 +24,11 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {
             return View(await _context.ApplicantCurrentStatus.ToListAsync());
         }
-
+        public async Task<IActionResult> _Index(int id, int applicantCurrentStatusId)
+        {
+            ViewBag.CurrenrPoint = _context.ApplicantCurrentStatus.Find(applicantCurrentStatusId).VisibleStateNo;            
+            return PartialView(await _context.ApplicantCurrentStatus.Where(a=>a.Visibility == true).ToListAsync());
+        }
         // GET: ApplicantCurrentStatus/Details/5
         public async Task<IActionResult> Details(int? id)
         {

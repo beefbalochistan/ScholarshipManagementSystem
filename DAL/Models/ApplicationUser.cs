@@ -12,6 +12,7 @@ namespace DAL.Models
         public string LastName { get; set; }
         public string SchemeLevelAccess { get; set; }
         public int BEEFSectionId { get; set; }
+        public int ApplicantCurrentStatusId { get; set; }
         public int UsernameChangeLimit { get; set; } = 10;
         public byte[] ProfilePicture { get; set; }
     }

@@ -128,11 +128,17 @@
                                                 <input tabindex="4" type="password" class="form-control" asp-for="Input.Password" id="userpassword" placeholder="Enter password">
                                                 <span asp-validation-for="Input.Password" class="text-danger"></span>
                                             </div>
-                                            <div>
-                                                <p class="mb-0">By registering you agree to the BEEF</p> <p><a href="#" class="text-primary">Terms of Use</a></p>
+                                            <div class="form-group">
+                                                <label asp-for="Input.ApplicantCurrentStatusId"></label>
+                                                <select required asp-for="Input.ApplicantCurrentStatusId" class="form-control" asp-items="ViewBag.ApplicantCurrentStatusId">
+                                                    <option value=""> - - Select - -</option>
+                                                </select>
                                             </div>
                                             <div class="mt-4">
                                                 <button tabindex="6" class="btn btn-primary btn-block waves-effect waves-light" type="submit">Register User</button>
+                                            </div>
+                                            <div>
+                                                <p class="mb-0">By registering you agree to the BEEF</p> <p><a href="#" class="text-primary">Terms of Use</a></p>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

@@ -23,7 +23,7 @@ namespace ScholarshipManagementSystem.Services
             _password = password;
             _displayName = displayName;
         }
-        public bool SendEmail(string emailAddress, string subject, string text)
+        public Task<bool> SendEmail(string emailAddress, string subject, string text)
         {
             using (var message = new MailMessage())
             {
@@ -41,7 +41,7 @@ namespace ScholarshipManagementSystem.Services
                     client.Send(message);
                 }
             }
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

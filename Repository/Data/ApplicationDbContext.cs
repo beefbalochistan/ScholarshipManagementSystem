@@ -65,5 +65,6 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.SectionComment> SectionComment { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SeverityLevel> SeverityLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToForward> userAccessToForward { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
     }
 }

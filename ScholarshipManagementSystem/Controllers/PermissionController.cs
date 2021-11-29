@@ -42,6 +42,8 @@ public class PermissionController : Controller
         allPermissions.GetPermissions(typeof(Permissions.DistrictQoutaBySchemeLevel), roleId);
         allPermissions.GetPermissions(typeof(Permissions.Applicant), roleId);
         allPermissions.GetPermissions(typeof(Permissions.SuperUser), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.FormCollection), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.FormEntry), roleId);
         var role = await _roleManager.FindByIdAsync(roleId);
         model.RoleId = roleId;
         var claims = await _roleManager.GetClaimsAsync(role);

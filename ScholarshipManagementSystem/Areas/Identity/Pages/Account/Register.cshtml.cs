@@ -65,6 +65,9 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
             [Required]            
             [Display(Name = "Section")]
             public int BEEFSectionId { get; set; }
+            [Required]
+            [Display(Name = "Operate On")]
+            public int ApplicantCurrentStatusId { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -82,6 +85,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ViewData["BEEFSectionId"] = new SelectList(_context.BEEFSection, "BEEFSectionId", "Name");
+            ViewData["ApplicantCurrentStatusId"] = new SelectList(_context.ApplicantCurrentStatus, "ApplicantCurrentStatusId", "ProcessState");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -99,7 +103,8 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    BEEFSectionId = Input.BEEFSectionId
+                    BEEFSectionId = Input.BEEFSectionId,
+                    ApplicantCurrentStatusId = Input.ApplicantCurrentStatusId
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
@@ -113,7 +118,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    bool IsSend = _emailSender.SendEmail(Input.Email, "Confirm your email",
+                    bool IsSend = await _emailSender.SendEmail(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)

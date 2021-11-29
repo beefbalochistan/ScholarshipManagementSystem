@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace ScholarshipManagementSystem.Controllers
 {
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,11 +22,11 @@ namespace ScholarshipManagementSystem.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index2()
         {
             return View();
         }
-        public IActionResult Index2()
+        public IActionResult Index()
         {
             ViewData["Years"] = new SelectList(_context.ScholarshipFiscalYear.OrderByDescending(a=>a.Code), "Code", "Code");
             ViewBag.value = _context.ScholarshipFiscalYear.Max(a=>a.Description);

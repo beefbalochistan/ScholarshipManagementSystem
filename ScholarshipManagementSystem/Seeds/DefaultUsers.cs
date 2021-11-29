@@ -61,7 +61,10 @@ namespace ScholarshipManagementSystem.Seeds
         private async static Task SeedClaimsForSuperAdmin(this RoleManager<IdentityRole> roleManager)
         {
             var adminRole = await roleManager.FindByNameAsync("SuperAdmin");
-            await roleManager.AddPermissionClaim(adminRole, "Country");
+            await roleManager.AddPermissionClaim(adminRole, "FormCollection");
+            await roleManager.AddPermissionClaim(adminRole, "SuperUser");
+            await roleManager.AddPermissionClaim(adminRole, "Applicant");        
+            await roleManager.AddPermissionClaim(adminRole, "FormEntry");        
         }
 
         public static async Task AddPermissionClaim(this RoleManager<IdentityRole> roleManager, IdentityRole role, string module)

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<DAL.Models.Domain.Student.ApplicantStudent>
+
+
+<ul class="list-unstyled" data-simplebar style="max-height: 470px;">
+
+    @{ int counter = 1;}
+    @foreach (var item in Model)
+    {                         
+        <li class="@((counter % 2) == 0 ? "right" : "")">
+            <div class="conversation-list">                
+                <div class="ctext-wrap">                    
+                    <div class="conversation-name">@item.UserAccessToForward.ApplicantCurrentStatus.BEEFSection.Name</div>
+                    <p>
+                        @item.Comments
+                    </p>
+                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle mr-1"></i> @item.CreatedOn</p>
+                </div>
+            </div>
+        </li>
+        counter++;
+    }
+</ul>

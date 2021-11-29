@@ -143,6 +143,14 @@ public static class Permissions
             public const string Edit = "Permissions.Applicant.Edit";
             public const string Delete = "Permissions.Applicant.Delete";
         }
+        public static class FormCollection
+        {
+            public const string View = "Permissions.FormCollection.View";            
+        }
+        public static class FormEntry
+        {
+            public const string View = "Permissions.FormEntry.View";
+        }
         public static class SuperUser
         {
             public const string View = "Permissions.SuperUser.View";            

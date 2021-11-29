@@ -16,15 +16,17 @@ namespace DAL.Models.Domain.Student
         public int ApplicantId { get; set; }
         public string SelectionStatus { get; set; }
         public string ApplicantReferenceId { get; set; }
-        public int SeverityLevel { get; set; }
+        [ForeignKey("SeverityLevel")]
+        public int SeverityLevelId { get; set; }
+        [ForeignKey("UserAccessToForward")]
+        public int UserAccessToForwardId { get; set; }
         public string Comments { get; set; }
-        public string Attachment { get; set; }
-        [ForeignKey("Employee")]
-        [Display(Name = "Employee")]
-        public int EmployeeId { get; set; }
+        public int ApplicantCurrentStatusId { get; set; }
+        public string Attachment { get; set; }       
         public string UserName { get; set; }
-        public DateTime CreatedOn  { get; set; }
-        public virtual Employee Employee { get; set; }
+        public DateTime CreatedOn  { get; set; }        
         public virtual Applicant Applicant { get; set; }
+        public virtual SeverityLevel SeverityLevel { get; set; }
+        public virtual UserAccessToForward UserAccessToForward { get; set; }
     }
 }
