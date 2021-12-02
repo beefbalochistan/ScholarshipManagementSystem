@@ -9,11 +9,11 @@
         {
             <li class="nav-item text-center d-inline-flex p-3">
                 <a class="nav-link text-center p-0">
-                    @if (counter <= currentPoint)
+                    @if (counter < currentPoint)
                     {
                         <span class="step-number" style="background-color:#556ee6;color:White">@counter.ToString().PadLeft(2, '0')</span>
                     }
-                    else if (counter == (currentPoint + 1))
+                    else if (counter == currentPoint)
                     {
                         <span class="step-number" style="background-color:orange;color:white">@counter.ToString().PadLeft(2, '0')</span>
                     }

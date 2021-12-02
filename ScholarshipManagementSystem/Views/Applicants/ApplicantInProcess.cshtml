@@ -1,16 +1,10 @@
-﻿@{
+﻿@model IEnumerable<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary>
+@{
     ViewBag.pTitle = "Applicant Pending Files";
     ViewBag.pageTitle = "Applicant";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-
-
-
-<!-- ============================================================== -->
-<!-- Start right Content here -->
-<!-- ============================================================== -->
-<!-- Summernote css -->
 <link href="~/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet" type="text/css" />
 <div class="row">
     <div class="col-xl-9 col-lg-8">
@@ -43,7 +37,7 @@
                         @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Design</a></li>*@
                         @foreach (var item in Model)
                         {
-                            <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-projector-screen mr-1"></i> @item.Name <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">04</span></a></li>
+                            <li><a onclick="UpdateRecord(@item)" class="text-muted py-2 d-block"><i class="mdi mdi-projector-screen mr-1"></i> @item.Qualification <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">@item.Applicant.ToString().PadLeft(2, '0')</span></a></li>
                         }
                         @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Business</a></li>
                             <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Project</a></li>
@@ -53,7 +47,7 @@
 
                 <hr class="my-4">
 
-                @*<div>
+                <div>
                         <p class="text-muted">Archive</p>
 
                         <ul class="list-unstyled font-weight-medium">
@@ -122,7 +116,7 @@
                             <li class="list-inline-item"><a href="#" class="badge badge-light font-size-12 mt-2">Lifestyle</a></li>
                             <li class="list-inline-item"><a href="#" class="badge badge-light font-size-12 mt-2">Photography</a></li>
                         </ul>
-                    </div>*@
+                    </div>
             </div>
         </div>
         <!-- end card -->
@@ -139,17 +133,39 @@
 
     <script>
         $(document).ready(function () {
-            fetchRecord();
+            var MaxFYId = '@ViewBag.MaxFYId';
+            var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
+            var SchemeLevelId = '@ViewBag.SchemeLevelId';
+            fetchRecord(MaxFYId, applicantCurrentStatusId, SchemeLevelId);
     })
-function fetchRecord() {
-    $("#fetchspinner").show();
-            $.ajax({
-                url: '@Url.Action("GetResultList", "Applicants")',                
-                success: function (data) {
-                    $("#ApplicantDataPlace").html(data);
-                    $("#fetchspinner").hide();
-                }
-                });
+        function fetchRecord(MaxFYId, applicantCurrentStatusId, SchemeLevelId) {
+        $("#fetchspinner").show();
+        $.ajax({
+            url: '@Url.Action("GetResultList", "Applicants")',
+            data: {
+                MaxFYId: MaxFYId,
+                applicantCurrentStatusId: applicantCurrentStatusId,
+                SchemeLevelId: SchemeLevelId
+            },
+            success: function (data) {
+                $("#ApplicantDataPlace").html(data);
+                $("#fetchspinner").hide();
+            }
+        });
+        }
+        function UpdateRecord(MaxFYId, applicantCurrentStatusId) {
+        $("#fetchspinner").show();
+        $.ajax({
+            url: '@Url.Action("GetResultList", "Applicants")',
+            data: {
+                MaxFYId: MaxFYId,
+                applicantCurrentStatusId: applicantCurrentStatusId
+            },
+            success: function (data) {
+                $("#ApplicantDataPlace").html(data);
+                $("#fetchspinner").hide();
+            }
+        });
     }
     </script>
 }

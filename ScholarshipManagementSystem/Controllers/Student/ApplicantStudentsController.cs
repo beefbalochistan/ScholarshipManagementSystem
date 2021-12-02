@@ -229,6 +229,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 }
                 //-------------------------------------------------------
                 _context.Add(obj);
+                applicantInfo.ApplicantCurrentStatusId = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
+                _context.Update(applicantInfo);                
                 await _context.SaveChangesAsync();
                 return "Uploaded Successfully!";
             }

@@ -19,6 +19,7 @@ using SMSService.Models.Domain.AutoSMSApi;
 using DAL.Models.Domain.ScholarshipSetup;
 using Microsoft.AspNetCore.Identity;
 using DAL.Models;
+using DAL.Models.ViewModels.ApplicantInProcess;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -39,30 +40,25 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
-        public async Task<IActionResult> GetResultList()
-        {
-            int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
-            /*var applicationDbContext = _context.Applicant
-                        .Include(a => a.DegreeScholarshipLevel)                        
-                        .Include(a => a.SchemeLevelPolicy.SchemeLevel)
-                        .Where(a=>a.Sc'hemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYearId == MaxFYId && a.ApplicantCurrentStatusId == applicantCurrentStatusId && a.SelectionStatus == "Selected");//KDA Hard*/
-            /*var applicationDbContext = await _context.ApplicantStudent
-                        *//*.Include(a => a.Applicant.DegreeScholarshipLevel)*//*                        
-                        .Include(a => a.Applicant.SchemeLevelPolicy.SchemeLevel)
-                        .Include(a => a.Applicant.SchemeLevelPolicy.PolicySRCForum)
-                        .Where(a => a.Applicant.SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYearId == MaxFYId && a.Applicant.SelectionStatus == "Selected" && a.ApplicantCurrentStatusId == applicantCurrentStatusId)
-                        .GroupBy(a=> new { a.ApplicantId, a.ApplicantReferenceId, a.Applicant.RollNumber, a.Applicant.Name, StudentMobile = a.Applicant.SchemeLevelPolicy.SchemeLevel.Name})
-                        .Select(x => new Applicant { ApplicantId = x.Key.ApplicantId, DistrictId = (x.Count(a=>a.ApplicantCurrentStatusId == applicantCurrentStatusId)+1), ApplicantReferenceNo = x.Key.ApplicantReferenceId, RollNumber = x.Key.RollNumber, Name = x.Key.Name, StudentMobile = x.Key.StudentMobile })
-                        .ToListAsync();//KDA Hard*/
-            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}", 3, 2).ToListAsync();
+        public async Task<IActionResult> GetResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
+        {                                
+            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, SchemeLevelId).ToListAsync();
+            /*ParentApplicantInProcess mymodel = new ParentApplicantInProcess();
+            mymodel.SPApplicantInProcessList = applicationDbContext;
+            mymodel.SPApplicantInProcessSummaryList = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummary] {0}, {1}", applicantCurrentStatusId, MaxFYId).ToListAsync(); ;*/
             return PartialView(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantInProcess()
         {
-            var applicationDbContext = _context.Scheme/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
-            return View(await applicationDbContext.ToListAsync());
+            int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);            
+            int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;            
+            ViewBag.MaxFYId = MaxFYId;
+            ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
+            ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
+
+            var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+            return View(applicationDbContext);
         }
         public IActionResult CollectForm(string id)
         {
@@ -230,7 +226,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {            
             if (mobileNo != null)
             {
-                mobileNo = "03327822567";
+                //mobileNo = "03327822567";
                 //--------------------SMS Alert------------------------------
                 SMSAPIService ConfigObj = new SMSAPIService();
                 ConfigObj = _context.SMSAPIService.Find(1);
@@ -310,7 +306,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {
             model.IsFormSubmitted = true;            
             model.IsFormEntered = false;            
-            model.ApplicantCurrentStatusId = 2;            
+            model.ApplicantCurrentStatusId = 3;            
             model.EntryThrough = "Manual";
             model.SelectionStatus = "Pending";
             model.ProvienceId = 1;            
@@ -571,7 +567,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                                 applicant.Picture = dataStream.ToArray();
                             }
                         }
-                    applicant.ApplicantCurrentStatusId = 3;//KDA Hard
+                    applicant.ApplicantCurrentStatusId = 4;//KDA Hard
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();                    
                 }
@@ -745,7 +741,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         }
                     }
                     applicant.IsFormEntered = true;
-                    applicant.ApplicantCurrentStatusId = 2;//KDA Hard
+                    applicant.ApplicantCurrentStatusId = 4;//KDA Hard
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();
                 }

@@ -69,5 +69,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
         [NotMapped]
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }
+        public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary> SPApplicantInProcessSummary { get; set; }
+        public DbSet<DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess> GetUserSchemeLevelAccess { get; set; }
     }
 }

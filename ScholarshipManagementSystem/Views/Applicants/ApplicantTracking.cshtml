@@ -429,11 +429,11 @@ else
                         $('#s_attach_cnic').prop('checked', response.attach_CNIC_BForm);
                         $('#s_attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
                         $('#formsubmitdate').text(response.formSubmittedOnDate);
-                        @*if (response.applicantCurrentStatusId == UserCurrentAccess) {
+                        if (response.applicantCurrentStatusId == UserCurrentAccess) {
                             $('#commentPortion').show();
                         } else {
                             $('#commentPortion').hide();
-                        }*@
+                        }
                         if (response.selectionMethodId > 2) {
                             $('#s_attach_death').prop('checked', response.attach_Father_Death_Certificate);
                             $('#s_attach_payslip').prop('checked', response.attach_Payslip);
@@ -669,6 +669,7 @@ else
                         $("#UserAccessToForwardId").val(0);
                         $('#msgbox').val('');
                         $('#msgbox').focus();
+                        $('#commentPortion').hide();
                     },
                     error: function () {
                         alert("Error Applicant Tracking!");
