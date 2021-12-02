@@ -102,12 +102,22 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                     }
                     else
                     {
-                        //Doublicate
-                        var oldMaxSRCForumId = _context.PolicySRCForum.Where(a=>a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId && a.IsEndorse == true).Max(a=>a.PolicySRCForumId);
-                        _context.Add(policySRCForum);
-                        await _context.SaveChangesAsync();
-                        var MaxId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId).Max(a => a.PolicySRCForumId);
-                        await GenerateDuplicateSchemeLevelPolicy(MaxId, oldMaxSRCForumId, policySRCForum.ScholarshipFiscalYearId);
+                        var IsPolicyFreez = _context.PolicySRCForum.Count(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId && a.IsFreez == true);
+                        if (IsPolicyFreez > 0)
+                        {
+                            ViewBag.message = "Failed, System already Generated First Merit List With Same Fiscal Year Policy!";
+                            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId), "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
+                            return View(policySRCForum);
+                        }
+                        else
+                        {
+                            //Doublicate
+                            var oldMaxSRCForumId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId && a.IsEndorse == true).Max(a => a.PolicySRCForumId);
+                            _context.Add(policySRCForum);
+                            await _context.SaveChangesAsync();
+                            var MaxId = _context.PolicySRCForum.Where(a => a.ScholarshipFiscalYearId == policySRCForum.ScholarshipFiscalYearId).Max(a => a.PolicySRCForumId);
+                            await GenerateDuplicateSchemeLevelPolicy(MaxId, oldMaxSRCForumId, policySRCForum.ScholarshipFiscalYearId);
+                        }                        
                     }
                 }
                 else
@@ -123,6 +133,11 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             }
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
             return View(policySRCForum);
+        }
+        [HttpPost]
+        public IActionResult CreatePost([FromBody] PolicySRCForum policySRCForum)
+        {
+            return Json(new { isValid = true });
         }
         private async Task<int> DistrictSlotAllocation(float DOMSSlot, int SRCId, float DistrictThreshold, int SchemeLevelPolicyId, int Stipend, float districtSlotPopulationPer, float districtSlotMPIPer)
         {
@@ -709,7 +724,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             
             var schemeLevelPolicyList = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == oldSRCForumId).ToList();
             foreach (var schemeLevelPolicy in schemeLevelPolicyList)
-            {                
+            {
                 var currentSchemePolicy = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.Institute).Include(a=>a.SchemeLevel.QualificationLevel).Where(a=>a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).FirstOrDefault();
                 currentSchemePolicy.PolicySRCForumId = SRCForumId;
                 currentSchemePolicy.SchemeLevelPolicyId = 0;

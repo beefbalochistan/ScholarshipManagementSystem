@@ -18,6 +18,7 @@ namespace DAL.Models.Domain.ScholarshipSetup
         public string Code { get; set; }
         [Display(Name = "Is Endorse")]
         public bool IsEndorse { get; set; }
+        public bool IsFreez { get; set; } = false;
         [Display(Name = "SRC Minutes")]
         public string SRCMinutesAttachmentPath { get; set; }
         [Display(Name = "Policy Document")]

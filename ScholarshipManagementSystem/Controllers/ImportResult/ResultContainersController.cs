@@ -11,6 +11,7 @@ using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.Student;
 using DAL.Models.ViewModels;
+using DAL.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.ImportResult
 {
@@ -224,13 +225,18 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 }
             }
             await _context.SaveChangesAsync();
-
+            //-------------------------------------------------------------
             ResultRepository resultRepository = await _context.ResultRepository.FindAsync(id);
             resultRepository.IsMeritListGenerated = true;
             resultRepository.currentCounter = counter;
             _context.Update(resultRepository);
             await _context.SaveChangesAsync();
-            //--------------------------------------------------------------
+            //---------------Freez Policy-----------------------------------
+            PolicySRCForum policySRCForum = await _context.PolicySRCForum.FindAsync(currentPolicy.PolicySRCForumId);
+            policySRCForum.IsFreez = true;            
+            _context.Update(policySRCForum);
+            await _context.SaveChangesAsync();
+            //----------------END Freez-------------------------------------
             return RedirectToAction(nameof(Details), new { id });
         }
         public async Task<IActionResult> ApplyCriteria(int id)

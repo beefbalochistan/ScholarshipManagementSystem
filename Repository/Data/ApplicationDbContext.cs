@@ -1,6 +1,7 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
 using DAL.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repository.Data
 {
@@ -66,5 +67,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.SeverityLevel> SeverityLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToForward> userAccessToForward { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
+        [NotMapped]
+        public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }
     }
 }

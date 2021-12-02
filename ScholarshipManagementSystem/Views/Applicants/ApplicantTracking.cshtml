@@ -182,47 +182,64 @@
                                     </div>
                                     <div id="reciptCard" style="display:none">
                                         <div class="col-lg-4">
-                                            <div class="card border border-success">
-                                                <div class="card-header bg-transparent border-success">
-                                                    <h6 class="my-0 text-success"><i class="mdi mdi-check-all mr-3"></i>Form Submitted Successfully</h6>
+                                            <div class="card border border-success">                                             
+                                                <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                                                    <i class="mdi mdi-alert-circle-outline mr-2"></i>
+                                                    Form Submitted Successfully
                                                 </div>
                                                 <div class="card-body">
-                                                    <h6 class="card-title mt-0">Form Information</h6>
-                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                        <input type="checkbox" class="custom-control-input" id="attach_picture" disabled="disabled">
-                                                        <label class="custom-control-label" for="attach_picture"> Pictures</label>
+                                                    <h6 class="card-title mt-0">Check List:</h6>
+                                                    <div>
+                                                        <input type="checkbox" id="s_attach_picture" switch="success" disabled="disabled" />
+                                                        <label style="top: 8px; margin-bottom: 0;" for="s_attach_picture" data-on-label="Yes"
+                                                               data-off-label="No"></label>
+                                                        <label class="control-label mb-0"> Pictures</label>
                                                     </div>
-                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                        <input type="checkbox" class="custom-control-input" id="attach_dmc" disabled="disabled">
-                                                        <label class="custom-control-label" for="attach_dmc"> DMC/Transcripts</label>
+                                                    <div>
+                                                        <input type="checkbox" id="s_attach_dmc" switch="success" disabled="disabled" />
+                                                        <label style="top:8px; margin-bottom:0;" for="s_attach_dmc" data-on-label="Yes"
+                                                               data-off-label="No"></label>
+                                                        <label class="control-label mb-0"> DMC/Transcripts</label>
                                                     </div>
-                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                        <input type="checkbox" class="custom-control-input" id="attach_cnic" disabled="disabled">
-                                                        <label class="custom-control-label" for="attach_cnic"> CNIC/B-Form</label>
+                                                    <div>
+                                                        <input type="checkbox" id="s_attach_cnic" switch="success" disabled="disabled" />
+                                                        <label style="top: 8px; margin-bottom: 0;" for="s_attach_cnic" data-on-label="Yes"
+                                                               data-off-label="No"></label>
+                                                        <label class="control-label mb-0"> CNIC/B-Form</label>
                                                     </div>
-                                                    <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                        <input type="checkbox" class="custom-control-input" id="attach_guardiancnic" disabled="disabled">
-                                                        <label class="custom-control-label" for="attach_guardiancnic"> Father/Mother/Guardian CNIC</label>
+                                                    <div>
+                                                        <input type="checkbox" id="s_attach_guardiancnic" switch="success" disabled="disabled" />
+                                                        <label style="top: 8px; margin-bottom: 0;" for="s_attach_guardiancnic" data-on-label="Yes"
+                                                               data-off-label="No"></label>
+                                                        <label class="control-label mb-0"> Father/Mother/Guardian CNIC</label>
                                                     </div>
                                                     <div id="specialAttachment" style="display:none">
-                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                            <input type="checkbox" class="custom-control-input" id="attach_death" disabled="disabled">
-                                                            <label class="custom-control-label" for="attach_death"> Father Death Certificate</label>
+                                                        <div>
+                                                            <input type="checkbox" id="s_attach_death" switch="success" />
+                                                            <label style="top: 8px; margin-bottom: 0;" for="s_attach_death" data-on-label="Yes"
+                                                                   data-off-label="No"></label>
+                                                            <label class="control-label mb-0"> Father Death Certificate</label>
                                                         </div>
-                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                            <input type="checkbox" class="custom-control-input" id="attach_payslip" disabled="disabled">
-                                                            <label class="custom-control-label" for="attach_payslip"> BPS(1-6) Payslip</label>
+                                                        <div>
+                                                            <input type="checkbox" id="s_attach_payslip" switch="success" disabled="disabled" />
+                                                            <label style="top: 8px; margin-bottom: 0;" for="s_attach_payslip" data-on-label="Yes"
+                                                                   data-off-label="No"></label>
+                                                            <label class="control-label mb-0"> BPS(1-6) Payslip</label>
                                                         </div>
-                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                            <input type="checkbox" class="custom-control-input" id="attach_affidavit" disabled="disabled">
-                                                            <label class="custom-control-label" for="attach_affidavit"> Affidavit(Mother)</label>
+                                                        <div>
+                                                            <input type="checkbox" id="s_attach_affidavit" switch="success" disabled="disabled" />
+                                                            <label style="top: 8px; margin-bottom: 0;" for="s_attach_affidavit" data-on-label="Yes"
+                                                                   data-off-label="No"></label>
+                                                            <label class="control-label mb-0"> Affidavit(Mother)</label>
                                                         </div>
-                                                        <div class="custom-control custom-checkbox custom-checkbox-outline custom-checkbox-info mb-3">
-                                                            <input type="checkbox" class="custom-control-input" id="attach_minority" disabled="disabled">
-                                                            <label class="custom-control-label" for="attach_minority"> Minority Certificate</label>
+                                                        <div>
+                                                            <input type="checkbox" id="s_attach_minority" switch="success" disabled="disabled" />
+                                                            <label style="top: 8px; margin-bottom: 0;" for="s_attach_minority" data-on-label="Yes"
+                                                                   data-off-label="No"></label>
+                                                            <label class="control-label mb-0"> Minority Certificate</label>
                                                         </div>
                                                     </div>
-                                                    <div class="text-right">
+                                                    <div class="text-right mt-2">
                                                         <label id="formsubmitdate"></label>
                                                     </div>
                                                 </div>
@@ -278,7 +295,7 @@
                                                         </div>
                                                         <div class="custom-control mb-2 mr-sm-3">
                                                             <div class="custom-file demoInputBox">
-                                                                <input style="max-width:100px" data-toggle="tooltip" data-placement="top" title="Attach File" type="file" class="custom-file-input" name="files" id="files">                                                                
+                                                                <input style="max-width:100px" data-toggle="tooltip" data-placement="top" title="Attach File" type="file" class="custom-file-input" name="files" id="files">
                                                                 <label class="custom-file-label" for="files"></label>
                                                             </div>
                                                         </div>
@@ -302,7 +319,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </div>                                                                        
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="paymentprocess" role="tabpanel">
                                     <p class="mb-0">
@@ -376,7 +393,7 @@ else
                 var comments = allMessage.substring(0, allMessage.indexOf("-"));
                 //var my = allMessage.substring((allMessage.indexOf("-")) + 2, comments.allMessage);
                 $("#msgbox").val(comments);
-            });            
+            });
 
             var refId = '@ViewBag.RefId';
             if (refId != "") {
@@ -407,10 +424,10 @@ else
                         $('#applicantCurrentStatusId').val(response.applicantCurrentStatusId);
                         $('#refNo').val(refno);
                         //------------------
-                        $('#attach_picture').prop('checked', response.attach_Picture);
-                        $('#attach_dmc').prop('checked', response.attach_DMC_Transcript);
-                        $('#attach_cnic').prop('checked', response.attach_CNIC_BForm);
-                        $('#attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
+                        $('#s_attach_picture').prop('checked', response.attach_Picture);
+                        $('#s_attach_dmc').prop('checked', response.attach_DMC_Transcript);
+                        $('#s_attach_cnic').prop('checked', response.attach_CNIC_BForm);
+                        $('#s_attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
                         $('#formsubmitdate').text(response.formSubmittedOnDate);
                         @*if (response.applicantCurrentStatusId == UserCurrentAccess) {
                             $('#commentPortion').show();
@@ -418,10 +435,10 @@ else
                             $('#commentPortion').hide();
                         }*@
                         if (response.selectionMethodId > 2) {
-                            $('#attach_death').prop('checked', response.attach_Father_Death_Certificate);
-                            $('#attach_payslip').prop('checked', response.attach_Payslip);
-                            $('#attach_affidavit').prop('checked', response.attach_Affidavit);
-                            $('#attach_minority').prop('checked', response.attach_Minority_Certificate);
+                            $('#s_attach_death').prop('checked', response.attach_Father_Death_Certificate);
+                            $('#s_attach_payslip').prop('checked', response.attach_Payslip);
+                            $('#s_attach_affidavit').prop('checked', response.attach_Affidavit);
+                            $('#s_attach_minority').prop('checked', response.attach_Minority_Certificate);
                             $("#specialAttachment").show();
                         } else {
                             $("#specialAttachment").hide();
@@ -564,10 +581,10 @@ else
                     //$("#SeverityLevelId").prop('disabled', 'disabled');
                     $(".severity").hide();
                     //$("#SeverityLevelId").css('background-color', '#F5F5F5');
-                    $("#msgbox").prop('disabled', true);
+                    //$("#msgbox").prop('disabled', true);
                     $("#SeverityLevelId").val(0);
                 } else {
-                    $("#msgbox").prop('disabled', false);
+                    //$("#msgbox").prop('disabled', false);
                     $("#SectionCommentId").prop('disabled', true);
                     $("#SectionCommentId").val(0);
                     $("#SeverityLevelId").val(0);
@@ -593,6 +610,11 @@ else
                     $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
                     return;
                 }
+                if (!$('#msgbox').val().length) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Enter Comments!");
+                    return;
+                }
                 var IsPreDefinedComment = $("#switch").is(':checked');
                 debugger;
                 if (IsPreDefinedComment) {
@@ -608,12 +630,7 @@ else
                         $('#GreenNoteOnFailed').show();
                         $('#GreenNoteOnFailedText').text("Please Select Severity Level!");
                         return;
-                    }
-                    if (!$('#msgbox').val().length) {
-                        $('#GreenNoteOnFailed').show();
-                        $('#GreenNoteOnFailedText').text("Please Enter Comments!");
-                        return;
-                    }
+                    }                    
                 }
             $('#GreenNoteOnFailed').hide();
             debugger;
@@ -625,9 +642,9 @@ else
                 if (!validate(files[0].size)) {
                     return;
                 }
-                //----------------------------------                
+                //----------------------------------
                 data.append("Attachment", files[0]);
-            }            
+            }
                 data.append("applicantId", applicantId);
                 data.append("applicantRefNo", applicantRefNo);
                 data.append("comment", comment);
@@ -664,7 +681,7 @@ else
         function validate(filesize) {
             $('#GreenNoteOnFailed').hide();
             var file_size = filesize;
-            if (file_size > 2097152) {                
+            if (file_size > 2097152) {
                 $('#GreenNoteOnFailed').show();
                 $('#GreenNoteOnFailedText').text("File Size not greater then 2MB'");
                 return false;

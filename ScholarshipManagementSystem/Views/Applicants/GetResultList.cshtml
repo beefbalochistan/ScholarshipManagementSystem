@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<DAL.Models.Domain.Student.Applicant>
+@model IEnumerable<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess>
 
 
 <div class="table-responsive">
@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
+                    @Html.DisplayNameFor(model => model.SchemeLevel)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
@@ -18,27 +18,31 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
+                <th>Round</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RollNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchemeLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <span class="badge badge-pill @((item.Round+1) == 1 ? "badge-soft-success" : (item.Round+1) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
+                </td>
+                <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
+            </tr>
             }
         </tbody>
     </table>

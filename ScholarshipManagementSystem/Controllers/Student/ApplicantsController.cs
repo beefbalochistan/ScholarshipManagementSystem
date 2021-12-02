@@ -35,7 +35,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
 
         // GET: Applicants
         public async Task<IActionResult> Index()
-        {
+        {            
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
@@ -44,11 +44,20 @@ namespace ScholarshipManagementSystem.Controllers.Student
             int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
-            var applicationDbContext = _context.Applicant
+            /*var applicationDbContext = _context.Applicant
                         .Include(a => a.DegreeScholarshipLevel)                        
                         .Include(a => a.SchemeLevelPolicy.SchemeLevel)
-                        .Where(a=>a.SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYearId == MaxFYId && a.ApplicantCurrentStatusId == applicantCurrentStatusId);
-            return PartialView(await applicationDbContext.ToListAsync());
+                        .Where(a=>a.Sc'hemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYearId == MaxFYId && a.ApplicantCurrentStatusId == applicantCurrentStatusId && a.SelectionStatus == "Selected");//KDA Hard*/
+            /*var applicationDbContext = await _context.ApplicantStudent
+                        *//*.Include(a => a.Applicant.DegreeScholarshipLevel)*//*                        
+                        .Include(a => a.Applicant.SchemeLevelPolicy.SchemeLevel)
+                        .Include(a => a.Applicant.SchemeLevelPolicy.PolicySRCForum)
+                        .Where(a => a.Applicant.SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYearId == MaxFYId && a.Applicant.SelectionStatus == "Selected" && a.ApplicantCurrentStatusId == applicantCurrentStatusId)
+                        .GroupBy(a=> new { a.ApplicantId, a.ApplicantReferenceId, a.Applicant.RollNumber, a.Applicant.Name, StudentMobile = a.Applicant.SchemeLevelPolicy.SchemeLevel.Name})
+                        .Select(x => new Applicant { ApplicantId = x.Key.ApplicantId, DistrictId = (x.Count(a=>a.ApplicantCurrentStatusId == applicantCurrentStatusId)+1), ApplicantReferenceNo = x.Key.ApplicantReferenceId, RollNumber = x.Key.RollNumber, Name = x.Key.Name, StudentMobile = x.Key.StudentMobile })
+                        .ToListAsync();//KDA Hard*/
+            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}", 3, 2).ToListAsync();
+            return PartialView(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantInProcess()
         {

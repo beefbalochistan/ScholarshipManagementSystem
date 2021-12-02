@@ -262,7 +262,7 @@
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                         {
                             <li>
-                                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
+                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
                                     <i class="bx bxs-file-pdf"></i>
                                     <span key="t-calendar">File Attachment</span>
                                 </a>
@@ -280,7 +280,7 @@
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                         {
                             <li>
-                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
+                                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
                                     <i class="bx bxs-file-txt"></i>
                                     <span key="t-calendar">In Process Files</span>
                                 </a>
