@@ -134,11 +134,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", policySRCForum.ScholarshipFiscalYearId);
             return View(policySRCForum);
         }
-        [HttpPost]
-        public IActionResult CreatePost([FromBody] PolicySRCForum policySRCForum)
-        {
-            return Json(new { isValid = true });
-        }
+        
         private async Task<int> DistrictSlotAllocation(float DOMSSlot, int SRCId, float DistrictThreshold, int SchemeLevelPolicyId, int Stipend, float districtSlotPopulationPer, float districtSlotMPIPer)
         {
             var totalPopulation = _context.DistrictDetail.Include(a=>a.District).Where(a=>a.District.IsActive == true).Sum(a=>a.Population);

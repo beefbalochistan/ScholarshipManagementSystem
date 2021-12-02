@@ -56,7 +56,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         .GroupBy(a=> new { a.ApplicantId, a.ApplicantReferenceId, a.Applicant.RollNumber, a.Applicant.Name, StudentMobile = a.Applicant.SchemeLevelPolicy.SchemeLevel.Name})
                         .Select(x => new Applicant { ApplicantId = x.Key.ApplicantId, DistrictId = (x.Count(a=>a.ApplicantCurrentStatusId == applicantCurrentStatusId)+1), ApplicantReferenceNo = x.Key.ApplicantReferenceId, RollNumber = x.Key.RollNumber, Name = x.Key.Name, StudentMobile = x.Key.StudentMobile })
                         .ToListAsync();//KDA Hard*/
-            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}", 3, 2).ToListAsync();
+            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}", applicantCurrentStatusId, MaxFYId).ToListAsync();
             return PartialView(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantInProcess()
@@ -230,7 +230,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {            
             if (mobileNo != null)
             {
-                mobileNo = "03327822567";
+                //mobileNo = "03327822567";
                 //--------------------SMS Alert------------------------------
                 SMSAPIService ConfigObj = new SMSAPIService();
                 ConfigObj = _context.SMSAPIService.Find(1);
