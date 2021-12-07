@@ -304,9 +304,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
         [HttpPost]        
         public async Task<IActionResult> CollectForm(Applicant model, int ScholarshipFiscalYearId, int SchemeLevelPolicyId)
         {
-            model.IsFormSubmitted = true;            
+            model.IsFormSubmitted = false;            
             model.IsFormEntered = false;            
-            model.ApplicantCurrentStatusId = 3;            
+            model.ApplicantCurrentStatusId = 1;            
             model.EntryThrough = "Manual";
             model.SelectionStatus = "Pending";
             model.ProvienceId = 1;            

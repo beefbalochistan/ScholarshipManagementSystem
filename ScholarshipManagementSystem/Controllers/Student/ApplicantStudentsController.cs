@@ -35,6 +35,14 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.ApplicantStudent.Include(a => a.UserAccessToForward.ApplicantCurrentStatus.BEEFSection).Where(a=>a.ApplicantId == id);
             return PartialView(await applicationDbContext.ToListAsync());
         }
+        public ActionResult DisplayPDF(int id)
+        {
+            byte[] byteArray = _context.ApplicantStudent.Find(8).AttachFileData;
+            MemoryStream pdfStream = new MemoryStream();
+            pdfStream.Write(byteArray, 0, byteArray.Length);
+            pdfStream.Position = 0;
+            return new FileStreamResult(pdfStream, "application/pdf");
+        }
         // GET: ApplicantStudents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
