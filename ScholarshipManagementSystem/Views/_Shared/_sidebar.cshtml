@@ -39,17 +39,17 @@
                                 </a>
                             </li>
                             @*<li>
-                                <a asp-action="Index" asp-controller="SchemeLevelPolicies" class=" waves-effect">
-                                    <i class="bx bxs-ruler"></i>
-                                    <span key="t-calendar">Scheme Policy</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="DistrictQoutaBySchemeLevels" class=" waves-effect">
-                                    <i class="bx bx-shield-quarter"></i>
-                                    <span key="t-calendar">District Qouta</span>
-                                </a>
-                            </li>*@
+                        <a asp-action="Index" asp-controller="SchemeLevelPolicies" class=" waves-effect">
+                            <i class="bx bxs-ruler"></i>
+                            <span key="t-calendar">Scheme Policy</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="DistrictQoutaBySchemeLevels" class=" waves-effect">
+                            <i class="bx bx-shield-quarter"></i>
+                            <span key="t-calendar">District Qouta</span>
+                        </a>
+                    </li>*@
                         </ul>
                     </li>
                 }
@@ -172,18 +172,6 @@
                                 </a>
                             </li>
                             <li>
-                                <a asp-action="Users" asp-controller="UserAccessToForwards" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Forward Access</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Users" asp-controller="UserAccessToSchemeLevels" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Scheme Level Access</span>
-                                </a>
-                            </li>
-                            <li>
                                 <a asp-action="Edit" asp-controller="Preferences" asp-route-id="4" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
                                     <span key="t-calendar">Preferences</span>
@@ -205,6 +193,18 @@
                             <li><a asp-action="Index" asp-controller="Users" key="t-invoice-list">View Users</a></li>
                             <li><a asp-action="Index" asp-controller="Roles" key="t-invoice-detail">Roles</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <a asp-action="Users" asp-controller="UserAccessToForwards" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Forward Access</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Users" asp-controller="UserAccessToSchemeLevels" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Scheme Level Access</span>
+                        </a>
                     </li>
                 }
                 <li class="menu-title" key="t-menu">Compile Result</li>
@@ -288,7 +288,7 @@
                             <li>
                                 <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
                                     <i class="bx bxs-file-txt"></i>
-                                    <span key="t-calendar">In Process Files</span>
+                                    <span key="t-calendar" id="TotalInProcessFiles">In Process Files</span>
                                 </a>
                             </li>
                         }
@@ -303,7 +303,7 @@
                             <span key="t-invoices">SMS Service</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>                            
+                            <li><a asp-action="Index" asp-controller="SMSAPIServices" key="t-invoice-list">Configuration</a></li>
                             <li><a asp-action="Index" asp-controller="SMSAPIServiceAuditTrails" key="t-invoice-detail">Reporting</a></li>
                         </ul>
                     </li>

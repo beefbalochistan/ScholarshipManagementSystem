@@ -20,7 +20,7 @@
                         {
                             var base64 = Convert.ToBase64String(item.AttachFileData);
                             var pdfSrc = String.Format("data:application/pdf;base64,{0}", base64);
-                            <button type="button" class="btn btn-outline-info waves-effect waves-light" id="shower" data-toggle="modal" data-src="@pdfSrc" data-target="#attachmentModal">
+                            <button type="button" class="btn btn-outline-info waves-effect waves-light shower" data-toggle="modal" data-src="@pdfSrc" data-target="#attachmentModal">
                                 <i class="mdi mdi-attachment align-middle mr-1"></i>View
                             </button>
                         }
@@ -56,7 +56,7 @@
 <script src="~/assets/libs/jquery/jquery.min.js"></script>
 <script>
     $(document).ready(function () {        
-        $("#shower").click(function () {            
+        $(".shower").click(function () {            
             $('#pdfFileAttachment').attr("src", $(this).attr("data-src"));
         });
     });

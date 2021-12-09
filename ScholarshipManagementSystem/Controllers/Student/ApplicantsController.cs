@@ -58,6 +58,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
 
             var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+            ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
             return View(applicationDbContext);
         }
         public IActionResult CollectForm(string id)
@@ -76,18 +77,18 @@ namespace ScholarshipManagementSystem.Controllers.Student
             {
                 ViewBag.RefId = RefId;
             }
-            ViewData["SeverityLevelId"] = new SelectList(_context.SeverityLevel, "SeverityLevelId", "Meaning");
-            var SectionCommentList = _context.SectionComment.Include(a=>a.SeverityLevel)
-                .Select(s => new
-                {
-                    SectionCommentId = s.SectionCommentId,
-                    Description = string.Format("{0} - Severity {1}", s.Comment, s.SeverityLevel.Meaning)
-                })
-                .ToList();
             var currentUserId = await _userManager.GetUserAsync(HttpContext.User);
             //var CurrentUser = await _userManager.Users.Where(a => a.Id == currentUserId.Id).FirstOrDefaultAsync();
             ViewBag.UserCurrentAccess = currentUserId.ApplicantCurrentStatusId;
-            ViewData["SectionCommentId"] = new SelectList(SectionCommentList.Where(a=>a.SectionCommentId == currentUserId.BEEFSectionId), "SectionCommentId", "Description");
+            ViewData["SeverityLevelId"] = _context.SeverityLevel;
+            var SectionCommentList = _context.SectionComment.Include(a=>a.SeverityLevel).Where(a=>a.BEEFSectionId == currentUserId.BEEFSectionId)
+                .Select(s => new
+                {
+                    SectionCommentId = s.SeverityLevelId,
+                    Description = string.Format("{0} - Severity {1}", s.Comment, s.SeverityLevel.Meaning)
+                })
+                .ToList();            
+            ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
             ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a=>a.ApplicantCurrentStatus).Where(a=>a.UserId == currentUserId.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
             return View();
