@@ -619,7 +619,8 @@ else
                     $('#GreenNoteOnFailedText').text("Please Enter Comments!");
                     return;
                 }
-                var IsPreDefinedComment = $("#switch").is(':checked');               
+            var IsPreDefinedComment = $("#switch").is(':checked');
+            var severityLevelId = $("#SeverityLevelId").val();
                 @*if (IsPreDefinedComment) {
                     var sectionCommentId = $("#SectionCommentId").val();
                     if (sectionCommentId == 0) {
