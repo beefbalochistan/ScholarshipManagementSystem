@@ -32,7 +32,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<IActionResult> _Index(int id)
         {            
-            var applicationDbContext = _context.ApplicantStudent.Include(a => a.UserAccessToForward.ApplicantCurrentStatus.BEEFSection).Where(a=>a.ApplicantId == id);
+            var applicationDbContext = _context.ApplicantStudent.Include(a => a.ApplicantCurrentStatus.BEEFSection).Where(a=>a.ApplicantId == id);
             return PartialView(await applicationDbContext.ToListAsync());
         }
         public ActionResult DisplayPDF(int id)

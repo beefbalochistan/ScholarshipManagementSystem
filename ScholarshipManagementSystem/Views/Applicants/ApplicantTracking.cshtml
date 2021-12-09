@@ -287,7 +287,8 @@
                                                                 <optgroup label="Comments Serverity">
                                                                     @foreach (var Detail in ViewBag.SeverityLevelId)
                                                                     {
-                                                                        <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>
+                                                                        @*<option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>*@
+                                                                        <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Meaning</option>
                                                                     }
                                                                 </optgroup>
                                                             </select>
