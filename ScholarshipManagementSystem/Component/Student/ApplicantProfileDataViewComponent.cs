@@ -1,6 +1,7 @@
 ﻿using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.Student;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using Repository.Data;
@@ -22,9 +23,9 @@ namespace ScholarshipManagementSystem.Component.Student
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id)
+        public async Task<IViewComponentResult> InvokeAsync(int id, int userCurrentAccess)
         {
-            var applicationDbContext = await _context.Applicant.Include(a => a.SelectionMethod).Include(r => r.District.Division.Provience).Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ApplicantId == id).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, FatherName = a.FatherName, SelectionMethod = new SelectionMethod { Name = a.SelectionMethod.Name }, SelectionStatus = a.SelectionStatus, District = new District {Name = a.District.Name }, Provience = new Provience { Name = a.Provience.Name }, RegisterationNumber = a.RegisterationNumber, DateOfBirth = a.DateOfBirth, Gender = a.Gender, BFormCNIC = a.BFormCNIC, Email = a.Email, StudentMobile = a.StudentMobile, FatherMobile = a.FatherMobile, FatherCareTakerCNIC = a.FatherCareTakerCNIC, RelationWithCareTaker = a.RelationWithCareTaker, Religion = a.Religion, HomeAddress = a.HomeAddress, TehsilName = a.TehsilName, OldInstitudeNameAddress = a.OldInstitudeNameAddress, Year = a.Year, TelephoneWithCode = a.TelephoneWithCode, CurrentInsituteName = a.CurrentInsituteName, CurrentInsituteHOD = a.CurrentInsituteHOD, CurrentInsitutePhone = a.CurrentInsitutePhone, CurrentInsituteFax = a.CurrentInsituteFax, CurrentInsituteFocalPerson = a.CurrentInsituteFocalPerson, CurrentInsituteFocalDesignation = a.CurrentInsituteFocalDesignation, CurrentInsituteFocalEmail = a.CurrentInsituteFocalEmail, CurrentInsituteFocalMobile = a.CurrentInsituteFocalMobile, CurrentInsituteAddress = a.CurrentInsituteAddress, TotalMarks = a.TotalMarks, ReceivedMarks = a.ReceivedMarks, TotalGPA = a.TotalGPA, ReceivedCGPA = a.ReceivedCGPA }).FirstOrDefaultAsync();
+            var applicationDbContext = await _context.Applicant.Include(a => a.SelectionMethod).Include(r => r.District.Division.Provience).Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ApplicantId == id).FirstOrDefaultAsync();
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
             QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("https://beef.org.pk/wp-content/uploads/2021/10/QRCodeBEEFForm.pdf?" + applicationDbContext.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
             QRCode QrCode = new QRCode(QrCodeInfo);
@@ -32,6 +33,12 @@ namespace ScholarshipManagementSystem.Component.Student
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();
             string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
             ViewBag.QrCodeUri = QrUri;
+            ViewBag.UserCurrentAccess = userCurrentAccess;
+            ViewData["ddMethodList"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name", applicationDbContext.SelectionMethodId);
+            ViewData["ddGenderList"] = new SelectList(_context.Gender, "Name", "Name", applicationDbContext.Gender);
+            ViewData["SelectedMethodId"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name");
+            ViewData["ProvienceId"] = new SelectList(_context.Provience.Where(a => a.ProvienceId == 1), "ProvienceId", "Name");
+            ViewData["DistrictId"] = new SelectList(_context.District.Where(a => a.Division.ProvienceId == 1), "DistrictId", "Name", applicationDbContext.DistrictId);
             return await Task.FromResult((IViewComponentResult)View("ApplicantProfileData", applicationDbContext));
         }
     }

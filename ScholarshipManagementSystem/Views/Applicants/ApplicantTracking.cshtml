@@ -152,7 +152,7 @@
                                 <div class="tab-pane active" id="profile" role="tabpanel">
                                     <div id="fetchProfile">
                                         Profile
-                                    </div>
+                                    </div>                                    
                                 </div>
                                 <div class="tab-pane" id="attachments" role="tabpanel">
                                     @*<form class="form-inline">
@@ -472,7 +472,7 @@ else
                         $('#FetchDataOnFailed').hide();
                         notificationme('Fetch Record Successfully!');
                         fetchApplicantProgressStatus(response.applicantId, response.applicantCurrentStatusId);
-                        fetchApplicantProfileData(response.applicantId);
+                        fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);
                         fetchApplicantAttachments(response.applicantId);
                         fetchApplicantMessages(response.applicantId);
                         fetchApplicantComments(response.applicantId);
@@ -515,12 +515,17 @@ else
             };
             toastr.info(message);
         }
-        function fetchApplicantProfileData(applicantId) {
-        $(".loading").show();
+        function fetchApplicantProfileData(applicantId, applicantCurrentStatusId) {
+            $(".loading").show();            
+            var userCurrentAccess = '@ViewBag.UserCurrentAccess';
+            if (applicantCurrentStatusId != userCurrentAccess) {
+                userCurrentAccess = 0;
+            }
             $.ajax({
             url: '@Url.Action("ReloadApplicantProfileData", "Applicants")',
             data: {
-                id: applicantId
+                id: applicantId,
+                userCurrentAccess: userCurrentAccess
             },
                 success: function (data) {
                 $("#fetchProfile").html(data);
@@ -529,7 +534,7 @@ else
         });
         }
         function fetchApplicantProgressStatus(applicantId, applicantCurrentStatusId) {
-    $(".loading").show();
+            $(".loading").show();            
         $.ajax({
             url: '@Url.Action("_Index", "ApplicantCurrentStatus")',
             data: {
@@ -609,7 +614,7 @@ else
                 var applicantId = $("#applicantId").val();
                 var applicantRefNo = $("#refNo").val();
                 var sectionCommentId = 0;
-                var applicantCurrentStatusId = '@ViewBag.UserCurrentAccess';
+            var UserCurrentAccess = '@ViewBag.UserCurrentAccess';
                 if (userAccessToForwardId == 0) {
                     $('#GreenNoteOnFailed').show();
                     $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
@@ -661,7 +666,7 @@ else
                 //data.append("sectionCommentId", sectionCommentId);
                 data.append("severityLevelId", severityLevelId);
                 data.append("userAccessToForwardId", userAccessToForwardId);
-                data.append("applicantCurrentStatusId", applicantCurrentStatusId);
+                data.append("userCurrentAccess", UserCurrentAccess);
                 $.ajax({
                     type: "POST",
                     url: "/ApplicantStudents/SubmitComment",

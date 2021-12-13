@@ -51,6 +51,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel> DegreeLevelQoutaBySchemeLevel { get; set; }
            
         public DbSet<DAL.Models.Domain.MasterSetup.BEEFSection> BEEFSection { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.Gender> Gender { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.ColumnLabel> ColumnLabel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.ResultRepository> ResultRepository { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.ResultContainer> ResultContainer { get; set; }

@@ -176,7 +176,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         [HttpPost]
-        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, string comment, int severityLevelId, int userAccessToForwardId, int applicantCurrentStatusId, IFormFile Attachment)
+        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, string comment, int severityLevelId, int userAccessToForwardId, int userCurrentAccess, IFormFile Attachment)
         {
             var applicantInfo = await _context.Applicant.FindAsync(applicantId);            
 
@@ -188,7 +188,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.Comments = comment;
                 obj.CreatedOn = DateTime.Now;                
                 obj.SeverityLevelId = severityLevelId;                
-                obj.ApplicantCurrentStatusId = applicantCurrentStatusId;
+                obj.ApplicantCurrentStatusId = userCurrentAccess;
                 obj.UserName = User.Identity.Name;
                 obj.UserAccessToForwardId = userAccessToForwardId;
                 //----------------Upload Attachment----------------------

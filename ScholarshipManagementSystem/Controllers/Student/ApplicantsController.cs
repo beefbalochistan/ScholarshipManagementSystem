@@ -136,9 +136,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }).FirstOrDefault();
             return Json(applicantInfo);
         }
-        public IActionResult ReloadApplicantProfileData(int id)
+        public IActionResult ReloadApplicantProfileData(int id, int userCurrentAccess)
         {
-            return ViewComponent("ApplicantProfileData", new { id});
+            return ViewComponent("ApplicantProfileData", new { id, userCurrentAccess});
         }
         public async Task<JsonResult> AjaxApplicantSubmit(int applicantId, bool fourPicture, bool dmc, bool cnic, bool guardiancnic, bool paySlip, bool deathCertificate, bool affidavit, bool minorityCertificate, string mobileNo)
         {
@@ -756,12 +756,38 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     {
                         throw;
                     }
-                }                
-                return RedirectToAction(nameof(ApplicantFormEntry), new { message = "Data has been saved successfully!" });
+                }                    
+                return RedirectToAction(nameof(ApplicantFormEntry), new { message = "Data has been saved successfully!" });                               
             }            
             return RedirectToAction(nameof(ApplicantFormEntry), new { message = "Invalid Input!" });
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicantFormEditFromProfile(Applicant applicant)
+        {          
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //_context.Update(applicant);
+                    var oldResult = await _context.Applicant.FindAsync(applicant.ApplicantId);
+                    _context.Entry(oldResult).CurrentValues.SetValues(applicant);
+                    await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);                    
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicantExists(applicant.ApplicantId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }                               
+            }
+            return RedirectToAction(nameof(ApplicantTracking), new { RefId = applicant.ApplicantReferenceNo });
+        }
         // GET: Applicants/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
