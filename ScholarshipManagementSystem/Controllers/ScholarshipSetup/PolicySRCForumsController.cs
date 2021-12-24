@@ -716,55 +716,86 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
 
         }
         private async Task<bool> GenerateDuplicateSchemeLevelPolicy(int SRCForumId, int oldSRCForumId, int FYId)
-        {
-            
+        {            
             var schemeLevelPolicyList = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == oldSRCForumId).ToList();
             foreach (var schemeLevelPolicy in schemeLevelPolicyList)
             {
+                SchemeLevelPolicy schemeLPObj = new SchemeLevelPolicy();
                 var currentSchemePolicy = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.Institute).Include(a=>a.SchemeLevel.QualificationLevel).Where(a=>a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).FirstOrDefault();
-                currentSchemePolicy.PolicySRCForumId = SRCForumId;
-                currentSchemePolicy.SchemeLevelPolicyId = 0;
-                _context.Add(currentSchemePolicy);
+                var currentSchemeLevelPolicyId = currentSchemePolicy.SchemeLevelPolicyId;
+                schemeLPObj.Amount = currentSchemePolicy.Amount;
+                schemeLPObj.CreatedOn = currentSchemePolicy.CreatedOn;
+                schemeLPObj.DOMS = currentSchemePolicy.DOMS;
+                schemeLPObj.POMS = currentSchemePolicy.POMS;
+                schemeLPObj.SchemeLevelId = currentSchemePolicy.SchemeLevelId;
+                schemeLPObj.ScholarshipSlot = currentSchemePolicy.ScholarshipSlot;
+                schemeLPObj.SQSEVIs = currentSchemePolicy.SQSEVIs;
+                schemeLPObj.SQSOMS = currentSchemePolicy.SQSOMS;                
+                schemeLPObj.PolicySRCForumId = SRCForumId;                
+                _context.Add(schemeLPObj);
                 await _context.SaveChangesAsync();
                 var MaxSchemeLevelPolicyId = _context.SchemeLevelPolicy.Max(a=>a.SchemeLevelPolicyId);
             
                 if (schemeLevelPolicy.SchemeLevelId == 1 || schemeLevelPolicy.SchemeLevelId == 2 || schemeLevelPolicy.SchemeLevelId == 3 || (schemeLevelPolicy.SchemeLevel.SchemeId == 3 && schemeLevelPolicy.SchemeLevel.InstituteId == 2) || (schemeLevelPolicy.SchemeLevel.SchemeId == 4 && schemeLevelPolicy.SchemeLevel.InstituteId == 2))
                 {
-                    var districtQoutaBySchemeLevelList = _context.DistrictQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    var districtQoutaBySchemeLevelList = _context.DistrictQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == currentSchemeLevelPolicyId).ToList();
                     foreach (var districtQouta in districtQoutaBySchemeLevelList)
                     {
-                        districtQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
-                        districtQouta.PolicySRCForumId = SRCForumId;
-                        districtQouta.DistrictQoutaBySchemeLevelId = 0;
-                        await _context.AddAsync(districtQouta);
+                        DistrictQoutaBySchemeLevel Obj = new DistrictQoutaBySchemeLevel();
+                        Obj.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        Obj.PolicySRCForumId = SRCForumId;
+                        Obj.DistrictId = districtQouta.DistrictId;
+                        Obj.CurrentYearPopulation = districtQouta.CurrentYearPopulation;
+                        Obj.DistrictAdditionalSlot = districtQouta.DistrictAdditionalSlot;
+                        Obj.DistrictMPISlot = districtQouta.DistrictMPISlot;
+                        Obj.DistrictPopulationSlot = districtQouta.DistrictPopulationSlot;
+                        Obj.MPI = districtQouta.MPI;
+                        Obj.MPIDifferenceFromStatndard = districtQouta.MPIDifferenceFromStatndard;
+                        Obj.DistrictMPISlot = districtQouta.DistrictMPISlot;
+                        Obj.StipendAmount = districtQouta.StipendAmount;
+                        Obj.Threshold = districtQouta.Threshold;
+                        _context.Add(Obj);
                     }                   
-                    await _context.SaveChangesAsync();                    
+                    _context.SaveChanges();                    
                 }
                 
                 else if (schemeLevelPolicy.SchemeLevelId == 4 || schemeLevelPolicy.SchemeLevelId == 5 || schemeLevelPolicy.SchemeLevelId == 6)// For 10th Pass DAE
                 {
-                    var districtQoutaBySchemeLevelList = _context.DAEInstituteQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    var districtQoutaBySchemeLevelList = _context.DAEInstituteQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == currentSchemeLevelPolicyId).ToList();
                     foreach (var daeQouta in districtQoutaBySchemeLevelList)
                     {
-                        daeQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
-                        daeQouta.PolicySRCForumId = SRCForumId;
-                        daeQouta.DAEInstituteQoutaBySchemeLevelId = 0;
-                        await _context.AddAsync(daeQouta);
+                        DAEInstituteQoutaBySchemeLevel Obj = new DAEInstituteQoutaBySchemeLevel();
+                        Obj.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        Obj.PolicySRCForumId = SRCForumId;
+                        Obj.ClassEnrollment = daeQouta.ClassEnrollment;                        
+                        Obj.DAEInstituteId = daeQouta.DAEInstituteId;                        
+                        Obj.InstituteAdditionalSlot = daeQouta.InstituteAdditionalSlot;                        
+                        Obj.SlotAllocate = daeQouta.SlotAllocate;                        
+                        Obj.StipendAmount = daeQouta.StipendAmount;                        
+                        Obj.Threshold = daeQouta.Threshold;                        
+                        Obj.Year = daeQouta.Year;                                              
+                        _context.Add(Obj);
                     }
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
 
                 else if ((schemeLevelPolicy.SchemeLevel.QualificationLevelId == 5 && schemeLevelPolicy.SchemeLevel.InstituteId != 2) || (schemeLevelPolicy.SchemeLevel.QualificationLevelId == 5 && schemeLevelPolicy.SchemeLevel.InstituteId != 2) || schemeLevelPolicy.SchemeLevel.QualificationLevelId == 6 || schemeLevelPolicy.SchemeLevel.QualificationLevelId == 7)// Degree
                 {
-                    var degreeLevelQoutaBySchemeLevelList = _context.DegreeLevelQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == schemeLevelPolicy.SchemeLevelPolicyId).ToList();
+                    var degreeLevelQoutaBySchemeLevelList = _context.DegreeLevelQoutaBySchemeLevel.Where(a => a.SchemeLevelPolicyId == currentSchemeLevelPolicyId).ToList();
                     foreach (var degreeQouta in degreeLevelQoutaBySchemeLevelList)
                     {
-                        degreeQouta.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
-                        degreeQouta.PolicySRCForumId = SRCForumId;
-                        degreeQouta.DegreeLevelQoutaBySchemeLevelId = 0;
-                        await _context.AddAsync(degreeQouta);
+                        DegreeLevelQoutaBySchemeLevel Obj = new DegreeLevelQoutaBySchemeLevel();
+                        Obj.SchemeLevelPolicyId = MaxSchemeLevelPolicyId;
+                        Obj.PolicySRCForumId = SRCForumId;
+                        Obj.AdditionalSlotAllocate = degreeQouta.AdditionalSlotAllocate;
+                        Obj.ClassEnrollment = degreeQouta.ClassEnrollment;
+                        Obj.DegreeScholarshipLevelId = degreeQouta.DegreeScholarshipLevelId;
+                        Obj.SlotAllocate = degreeQouta.SlotAllocate;
+                        Obj.StipendAmount = degreeQouta.StipendAmount;
+                        Obj.Threshold = degreeQouta.Threshold;                        
+                        _context.Add(Obj);
                     }
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }              
             }
             return true;

@@ -86,7 +86,8 @@
                                         <th style="text-align:left;min-width:180px;background-color:gainsboro">@item.SchemeId. @lastQualificationLevelName</th>
                                         <th>S-TOTAL</th>
                                         <th>@(Model.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount)/12)</th>
-                                        <th>@(12*(Model.Count(a => a.QualificationLevelId == lastQualificationId)))</th>
+                                        @*<th>@(12*(Model.Count(a => a.QualificationLevelId == lastQualificationId)))</th>*@
+                                        <th>@(12)</th>
                                         <th>@(Model.Where(a=>a.QualificationLevelId == lastQualificationId).Sum(a=>a.Amount))</th>
                                         <th>
                                             @{ POMS = Model.Where(a => a.QualificationLevelId == lastQualificationId).Sum(a => a.POMS);}

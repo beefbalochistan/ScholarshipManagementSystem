@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DAL.Models.Domain.ImportResult.DocumentAssistIndicator>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ExcelColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentAssist)
+            </th>
+            <th>Records</th>
+            <th>
+                Result
+            </th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentAssist.ConditionalOperator)
+            </td>
+            <td>@ViewBag.TotalRecord</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalFind)
+            </td>
+            <td>
+                @{
+                    if (item.TotalFind == 0)
+                    {
+                        <img src="~/assets/images/tick.png" width="30" />
+                    }
+                    else
+                    {
+                        <img src="~/assets/images/cross.png" width="30" />
+                    }
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

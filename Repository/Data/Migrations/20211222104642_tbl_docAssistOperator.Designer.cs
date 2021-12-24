@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222104642_tbl_docAssistOperator")]
+    partial class tbl_docAssistOperator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +172,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalFind")
                         .HasColumnType("int");
 
                     b.HasKey("DocumentAssistIndicatorId");
@@ -822,33 +821,6 @@ namespace Repository.Data.Migrations
                     b.HasKey("OperatorId");
 
                     b.ToTable("Operator", "master");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.PaymentMethod", b =>
-                {
-                    b.Property<int>("PaymentMethodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BankName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Logo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PaymentMethodId");
-
-                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Preference", b =>
@@ -2379,24 +2351,6 @@ namespace Repository.Data.Migrations
                     b.HasKey("SchemeLevelId");
 
                     b.ToTable("PolicyView");
-                });
-
-            modelBuilder.Entity("DAL.Models.ViewModels.SPAssistDocumentViewer", b =>
-                {
-                    b.Property<int>("SrNo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ColumnValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalFind")
-                        .HasColumnType("int");
-
-                    b.HasKey("SrNo");
-
-                    b.ToTable("SPAssistDocumentViewer");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess", b =>

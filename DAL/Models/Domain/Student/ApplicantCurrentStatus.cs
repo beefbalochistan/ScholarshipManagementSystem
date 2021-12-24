@@ -20,6 +20,7 @@ namespace DAL.Models.Domain.Student
             public int ProcessValue { get; set; }
             [Display(Name = "Process No")]
             public int VisibleStateNo { get; set; }
+            public string VisibleStateText { get; set; }
             public bool Visibility { get; set; } = true;
             public bool IsActive { get; set; } = true;
             [ForeignKey("BEEFSection")]

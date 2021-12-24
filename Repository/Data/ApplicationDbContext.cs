@@ -26,6 +26,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.QualificationLevel> QualificationLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Discipline> Discipline { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Degree> Degree { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.PaymentMethod> PaymentMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
@@ -58,6 +59,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.ExcelColumnName> ExcelColumnName { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.SelectionCriteria> SelectionCriteria { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Operator> Operator { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.DocumentAssist> DocumentAssist { get; set; }
         public DbSet<DAL.Models.Domain.Student.Applicant> Applicant { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionMethod> SelectionMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Employee> Employee { get; set; }
@@ -66,8 +68,10 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.Student.ApplicantAttachment> ApplicantAttachment { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SectionComment> SectionComment { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SeverityLevel> SeverityLevel { get; set; }
+        public DbSet<DAL.Models.ViewModels.SPAssistDocumentViewer> SPAssistDocumentViewer { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToForward> userAccessToForward { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }
         [NotMapped]
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary> SPApplicantInProcessSummary { get; set; }

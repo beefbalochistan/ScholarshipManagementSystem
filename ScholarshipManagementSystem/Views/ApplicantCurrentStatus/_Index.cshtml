@@ -21,7 +21,7 @@
                     {
                         <span class="step-number" style="background-color:white;color:black">@counter.ToString().PadLeft(2, '0')</span>
                     }
-                    <div class="mt-1">@item.ProcessState</div>
+                    <div class="mt-1">@item.VisibleStateText</div>
                 </a>
             </li>
             counter = counter + 1;

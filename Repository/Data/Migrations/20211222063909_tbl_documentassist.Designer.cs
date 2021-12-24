@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222063909_tbl_documentassist")]
+    partial class tbl_documentassist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,36 +156,6 @@ namespace Repository.Data.Migrations
                     b.HasKey("DocumentAssistId");
 
                     b.ToTable("DocumentAssist", "ImportResult");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssistIndicator", b =>
-                {
-                    b.Property<int>("DocumentAssistIndicatorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DocumentAssistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExcelColumnNameId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalFind")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentAssistIndicatorId");
-
-                    b.HasIndex("DocumentAssistId");
-
-                    b.HasIndex("ExcelColumnNameId");
-
-                    b.HasIndex("ResultRepositoryId");
-
-                    b.ToTable("DocumentAssistIndicator", "ImportResult");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BEEFSection", b =>
@@ -822,33 +794,6 @@ namespace Repository.Data.Migrations
                     b.HasKey("OperatorId");
 
                     b.ToTable("Operator", "master");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.PaymentMethod", b =>
-                {
-                    b.Property<int>("PaymentMethodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BankName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Logo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PaymentMethodId");
-
-                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Preference", b =>
@@ -2381,24 +2326,6 @@ namespace Repository.Data.Migrations
                     b.ToTable("PolicyView");
                 });
 
-            modelBuilder.Entity("DAL.Models.ViewModels.SPAssistDocumentViewer", b =>
-                {
-                    b.Property<int>("SrNo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ColumnValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalFind")
-                        .HasColumnType("int");
-
-                    b.HasKey("SrNo");
-
-                    b.ToTable("SPAssistDocumentViewer");
-                });
-
             modelBuilder.Entity("DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess", b =>
                 {
                     b.Property<string>("UserId")
@@ -2622,33 +2549,6 @@ namespace Repository.Data.Migrations
                     b.HasKey("SMSAPIServiceAuditTrailId");
 
                     b.ToTable("SMSAPIServiceAuditTrail", "sms");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssistIndicator", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.ImportResult.DocumentAssist", "DocumentAssist")
-                        .WithMany()
-                        .HasForeignKey("DocumentAssistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ExcelColumnName", "ExcelColumnName")
-                        .WithMany()
-                        .HasForeignKey("ExcelColumnNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
-                        .WithMany()
-                        .HasForeignKey("ResultRepositoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DocumentAssist");
-
-                    b.Navigation("ExcelColumnName");
-
-                    b.Navigation("ResultRepository");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ColumnLabel", b =>

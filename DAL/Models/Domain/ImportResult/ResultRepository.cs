@@ -19,6 +19,7 @@ namespace DAL.Models.Domain.MasterSetup
         public int ScholarshipFiscalYearId { get; set; }
         [Display(Name = "Scheme Level")]
         public int SchemeLevelPolicyId { get; set; }
+        public int DegreeScholarshipLevelId { get; set; }
         [Display(Name = "Uploaded Date")]
         [DataType(DataType.Date)]
         public DateTime CreatedOn { get; set; }

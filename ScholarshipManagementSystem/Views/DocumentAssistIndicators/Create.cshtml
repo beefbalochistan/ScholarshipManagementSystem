@@ -1,0 +1,38 @@
+﻿@model DAL.Models.Domain.ImportResult.DocumentAssistIndicator
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>DocumentAssistIndicator</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ExcelColumnNameId" class="control-label"></label>
+                <select asp-for="ExcelColumnNameId" class ="form-control" asp-items="ViewBag.ExcelColumnNameId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DocumentAssistId" class="control-label"></label>
+                <select asp-for="DocumentAssistId" class ="form-control" asp-items="ViewBag.DocumentAssistId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResultRepositoryId" class="control-label"></label>
+                <select asp-for="ResultRepositoryId" class ="form-control" asp-items="ViewBag.ResultRepositoryId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
