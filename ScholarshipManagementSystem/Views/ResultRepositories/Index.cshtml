@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.ResultRepository>
+﻿@model IEnumerable<DAL.Models.Domain.ImportResult.ResultRepository>
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @using ScholarshipManagementSystem.Constants
@@ -39,18 +39,19 @@
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
                                                 </th>
+                                                <th>Excel File</th>
                                                 <th>Data Cleaned</th>
                                                 <th>Criteria Applied</th>
                                                 <th>Action</th>
                                                 <th>View</th>
                                                 @* @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
-                                                    {
-                                                        <th>Edit</th>
-                                                    }
-                                                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
-                                                    {
-                                                        <th>Delete</th>
-                                                    }*@
+        {
+            <th>Edit</th>
+        }
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
+        {
+            <th>Delete</th>
+        }*@
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,6 +63,14 @@
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        if (item.resultFilePath != null)
+                                                        {
+                                                            <a href="@item.resultFilePath">Download</a>
+                                                        }
+                                                    }
                                                 </td>
                                                 <td>
                                                     @{

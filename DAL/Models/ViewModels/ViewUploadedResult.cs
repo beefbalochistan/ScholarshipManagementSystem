@@ -1,4 +1,5 @@
-﻿using DAL.Models.Domain.MasterSetup;
+﻿using DAL.Models.Domain.ImportResult;
+using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.ScholarshipSetup;
 using System;
 using System.Collections.Generic;

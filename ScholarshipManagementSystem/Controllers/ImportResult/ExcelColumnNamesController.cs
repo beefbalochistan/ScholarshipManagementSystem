@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.ImportResult;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {

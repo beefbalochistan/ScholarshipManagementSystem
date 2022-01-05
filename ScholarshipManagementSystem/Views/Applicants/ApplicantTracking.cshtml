@@ -518,9 +518,9 @@ else
         function fetchApplicantProfileData(applicantId, applicantCurrentStatusId) {
             $(".loading").show();            
             var userCurrentAccess = '@ViewBag.UserCurrentAccess';
-            @*if (applicantCurrentStatusId != userCurrentAccess) {
+            if (applicantCurrentStatusId != userCurrentAccess) {
                 userCurrentAccess = 0;
-            }*@
+            }
             $.ajax({
             url: '@Url.Action("ReloadApplicantProfileData", "Applicants")',
             data: {

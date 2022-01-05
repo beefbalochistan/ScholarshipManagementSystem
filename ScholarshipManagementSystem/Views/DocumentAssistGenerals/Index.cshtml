@@ -1,0 +1,54 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SchemeLevel.Scheme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SchemeLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExcelColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentAssist)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchemeLevel.Scheme.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentAssist.ConditionalOperator)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DocumentAssistGeneralId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DocumentAssistGeneralId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DocumentAssistGeneralId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

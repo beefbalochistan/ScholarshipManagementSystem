@@ -9,30 +9,139 @@
 
 <h4>DocumentAssistIndicator</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-3">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ExcelColumnNameId" class="control-label"></label>
-                <select asp-for="ExcelColumnNameId" class ="form-control" asp-items="ViewBag.ExcelColumnNameId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DocumentAssistId" class="control-label"></label>
-                <select asp-for="DocumentAssistId" class ="form-control" asp-items="ViewBag.DocumentAssistId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ResultRepositoryId" class="control-label"></label>
-                <select asp-for="ResultRepositoryId" class ="form-control" asp-items="ViewBag.ResultRepositoryId"></select>
-            </div>
+                <label class="control-label">Select Scheme</label>
+                <select id="SchemeId" class="form-control" asp-items="ViewBag.SchemeId"></select>
+            </div>            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Select Fiscal Year</label>
+                <select id="PolicySRCForumId" class="form-control" asp-items="ViewBag.PolicySRCForumId">
+                    <option value="0">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Select Scheme Level</label>
+                <select id="SchemeLevelId" class="form-control">
+                    <option value="0">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="degreeLevelDiv" style="display:none">
+                <label class="control-label">Select Degree Level</label>
+                <select id="DegreeScholarshipLevelId" class="form-control">
+                    <option value="0">-Select-</option>
+                </select>
+            </div>
+        </div>
     </div>
-</div>
-
+</form>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#PolicySRCForumId").val(0);
+            $("#SchemeLevelId").val(0);
+            $("#SchemeId").val(0);
+            $("#PolicySRCForumId").change(function () {
+                var PolicySRCForumId = $("#PolicySRCForumId").val();
+                $("#TempScholarshipFiscalYear").val($("#PolicySRCForumId option:selected").text());
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeId != 0) {
+                    if (PolicySRCForumId != 0) {
+                        $("#SchemeLevelId").empty();
+                        $.get("/DocumentAssistIndicators/GetSchemeLevels", { policySRCForumId: PolicySRCForumId, schemeId: SchemeId }, function (data) {
+                            $("#SchemeLevelId").empty();
+                            $("#SchemeLevelId").append('<option value="0">Select...</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                        return false;
+                    } else {
+                        $("#SchemeLevelId").empty();
+                        $("#SchemeLevelId").append('<option value="0">-Select-</option>');
+                        $("#DegreeScholarshipLevelId").empty();
+                        $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                    }
+                } else {
+                    $("#PolicySRCForumId").val(0);
+                }
+            });
+
+            $("#SchemeLevelId").change(function () {
+                var SchemeLevelId = $("#SchemeLevelId").val();
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeLevelId != 0) {
+                    if (SchemeId >= 4) {
+                        $.get("/DocumentAssistIndicators/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
+                            $("#DegreeScholarshipLevelId").empty();
+                            $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#DegreeScholarshipLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                    }
+                    return false;
+                } else {
+                    $("#DegreeScholarshipLevelId").empty();
+                    $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                }
+            });
+
+            $("#SchemeId").change(function () {
+                $("#PolicySRCForumId").empty();
+                $("#PolicySRCForumId").append('<option value="0">-Select-</option>');
+                $("#SchemeLevelId").empty();
+                $("#SchemeLevelId").append('<option value="0">-Select-</option>');
+                $("#DegreeScholarshipLevelId").empty();
+                $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeId >= 4) {
+                    $('#degreeLevelDiv').show();
+                } else {
+                    $('#degreeLevelDiv').hide();
+                }
+            });
+        });
+
+        function fetchSelectionCriteria() {
+            $("#loading").show();
+            var rrId = $('#RRId').val();
+            var columns = $('#Columns').val();
+            var documentAssistId = $('#DocumentAssistId').val();
+            $.ajax({
+                url: '@Url.Action("AddDocumentAssistIndicator", "ResultRepositories")',
+                data: {
+                    rrId: rrId,
+                    DocumentAssistId: documentAssistId,
+                    ExcelColumnNameId: columns,
+                    IsAdd: isAdd
+                },
+                    success: function (data) {
+                    $("#documentAssistIndicatordiv").html(data);
+                    $("#loading").hide();
+                }
+            });
+        }
+    </script>
+}

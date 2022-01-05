@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models.Domain.ImportResult;
 using Repository.Data;
+using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.ScholarshipSetup;
 
 namespace ScholarshipManagementSystem.Controllers.ImportResult
 {
@@ -46,10 +48,40 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
 
             return View(documentAssistIndicator);
         }
-
+        public async Task<JsonResult> GetSchemeLevels(int policySRCForumId, int schemeId)
+        {
+            List<SchemeLevel> schemeLevels = await _context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForumId == policySRCForumId && a.SchemeLevel.SchemeId == schemeId).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToListAsync();
+            var schemeLevelList = schemeLevels.Select(m => new SelectListItem()
+            {
+                Text = m.Name.ToString(),
+                Value = m.SchemeLevelId.ToString(),
+            });
+            return Json(schemeLevelList);
+        }
+        public async Task<JsonResult> GetDegreeLevels(int schemeLevelId)
+        {
+            List<DegreeScholarshipLevel> degreeLevels = await _context.DegreeScholarshipLevel.Where(a => a.SchemeLevelId == schemeLevelId).ToListAsync();
+            var degreeLevelList = degreeLevels.Select(m => new SelectListItem()
+            {
+                Text = m.Name.ToString(),
+                Value = m.DegreeLevelId.ToString(),
+            });
+            return Json(degreeLevelList);
+        }
         // GET: DocumentAssistIndicators/Create
         public IActionResult Create()
         {
+            var schemeList = _context.Scheme.ToList();
+            schemeList.Insert(0, new Scheme { SchemeId = 0, Name = "Select" });
+            ViewData["SchemeId"] = new SelectList(schemeList, "SchemeId", "Name");
+            var qry = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Join(_context.ScholarshipFiscalYear, s => s.ScholarshipFiscalYearId, i => i.ScholarshipFiscalYearId, (s, i) => new { s, i })
+             .GroupBy(g => new { g.s.ScholarshipFiscalYearId })
+             .Select(g => new PolicySRCForum
+             {
+                 PolicySRCForumId = g.Max(p => p.s.PolicySRCForumId),
+                 Code = g.Max(p => p.i.Code)
+             });
+            ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId");
             ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId");
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId");

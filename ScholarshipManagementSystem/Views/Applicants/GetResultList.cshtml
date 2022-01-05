@@ -41,7 +41,7 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        <span class="badge badge-pill @((item.Round+1) == 1 ? "badge-soft-success" : (item.Round+1) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
+                        <span class="badge badge-pill @((item.Round) == 1 ? "badge-soft-success" : (item.Round) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
                     </td>
                     <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
                 </tr>

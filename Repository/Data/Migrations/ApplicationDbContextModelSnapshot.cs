@@ -141,71 +141,7 @@ namespace Repository.Data.Migrations
                     b.ToTable("AuditLogs");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssist", b =>
-                {
-                    b.Property<int>("DocumentAssistId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConditionalOperator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("DocumentAssistId");
-
-                    b.ToTable("DocumentAssist", "ImportResult");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssistIndicator", b =>
-                {
-                    b.Property<int>("DocumentAssistIndicatorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DocumentAssistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExcelColumnNameId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalFind")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentAssistIndicatorId");
-
-                    b.HasIndex("DocumentAssistId");
-
-                    b.HasIndex("ExcelColumnNameId");
-
-                    b.HasIndex("ResultRepositoryId");
-
-                    b.ToTable("DocumentAssistIndicator", "ImportResult");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BEEFSection", b =>
-                {
-                    b.Property<int>("BEEFSectionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BEEFSectionId");
-
-                    b.ToTable("BEEFSection", "master");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ColumnLabel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ColumnLabel", b =>
                 {
                     b.Property<int>("ColumnLabelId")
                         .ValueGeneratedOnAdd()
@@ -268,6 +204,358 @@ namespace Repository.Data.Migrations
                     b.HasIndex("ResultRepositoryId");
 
                     b.ToTable("ColumnLabel", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ColumnLabelTemp", b =>
+                {
+                    b.Property<int>("ColumnLabelTempId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("C1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C10")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C11")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C12")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C13")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C14")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C15")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C9")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ResultRepositoryTempId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ColumnLabelTempId");
+
+                    b.HasIndex("ResultRepositoryTempId");
+
+                    b.ToTable("ColumnLabelTemp", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssist", b =>
+                {
+                    b.Property<int>("DocumentAssistId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConditionalOperator")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DocumentAssistId");
+
+                    b.ToTable("DocumentAssist", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssistIndicator", b =>
+                {
+                    b.Property<int>("DocumentAssistIndicatorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DocumentAssistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExcelColumnNameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResultRepositoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalFind")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentAssistIndicatorId");
+
+                    b.HasIndex("DocumentAssistId");
+
+                    b.HasIndex("ExcelColumnNameId");
+
+                    b.HasIndex("ResultRepositoryId");
+
+                    b.ToTable("DocumentAssistIndicator", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ExcelColumnName", b =>
+                {
+                    b.Property<int>("ExcelColumnNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExcelColumnNameId");
+
+                    b.ToTable("ExcelColumnName", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultContainer", b =>
+                {
+                    b.Property<int>("ResultContainerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CGPA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CNIC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Candidate_District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Father_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Group")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institute")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institute_District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsOnCriteria")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Marks_")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pass_Fail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("REG_NO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ResultRepositoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Roll_NO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResultContainerId");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("ResultRepositoryId");
+
+                    b.ToTable("ResultContainer", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultContainerTemp", b =>
+                {
+                    b.Property<int>("ResultContainerTempId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CGPA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CNIC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Candidate_District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Father_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Group")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institute")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institute_District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Marks_")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pass_Fail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("REG_NO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ResultRepositoryTempId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Roll_NO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResultContainerTempId");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("ResultRepositoryTempId");
+
+                    b.ToTable("ResultContainerTemp", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultRepository", b =>
+                {
+                    b.Property<int>("ResultRepositoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DegreeScholarshipLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDataCleaned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMeritListGenerated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSelctionCriteriaApplied")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SchemeLevelPolicyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScholarshipFiscalYearId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("currentCounter")
+                        .HasColumnType("int");
+
+                    b.Property<string>("resultFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("resultScannedFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResultRepositoryId");
+
+                    b.HasIndex("SchemeLevelPolicyId");
+
+                    b.HasIndex("ScholarshipFiscalYearId");
+
+                    b.ToTable("ResultRepository", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultRepositoryTemp", b =>
+                {
+                    b.Property<int>("ResultRepositoryTempId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DegreeScholarshipLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeLevelPolicyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScholarshipFiscalYearId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("resultFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("resultScannedFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResultRepositoryTempId");
+
+                    b.HasIndex("SchemeLevelPolicyId");
+
+                    b.HasIndex("ScholarshipFiscalYearId");
+
+                    b.ToTable("ResultRepositoryTemp", "ImportResult");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BEEFSection", b =>
+                {
+                    b.Property<int>("BEEFSectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BEEFSectionId");
+
+                    b.ToTable("BEEFSection", "master");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
@@ -564,6 +852,41 @@ namespace Repository.Data.Migrations
                     b.ToTable("Division", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DocumentAssistGeneral", b =>
+                {
+                    b.Property<int>("DocumentAssistGeneralId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("DegreeScholarshipLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocumentAssistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExcelColumnNameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalFind")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentAssistGeneralId");
+
+                    b.HasIndex("DegreeScholarshipLevelId");
+
+                    b.HasIndex("DocumentAssistId");
+
+                    b.HasIndex("ExcelColumnNameId");
+
+                    b.HasIndex("SchemeLevelId");
+
+                    b.ToTable("DocumentAssistGeneral", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -595,21 +918,6 @@ namespace Repository.Data.Migrations
                     b.HasIndex("BEEFSectionId");
 
                     b.ToTable("Employee", "master");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ExcelColumnName", b =>
-                {
-                    b.Property<int>("ExcelColumnNameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ExcelColumnNameId");
-
-                    b.ToTable("ExcelColumnName", "ImportResult");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Faculty", b =>
@@ -1114,116 +1422,6 @@ namespace Repository.Data.Migrations
                     b.ToTable("QualificationLevel", "master");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultContainer", b =>
-                {
-                    b.Property<int>("ResultContainerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CGPA")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CNIC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Candidate_District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Father_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Institute_District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsOnCriteria")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Marks_")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pass_Fail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("REG_NO")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ResultRepositoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Roll_NO")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ResultContainerId");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("ResultRepositoryId");
-
-                    b.ToTable("ResultContainer", "ImportResult");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultRepository", b =>
-                {
-                    b.Property<int>("ResultRepositoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DegreeScholarshipLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDataCleaned")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMeritListGenerated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSelctionCriteriaApplied")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SchemeLevelPolicyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ScholarshipFiscalYearId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("currentCounter")
-                        .HasColumnType("int");
-
-                    b.Property<string>("resultFilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ResultRepositoryId");
-
-                    b.HasIndex("SchemeLevelPolicyId");
-
-                    b.HasIndex("ScholarshipFiscalYearId");
-
-                    b.ToTable("ResultRepository", "ImportResult");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SMSMassage", b =>
                 {
                     b.Property<int>("SMSMassageTypeId")
@@ -1339,6 +1537,41 @@ namespace Repository.Data.Migrations
                     b.HasIndex("SeverityLevelId");
 
                     b.ToTable("SectionComment", "master");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral", b =>
+                {
+                    b.Property<int>("SelectionCriteriaGeneralId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Condition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DegreeScholarshipLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExcelColumnNameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OperatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchemeLevelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SelectionCriteriaGeneralId");
+
+                    b.HasIndex("DegreeScholarshipLevelId");
+
+                    b.HasIndex("ExcelColumnNameId");
+
+                    b.HasIndex("OperatorId");
+
+                    b.HasIndex("SchemeLevelId");
+
+                    b.ToTable("SelectionCriteriaGeneral", "master");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionMethod", b =>
@@ -1776,6 +2009,9 @@ namespace Repository.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ApplicantSelectionStatusId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Attach_Affidavit")
                         .HasColumnType("bit");
 
@@ -1943,6 +2179,8 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("ApplicantCurrentStatusId");
 
+                    b.HasIndex("ApplicantSelectionStatusId");
+
                     b.HasIndex("DegreeScholarshipLevelId");
 
                     b.HasIndex("DistrictId");
@@ -2015,6 +2253,21 @@ namespace Repository.Data.Migrations
                     b.HasIndex("BEEFSectionId");
 
                     b.ToTable("ApplicantCurrentStatus", "Student");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantSelectionStatus", b =>
+                {
+                    b.Property<int>("ApplicantSelectionStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SelectionStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicantSelectionStatusId");
+
+                    b.ToTable("ApplicantSelectionStatus", "Student");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantStudent", b =>
@@ -2399,6 +2652,33 @@ namespace Repository.Data.Migrations
                     b.ToTable("SPAssistDocumentViewer");
                 });
 
+            modelBuilder.Entity("DAL.Models.ViewModels.SPDocumentViewerReport", b =>
+                {
+                    b.Property<int>("SrNo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ColumnValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ROLL_NO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalFind")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SrNo");
+
+                    b.ToTable("SPDocumentViewerReport");
+                });
+
             modelBuilder.Entity("DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess", b =>
                 {
                     b.Property<string>("UserId")
@@ -2624,6 +2904,28 @@ namespace Repository.Data.Migrations
                     b.ToTable("SMSAPIServiceAuditTrail", "sms");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ColumnLabel", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepository", "ResultRepository")
+                        .WithMany()
+                        .HasForeignKey("ResultRepositoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResultRepository");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ColumnLabelTemp", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepositoryTemp", "ResultRepositoryTemp")
+                        .WithMany()
+                        .HasForeignKey("ResultRepositoryTempId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResultRepositoryTemp");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.ImportResult.DocumentAssistIndicator", b =>
                 {
                     b.HasOne("DAL.Models.Domain.ImportResult.DocumentAssist", "DocumentAssist")
@@ -2632,13 +2934,13 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ExcelColumnName", "ExcelColumnName")
+                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
                         .WithMany()
                         .HasForeignKey("ExcelColumnNameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2651,15 +2953,80 @@ namespace Repository.Data.Migrations
                     b.Navigation("ResultRepository");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ColumnLabel", b =>
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultContainer", b =>
                 {
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("District");
+
                     b.Navigation("ResultRepository");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultContainerTemp", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepositoryTemp", "ResultRepositoryTemp")
+                        .WithMany()
+                        .HasForeignKey("ResultRepositoryTempId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("District");
+
+                    b.Navigation("ResultRepositoryTemp");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultRepository", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                        .WithMany()
+                        .HasForeignKey("SchemeLevelPolicyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                        .WithMany()
+                        .HasForeignKey("ScholarshipFiscalYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SchemeLevelPolicy");
+
+                    b.Navigation("ScholarshipFiscalYear");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.ImportResult.ResultRepositoryTemp", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
+                        .WithMany()
+                        .HasForeignKey("SchemeLevelPolicyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                        .WithMany()
+                        .HasForeignKey("ScholarshipFiscalYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SchemeLevelPolicy");
+
+                    b.Navigation("ScholarshipFiscalYear");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
@@ -2755,6 +3122,39 @@ namespace Repository.Data.Migrations
                     b.Navigation("Provience");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DocumentAssistGeneral", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
+                        .WithMany()
+                        .HasForeignKey("DegreeScholarshipLevelId");
+
+                    b.HasOne("DAL.Models.Domain.ImportResult.DocumentAssist", "DocumentAssist")
+                        .WithMany()
+                        .HasForeignKey("DocumentAssistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
+                        .WithMany()
+                        .HasForeignKey("ExcelColumnNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                        .WithMany()
+                        .HasForeignKey("SchemeLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DegreeScholarshipLevel");
+
+                    b.Navigation("DocumentAssist");
+
+                    b.Navigation("ExcelColumnName");
+
+                    b.Navigation("SchemeLevel");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Employee", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
@@ -2823,44 +3223,6 @@ namespace Repository.Data.Migrations
                     b.Navigation("Institute");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultContainer", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.MasterSetup.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
-                        .WithMany()
-                        .HasForeignKey("ResultRepositoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("District");
-
-                    b.Navigation("ResultRepository");
-                });
-
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.ResultRepository", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy", "SchemeLevelPolicy")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
-                        .WithMany()
-                        .HasForeignKey("ScholarshipFiscalYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SchemeLevelPolicy");
-
-                    b.Navigation("ScholarshipFiscalYear");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Scheme", b =>
                 {
                     b.HasOne("DAL.Models.Domain.ScholarshipSetup.Scholarship", "Scholarship")
@@ -2916,6 +3278,39 @@ namespace Repository.Data.Migrations
                     b.Navigation("BEEFSection");
 
                     b.Navigation("SeverityLevel");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
+                        .WithMany()
+                        .HasForeignKey("DegreeScholarshipLevelId");
+
+                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
+                        .WithMany()
+                        .HasForeignKey("ExcelColumnNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.Operator", "Operator")
+                        .WithMany()
+                        .HasForeignKey("OperatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
+                        .WithMany()
+                        .HasForeignKey("SchemeLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DegreeScholarshipLevel");
+
+                    b.Navigation("ExcelColumnName");
+
+                    b.Navigation("Operator");
+
+                    b.Navigation("SchemeLevel");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToForward", b =>
@@ -3072,7 +3467,7 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.SelectionCriteria", b =>
                 {
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ExcelColumnName", "ExcelColumnName")
+                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
                         .WithMany()
                         .HasForeignKey("ExcelColumnNameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3084,7 +3479,7 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.ResultRepository", "ResultRepository")
+                    b.HasOne("DAL.Models.Domain.ImportResult.ResultRepository", "ResultRepository")
                         .WithMany()
                         .HasForeignKey("ResultRepositoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3102,6 +3497,12 @@ namespace Repository.Data.Migrations
                     b.HasOne("DAL.Models.Domain.Student.ApplicantCurrentStatus", "ApplicantCurrentStatus")
                         .WithMany()
                         .HasForeignKey("ApplicantCurrentStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.Student.ApplicantSelectionStatus", "ApplicantSelectionStatus")
+                        .WithMany()
+                        .HasForeignKey("ApplicantSelectionStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3134,6 +3535,8 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicantCurrentStatus");
+
+                    b.Navigation("ApplicantSelectionStatus");
 
                     b.Navigation("DegreeScholarshipLevel");
 

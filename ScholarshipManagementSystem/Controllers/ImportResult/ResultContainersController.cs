@@ -12,6 +12,7 @@ using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.Student;
 using DAL.Models.ViewModels;
 using DAL.Models.Domain.ScholarshipSetup;
+using DAL.Models.Domain.ImportResult;
 
 namespace ScholarshipManagementSystem.Controllers.ImportResult
 {
@@ -126,6 +127,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.TotalMarks = 1100;//KDA
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Selected";
+                applicant.ApplicantSelectionStatusId = 1;
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -159,6 +161,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.TotalMarks = 1100;//KDA
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Selected";
+                    applicant.ApplicantSelectionStatusId = 1;                    
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;
@@ -186,6 +189,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.TotalMarks = 1100;//KDA
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Awaited";
+                applicant.ApplicantSelectionStatusId = 2;
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -216,6 +220,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.TotalMarks = 1100;//KDA
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Awaited";
+                    applicant.ApplicantSelectionStatusId = 2;
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;

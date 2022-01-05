@@ -31,6 +31,8 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevel> SchemeLevel { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral> SelectionCriteriaGeneral { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral> DocumentAssistGeneral { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear> ScholarshipFiscalYear { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.SchemeLevelPayment> SchemeLevelPayment { get; set; }        
         public DbSet<DAL.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel> DistrictQoutaBySchemeLevel { get; set; }
@@ -53,14 +55,18 @@ namespace Repository.Data
            
         public DbSet<DAL.Models.Domain.MasterSetup.BEEFSection> BEEFSection { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Gender> Gender { get; set; }
-        public DbSet<DAL.Models.Domain.MasterSetup.ColumnLabel> ColumnLabel { get; set; }
-        public DbSet<DAL.Models.Domain.MasterSetup.ResultRepository> ResultRepository { get; set; }
-        public DbSet<DAL.Models.Domain.MasterSetup.ResultContainer> ResultContainer { get; set; }
-        public DbSet<DAL.Models.Domain.MasterSetup.ExcelColumnName> ExcelColumnName { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ColumnLabel> ColumnLabel { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ResultRepository> ResultRepository { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ResultContainer> ResultContainer { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ResultRepositoryTemp> ResultRepositoryTemp { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ResultContainerTemp> ResultContainerTemp { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ColumnLabelTemp> ColumnLabelTemp { get; set; }
+        public DbSet<DAL.Models.Domain.ImportResult.ExcelColumnName> ExcelColumnName { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.SelectionCriteria> SelectionCriteria { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Operator> Operator { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssist> DocumentAssist { get; set; }
         public DbSet<DAL.Models.Domain.Student.Applicant> Applicant { get; set; }
+        public DbSet<DAL.Models.Domain.Student.ApplicantSelectionStatus> ApplicantSelectionStatus { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionMethod> SelectionMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Employee> Employee { get; set; }
         public DbSet<DAL.Models.Domain.Student.ApplicantStudent> ApplicantStudent { get; set; }
@@ -69,6 +75,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.SectionComment> SectionComment { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SeverityLevel> SeverityLevel { get; set; }
         public DbSet<DAL.Models.ViewModels.SPAssistDocumentViewer> SPAssistDocumentViewer { get; set; }
+        public DbSet<DAL.Models.ViewModels.SPDocumentViewerReport> SPDocumentViewerReport { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToForward> userAccessToForward { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }

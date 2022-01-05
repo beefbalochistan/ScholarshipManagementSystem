@@ -1,4 +1,5 @@
-﻿using DAL.Models.Domain.MasterSetup;
+﻿using DAL.Models.Domain.ImportResult;
+using DAL.Models.Domain.MasterSetup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

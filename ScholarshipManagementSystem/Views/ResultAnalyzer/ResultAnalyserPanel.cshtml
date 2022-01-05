@@ -1,0 +1,692 @@
+﻿@model DAL.Models.Domain.ImportResult.ResultRepositoryTemp
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+
+@{
+    ViewData["Title"] = "Create";
+    ViewBag.pageTitle = "Repository";
+    ViewBag.Title = "Result";
+    ViewBag.pTitle = "Result";
+
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="~/assets/libs/twitter-bootstrap-wizard/prettify.css">
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Import Result</h4>
+
+            <div id="progrss-wizard" class="twitter-bs-wizard">
+                <ul class="twitter-bs-wizard-nav nav-justified">
+                    <li class="nav-item">
+                        <a href="#progress-seller-details" class="nav-link" data-toggle="tab" style="pointer-events:none">
+                            <span class="step-number mr-2">01</span>
+                            Scheme
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#progress-company-document" class="nav-link" data-toggle="tab" style="pointer-events:none">
+                            <span class="step-number mr-2">02</span>
+                            Scheme Level
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#progress-attach-result" class="nav-link" data-toggle="tab" style="pointer-events:none">
+                            <span class="step-number mr-2">03</span>
+                            Attach Result
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#progress-bank-detail" class="nav-link" data-toggle="tab">
+                            <span class="step-number mr-2">04</span>
+                            Import Result
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#progress-confirm-detail" class="nav-link" data-toggle="tab">
+                            <span class="step-number mr-2">05</span>
+                            Assist Document
+                        </a>
+                    </li>                   
+                </ul>
+                <div id="bar" class="progress mt-4">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"></div>
+                </div>
+                <div class="tab-content twitter-bs-wizard-tab-content">
+                    <div class="tab-pane" id="progress-seller-details">
+                        <form>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="text-center">
+                                        <div class="mb-4">
+                                            <i id="schemeDiv" class="display-4"></i>
+                                        </div>
+                                        <div>
+                                            <h5>Select BEEF Scheme</h5>
+                                            <div class="form-group">
+                                                <select id="SchemeId" class="form-control" asp-items="ViewBag.SchemeId">
+                                                    <option value="0">-Select-</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="progress-company-document">
+                        <div>
+                            <form>
+                                <input type="hidden" asp-for="CreatedOn" />
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div id="FetchDataOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div id="FetchDataOnFailedText"></div>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="mb-4">
+                                                <i id="schemeLevelDiv" class="display-4"></i>
+                                            </div>
+                                            <div>
+                                                <h5>Select Scholarship Fiscal Year</h5>
+                                                <div class="form-group">
+                                                    <select id="PolicySRCForumId" class="form-control" asp-items="ViewBag.PolicySRCForumId">
+                                                        <option value="0">-Select-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h5>Select Scheme Level</h5>
+                                                <div class="form-group">
+                                                    <select id="SchemeLevelId" class="form-control">
+                                                        <option value="0">-Select-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="degreeLevelDiv" style="display:none">
+                                                <h5>Select Degree Level</h5>
+                                                <div class="form-group">
+                                                    <select id="DegreeScholarshipLevelId" class="form-control">
+                                                        <option value="0">-Select-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="progress-attach-result">
+                        <div>
+                            <div class="mb-4 text-center">
+                                <i id="AttachResultDivIcon" class="display-4"></i>
+                            </div>
+                            <form asp-action="Create" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="CreatedOn" />
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
+                                            <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="btnAttachResult" type="button" onclick="AttachFile()" class="btn btn-info">Attach Result</button>
+                                            <span style="display:none" id="AttachResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Scheme Level</label>
+                                            <input class="form-control TempSchemeLevel" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="display:none" id="degreeInfoStep3">
+                                        <div class="form-group">
+                                            <label class="control-label">Degree Level</label>
+                                            <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Result to Import (Excel)</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="ExcelFile" name="ExcelFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                                                <label id="lblFile" class="custom-file-label" for="customFile">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="progress-bank-detail">
+                        <div>
+                            <div class="mb-4 text-center">
+                                <i id="ImportResultDivIcon" class="display-4"></i>
+                            </div>
+                            <form asp-action="Create" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="CreatedOn" />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
+                                            <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Scheme Level</label>
+                                            <input class="form-control TempSchemeLevel" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="display:none" id="degreeInfoStep3">
+                                        <div class="form-group">
+                                            <label class="control-label">Degree Level</label>
+                                            <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="CreatedOn" class="control-label"></label>
+                                            <input asp-for="CreatedOn" class="form-control" readonly="readonly" />
+                                            <span asp-validation-for="CreatedOn" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem">
+                                                <input type="checkbox" class="custom-control-input" id="checkbox">
+                                                <label class="custom-control-label" for="checkbox">Select Required Columns (Select All)</label>
+                                            </div>
+                                            <select id="selectedColumn" style="width:100%" class="select2 form-control select2-multiple" name="selectedColumn" multiple="multiple" data-placeholder="Choose Column..." asp-items="ViewBag.ExcelColumnNameId">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">Attached File Columns</label>
+                                            <select id="allColumn" style="width:100%" class="select2 form-control select2-multiple" name="allColumn" multiple="multiple" disabled="disabled">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
+                                            <div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
+                                                <input type="checkbox" class="custom-control-input" id="isReupload">
+                                                <label class="custom-control-label" for="isReupload"> Re-Import</label>
+                                            </div>
+                                            <input type="hidden" id="RRId" value="0" />
+                                            <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="progress-confirm-detail">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <h5 class="card-title mb-4">Document Assisment Analyzer</h5>
+                                <form class="form-inline">
+                                    <div class="mb-4">
+                                        <i id="assistDiv" class="display-4"></i>
+                                    </div>
+                                    @* <label class="sr-only" for="inlineFormemail2">Email</label>
+                                        <div class="input-group mb-2 mr-sm-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Select Column</div>
+                                            </div>
+                                            <select id="Columns" class="form-control">
+                                                <option value="0">-Select-</option>
+                                            </select>
+                                        </div>
+                                        <label class="sr-only" for="inlineFormemail2">Email</label>
+                                        <div class="input-group mb-2 mr-sm-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Select Filter</div>
+                                            </div>
+                                            <select id="DocumentAssistId" class="form-control" asp-items="ViewBag.DocumentAssistId">
+                                            </select>
+                                        </div>
+                                        <button type="button" id="btnAddAssistDocumentIndicator" onclick="addDocumentAssistIndicator()" class="btn btn-primary mb-2">Add</button>*@
+                                    <button type="button" id="btnAssistDocument" onclick="assistDocument()" class="btn btn-primary mb-2 ml-2">Assist Document</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-10">
+                                <div id="documentAssistIndicatordiv" class="text-center">
+                                    <div id="loading" style="display:none">
+                                        <img src="~/assets/images/loading.gif" width="70" />
+                                    </div>
+                                </div>
+                                <div id="documentAssistOutputdiv" class="text-center">
+                                    <div id="loading" style="display:none">
+                                        <img src="~/assets/images/loading.gif" width="70" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div id="analize" style="display:none" class="text-center">
+                                    <img src="~/assets/images/analyze.gif" width="120" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <ul class="pager wizard twitter-bs-wizard-pager-link">
+                    <li class="previous"><a href="javascript: void(0);" id="previousLink">Previous</a></li>
+                    <li class="next"><a href="javascript: void(0);" id="nextLink" class="">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- twitter-bootstrap-wizard js -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/libs/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="~/assets/libs/twitter-bootstrap-wizard/prettify.js"></script>
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#checkbox').prop('checked', false);
+            $("#checkbox").click(function () {
+                if ($("#checkbox").is(':checked')) { //select all
+                    $("#selectedColumn").find('option').prop("selected", true);
+                    $("#selectedColumn").trigger('change');
+                } else { //deselect all
+                    $("#selectedColumn").find('option').prop("selected", false);
+                    $("#selectedColumn").trigger('change');
+                }
+            });
+            $('#progrss-wizard').bootstrapWizard({
+                tabClass: 'nav nav-pills',
+                onNext: function (tab, navigation, index) {
+                    if (index == 1) {
+                        if ($("#SchemeId").val() == 0) {
+                            notificationme('Please select Scheme!');
+                            $('#schemeDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                            onPrevious(tab, navigation, 1);
+                        }
+                    } else if (index == 2) {
+                        if ($("#SchemeLevelId").val() == 0) {
+                            notificationme('Please select fill required fields!');
+                            $("#schemeLevelDiv").show();
+                            $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                            onPrevious(tab, navigation, 2);
+                        } else if ($("#SchemeId").val() >= 4 && $("#DegreeScholarshipLevelId").val() == 0) {
+                            notificationme('Please select fill required fields!');
+                            $("#schemeLevelDiv").show();
+                            $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                            onPrevious(tab, navigation, 2);
+                        }
+                    }else if (index == 3) {
+                    }else if (index == 4) {
+                        //fetchAssistDocumentIndicator(0);
+                        fetchAssistDocumentGeneral();
+                        notificationme('Document Assist Indicators defined against selected Scheme Level!');
+                    }
+                    else if (index == 5) {
+                        fetchSelectionCriteriaGeneral();
+                        notificationme('Selection criteria defined against selected Scheme Level!');
+                    }
+                    //$('#progrss-wizard').bootstrapWizard('show', 3);
+                },
+                onPrevious: function (tab, navigation, index) {
+                    //alert(index);
+                    //$('#progrss-wizard').bootstrapWizard('show', 3);
+                    if (index == 1) {
+                        $('#nextLink').css("display", "");
+                        $('#ImportResultDivIcon').removeClass().addClass('display-4');
+                    }
+                },
+                onFinish: function (tab, navigation, index) {
+                    alert(index);
+                    //$('#progrss-wizard').bootstrapWizard('show', 3);
+                },
+            });
+        });
+        $(document).ready(function () {
+            $("#isReuploadDiv").hide();
+            $("#PolicySRCForumId").val(0);
+            $("#SchemeLevelId").val(0);
+            $("#SchemeId").val(0);
+            $("#PolicySRCForumId").change(function () {
+                var PolicySRCForumId = $("#PolicySRCForumId").val();
+                $(".TempScholarshipFiscalYear").val($("#PolicySRCForumId option:selected").text());
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeId != 0) {
+                    if (PolicySRCForumId != 0) {
+                        $("#SchemeLevelId").empty();
+                        $.get("/ResultAnalyzer/GetSchemeLevels", { policySRCForumId: PolicySRCForumId,schemeId: SchemeId }, function (data) {
+                            $("#SchemeLevelId").empty();
+                            $("#SchemeLevelId").append('<option value="0">Select...</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                        return false;
+                    } else {
+                        $("#SchemeLevelId").empty();
+                        $("#SchemeLevelId").append('<option value="0">-Select-</option>');
+                        $("#DegreeScholarshipLevelId").empty();
+                        $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                        $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                    }
+                } else {
+                    $("#PolicySRCForumId").val(0);
+                    $('#FetchDataOnFailed').show();
+                    $('#FetchDataOnFailedText').text("Please First Select Scheme!");
+                    $('#schemelevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                }
+            });
+            $("#SchemeLevelId").change(function () {
+                $('#excelFile').remove();
+                $('#lblFile').text('Choose file');
+                $("#selectedColumn").val(null).trigger('change');
+                var SchemeLevelId = $("#SchemeLevelId").val();
+                var SchemeId = $("#SchemeId").val();
+                $(".TempSchemeLevel").val($("#SchemeLevelId option:selected").text());
+                if (SchemeLevelId != 0) {
+                    if (SchemeId >= 4) {
+                        $.get("/ResultAnalyzer/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
+                            $("#DegreeScholarshipLevelId").empty();
+                            $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#DegreeScholarshipLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                    } else {
+                        $("#schemeLevelDiv").show();
+                        $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                    }
+                    return false;
+                } else {
+                    $("#DegreeScholarshipLevelId").empty();
+                    $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                }
+            });
+            $("#SchemeId").change(function () {
+                $('#excelFile').remove();
+                $('#lblFile').text('Choose file');
+                //$('#selectedColumn').text('');
+                $("#PolicySRCForumId").val(0);
+                $("#SchemeLevelId").val(0);
+                $("#DegreeScholarshipLevelId").val(0);
+                $("#schemeLevelDiv").hide();
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeId == 0) {
+                    $('#schemeDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                } else {
+                    $('#schemeDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                }
+                if (SchemeId >= 4) {
+                    $('#degreeLevelDiv').show();
+                    $('#degreeInfoStep3').show();
+                } else {
+                    $('#degreeLevelDiv').hide();
+                    $('#degreeInfoStep3').hide();
+                }
+            });
+            $("#DegreeScholarshipLevelId").change(function () {
+                $('#excelFile').remove();
+                $('#lblFile').text('Choose file');
+                //$('#selectedColumn').text('');
+                var DegreeScholarshipLevelId = $("#DegreeScholarshipLevelId").val();
+                $(".TempDegreeScholarshipLevelId").val($("#DegreeScholarshipLevelId option:selected").text());
+                if (DegreeScholarshipLevelId == 0) {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                } else {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                }
+            });
+        });
+
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+
+        function UploadFile() {
+            var excelFile = document.getElementById('ExcelFile');
+            //alert(excelFile.files[0].name);
+            if (excelFile.files.length == 0) {
+                alert("Please attach result file!");
+                return;
+            }
+            //alert($('#selectedColumn').val());
+            formData = new FormData();
+            $("#ImportResultLoading").show();
+            $('#btnImportResult').prop('disabled', true);
+            //formData.append("data", JSON.stringify(myModel));
+            for (var i = 0; i < excelFile.files.length; i++) {
+                var file = ExcelFile.files[i];
+                formData.append("excelFile", file);
+            }
+            var isReImportResult = false;
+            if ($('#isReupload').is(":checked")) {
+                isReImportResult = true;
+                alert(isReImportResult);
+            }
+            formData.append("selectedColumn", $('#selectedColumn').val());
+            formData.append("PolicySRCForumId", $('#PolicySRCForumId').val());
+            formData.append("SchemeId", $('#SchemeId').val());
+            formData.append("isReImportResult", isReImportResult);
+            formData.append("SchemeLevelId", $('#SchemeLevelId').val());
+            formData.append("DegreeScholarshipLevelId", $('#DegreeScholarshipLevelId').val());
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadFilePost", "ResultAnalyzer")',
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    debugger;
+                    $("#ImportResultLoading").hide();                    
+                    $('#excelFile').text('');
+                    $('#RRId').val(data.resultRepositoryId);
+                    RefillColumn(data.resultRepositoryId);
+                    notificationme(data.message);
+                    if (data.isValid == false) {
+                        $('#btnImportResult').prop('disabled', false);
+                        $('#ImportResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                    } else {
+                        $('#ImportResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                    }
+                    if (data.reupload) {
+                        debugger;
+                        $('#btnAttachResult').prop('disabled', false);
+                        @*$('#nextLink').css("display", "none");
+                        document.getElementById("ExcelFile").value = null;
+                        $('#lblFile').text('Choose file');*@
+                        $("#isReuploadDiv").show();
+                    }
+                },
+                error: function (data) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function AttachFile() {
+            debugger;
+            var excelFile = document.getElementById('ExcelFile');
+            if (excelFile.files.length == 0) {
+                alert("Please attach result file!");
+                return;
+            }
+            formData = new FormData();
+            $("#AttachResultLoading").show();
+            $('#btnAttachResult').prop('disabled', true);
+            for (var i = 0; i < excelFile.files.length; i++) {
+                var file = ExcelFile.files[i];
+                formData.append("excelFile", file);
+            }
+            var studentSelect = $('#allColumn');
+            studentSelect.val('').change();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AttachFilePost", "ResultAnalyzer")',
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $.each(data.allColumn, function (index, row) {
+                        console.log(row);
+                        var option = new Option(row.text, row.value, true, true);
+                        studentSelect.append(option).trigger('change');
+                    });
+                    $("#AttachResultLoading").hide();
+                    notificationme(data.message);
+                    if (data.isValid == false) {
+                        $('#btnAttachResult').prop('disabled', false);
+                        $('#AttachResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                    } else {
+                        $('#AttachResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                        $('#nextLink').css("display", "");
+                    }
+                },
+                error: function (data) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function RefillColumn(rrId) {
+            $.get("/ResultAnalyzer/GetSelectedColumns", { rrId: rrId }, function (data) {
+                $("#Columns").empty();
+                $("#sCriteriaColumns").empty();
+                $("#Columns").append('<option value="0">Select...</option>');
+                $("#sCriteriaColumns").append('<option value="0">Select...</option>');
+                console.log(data);
+                $.each(data, function (index, row) {
+                    console.log(row);
+                    $("#Columns").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    $("#sCriteriaColumns").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                });
+            });
+        }
+        function addDocumentAssistIndicator() {
+            $("#loading").show();
+            var rrId = $('#RRId').val();
+            var columns = $('#Columns').val();
+            var documentAssistId = $('#DocumentAssistId').val();
+            if (rrId == 0 || columns == 0 || documentAssistId == 0) {
+                alert("Invalid Input!");
+                $("#loading").hide();
+                return;
+            }
+            fetchAssistDocumentIndicator(1);
+        }
+        function assistDocument() {
+            var delay = 4000;
+            $('#btnAddAssistDocumentIndicator').prop('disabled', true);
+            $('#btnAssistDocument').prop('disabled', true);
+            $("#analize").show();
+            var rrId = $('#RRId').val();
+            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var schemeLevelId = $('#SchemeLevelId').val();
+            $.ajax({
+                url: '@Url.Action("AssistDocumentTemp", "DocumentAssistGenerals")',
+                data: {
+                    rrId: rrId,
+                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
+                    SchemeLevelId: schemeLevelId
+                },
+                success: function (data) {
+                    setTimeout(function () {
+                        $("#documentAssistOutputdiv").html(data);
+                        $("#analize").hide();
+                        $("#documentAssistIndicatordiv").hide();
+                    }, delay);
+                }
+            });
+        }
+        function fetchAssistDocumentIndicator(isAdd) {
+            $("#loading").show();
+            var rrId = $('#RRId').val();
+            var columns = $('#Columns').val();
+            var documentAssistId = $('#DocumentAssistId').val();
+            $.ajax({
+                url: '@Url.Action("AddDocumentAssistIndicator", "ResultAnalyzer")',
+                data: {
+                    rrId: rrId,
+                    DocumentAssistId: documentAssistId,
+                    ExcelColumnNameId: columns,
+                    IsAdd: isAdd
+                },
+                    success: function (data) {
+                    $("#documentAssistIndicatordiv").html(data);
+                    $("#loading").hide();
+                }
+            });
+        }
+        function fetchAssistDocumentGeneral() {
+            $("#loading").show();
+            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var schemeLevelId = $('#SchemeLevelId').val();
+            var rrId = $('#RRId').val();
+            $.ajax({
+                url: '@Url.Action("GetDocumentAssistGeneralTemp", "DocumentAssistGenerals")',
+                data: {
+                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
+                    SchemeLevelId: schemeLevelId,
+                    rrId: rrId
+                },
+                    success: function (data) {
+                    $("#documentAssistIndicatordiv").html(data);
+                    $("#loading").hide();
+                }
+            });
+        }
+    </script>
+
+}

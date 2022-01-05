@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models.Domain.MasterSetup
+namespace DAL.Models.Domain.ImportResult
 {
     [Table("ExcelColumnName", Schema = "ImportResult")]
     public class ExcelColumnName

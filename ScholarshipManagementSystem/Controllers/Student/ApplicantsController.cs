@@ -310,6 +310,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             model.ApplicantCurrentStatusId = 1;            
             model.EntryThrough = "Manual";
             model.SelectionStatus = "Pending";
+            model.ApplicantSelectionStatusId = 3;
             model.ProvienceId = 1;            
             var currentPolicy = await _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel.QualificationLevel).Where(a=>a.SchemeLevelPolicyId == SchemeLevelPolicyId).FirstOrDefaultAsync();
             var resultRepository = await _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == model.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == ScholarshipFiscalYearId).FirstOrDefaultAsync();
@@ -339,6 +340,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
 
             Applicant applicant = new Applicant();
             applicant.SelectionStatus = "Pending";
+            applicant.ApplicantSelectionStatusId = 3;
             applicant.EntryThrough = "Manual";
             applicant.SchemeLevelPolicyId = SLPId;
             applicant.DateOfBirth = DateTime.Now.Date;

@@ -1,0 +1,151 @@
+﻿@model DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Selection Criteria</h4>
+<hr />
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Select Scheme</label>
+                <select id="SchemeId" name="SchemeId" class="form-control" asp-items="ViewBag.SchemeId">
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Select Scheme Level</label>
+                <select asp-for="SchemeLevelId" class="form-control" required>
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3" id="degreeLevelDiv" style="display:none">
+            <div class="form-group">
+                <label class="control-label">Select Degree Level</label>
+                <select asp-for="DegreeScholarshipLevelId" class="form-control">
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="">
+                <label class="control-label">Select Operator</label>
+                <select asp-for="OperatorId" class="form-control" asp-items="ViewBag.OperatorId" required>
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="">
+                <label class="control-label">Select Excel Column</label>
+                <select asp-for="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId" required>
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="">
+                <label class="control-label">Conditional Value</label>
+                <input asp-for="Condition" class="form-control" required />                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $("#SchemeLevelId").val('');
+            $("#SchemeId").val('');
+            $("#OperatorId").val('');
+            $("#ExcelColumnNameId").val('');
+
+            $("#SchemeLevelId").change(function () {
+                var SchemeLevelId = $("#SchemeLevelId").val();
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeLevelId != 0) {
+                    if (SchemeId >= 4) {
+                        $.get("/SelectionCriteriaGenerals/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
+                            $("#DegreeScholarshipLevelId").empty();
+                            $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#DegreeScholarshipLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                    }
+                    return false;
+                } else {
+                    $("#DegreeScholarshipLevelId").empty();
+                    $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                }
+            });
+
+            $("#SchemeId").change(function () {
+                var SchemeId = $("#SchemeId").val();
+                $("#OperatorId").val('');
+                $("#ExcelColumnNameId").val('');
+                $("#SchemeLevelId").empty();
+                $.get("/SelectionCriteriaGenerals/GetSchemeLevels", { schemeId: SchemeId }, function (data) {
+                    $("#SchemeLevelId").empty();
+                    $("#SchemeLevelId").append('<option value="0">Select...</option>');
+                    console.log(data);
+                    $.each(data, function (index, row) {
+                        console.log(row);
+                        $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+                $("#DegreeScholarshipLevelId").empty();
+                $("#DegreeScholarshipLevelId").append('<option value="">-Select-</option>');
+                var SchemeId = $("#SchemeId").val();
+                if (SchemeId >= 4) {
+                    $('#degreeLevelDiv').show();
+                } else {
+                    $('#degreeLevelDiv').hide();
+                }
+            });
+        });
+
+        function fetchSelectionCriteria() {
+            $("#loading").show();
+            var rrId = $('#RRId').val();
+            var columns = $('#Columns').val();
+            var OperatorId = $('#OperatorId').val();
+            $.ajax({
+                url: '@Url.Action("AddDocumentAssistIndicator", "ResultRepositories")',
+                data: {
+                    rrId: rrId,
+                    OperatorId: OperatorId,
+                    ExcelColumnNameId: columns,
+                    IsAdd: isAdd
+                },
+                    success: function (data) {
+                    $("#documentAssistIndicatordiv").html(data);
+                    $("#loading").hide();
+                }
+            });
+        }
+    </script>
+}

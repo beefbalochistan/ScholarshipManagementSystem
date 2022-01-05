@@ -101,6 +101,8 @@ namespace DAL.Models.Domain.Student
         public string ScanOtherDocument { get; set; }
         [Display(Name = "Selection Status")]
         public string SelectionStatus { get; set; }
+        [ForeignKey("ApplicantSelectionStatus")]
+        public int ApplicantSelectionStatusId { get; set; }
         [Display(Name = "Selected Method")]
         public int SelectionMethodId { get; set; }
         [Display(Name = "Entry Through")]
@@ -125,5 +127,6 @@ namespace DAL.Models.Domain.Student
         public virtual SelectionMethod SelectionMethod { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
+        public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
     }
 }

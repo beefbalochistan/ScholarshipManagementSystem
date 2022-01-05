@@ -1,0 +1,89 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ExcelColumnName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentAssist)
+                </th>
+                <th>Records</th>
+                <th>
+                    Match
+                </th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocumentAssist.ConditionalOperator)
+                    </td>
+                    <td>@ViewBag.TotalRecord</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalFind)
+                    </td>
+                    <td>
+                        @{
+                            if (item.TotalFind == 0)
+                            {
+                                <img src="~/assets/images/tick.png" width="30" />
+                            }
+                            else
+                            {
+                                <img src="~/assets/images/cross.png" width="30" />
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="ViewScannedRecords" asp-route-column="@item.ExcelColumnName.Name" asp-route-rrId="@ViewBag.RRId" asp-route-DocumentAssistId="@item.DocumentAssistId" asp-controller="DocumentAssistGenerals">View</a>
+                        <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.ExcelColumnName.Name', '@ViewBag.RRId', '@item.DocumentAssistId')" class="btn btn-info waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>                    
+                </div>
+                <div class="modal-body">
+                    <div id="rendercontent">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function createModal(column, rrId, documentAssistId) {
+            debugger;
+            $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("ViewScannedRecords", "DocumentAssistGenerals")',
+                data: {
+                    column: column,
+                    rrId: rrId,
+                    DocumentAssistId: documentAssistId
+                },
+                success: function (data) {
+                    $("#rendercontent").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+    </script>

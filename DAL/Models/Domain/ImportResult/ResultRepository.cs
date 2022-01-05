@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models.Domain.MasterSetup
+namespace DAL.Models.Domain.ImportResult
 {
     [Table("ResultRepository", Schema = "ImportResult")]
     public class ResultRepository
@@ -15,6 +15,7 @@ namespace DAL.Models.Domain.MasterSetup
         public int ResultRepositoryId { get; set; }
         [Display(Name = "Provience")]
         public string resultFilePath { get; set; }
+        public string resultScannedFilePath { get; set; }
         [Display(Name = "Fiscal Year")]
         public int ScholarshipFiscalYearId { get; set; }
         [Display(Name = "Scheme Level")]

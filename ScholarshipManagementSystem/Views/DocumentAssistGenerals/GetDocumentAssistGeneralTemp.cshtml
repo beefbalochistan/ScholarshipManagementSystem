@@ -1,0 +1,28 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ExcelColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentAssist)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocumentAssist.ConditionalOperator)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

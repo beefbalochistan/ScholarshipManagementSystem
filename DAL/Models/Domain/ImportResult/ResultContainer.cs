@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DAL.Models.Domain.MasterSetup;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models.Domain.MasterSetup
+namespace DAL.Models.Domain.ImportResult
 {
     [Table("ResultContainer", Schema = "ImportResult")]
     public class ResultContainer

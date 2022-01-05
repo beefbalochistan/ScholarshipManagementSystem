@@ -1,0 +1,34 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ExcelColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Operator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Condition)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Operator.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
