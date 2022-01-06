@@ -224,10 +224,10 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
-                                            <div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
+                                            @*<div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
                                                 <input type="checkbox" class="custom-control-input" id="isReupload">
                                                 <label class="custom-control-label" for="isReupload"> Re-Import</label>
-                                            </div>
+                                            </div>*@
                                             <input type="hidden" id="RRId" value="0" />
                                             <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
@@ -362,7 +362,7 @@
             });
         });
         $(document).ready(function () {
-            $("#isReuploadDiv").hide();
+            @*$("#isReuploadDiv").hide();*@
             $("#PolicySRCForumId").val(0);
             $("#SchemeLevelId").val(0);
             $("#SchemeId").val(0);
@@ -502,15 +502,15 @@
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
-            var isReImportResult = false;
+            @*var isReImportResult = false;
             if ($('#isReupload').is(":checked")) {
                 isReImportResult = true;
                 alert(isReImportResult);
-            }
+            }*@
             formData.append("selectedColumn", $('#selectedColumn').val());
             formData.append("PolicySRCForumId", $('#PolicySRCForumId').val());
             formData.append("SchemeId", $('#SchemeId').val());
-            formData.append("isReImportResult", isReImportResult);
+            @*formData.append("isReImportResult", isReImportResult);*@
             formData.append("SchemeLevelId", $('#SchemeLevelId').val());
             formData.append("DegreeScholarshipLevelId", $('#DegreeScholarshipLevelId').val());
             $.ajax({
@@ -540,7 +540,7 @@
                         @*$('#nextLink').css("display", "none");
                         document.getElementById("ExcelFile").value = null;
                         $('#lblFile').text('Choose file');*@
-                        $("#isReuploadDiv").show();
+                        @*$("#isReuploadDiv").show();*@
                     }
                 },
                 error: function (data) {

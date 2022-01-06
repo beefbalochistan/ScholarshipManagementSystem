@@ -79,7 +79,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return Json(new { isValid = false, message = "Please attach result file!" });
             }
         }
-        public async Task<JsonResult> UploadFilePost(IFormFile excelFile, bool isReImportResult, string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId)
+        public async Task<JsonResult> UploadFilePost(IFormFile excelFile, /*bool isReImportResult, */string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
                         }
                     }
-                    if(isReImportResult == true && IsResultAlreadyExist != 0)
+                    if(/*isReImportResult == true && */IsResultAlreadyExist != 0)
                     {
                         var ResultRepositoryTempId = 0;
                         if (SchemeId < 4)
