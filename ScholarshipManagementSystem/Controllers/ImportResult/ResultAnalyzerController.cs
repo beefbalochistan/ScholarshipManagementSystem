@@ -122,6 +122,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                         _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultContainerTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
                         _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultRepositoryTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
                         _context.Database.ExecuteSqlRaw("delete [ImportResult].[ColumnLabelTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
+                        //_context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('ImportResult.ResultContainerTemp', RESEED, 1);");                        
                         IsResultAlreadyExist = 0;
                     }                    
                     if (IsResultAlreadyExist == 0)
@@ -135,7 +136,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                 var worksheet = package.Workbook.Worksheets.First();
                                 var rowCount = worksheet.Dimension.Rows;
                                 var colCount = worksheet.Dimension.Columns;
-                                List<int> columnList = new List<int>();
+                                List<int> excelColumnList = new List<int>();
+                                List<int> DbColumnList = new List<int>();
                                 List<string> selectedColumnList = selectedColumn.Split(',').ToList();
                                 bool isFound = false;
                                 for (var val = 0; val < selectedColumnList.Count; val++)
@@ -145,7 +147,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                     {
                                         if (worksheet.Cells[1, col].Value.ToString().ToLower() == selectedColumnList.ElementAt(val).ToLower())
                                         {
-                                            columnList.Add(col);
+                                            excelColumnList.Add(col);
+                                            DbColumnList.Add(_context.ExcelColumnName.Where(a=>a.Name.ToLower() == selectedColumnList.ElementAt(val).ToLower()).Select(a=>a.ExcelColumnNameId).FirstOrDefault());
                                             isFound = true;
                                             break;
                                         }
@@ -158,9 +161,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                 //-------------------------------------------------------
                                 List<string> columnNameList = new List<string>();
                                 int counter = 0;
-                                for (var val = 1; val <= 13; val++)//KDA Hard
+                                for (var val = 1; val <= 14; val++)//KDA Hard
                                 {
-                                    if (counter < columnList.Count && val == columnList.ElementAt(counter))
+                                    if (val == DbColumnList.ElementAt(counter))
                                     {
                                         columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
@@ -170,7 +173,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                         columnNameList.Add("");
                                     }
                                 }
-                                if (columnList.Count == selectedColumnList.Count)
+                                if (excelColumnList.Count == selectedColumnList.Count)
                                 {
                                     ResultRepositoryTemp resultRepository = new ResultRepositoryTemp();
                                     resultRepository.CreatedOn = DateTime.Today;
@@ -195,6 +198,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                         C11 = columnNameList.ElementAt(10),
                                         C12 = columnNameList.ElementAt(11),
                                         C13 = columnNameList.ElementAt(12),
+                                        C14 = columnNameList.ElementAt(13),
                                         IsActive = true,
                                         ResultRepositoryTempId = MaxResultRespositoryId
                                     };
@@ -208,11 +212,11 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                         try
                                         {
                                             List<string> specificExcelRow = new List<string>();
-                                            for (var val = 1; val <= 13; val++)//KDA Hard
+                                            for (var val = 1; val <= 14; val++)//KDA Hard
                                             {
-                                                if (counter < columnList.Count && val == columnList.ElementAt(counter))
+                                                if (val == DbColumnList.ElementAt(counter))
                                                 {
-                                                    specificExcelRow.Add(worksheet.Cells[row, columnList.ElementAt(counter)].Value?.ToString());
+                                                    specificExcelRow.Add(worksheet.Cells[row, excelColumnList.ElementAt(counter)].Value?.ToString());
                                                     counter++;
                                                 }
                                                 else
@@ -237,6 +241,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                                 Remarks = specificExcelRow.ElementAt(10),
                                                 CNIC = specificExcelRow.ElementAt(11),
                                                 CGPA = specificExcelRow.ElementAt(12),
+                                                Department = specificExcelRow.ElementAt(13),
                                                 DistrictId = 1
                                             };
                                             string districtName = result.Candidate_District.ToLower();

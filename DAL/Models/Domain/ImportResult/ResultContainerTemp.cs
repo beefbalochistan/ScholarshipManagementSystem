@@ -26,6 +26,7 @@ namespace DAL.Models.Domain.ImportResult
         public string Remarks { get; set; }        
         public string CNIC { get; set; }        
         public string CGPA { get; set; }        
+        public string Department { get; set; }        
         public int DistrictId { get; set; }
         [ForeignKey("ResultRepository")]
         [Display(Name = "ResultRepository")]

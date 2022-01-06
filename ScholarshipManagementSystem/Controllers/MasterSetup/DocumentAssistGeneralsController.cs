@@ -87,6 +87,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         {
             if (ModelState.IsValid)
             {
+                var IsExist = _context.DocumentAssistGeneral.Count(a=>a.DocumentAssistId == documentAssistGeneral.DocumentAssistId && a.ExcelColumnNameId == documentAssistGeneral.ExcelColumnNameId);
                 _context.Add(documentAssistGeneral);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -112,8 +113,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Where(a => a.SchemeLevelId == documentAssistGeneral.SchemeLevelId).Select(a => a.SchemeId).FirstOrDefault());
-            ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId", documentAssistGeneral.DocumentAssistId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", documentAssistGeneral.ExcelColumnNameId);
+            ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "ConditionalOperator", documentAssistGeneral.DocumentAssistId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name", documentAssistGeneral.ExcelColumnNameId);
             return View(documentAssistGeneral);
         }
 
@@ -150,8 +151,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Where(a => a.SchemeLevelId == documentAssistGeneral.SchemeLevelId).Select(a => a.SchemeId).FirstOrDefault());
-            ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId", documentAssistGeneral.DocumentAssistId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", documentAssistGeneral.ExcelColumnNameId);
+            ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "ConditionalOperator", documentAssistGeneral.DocumentAssistId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name", documentAssistGeneral.ExcelColumnNameId);
             return View(documentAssistGeneral);
         }
 
@@ -231,11 +232,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
 
         public async Task<IActionResult> AssistDocument(int rrId, int SchemeLevelId, int DegreeScholarshipLevelId)
         {
-            var applicationDbContext = await _context.DocumentAssistGeneral.Include(r => r.DocumentAssist).Include(r => r.ExcelColumnName).Where(a => a.SchemeLevelId == SchemeLevelId).ToListAsync();
+            /*var applicationDbContext = await _context.DocumentAssistGeneral.Include(r => r.DocumentAssist).Include(r => r.ExcelColumnName).Where(a => a.SchemeLevelId == SchemeLevelId).ToListAsync();
             if (DegreeScholarshipLevelId != 0)
             {
                 applicationDbContext = applicationDbContext.Where(a => a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).ToList();
-            }
+            }*/
+            var applicationDbContext = await _context.DocumentAssistGeneral.Include(r => r.DocumentAssist).Include(r => r.ExcelColumnName).ToListAsync();
             ColumnLabel columnLabels = await _context.ColumnLabel.Where(a => a.ResultRepositoryId == rrId).FirstOrDefaultAsync();
             List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.ToList();
             List<DocumentAssistGeneral> documentAssistGenerals = new List<DocumentAssistGeneral>();
@@ -264,6 +266,52 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     documentAssistGenerals.ElementAt(counter).TotalFind = await CallSP("exec [ImportResult].[SPCheckDouplicate] {0}, {1}, {2}, {3}", documentAssist.ExcelColumnName.Name, rrId, documentAssist.DocumentAssistId, "ResultContainer", "ResultRepository");
                 }
                 counter++;
+            }
+            if(documentAssistGenerals.Sum(a=>a.TotalFind) == 0)
+            {
+                var resultRepositoryTemp = _context.ResultRepositoryTemp.Find(rrId);
+                ResultRepository resultRepository = new ResultRepository();
+                resultRepository.CreatedOn = DateTime.Today;
+                resultRepository.currentCounter = 0;
+                resultRepository.DegreeScholarshipLevelId = resultRepositoryTemp.DegreeScholarshipLevelId;
+                resultRepository.IsDataCleaned = true;
+                resultRepository.IsMeritListGenerated = false;
+                resultRepository.IsSelctionCriteriaApplied = false;
+                resultRepository.resultFilePath = resultRepositoryTemp.resultFilePath;
+                resultRepository.resultScannedFilePath = resultRepositoryTemp.resultScannedFilePath;
+                resultRepository.SchemeLevelPolicyId = resultRepositoryTemp.SchemeLevelPolicyId;
+                resultRepository.ScholarshipFiscalYearId = resultRepositoryTemp.ScholarshipFiscalYearId;
+                _context.Add(resultRepository);
+                _context.SaveChanges();
+                int RRMaxId = _context.ResultRepository.Max(a=>a.ResultRepositoryId);
+                var resultContainerTemp = _context.ResultContainerTemp.Where(a => a.ResultRepositoryTempId == rrId).ToList();
+                foreach(var result in resultContainerTemp)
+                {
+                    ResultContainer obj = new ResultContainer();
+                    obj.Candidate_District = result.Candidate_District;
+                    obj.CGPA = result.CGPA;
+                    obj.CNIC = result.CNIC;
+                    obj.Department = result.Department;
+                    obj.DistrictId = result.DistrictId;
+                    obj.Father_Name = result.Father_Name;
+                    obj.Group = result.Group;
+                    obj.Institute = result.Institute;
+                    obj.Institute_District = result.Institute_District;
+                    obj.IsOnCriteria = false;
+                    obj.IsSelected = false;
+                    obj.Marks_ = result.Marks_;
+                    obj.Name = result.Name;
+                    obj.Pass_Fail = result.Pass_Fail;
+                    obj.REG_NO = result.REG_NO;
+                    obj.Remarks = result.Remarks;
+                    obj.Roll_NO = result.Roll_NO;
+                    obj.ResultRepositoryId = RRMaxId;
+                    _context.Add(obj);
+                }
+                await _context.SaveChangesAsync();
+                _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultContainerTemp] where ResultRepositoryTempId = " + rrId);
+                _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultRepositoryTemp] where ResultRepositoryTempId = " + rrId);
+                _context.Database.ExecuteSqlRaw("delete [ImportResult].[ColumnLabelTemp] where ResultRepositoryTempId = " + rrId);
             }
             return PartialView(documentAssistGenerals);
         }

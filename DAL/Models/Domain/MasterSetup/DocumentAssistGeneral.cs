@@ -25,8 +25,9 @@ namespace DAL.Models.Domain.MasterSetup
         public int SchemeLevelId { get; set; }
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "Degree Level")]
-        public int? DegreeScholarshipLevelId { get; set; }    
-        public int TotalFind { get; set; }
+        public int? DegreeScholarshipLevelId { get; set; }
+        public int TotalFind { get; set; } 
+        public bool IsActive { get; set; } = true;
         public virtual ExcelColumnName ExcelColumnName { get; set; }
         public virtual DocumentAssist DocumentAssist { get; set; }        
         public virtual SchemeLevel SchemeLevel { get; set; }        

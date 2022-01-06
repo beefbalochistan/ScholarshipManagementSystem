@@ -16,7 +16,11 @@
 <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="~/assets/libs/twitter-bootstrap-wizard/prettify.css">
 <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
-
+<style>
+    .nav-link{
+        padding:.5rem;
+    }
+</style>
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
@@ -145,7 +149,7 @@
                                         <div class="form-group">
                                             <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
                                             <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
-                                        </div>                                        
+                                        </div>
                                         <div class="form-group">
                                             <button id="btnAttachResult" type="button" onclick="AttachFile()" class="btn btn-info">Attach Result</button>
                                             <span style="display:none" id="AttachResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
@@ -217,19 +221,23 @@
                                                 <label class="custom-control-label" for="checkbox">Select Required Columns (Select All)</label>
                                             </div>
                                             <select id="selectedColumn" style="width:100%" class="select2 form-control select2-multiple" name="selectedColumn" multiple="multiple" data-placeholder="Choose Column..." asp-items="ViewBag.ExcelColumnNameId">
-                                            </select>                                            
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group">
                                             <label class="control-label">Attached File Columns</label>
                                             <select id="allColumn" style="width:100%" class="select2 form-control select2-multiple" name="allColumn" multiple="multiple" disabled="disabled">
-                                            </select>                                           
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
+                                            <div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
+                                                <input type="checkbox" class="custom-control-input" id="isReupload">
+                                                <label class="custom-control-label" for="isReupload"> Re-Import</label>
+                                            </div>
                                             <input type="hidden" id="RRId" value="0" />
                                             <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
@@ -417,7 +425,9 @@
                 },
             });
         });
+
         $(document).ready(function () {
+            $("#isReuploadDiv").hide();
             $("#PolicySRCForumId").val(0);
             $("#SchemeLevelId").val(0);
             $("#SchemeId").val(0);
@@ -428,7 +438,7 @@
                 if (SchemeId != 0) {
                     if (PolicySRCForumId != 0) {
                         $("#SchemeLevelId").empty();
-                        $.get("/ResultRepositories/GetSchemeLevels", { policySRCForumId: PolicySRCForumId,schemeId: SchemeId }, function (data) {
+                        $.get("/ResultAnalyzer/GetSchemeLevels", { policySRCForumId: PolicySRCForumId,schemeId: SchemeId }, function (data) {
                             $("#SchemeLevelId").empty();
                             $("#SchemeLevelId").append('<option value="0">Select...</option>');
                             console.log(data);
@@ -461,7 +471,7 @@
                 $(".TempSchemeLevel").val($("#SchemeLevelId option:selected").text());
                 if (SchemeLevelId != 0) {
                     if (SchemeId >= 4) {
-                        $.get("/ResultRepositories/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
+                        $.get("/ResultAnalyzer/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
                             $("#DegreeScholarshipLevelId").empty();
                             $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
                             console.log(data);
@@ -519,7 +529,7 @@
                 }
             });
         });
-      
+
         function notificationme(message) {
             toastr.options = {
                 "closeButton": false,
@@ -557,14 +567,20 @@
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
+            var isReImportResult = false;
+            if ($('#isReupload').is(":checked")) {
+                isReImportResult = true;
+                alert(isReImportResult);
+            }
             formData.append("selectedColumn", $('#selectedColumn').val());
             formData.append("PolicySRCForumId", $('#PolicySRCForumId').val());
             formData.append("SchemeId", $('#SchemeId').val());
+            formData.append("isReImportResult", isReImportResult);
             formData.append("SchemeLevelId", $('#SchemeLevelId').val());
             formData.append("DegreeScholarshipLevelId", $('#DegreeScholarshipLevelId').val());
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("UploadFilePost", "ResultRepositories")',
+                url: '@Url.Action("UploadFilePost", "ResultAnalyzer")',
                 data: formData,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -573,7 +589,6 @@
                 success: function (data) {
                     debugger;
                     $("#ImportResultLoading").hide();
-                    $('#excelFile').remove();
                     $('#excelFile').text('');
                     $('#RRId').val(data.resultRepositoryId);
                     RefillColumn(data.resultRepositoryId);
@@ -584,6 +599,14 @@
                     } else {
                         $('#ImportResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
                     }
+                    if (data.reupload) {
+                        debugger;
+                        $('#btnAttachResult').prop('disabled', false);
+                        @*$('#nextLink').css("display", "none");
+                        document.getElementById("ExcelFile").value = null;
+                        $('#lblFile').text('Choose file');*@
+                        $("#isReuploadDiv").show();
+                    }
                 },
                 error: function (data) {
                     alert(data.message);
@@ -592,40 +615,43 @@
         }
 
         function AttachFile() {
-            var excelFile = document.getElementById('ExcelFile');            
+            debugger;
+            var excelFile = document.getElementById('ExcelFile');
             if (excelFile.files.length == 0) {
                 alert("Please attach result file!");
                 return;
-            }            
+            }
             formData = new FormData();
             $("#AttachResultLoading").show();
-            $('#btnAttachResult').prop('disabled', true);            
+            $('#btnAttachResult').prop('disabled', true);
             for (var i = 0; i < excelFile.files.length; i++) {
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
             var studentSelect = $('#allColumn');
+            studentSelect.val('').change();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("AttachFilePost", "ResultRepositories")',
+                url: '@Url.Action("AttachFilePost", "ResultAnalyzer")',
                 data: formData,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: false,
                 processData: false,
-                success: function (data) {                    
+                success: function (data) {
                     $.each(data.allColumn, function (index, row) {
                         console.log(row);
                         var option = new Option(row.text, row.value, true, true);
                         studentSelect.append(option).trigger('change');
-                    });                                        
-                    $("#AttachResultLoading").hide();                                                                                
+                    });
+                    $("#AttachResultLoading").hide();
                     notificationme(data.message);
                     if (data.isValid == false) {
                         $('#btnAttachResult').prop('disabled', false);
                         $('#AttachResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                     } else {
                         $('#AttachResultDivIcon').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                        $('#nextLink').css("display", "");
                     }
                 },
                 error: function (data) {
@@ -635,7 +661,7 @@
         }
 
         function RefillColumn(rrId) {
-            $.get("/ResultRepositories/GetSelectedColumns", { rrId: rrId }, function (data) {
+            $.get("/ResultAnalyzer/GetSelectedColumns", { rrId: rrId }, function (data) {
                 $("#Columns").empty();
                 $("#sCriteriaColumns").empty();
                 $("#Columns").append('<option value="0">Select...</option>');
@@ -669,7 +695,7 @@
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
             $.ajax({
-                url: '@Url.Action("AssistDocumentTemp", "DocumentAssistGenerals")',
+                url: '@Url.Action("AssistDocument", "DocumentAssistGenerals")',
                 data: {
                     rrId: rrId,
                     DegreeScholarshipLevelId: degreeScholarshipLevelId,
@@ -690,7 +716,7 @@
             var columns = $('#Columns').val();
             var documentAssistId = $('#DocumentAssistId').val();
             $.ajax({
-                url: '@Url.Action("AddDocumentAssistIndicator", "ResultRepositories")',
+                url: '@Url.Action("AddDocumentAssistIndicator", "ResultAnalyzer")',
                 data: {
                     rrId: rrId,
                     DocumentAssistId: documentAssistId,
@@ -703,7 +729,6 @@
                 }
             });
         }
-
         function fetchAssistDocumentGeneral() {
             $("#loading").show();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();

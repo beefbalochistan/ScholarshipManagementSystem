@@ -12,7 +12,7 @@
 
 <form asp-action="Create" enctype="multipart/form-data">
     <div class="row">
-        <div class="col-md-3">
+        @*<div class="col-md-3">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Select Scheme</label>
@@ -20,7 +20,7 @@
                     <option value="">-Select-</option>
                 </select>
             </div>
-        </div>      
+        </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Select Scheme Level</label>
@@ -36,19 +36,20 @@
                     <option value="">-Select-</option>
                 </select>
             </div>
-        </div>
+        </div>*@
+        <input type="hidden" asp-for="SchemeLevelId" value="10" />        
         <div class="col-md-3">
             <div class="form-group" id="">
-                <label class="control-label">Select Filter</label>
-                <select asp-for="DocumentAssistId" class="form-control" asp-items="ViewBag.DocumentAssistId" required>
+                <label class="control-label">Select Excel Column</label>
+                <select asp-for="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId" required>
                     <option value="">-Select-</option>
                 </select>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group" id="">
-                <label class="control-label">Select Excel Column</label>
-                <select asp-for="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId" required>
+                <label class="control-label">Select Filter</label>
+                <select asp-for="DocumentAssistId" class="form-control" asp-items="ViewBag.DocumentAssistId" required>
                     <option value="">-Select-</option>
                 </select>
             </div>

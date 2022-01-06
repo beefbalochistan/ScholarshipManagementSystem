@@ -5,20 +5,20 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h3>Document Assist Indicators</h3>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
-            <th>
+           @* <th>
                 @Html.DisplayNameFor(model => model.SchemeLevel.Scheme)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SchemeLevel)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.ExcelColumnName)
             </th>
@@ -31,12 +31,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.SchemeLevel.Scheme.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
             </td>
@@ -44,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.DocumentAssist.ConditionalOperator)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.DocumentAssistGeneralId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DocumentAssistGeneralId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DocumentAssistGeneralId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.DocumentAssistGeneralId">Edit</a> @*|
+        <a asp-action="Details" asp-route-id="@item.DocumentAssistGeneralId">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.DocumentAssistGeneralId">Delete</a>*@
             </td>
         </tr>
 }

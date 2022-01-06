@@ -406,13 +406,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                 {
                                     if (counter < columnList.Count && val == columnList.ElementAt(counter))
                                     {
-                                        columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
+                                        columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());                                        
                                     }
                                     else
                                     {
                                         columnNameList.Add("");
-                                    }
+                                    }                                    
                                 }
                                 if (columnList.Count == selectedColumnList.Count)
                                 {

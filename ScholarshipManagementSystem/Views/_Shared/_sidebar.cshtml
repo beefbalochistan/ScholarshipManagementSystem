@@ -225,7 +225,7 @@
                             <li>
                                 <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Assist Document</span>
+                                    <span key="t-calendar">Assist Tool</span>
                                 </a>
                             </li>
                             <li>
@@ -241,7 +241,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a asp-action="Create" asp-controller="ResultRepositories" class=" waves-effect">
+                                <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar"> Result Analyzer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="ResultImporter" asp-controller="ResultRepositories" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
                                     <span key="t-calendar">Import Result</span>
                                 </a>
@@ -272,13 +278,7 @@
                                     <i class="bx bxs-dizzy"></i>
                                     <span key="t-calendar"> Applicant Tracking</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar"> Result Analyzer</span>
-                                </a>
-                            </li>
+                            </li>                            
                         }
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormCollection.View)).Result.Succeeded)
                         {
