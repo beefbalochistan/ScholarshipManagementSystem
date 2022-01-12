@@ -53,7 +53,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // GET: SelectionCriterias/Create
         public IActionResult Create(int id)
         {            
-            var excelColumns = _context.ExcelColumnName.ToList();
+            var excelColumns = _context.ExcelColumnName.Where(a=>a.IsActive == true).ToList();
             var record = _context.ColumnLabel.Where(a => a.ResultRepositoryId == id).FirstOrDefault();            
             List<SelectListItem> Listitems = new List<SelectListItem>(); 
             if(record.C1 != "")
@@ -103,7 +103,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { id = selectionCriteria.ResultRepositoryId});
             }
-            var excelColumns = _context.ExcelColumnName.ToList();
+            var excelColumns = _context.ExcelColumnName.Where(a=>a.IsActive == true).ToList();
             var record = _context.ColumnLabel.Where(a => a.ResultRepositoryId == selectionCriteria.ResultRepositoryId).FirstOrDefault();
             List<SelectListItem> Listitems = new List<SelectListItem>();
             if (record.C1 != "")
@@ -151,7 +151,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 return NotFound();
             }
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteria.ExcelColumnNameId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteria.ExcelColumnNameId);
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteria.OperatorId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", selectionCriteria.ResultRepositoryId);
             return View(selectionCriteria);
@@ -189,7 +189,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteria.ExcelColumnNameId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteria.ExcelColumnNameId);
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteria.OperatorId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", selectionCriteria.ResultRepositoryId);
             return View(selectionCriteria);

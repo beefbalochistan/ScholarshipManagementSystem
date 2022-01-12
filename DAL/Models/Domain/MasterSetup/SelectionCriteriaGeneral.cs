@@ -13,24 +13,11 @@ namespace DAL.Models.Domain.MasterSetup
         public class SelectionCriteriaGeneral
         {
             [Key]
-            public int SelectionCriteriaGeneralId { get; set; }            
-            [ForeignKey("Operator")]
-            [Display(Name = "Operator")]
-            public int OperatorId { get; set; }
-            [Required]
-            [ForeignKey("ExcelColumnName")]
-            [Display(Name = "Column")]
-            public int ExcelColumnNameId { get; set; }
+            public int SelectionCriteriaGeneralId { get; set; }                        
             [ForeignKey("SchemeLevel")]
             [Display(Name = "Scheme Level")]
-            public int SchemeLevelId { get; set; }
-            [ForeignKey("DegreeScholarshipLevel")]
-            [Display(Name = "Degree Level")]
-            public int? DegreeScholarshipLevelId { get; set; }
-            public string Condition { get; set; }
-            public virtual Operator Operator { get; set; }           
-            public virtual ExcelColumnName ExcelColumnName { get; set; }
-            public virtual SchemeLevel SchemeLevel { get; set; }
-            public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
+            public int SchemeLevelId { get; set; }            
+            public string Expression { get; set; }            
+            public virtual SchemeLevel SchemeLevel { get; set; }            
         }
     }

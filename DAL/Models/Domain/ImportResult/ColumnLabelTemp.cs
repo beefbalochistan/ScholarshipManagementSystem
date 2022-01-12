@@ -25,6 +25,7 @@ namespace DAL.Models.Domain.ImportResult
         public string C13 { get; set; }
         public string C14 { get; set; }
         public string C15 { get; set; }
+        public string C16 { get; set; }
         public bool IsActive { get; set; }
         public int ResultRepositoryTempId { get; set; }
         public virtual ResultRepositoryTemp ResultRepositoryTemp { get; set; }

@@ -154,7 +154,7 @@
                                        
 
                                         @{
-                                            if (Model.CGPA != "")
+                                            if (Model.CGPA != 0)//KDA Check
                                             {
                                                 <div class="form-group">
                                                     <label asp-for="CGPA" class="control-label"></label>

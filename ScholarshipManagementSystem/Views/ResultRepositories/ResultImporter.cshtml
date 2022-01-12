@@ -20,6 +20,13 @@
     .nav-link{
         padding:.5rem;
     }
+    .nav{
+        display: block ruby;
+    }
+    .disabled-link {
+        cursor: not-allowed;
+        background-color: #798ceb;
+    }
 </style>
 <div class="col-lg-12">
     <div class="card">
@@ -54,14 +61,20 @@
                     </li>
                     <li class="nav-item">
                         <a href="#progress-confirm-detail" class="nav-link" data-toggle="tab">
-                            <span class="step-number mr-2">04</span>
+                            <span class="step-number mr-2">05</span>
                             Assist Document
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#progress-selection-criteria" class="nav-link" data-toggle="tab">
-                            <span class="step-number mr-2">05</span>
+                            <span class="step-number mr-2">06</span>
                             Selection Criteria
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#progress-generate-merit-list" class="nav-link" data-toggle="tab">
+                            <span class="step-number mr-2">07</span>
+                            Merit List
                         </a>
                     </li>
                 </ul>
@@ -234,10 +247,10 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
-                                            <div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
-                                                <input type="checkbox" class="custom-control-input" id="isReupload">
-                                                <label class="custom-control-label" for="isReupload"> Re-Import</label>
-                                            </div>
+                                            @*<div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
+                                    <input type="checkbox" class="custom-control-input" id="isReupload">
+                                    <label class="custom-control-label" for="isReupload"> Re-Import</label>
+                                </div>*@
                                             <input type="hidden" id="RRId" value="0" />
                                             <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
@@ -288,7 +301,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div id="analize" style="display:none" class="text-center">
+                                <div style="display:none" class="text-center analize">
                                     <img src="~/assets/images/analyze.gif" width="120" />
                                 </div>
                             </div>
@@ -301,31 +314,7 @@
                                 <form class="form-inline">
                                     <div class="mb-4">
                                         <i id="scriteriaDiv" class="display-4"></i>
-                                    </div>
-                                    @*<label class="sr-only" for="inlineFormemail2"></label>
-                        <div class="input-group mb-2 mr-sm-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">Select Column</div>
-                            </div>
-                            <select id="sCriteriaColumns" class="form-control">
-                                <option value="0">-Select-</option>
-                            </select>
-                        </div>
-                        <label class="sr-only" for="inlineFormemail2"></label>
-                        <div class="input-group mb-2 mr-sm-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">Select Filter</div>
-                            </div>
-                            <select id="OperatorId" class="form-control" asp-items="ViewBag.OperatorId">
-                            </select>
-                        </div>
-                        <div class="input-group mb-2 mr-sm-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">Value</div>
-                            </div>
-                           <input id="criteriaValue" type="text" />
-                        </div>
-                        <button type="button" id="btnAddCriteria" onclick="addSelectedCriteria()" class="btn btn-primary mb-2">Add</button>*@
+                                    </div>                              
                                     <button type="button" id="btnApplyCriteria" onclick="applyCriteria()" class="btn btn-primary mb-2 ml-2">Apply Criteria</button>
                                 </form>
                             </div>
@@ -335,14 +324,44 @@
                                         <img src="~/assets/images/loading.gif" width="70" />
                                     </div>
                                 </div>
-                                <div id="documentAssistOutputdiv" class="text-center">
+                                <div id="selectionCriteriaOutputdiv" class="text-center">
                                     <div id="loading" style="display:none">
                                         <img src="~/assets/images/loading.gif" width="70" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <div id="analize" style="display:none" class="text-center">
+                                <div style="display:none" class="text-center analize">
+                                    <img src="~/assets/images/analyze.gif" width="120" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="progress-generate-merit-list">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <h5 class="card-title mb-4">Generate First Merit List</h5>
+                                <form class="form-inline">
+                                    <div class="mb-4">
+                                        <i id="meritListDiv" class="display-4"></i>
+                                    </div>                       
+                                    <button type="button" id="btnGenerateMeritList" onclick="generateMeritList()" class="btn btn-primary mb-2 ml-2">Generate List</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-10">
+                                <div id="generateMeritListDiv" class="text-center">
+                                    <div id="loading" style="display:none">
+                                        <img src="~/assets/images/loading.gif" width="70" />
+                                    </div>
+                                </div>
+                                <div id="generateMeritListOutputdiv" class="text-center">
+                                    <div id="loading" style="display:none">
+                                        <img src="~/assets/images/loading.gif" width="70" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div style="display:none" class="text-center analize">
                                     <img src="~/assets/images/analyze.gif" width="120" />
                                 </div>
                             </div>
@@ -350,7 +369,7 @@
                     </div>
                 </div>
                 <ul class="pager wizard twitter-bs-wizard-pager-link">
-                    <li class="previous"><a href="javascript: void(0);">Previous</a></li>
+                    <li class="previous"><a href="javascript: void(0);" id="previousLink">Previous</a></li>
                     <li class="next"><a href="javascript: void(0);" id="nextLink" class="">Next</a></li>
                 </ul>
             </div>
@@ -372,6 +391,11 @@
     <script src="~/assets/js/pages/form-advanced.init.js"></script>
     
     <script>
+        var IsClean = false;
+        var IsResultExist = false;
+        var CurrentTab = 0;
+        var IsCriteriaApplied = false;
+        var IsMeritListGenerated = false;
         $(document).ready(function () {
             $('#checkbox').prop('checked', false);
             $("#checkbox").click(function () {
@@ -404,7 +428,60 @@
                             $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                             onPrevious(tab, navigation, 2);
                         }
-                    } else if (index == 4) {
+                        $.ajax({
+                            url: '@Url.Action("GetResultStatus", "SelectionCriteriaGenerals")',
+                            data: {
+                                PolicySRCForumId: $('#PolicySRCForumId').val(),
+                                SchemeLevelId: $('#SchemeLevelId').val(),
+                                SchemeId: $('#SchemeId').val(),
+                                DegreeScholarshipLevelId: $('#DegreeScholarshipLevelId').val()
+                            },
+                            success: function (data) {
+                                $('#RRId').val(data.rrid);
+                                if (!data.success) {
+                                    IsResultExist = true;
+                                    IsClean = data.isclean;
+                                    IsCriteriaApplied = data.iscriteriaapplied;
+                                    IsMeritListGenerated = data.ismeritlistgenerated;
+                                    $('#btnImportResult').prop('disabled', true);
+                                    $('#btnAttachResult').prop('disabled', true);
+                                    if (data.ismeritlistgenerated) {
+                                        $('#btnGenerateMeritList').prop('disabled', false);
+                                        $('#progrss-wizard').bootstrapWizard('show', 6);
+                                        CurrentTab = 6;
+                                    } else if (data.iscriteriaapplied) {
+                                        $('#btnApplyCriteria').prop('disabled', true);
+                                        $('#btnAssistDocument').prop('disabled', true);
+                                        $('#progrss-wizard').bootstrapWizard('show', 6);
+                                        CurrentTab = 6;
+                                    } else if (data.isclean) {
+                                        $('#btnAssistDocument').prop('disabled', true);
+                                        $('#progrss-wizard').bootstrapWizard('show', 5);
+                                        fetchSelectionCriteriaGeneral();
+                                        notificationme('Selection criteria defined against selected Scheme Level!');
+                                        CurrentTab = 5;
+                                    } else if (data.isclean == false) {
+                                        $('#progrss-wizard').bootstrapWizard('show', 4);
+                                        fetchAssistDocumentGeneral();
+                                        notificationme('Document Assist Indicators defined against selected Scheme Level!');
+                                        CurrentTab = 4;
+                                    }
+                                    $('#previousLink').removeClass().addClass("disabled-link");
+                                } else {
+                                    $('#btnImportResult').prop('disabled', false);
+                                    $('#btnApplyCriteria').prop('disabled', false);
+                                    $('#btnAssistDocument').prop('disabled', false);
+                                    $('#btnAttachResult').prop('disabled', false);
+                                    $('#btnGenerateMeritList').prop('disabled', false);
+                                    $('#previousLink').removeClass();
+                                }                                
+                                $(".analize").hide();
+                            }
+                        });
+                    } else if (index == 3) {
+
+                    }
+                    else if (index == 4) {
                         //fetchAssistDocumentIndicator(0);
                         fetchAssistDocumentGeneral();
                         notificationme('Document Assist Indicators defined against selected Scheme Level!');
@@ -415,9 +492,17 @@
                     }
                     //$('#progrss-wizard').bootstrapWizard('show', 3);
                 },
-                onPrevious: function (tab, navigation, index) {
-                    //alert(index);
-                    //$('#progrss-wizard').bootstrapWizard('show', 3);
+                onPrevious: function (tab, navigation, index) {                    
+                    if (IsResultExist) {
+                        @*if (IsCriteriaApplied) {
+                            $('#progrss-wizard').bootstrapWizard('show', 6);
+                        } else if (IsClean) {
+                            $('#progrss-wizard').bootstrapWizard('show', 5);
+                        } else if (!IsClean) {
+                            $('#progrss-wizard').bootstrapWizard('show', 4);
+                        }*@
+                        onNext(tab, navigation, (index+1));
+                    }
                 },
                 onFinish: function (tab, navigation, index) {
                     alert(index);
@@ -427,7 +512,7 @@
         });
 
         $(document).ready(function () {
-            $("#isReuploadDiv").hide();
+            @*$("#isReuploadDiv").hide();*@
             $("#PolicySRCForumId").val(0);
             $("#SchemeLevelId").val(0);
             $("#SchemeId").val(0);
@@ -567,20 +652,20 @@
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
-            var isReImportResult = false;
+            @*var isReImportResult = false;
             if ($('#isReupload').is(":checked")) {
                 isReImportResult = true;
                 alert(isReImportResult);
-            }
+            }*@
             formData.append("selectedColumn", $('#selectedColumn').val());
             formData.append("PolicySRCForumId", $('#PolicySRCForumId').val());
             formData.append("SchemeId", $('#SchemeId').val());
-            formData.append("isReImportResult", isReImportResult);
+            @*formData.append("isReImportResult", isReImportResult);*@
             formData.append("SchemeLevelId", $('#SchemeLevelId').val());
             formData.append("DegreeScholarshipLevelId", $('#DegreeScholarshipLevelId').val());
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("UploadFilePost", "ResultAnalyzer")',
+                url: '@Url.Action("UploadFilePost", "ResultRepositories")',
                 data: formData,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -605,7 +690,7 @@
                         @*$('#nextLink').css("display", "none");
                         document.getElementById("ExcelFile").value = null;
                         $('#lblFile').text('Choose file');*@
-                        $("#isReuploadDiv").show();
+                        @*$("#isReuploadDiv").show();*@
                     }
                 },
                 error: function (data) {
@@ -690,7 +775,7 @@
             var delay = 4000;
             $('#btnAddAssistDocumentIndicator').prop('disabled', true);
             $('#btnAssistDocument').prop('disabled', true);
-            $("#analize").show();
+            $(".analize").show();
             var rrId = $('#RRId').val();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
@@ -704,7 +789,7 @@
                 success: function (data) {
                     setTimeout(function () {
                         $("#documentAssistOutputdiv").html(data);
-                        $("#analize").hide();
+                        $(".analize").hide();
                         $("#documentAssistIndicatordiv").hide();
                     }, delay);
                 }
@@ -750,19 +835,68 @@
 
         function fetchSelectionCriteriaGeneral() {
             $("#loading").show();
-            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
-            var rrId = $('#RRId').val();
             $.ajax({
                 url: '@Url.Action("GetSelectionCriteriaGeneral", "SelectionCriteriaGenerals")',
                 data: {
-                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
-                    SchemeLevelId: schemeLevelId,
-                    rrId: rrId
+                    SchemeLevelId: schemeLevelId
                 },
                     success: function (data) {
                         $("#documentSelectionCriteriadiv").html(data);
                     $("#loading").hide();
+                }
+            });
+        }
+        function applyCriteria() {
+            var delay = 4000;
+            $('#btnApplyCriteria').prop('disabled', true);
+            $(".analize").show();
+            var policySRCForumId = $('#PolicySRCForumId').val();
+            var schemeLevelId = $('#SchemeLevelId').val();
+            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var schemeId = $('#SchemeId').val();
+            $.ajax({
+                url: '@Url.Action("ApplySelectionCriteria", "SelectionCriteriaGenerals")',
+                data: {
+                    PolicySRCForumId: policySRCForumId,
+                    SchemeLevelId: schemeLevelId,
+                    SchemeId: schemeId,
+                    DegreeScholarshipLevelId: degreeScholarshipLevelId
+                },
+                success: function (data) {
+                    if (data.IsValid) {
+                        setTimeout(function () {
+                            notificationme(data.message);
+                        }, delay);
+                    } else {
+                        notificationme(data.message);
+                    }
+                    $(".analize").hide();
+                }
+            });
+        }
+
+        function generateMeritList() {
+            var delay = 4000;
+            $('#btnAddAssistDocumentIndicator').prop('disabled', true);
+            $('#btnAssistDocument').prop('disabled', true);
+            $(".analize").show();
+            var rrId = $('#RRId').val();
+            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var schemeLevelId = $('#SchemeLevelId').val();
+            $.ajax({
+                url: '@Url.Action("AssistDocument", "DocumentAssistGenerals")',
+                data: {
+                    rrId: rrId,
+                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
+                    SchemeLevelId: schemeLevelId
+                },
+                success: function (data) {
+                    setTimeout(function () {
+                        $("#documentAssistOutputdiv").html(data);
+                        $(".analize").hide();
+                        $("#documentAssistIndicatordiv").hide();
+                    }, delay);
                 }
             });
         }

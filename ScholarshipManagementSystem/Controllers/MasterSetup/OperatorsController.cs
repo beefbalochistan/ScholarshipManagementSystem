@@ -54,7 +54,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OperatorId,Name,OperatorType")] Operator @operator)
+        public async Task<IActionResult> Create([Bind("OperatorId,Name,Value,OperatorType")] Operator @operator)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OperatorId,Name,OperatorType")] Operator @operator)
+        public async Task<IActionResult> Edit(int id, [Bind("OperatorId,Name,Value,OperatorType")] Operator @operator)
         {
             if (id != @operator.OperatorId)
             {

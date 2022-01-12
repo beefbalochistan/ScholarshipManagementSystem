@@ -177,11 +177,11 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                                 Group = specificExcelRow.ElementAt(5),
                                                 Candidate_District = specificExcelRow.ElementAt(6),
                                                 Institute_District = specificExcelRow.ElementAt(7),                                                                                                
-                                                Marks_ = specificExcelRow.ElementAt(8),
+                                                Marks_ = int.Parse(specificExcelRow.ElementAt(8)),
                                                 Pass_Fail = specificExcelRow.ElementAt(9),
                                                 Remarks = specificExcelRow.ElementAt(10),                                                
                                                 CNIC = specificExcelRow.ElementAt(11),                                                
-                                                CGPA = specificExcelRow.ElementAt(12),                                                
+                                                CGPA = decimal.Parse(specificExcelRow.ElementAt(12)),                                                
                                                 DistrictId = 1
                                             };                                                                             
                                             string districtName = result.Candidate_District.ToLower();
@@ -243,7 +243,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }                    
             }
             ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", resultRepository.SchemeLevelPolicy.SchemeLevelId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "Name", "Name");
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", resultRepository.ScholarshipFiscalYearId);
             ViewBag.Message = "Record already exist of " + _context.ScholarshipFiscalYear.Find(resultRepository.ScholarshipFiscalYearId).Name + " Fiscal Year of Scheme " + _context.SchemeLevel.Find(resultRepository.SchemeLevelPolicy.SchemeLevelId).Name;
             resultRepository.CreatedOn = DateTime.Now.Date;
@@ -272,7 +272,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         public async Task<JsonResult> GetSelectedColumns(int rrId)
         {
             ColumnLabel columnLabels = await _context.ColumnLabel.Where(a => a.ResultRepositoryId == rrId).FirstOrDefaultAsync();
-            List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.ToList();
+            List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.Where(a=>a.IsActive == true).ToList();
             List<ExcelColumnName> selectedExcelColumnNames = new List<ExcelColumnName>();
             string record = JsonConvert.SerializeObject(columnLabels);            
             foreach (var columnName in excelColumnNames)
@@ -301,7 +301,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
              });
             ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");
             //ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeId", "Name");            
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name", true);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "Name", "Name", true);
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "ConditionalOperator");
             ResultRepositoryTemp obj = new ResultRepositoryTemp();
@@ -339,7 +339,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     return Json(new { isValid = false, message = "Please attach result file!" });
                 }           
         }
-        public async Task<JsonResult> UploadFilePost(IFormFile excelFile, string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId)
+        public async Task<JsonResult> UploadFilePost(IFormFile excelFile/*, bool isReImportResult*/, string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId)
         {
             try
             {
@@ -348,13 +348,13 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     var IsResultAlreadyExist = 0;
                     if (SchemeId < 4)
                     {
-                        if(selectedColumn.Contains("Roll_NO") && selectedColumn.Contains("Name") && selectedColumn.Contains("Father_Name") && selectedColumn.Contains("Candidate_District")  && selectedColumn.Contains("Marks_"))
+                        if (selectedColumn.Contains("Roll_NO") && selectedColumn.Contains("Name") && selectedColumn.Contains("Father_Name") && selectedColumn.Contains("Candidate_District")  && selectedColumn.Contains("Marks_"))
                         {
                             IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId);
                         }
                         else
                         {
-                            return Json(new { isValid = false, message = "Please select mandatory columns!" });
+                            return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
                         }
                     }
                     else
@@ -365,9 +365,26 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         }
                         else
                         {
-                            return Json(new { isValid = false, message = "Please select mandatory columns!" });
-                        }                        
+                            return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
+                        }
                     }
+                    /*if (isReImportResult == true && IsResultAlreadyExist != 0)
+                    {
+                        var ResultRepositoryTempId = 0;
+                        if (SchemeId < 4)
+                        {
+                            ResultRepositoryTempId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).Max(a => a.ResultRepositoryTempId);
+                        }
+                        else
+                        {
+                            ResultRepositoryTempId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).Max(a => a.ResultRepositoryTempId);
+                        }
+                        _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultContainerTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
+                        _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultRepositoryTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
+                        _context.Database.ExecuteSqlRaw("delete [ImportResult].[ColumnLabelTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
+                        //_context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('ImportResult.ResultContainerTemp', RESEED, 1);");                        
+                        IsResultAlreadyExist = 0;
+                    }*/
                     if (IsResultAlreadyExist == 0)
                     {
                         int MaxResultRespositoryId = 0;
@@ -379,7 +396,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                 var worksheet = package.Workbook.Worksheets.First();
                                 var rowCount = worksheet.Dimension.Rows;
                                 var colCount = worksheet.Dimension.Columns;
-                                List<int> columnList = new List<int>();
+                                List<int> excelColumnList = new List<int>();
+                                List<int> DbColumnList = new List<int>();
                                 List<string> selectedColumnList = selectedColumn.Split(',').ToList();
                                 bool isFound = false;
                                 for (var val = 0; val < selectedColumnList.Count; val++)
@@ -389,36 +407,37 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                     {
                                         if (worksheet.Cells[1, col].Value.ToString().ToLower() == selectedColumnList.ElementAt(val).ToLower())
                                         {
-                                            columnList.Add(col);
+                                            excelColumnList.Add(col);
+                                            DbColumnList.Add(_context.ExcelColumnName.Where(a=>a.IsActive == true).Where(a => a.Name.ToLower() == selectedColumnList.ElementAt(val).ToLower()).Select(a => a.ExcelColumnNameId).FirstOrDefault());
                                             isFound = true;
                                             break;
                                         }
                                     }
-                                    if(isFound == false)
+                                    if (isFound == false)
                                     {
                                         return Json(new { isValid = false, message = "Column '"+ selectedColumnList.ElementAt(val) +"' missing in excel file!" });
                                     }
-                                }                                
+                                }
                                 //-------------------------------------------------------
                                 List<string> columnNameList = new List<string>();
                                 int counter = 0;
-                                for (var val = 1; val <= 13; val++)//KDA Hard
+                                for (var val = 1; val <= 16; val++)//KDA Hard
                                 {
-                                    if (counter < columnList.Count && val == columnList.ElementAt(counter))
+                                    if (val < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                     {
+                                        columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
-                                        columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());                                        
                                     }
                                     else
                                     {
                                         columnNameList.Add("");
-                                    }                                    
+                                    }
                                 }
-                                if (columnList.Count == selectedColumnList.Count)
+                                if (excelColumnList.Count == selectedColumnList.Count)
                                 {
                                     ResultRepositoryTemp resultRepository = new ResultRepositoryTemp();
-                                    resultRepository.CreatedOn = DateTime.Today;                                    
-                                    resultRepository.DegreeScholarshipLevelId = DegreeScholarshipLevelId;                               
+                                    resultRepository.CreatedOn = DateTime.Today;
+                                    resultRepository.DegreeScholarshipLevelId = DegreeScholarshipLevelId;
                                     resultRepository.ScholarshipFiscalYearId = _context.PolicySRCForum.Find(PolicySRCForumId).ScholarshipFiscalYearId;
                                     resultRepository.SchemeLevelPolicyId = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelId == SchemeLevelId).Select(a => a.SchemeLevelPolicyId).FirstOrDefault();
                                     _context.Add(resultRepository);
@@ -439,12 +458,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                         C11 = columnNameList.ElementAt(10),
                                         C12 = columnNameList.ElementAt(11),
                                         C13 = columnNameList.ElementAt(12),
+                                        C14 = columnNameList.ElementAt(13),
                                         IsActive = true,
                                         ResultRepositoryTempId = MaxResultRespositoryId
                                     };
                                     _context.Add(columnLabel);
-                                    await _context.SaveChangesAsync();                                    
-                                    //-------------------------------------------------------                                    
+                                    await _context.SaveChangesAsync();
+                                    //-------------------------------------------------------
+                                    var currentSchemeLevel = _context.SchemeLevel.Find(SchemeLevelId);
                                     var districts = _context.District.Select(a => new District { DistrictId = a.DistrictId, Name = a.Name.ToLower() }).ToList();
                                     for (var row = 2; row < rowCount; row++)
                                     {
@@ -452,11 +473,11 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                         try
                                         {
                                             List<string> specificExcelRow = new List<string>();
-                                            for (var val = 1; val <= 13; val++)//KDA Hard
+                                            for (var val = 1; val <= 16; val++)//KDA Hard
                                             {
-                                                if (counter < columnList.Count && val == columnList.ElementAt(counter))
+                                                if (val == DbColumnList.ElementAt(counter))
                                                 {
-                                                    specificExcelRow.Add(worksheet.Cells[row, columnList.ElementAt(counter)].Value?.ToString());
+                                                    specificExcelRow.Add(worksheet.Cells[row, excelColumnList.ElementAt(counter)].Value?.ToString());
                                                     counter++;
                                                 }
                                                 else
@@ -476,11 +497,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                                 Group = specificExcelRow.ElementAt(5),
                                                 Candidate_District = specificExcelRow.ElementAt(6),
                                                 Institute_District = specificExcelRow.ElementAt(7),
-                                                Marks_ = specificExcelRow.ElementAt(8),
+                                                Marks_ = int.Parse(specificExcelRow.ElementAt(8)),
                                                 Pass_Fail = specificExcelRow.ElementAt(9),
                                                 Remarks = specificExcelRow.ElementAt(10),
                                                 CNIC = specificExcelRow.ElementAt(11),
-                                                CGPA = specificExcelRow.ElementAt(12),
+                                                TotalGPA = currentSchemeLevel.TotalMarks_GPA,
+                                                TotalMarks_ = Convert.ToInt32(currentSchemeLevel.TotalMarks_GPA),
+                                                CGPA = decimal.Parse(specificExcelRow.ElementAt(12)),
+                                                Department = specificExcelRow.ElementAt(13),
                                                 DistrictId = 1
                                             };
                                             string districtName = result.Candidate_District.ToLower();
@@ -528,15 +552,15 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                 }
                                 else
                                 {
-                                    return Json(new { isValid = false, message = "Selected Column not matched with uploaded selected file!", resultRepositoryId = MaxResultRespositoryId });
-                                }                                                                                          
+                                    return Json(new { isValid = false, reupload = false, message = "Selected Column not matched with uploaded selected file!", resultRepositoryId = MaxResultRespositoryId });
+                                }
                             }
                         }
                         catch (Exception ex)
                         {
-                            return Json(new { isValid = false, message = "Something went wrong!", resultRepositoryId = MaxResultRespositoryId });
+                            return Json(new { isValid = false, reupload = false, message = "Something went wrong!", resultRepositoryId = MaxResultRespositoryId });
                         }
-                        return Json(new { isValid = true, message = "Result Imported successfully!", resultRepositoryId = MaxResultRespositoryId });
+                        return Json(new { isValid = true, reupload = false, message = "Result Imported successfully!", resultRepositoryId = MaxResultRespositoryId });
                     }
                     else
                     {
@@ -549,24 +573,24 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         {
                             resultRepositoryId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).Max(a => a.ResultRepositoryTempId);
                         }
-                        return Json(new { isValid = true, resultRepositoryId = resultRepositoryId, message = "Result already imported!" });
+                        return Json(new { isValid = false, reupload = true, resultRepositoryId = resultRepositoryId, message = "Result already imported!" });
                     }
                 }
                 else
                 {
-                    return Json(new { isValid = false, message = "Please attach result file!" });
+                    return Json(new { isValid = false, reupload = false, message = "Please attach result file!" });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Json(new { isValid = false, message = ex.Message });
-            }                    
+                return Json(new { isValid = false, reupload = false, message = ex.Message });
+            }
         }
         // GET: ResultRepositories/Create
         public IActionResult Create()
         {
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a=>a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name");
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "Name", "Name");
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code");
             ResultRepository obj = new ResultRepository();
             obj.CreatedOn = DateTime.Now.Date;

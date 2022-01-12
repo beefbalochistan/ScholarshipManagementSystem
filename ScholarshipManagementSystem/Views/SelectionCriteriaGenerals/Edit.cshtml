@@ -5,71 +5,101 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-
-
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
 <h4>Selection Criteria</h4>
 <hr />
 @{
-    if (ViewBag.message != "")
+    if (ViewBag.meesage != null)
     {
-        <div style="color:green">@ViewBag.message</div>
+        <div>@ViewBag.message</div>
     }
 }
 <form asp-action="Edit" enctype="multipart/form-data">
-    <input asp-for="SelectionCriteriaGeneralId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <span asp-validation-for="SchemeLevelId" class="text-danger"></span>
+    <span asp-validation-for="Expression" class="text-danger"></span>
+    <input type="hidden" asp-for="SelectionCriteriaGeneralId"/>
     <div class="row">
         <div class="col-md-3">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Select Scheme</label>
-                <select id="SchemeId" name="SchemeId" class="form-control" asp-items="ViewBag.SchemeId">
-                    <option value="">-Select-</option>
+                <select id="SchemeId" name="SchemeId" class="form-control" asp-items="ViewBag.SchemeId" required>                    
                 </select>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Select Scheme Level</label>
-                <select asp-for="SchemeLevelId" class="form-control" required>
-                    <option value="">-Select-</option>
+                <select asp-for="SchemeLevelId" asp-items="ViewBag.SchemeLevelId" class="form-control" required>                    
                 </select>
             </div>
         </div>
-        <div class="col-md-3" id="degreeLevelDiv" style="display:none">
-            <div class="form-group">
-                <label class="control-label">Select Degree Level</label>
-                <select asp-for="DegreeScholarshipLevelId" class="form-control">
-                    <option value="">-Select-</option>
-                </select>
+        @*<div class="col-md-3" id="degreeLevelDiv" style="display:none">
+                <div class="form-group">
+                    <label class="control-label">Select Degree Level</label>
+                    <select asp-for="DegreeScholarshipLevelId" class="form-control">
+                        <option value="">-Select-</option>
+                    </select>
+                </div>
+            </div>*@
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-inline">
+                <label class="control-label"></label>
+                <div class="input-group mb-2 mr-sm-3" style="width: 287px;margin-right:1.5rem">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Excel Column</div>
+                    </div>
+                    <select id="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId">
+                    </select>
+                </div>
+                <button type="button" id="addColumn" onclick="addColumnFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
+            </div>
+            <div class="form-inline">
+                <label class="control-label"></label>
+                <div class="input-group mb-2 mr-sm-3" style="width: 287px;margin-right:1.5rem">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Operator</div>
+                    </div>
+                    <select id="OperatorId" class="form-control" asp-items="ViewBag.OperatorId">
+                    </select>
+                </div>
+                <button type="button" id="addOperator" onclick="addOperatorFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
+            </div>
+            <div class="form-inline">
+                <label class="control-label"></label>
+                <div class="input-group mb-2 mr-sm-3" style="width: 287px;margin-right:1.5rem">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Number</div>
+                    </div>
+                    <select id="NumberListId" class="form-control" asp-items="ViewBag.NumberList">
+                    </select>
+                </div>
+                <button type="button" id="addNumber" onclick="addNumberFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-8">
             <div class="form-group" id="">
-                <label class="control-label">Select Operator</label>
-                <select asp-for="OperatorId" class="form-control" asp-items="ViewBag.OperatorId" required>
-                    <option value="">-Select-</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group" id="">
-                <label class="control-label">Select Excel Column</label>
-                <select asp-for="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId" required>
-                    <option value="">-Select-</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group" id="">
-                <label class="control-label">Conditional Value</label>
-                <input asp-for="Condition" class="form-control" required />
+                <button type="button" id="addOperator" onclick="clearTextAreaFun()" class="btn btn-secondary mb-2">
+                    <i class="bx bxs-trash  font-size-16 align-middle mr-2"></i>Clear Expression
+                </button>
+                <button type="button" id="undo" onclick="undoFun()" class="btn btn-warning mb-2">
+                    <i class="bx bx-bx-undo font-size-16 align-middle mr-2"></i>Undo
+                </button>
+                <button type="button" id="undo" onclick="testExpressionFun()" class="btn btn-success mb-2">
+                    <i class="bx bx-test-tube font-size-16 align-middle mr-2"></i>Test Expression
+                </button>
+                <textarea id="ExpressionViewer" class="form-control" cols="2" readonly="readonly" style="display:none" required>@Model.Expression</textarea>
+                <textarea asp-for="Expression" class="form-control" cols="2" readonly="readonly" required>  </textarea>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input type="submit" value="Save Expression" class="btn btn-primary" />
             </div>
         </div>
     </div>
@@ -80,14 +110,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
     <script>
+        let stack1 = [];
+        stack1.push($('#ExpressionViewer').val());
+        let stack2 = [];
+        stack2.push($('#Expression').val());
         $(document).ready(function () {
-            $("#SchemeLevelId").val('');
-            $("#SchemeId").val('');
-            $("#OperatorId").val('');
-            $("#ExcelColumnNameId").val('');
-
-            $("#SchemeLevelId").change(function () {
+            @*$('#ExpressionViewer').val('');
+            $('#Expression').val('');*@
+            @*$("#SchemeLevelId").change(function () {
                 var SchemeLevelId = $("#SchemeLevelId").val();
                 var SchemeId = $("#SchemeId").val();
                 if (SchemeLevelId != 0) {
@@ -107,7 +139,7 @@
                     $("#DegreeScholarshipLevelId").empty();
                     $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
                 }
-            });
+            });*@
 
             $("#SchemeId").change(function () {
                 var SchemeId = $("#SchemeId").val();
@@ -123,35 +155,110 @@
                         $("#SchemeLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
                     });
                 });
-                $("#DegreeScholarshipLevelId").empty();
-                $("#DegreeScholarshipLevelId").append('<option value="">-Select-</option>');
+                @*$("#DegreeScholarshipLevelId").empty();
+                $("#DegreeScholarshipLevelId").append('<option value="">-Select-</option>');*@
                 var SchemeId = $("#SchemeId").val();
                 if (SchemeId >= 4) {
-                    $('#degreeLevelDiv').show();
+                    @*$('#degreeLevelDiv').show();*@
                 } else {
-                    $('#degreeLevelDiv').hide();
+                    @*$('#degreeLevelDiv').hide();*@
                 }
             });
         });
-
-        function fetchSelectionCriteria() {
-            $("#loading").show();
-            var rrId = $('#RRId').val();
-            var columns = $('#Columns').val();
-            var OperatorId = $('#OperatorId').val();
+        function addColumnFun() {
+            var column = $('#ExcelColumnNameId option:selected').text();
+            stack1.push(" " + column + " ");
+            stack2.push(" " + column + " ");
+            $('#ExpressionViewer').val(stack1);
+            var expressionViewer = $('#ExpressionViewer').val();
+            $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
+            $('#Expression').val(stack2);
+            var expression = $('#Expression').val();
+            $('#Expression').val(expression.replace(/,/g, ''));
+            console.log(stack1);
+        }
+        function addOperatorFun() {
+            var operator = $('#OperatorId option:selected').text();
+            var operatorValue = $('#OperatorId option:selected').val();
+            stack1.push(" " + operator + " ");
+            stack2.push(" " + operatorValue + " ");
+            $('#ExpressionViewer').val(stack1);
+            var expressionViewer = $('#ExpressionViewer').val();
+            $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
+            $('#Expression').val(stack2);
+            var expression = $('#Expression').val();
+            $('#Expression').val(expression.replace(/,/g, ''));
+        }
+        function addNumberFun() {
+            var number = $('#NumberListId option:selected').text();
+            stack1.push(number);
+            stack2.push(number);
+            $('#ExpressionViewer').val(stack1);
+            var expressionViewer = $('#ExpressionViewer').val();
+            $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
+            $('#Expression').val(stack2);
+            var expression = $('#Expression').val();
+            $('#Expression').val(expression.replace(/,/g, ''));
+        }
+        function clearTextAreaFun() {
+            $('#ExpressionViewer').val('');
+            $('#Expression').val('');
+        }
+        function undoFun() {
+            stack1.pop();
+            stack2.pop();
+            $('#ExpressionViewer').val(stack1);
+            var expressionViewer = $('#ExpressionViewer').val();
+            $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
+            $('#Expression').val(stack2);
+            var expression = $('#Expression').val();
+            $('#Expression').val(expression.replace(/,/g, ''));
+        }
+        function testExpressionFun() {            
+            
+            var exp = $('#Expression').val();
+            exp = RemoveAllSpaces(exp);            
             $.ajax({
-                url: '@Url.Action("AddDocumentAssistIndicator", "ResultRepositories")',
+                url: '@Url.Action("TestExpression", "SelectionCriteriaGenerals")',
                 data: {
-                    rrId: rrId,
-                    OperatorId: OperatorId,
-                    ExcelColumnNameId: columns,
-                    IsAdd: isAdd
+                    'exp': exp
                 },
-                    success: function (data) {
-                    $("#documentAssistIndicatordiv").html(data);
-                    $("#loading").hide();
+                success: function (data) {
+                    debugger;
+                    if (data.success) {
+                        notificationme("Expression Validated Successfully!");
+                    } else {
+                        notificationme("Invalid Expression!");
+                    }
                 }
             });
+        }
+        function RemoveAllSpaces(ToRemove) {
+            let str = new String(ToRemove);
+            while (str.includes(" ")) {
+                str = str.replace(" ", "");
+            }
+            return str;
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
         }
     </script>
 }

@@ -169,6 +169,9 @@ namespace Repository.Data.Migrations
                     b.Property<string>("C15")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("C16")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("C2")
                         .HasColumnType("nvarchar(max)");
 
@@ -232,6 +235,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("C15")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C16")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("C2")
@@ -323,6 +329,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -338,8 +347,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CGPA")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("CGPA")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CNIC")
                         .HasColumnType("nvarchar(max)");
@@ -371,8 +380,8 @@ namespace Repository.Data.Migrations
                     b.Property<bool>("IsSelected")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Marks_")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Marks_")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -392,6 +401,12 @@ namespace Repository.Data.Migrations
                     b.Property<string>("Roll_NO")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("TotalGPA")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TotalMarks_")
+                        .HasColumnType("int");
+
                     b.HasKey("ResultContainerId");
 
                     b.HasIndex("DistrictId");
@@ -408,8 +423,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CGPA")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("CGPA")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CNIC")
                         .HasColumnType("nvarchar(max)");
@@ -435,8 +450,8 @@ namespace Repository.Data.Migrations
                     b.Property<string>("Institute_District")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Marks_")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Marks_")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -455,6 +470,12 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Roll_NO")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalGPA")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalMarks_")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ResultContainerTempId");
 
@@ -1136,6 +1157,9 @@ namespace Repository.Data.Migrations
                     b.Property<string>("OperatorType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("OperatorId");
 
                     b.ToTable("Operator", "master");
@@ -1508,6 +1532,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("SchemeId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalMarks_GPA")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("SchemeLevelId");
 
                     b.HasIndex("InstituteId");
@@ -1555,28 +1582,13 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Condition")
+                    b.Property<string>("Expression")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DegreeScholarshipLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExcelColumnNameId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OperatorId")
-                        .HasColumnType("int");
 
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
                     b.HasKey("SelectionCriteriaGeneralId");
-
-                    b.HasIndex("DegreeScholarshipLevelId");
-
-                    b.HasIndex("ExcelColumnNameId");
-
-                    b.HasIndex("OperatorId");
 
                     b.HasIndex("SchemeLevelId");
 
@@ -3283,33 +3295,11 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral", b =>
                 {
-                    b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
-                        .WithMany()
-                        .HasForeignKey("DegreeScholarshipLevelId");
-
-                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
-                        .WithMany()
-                        .HasForeignKey("ExcelColumnNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.Operator", "Operator")
-                        .WithMany()
-                        .HasForeignKey("OperatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
                         .WithMany()
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DegreeScholarshipLevel");
-
-                    b.Navigation("ExcelColumnName");
-
-                    b.Navigation("Operator");
 
                     b.Navigation("SchemeLevel");
                 });

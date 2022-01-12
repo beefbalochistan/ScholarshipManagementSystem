@@ -41,7 +41,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
              });
             ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");
             //ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeId", "Name");            
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "Name", "Name", true);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "Name", "Name", true);
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "ConditionalOperator");
             ResultRepositoryTemp obj = new ResultRepositoryTemp();
@@ -148,7 +148,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                         if (worksheet.Cells[1, col].Value.ToString().ToLower() == selectedColumnList.ElementAt(val).ToLower())
                                         {
                                             excelColumnList.Add(col);
-                                            DbColumnList.Add(_context.ExcelColumnName.Where(a=>a.Name.ToLower() == selectedColumnList.ElementAt(val).ToLower()).Select(a=>a.ExcelColumnNameId).FirstOrDefault());
+                                            DbColumnList.Add(_context.ExcelColumnName.Where(a=>a.IsActive == true).Where(a=>a.Name.ToLower() == selectedColumnList.ElementAt(val).ToLower()).Select(a=>a.ExcelColumnNameId).FirstOrDefault());
                                             isFound = true;
                                             break;
                                         }
@@ -161,9 +161,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                 //-------------------------------------------------------
                                 List<string> columnNameList = new List<string>();
                                 int counter = 0;
-                                for (var val = 1; val <= 14; val++)//KDA Hard
+                                for (var val = 1; val <= 16; val++)//KDA Hard
                                 {
-                                    if (val == DbColumnList.ElementAt(counter))
+                                    if (val < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                     {
                                         columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
@@ -204,7 +204,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                     };
                                     _context.Add(columnLabel);
                                     await _context.SaveChangesAsync();
-                                    //-------------------------------------------------------                                    
+                                    //-------------------------------------------------------
+                                    var currentSchemeLevel = _context.SchemeLevel.Find(SchemeLevelId);
                                     var districts = _context.District.Select(a => new District { DistrictId = a.DistrictId, Name = a.Name.ToLower() }).ToList();
                                     for (var row = 2; row < rowCount; row++)
                                     {
@@ -212,9 +213,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                         try
                                         {
                                             List<string> specificExcelRow = new List<string>();
-                                            for (var val = 1; val <= 14; val++)//KDA Hard
+                                            for (var val = 1; val <= 16; val++)//KDA Hard
                                             {
-                                                if (val == DbColumnList.ElementAt(counter))
+                                                if (counter < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                                 {
                                                     specificExcelRow.Add(worksheet.Cells[row, excelColumnList.ElementAt(counter)].Value?.ToString());
                                                     counter++;
@@ -224,6 +225,10 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                                     specificExcelRow.Add("");
                                                 }
                                             }
+                                            int a;
+                                            decimal b;
+                                            bool resA = int.TryParse(specificExcelRow.ElementAt(8), out a);
+                                            bool resB = decimal.TryParse(specificExcelRow.ElementAt(12), out b);
                                             var result = new ResultContainerTemp()
                                             {
                                                 //ColumnLabelId = 43,
@@ -236,12 +241,14 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                                 Group = specificExcelRow.ElementAt(5),
                                                 Candidate_District = specificExcelRow.ElementAt(6),
                                                 Institute_District = specificExcelRow.ElementAt(7),
-                                                Marks_ = specificExcelRow.ElementAt(8),
+                                                Marks_ = resA == true ? a : 0,
                                                 Pass_Fail = specificExcelRow.ElementAt(9),
                                                 Remarks = specificExcelRow.ElementAt(10),
                                                 CNIC = specificExcelRow.ElementAt(11),
-                                                CGPA = specificExcelRow.ElementAt(12),
+                                                CGPA = resB == true ? b : 0,
                                                 Department = specificExcelRow.ElementAt(13),
+                                                TotalGPA = currentSchemeLevel.TotalMarks_GPA,
+                                                TotalMarks_ = currentSchemeLevel.TotalMarks_GPA,
                                                 DistrictId = 1
                                             };
                                             string districtName = result.Candidate_District.ToLower();
@@ -348,7 +355,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         public async Task<JsonResult> GetSelectedColumns(int rrId)
         {
             ColumnLabel columnLabels = await _context.ColumnLabel.Where(a => a.ResultRepositoryId == rrId).FirstOrDefaultAsync();
-            List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.ToList();
+            List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.Where(a=>a.IsActive == true).ToList();
             List<ExcelColumnName> selectedExcelColumnNames = new List<ExcelColumnName>();
             string record = JsonConvert.SerializeObject(columnLabels);
             foreach (var columnName in excelColumnNames)

@@ -23,7 +23,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: ExcelColumnNames
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ExcelColumnName.ToListAsync());
+            return View(await _context.ExcelColumnName.Where(a=>a.IsActive == true).ToListAsync());
         }
 
         // GET: ExcelColumnNames/Details/5
@@ -34,7 +34,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var excelColumnName = await _context.ExcelColumnName
+            var excelColumnName = await _context.ExcelColumnName.Where(a=>a.IsActive == true)
                 .FirstOrDefaultAsync(m => m.ExcelColumnNameId == id);
             if (excelColumnName == null)
             {
@@ -125,7 +125,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var excelColumnName = await _context.ExcelColumnName
+            var excelColumnName = await _context.ExcelColumnName.Where(a=>a.IsActive == true)
                 .FirstOrDefaultAsync(m => m.ExcelColumnNameId == id);
             if (excelColumnName == null)
             {

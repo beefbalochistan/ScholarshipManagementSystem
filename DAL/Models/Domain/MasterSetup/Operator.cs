@@ -14,6 +14,7 @@ namespace DAL.Models.Domain.MasterSetup
         public int OperatorId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Value { get; set; }
         public string OperatorType { get; set; }
     }
 }

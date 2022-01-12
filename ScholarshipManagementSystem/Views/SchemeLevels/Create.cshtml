@@ -80,11 +80,16 @@
                                             <div class="form-group">
                                                 <label asp-for="InstituteId" class="control-label"></label>
                                                 <select asp-for="InstituteId" class="form-control" asp-items="ViewBag.InstituteId"></select>
-                                            </div> 
+                                            </div>
                                             <div class="form-group">
                                                 <label asp-for="Code" class="control-label"></label>
                                                 <input asp-for="Code" class="form-control" placeholder="Scheme Level Code" required data-parsley-maxlength="3" />
                                                 <span asp-validation-for="Code" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="TotalMarks_GPA" class="control-label"></label>
+                                                <input asp-for="TotalMarks_GPA" class="form-control" placeholder="Total Marks/GPA" required data-parsley-maxlength="3" />
+                                                <span asp-validation-for="TotalMarks_GPA" class="text-danger"></span>
                                             </div>
                                         </div>                                            
                                         <div class="col-md-4">

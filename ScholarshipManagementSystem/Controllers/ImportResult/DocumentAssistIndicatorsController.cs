@@ -83,7 +83,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
              });
             ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId");
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId");
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId");
             return View();
         }
@@ -102,7 +102,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId", documentAssistIndicator.DocumentAssistId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", documentAssistIndicator.ResultRepositoryId);
             return View(documentAssistIndicator);
         }
@@ -121,7 +121,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return NotFound();
             }
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId", documentAssistIndicator.DocumentAssistId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", documentAssistIndicator.ResultRepositoryId);
             return View(documentAssistIndicator);
         }
@@ -159,7 +159,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "DocumentAssistId", documentAssistIndicator.DocumentAssistId);
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "ExcelColumnNameId", "ExcelColumnNameId", documentAssistIndicator.ExcelColumnNameId);
             ViewData["ResultRepositoryId"] = new SelectList(_context.ResultRepository, "ResultRepositoryId", "ResultRepositoryId", documentAssistIndicator.ResultRepositoryId);
             return View(documentAssistIndicator);
         }

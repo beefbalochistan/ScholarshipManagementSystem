@@ -3,30 +3,18 @@
 
 <table class="table">
     <thead>
-        <tr>
+        <tr>          
             <th>
-                @Html.DisplayNameFor(model => model.ExcelColumnName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Operator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Condition)
+                @Html.DisplayNameFor(model => model.Expression)
             </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
+        <tr>           
             <td>
-                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Operator.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Condition)
+                @Html.DisplayFor(modelItem => item.Expression)
             </td>
         </tr>
         }

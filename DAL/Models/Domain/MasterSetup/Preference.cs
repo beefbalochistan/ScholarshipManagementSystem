@@ -58,7 +58,7 @@ namespace DAL.Models.Domain.MasterSetup
         [Display(Name = "SQS-OMS Matric Qouta Percentage")]
         public float SQSOMSMatricQoutaPER { get; set; }
         [Display(Name = "SQS-EVI Matric Qouta Percentage")]
-        public float SQSEVIMatricQoutaPER { get; set; }
+        public float SQSEVIMatricQoutaPER { get; set; }        
         //---floatermediate
         [Display(Name = "POMS floatermediate Qouta Percentage")]
         public float POMSIntermediateQoutaPER { get; set; }
@@ -67,7 +67,7 @@ namespace DAL.Models.Domain.MasterSetup
         [Display(Name = "SQS-OMS floatermediate Qouta Percentage")]
         public float SQSOMSIntermediateQouta { get; set; }
         [Display(Name = "SQS-EVI floatermediate Qouta Percentage")]
-        public float SQSIntermediateEVIQouta { get; set; }
+        public float SQSIntermediateEVIQouta { get; set; }        
         //---DAE
         [Display(Name = "IOMS DAE Qouta Percentage")]
         public float IOMSDAEQoutaPER { get; set; }
@@ -76,7 +76,7 @@ namespace DAL.Models.Domain.MasterSetup
         [Display(Name = "SQS-OMS DAE Qouta Percentage")]
         public float SQSOMSDAEQoutaPER { get; set; }
         [Display(Name = "SQS-EVI DAE Qouta Percentage")]
-        public float SQSEVIDAEQoutaPER { get; set; }
+        public float SQSEVIDAEQoutaPER { get; set; }        
         //---Graduation
         [Display(Name = "IOMS Graduation Qouta Percentage")]
         public float IOMSGraduationQoutaPER { get; set; }

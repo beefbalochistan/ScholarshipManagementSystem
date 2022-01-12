@@ -119,7 +119,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.DistrictId = result.DistrictId;
                 applicant.ProvienceId = _context.District.Include(a=>a.Division.Provience).Where(a=>a.DistrictId == applicant.DistrictId).Select(a=>a.Division.ProvienceId).FirstOrDefault();
                 applicant.FatherName = result.Father_Name;
-                applicant.ReceivedMarks = int.Parse(result.Marks_);
+                applicant.ReceivedMarks = result.Marks_;
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
@@ -153,7 +153,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.DistrictId = result.DistrictId;
                     applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                     applicant.FatherName = result.Father_Name;
-                    applicant.ReceivedMarks = int.Parse(result.Marks_);
+                    applicant.ReceivedMarks = result.Marks_;
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectionMethodId = 2;// "DOSM";
                     applicant.RegisterationNumber = result.REG_NO;
@@ -181,7 +181,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.DistrictId = result.DistrictId;
                 applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                 applicant.FatherName = result.Father_Name;
-                applicant.ReceivedMarks = int.Parse(result.Marks_);
+                applicant.ReceivedMarks = result.Marks_;
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
@@ -212,7 +212,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.DistrictId = result.DistrictId;
                     applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                     applicant.FatherName = result.Father_Name;
-                    applicant.ReceivedMarks = int.Parse(result.Marks_);
+                    applicant.ReceivedMarks = result.Marks_;
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectionMethodId = 2;// "DOMS";
                     applicant.RegisterationNumber = result.REG_NO;

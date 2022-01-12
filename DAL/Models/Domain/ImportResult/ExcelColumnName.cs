@@ -13,5 +13,6 @@ namespace DAL.Models.Domain.ImportResult
         [Key]
         public int ExcelColumnNameId { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

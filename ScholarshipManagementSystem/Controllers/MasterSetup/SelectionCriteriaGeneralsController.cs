@@ -9,6 +9,7 @@ using DAL.Models.Domain.MasterSetup;
 using Repository.Data;
 using Newtonsoft.Json;
 using DAL.Models.Domain.ImportResult;
+using DAL.Models.ViewModels;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
@@ -24,7 +25,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: SelectionCriteriaGenerals
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SelectionCriteriaGeneral.Include(s => s.ExcelColumnName).Include(s => s.Operator).Include(a=>a.SchemeLevel.Scheme);
+            var applicationDbContext = _context.SelectionCriteriaGeneral.Include(a=>a.SchemeLevel.Scheme);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,9 +37,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var selectionCriteriaGeneral = await _context.SelectionCriteriaGeneral
-                .Include(s => s.ExcelColumnName)
-                .Include(s => s.Operator)
+            var selectionCriteriaGeneral = await _context.SelectionCriteriaGeneral               
                 .FirstOrDefaultAsync(m => m.SelectionCriteriaGeneralId == id);
             if (selectionCriteriaGeneral == null)
             {
@@ -69,9 +68,24 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         }
         // GET: SelectionCriteriaGenerals/Create
         public IActionResult Create()
-        {            
+        {
+            var selectNumberList = new List<SelectListItem>();
+            for (int i = 9; i>=0; i--)
+            {
+                selectNumberList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                });
+            }
+            selectNumberList.Add(new SelectListItem
+            {
+                Value = ".",
+                Text = "."
+            });
+            ViewData["NumberList"] = selectNumberList;
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name");
-            ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
+            ViewData["OperatorId"] = new SelectList(_context.Operator, "Value", "Name");
             ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name");
             return View();
         }
@@ -83,15 +97,39 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SelectionCriteriaGeneral selectionCriteriaGeneral)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
-                _context.Add(selectionCriteriaGeneral);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var IsExist = _context.SelectionCriteriaGeneral.Where(a => a.SchemeLevelId == selectionCriteriaGeneral.SchemeLevelId).Count();
+                if(IsExist == 0)
+                {
+                    _context.Add(selectionCriteriaGeneral);
+                    await _context.SaveChangesAsync();                    
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(selectionCriteriaGeneral.SchemeLevelId), "Selection Criteria Already Defined Against Selected Scheme!");
+                    //return BadRequest(ModelState);                    
+                }              
             }
+            var selectNumberList = new List<SelectListItem>();
+            for (int i = 9; i>=0; i--)
+            {
+                selectNumberList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                });
+            }
+            selectNumberList.Add(new SelectListItem
+            {
+                Value = ".",
+                Text = "."
+            });
+            ViewData["NumberList"] = selectNumberList;
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name");
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteriaGeneral.ExcelColumnNameId);
-            ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteriaGeneral.OperatorId);
+            ViewData["OperatorId"] = new SelectList(_context.Operator, "Value", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name");
             return View(selectionCriteriaGeneral);
         }
 
@@ -108,9 +146,25 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Where(a=>a.SchemeLevelId == selectionCriteriaGeneral.SchemeLevelId).Select(a=>a.SchemeId).FirstOrDefault());          
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteriaGeneral.ExcelColumnNameId);
-            ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteriaGeneral.OperatorId);
+            var selectNumberList = new List<SelectListItem>();
+            for (int i = 9; i>=0; i--)
+            {
+                selectNumberList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                });
+            }
+            selectNumberList.Add(new SelectListItem
+            {
+                Value = ".",
+                Text = "."
+            });
+            ViewData["NumberList"] = selectNumberList;
+            ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Find(selectionCriteriaGeneral.SchemeLevelId).SchemeId);
+            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", selectionCriteriaGeneral.SchemeLevelId);
+            ViewData["OperatorId"] = new SelectList(_context.Operator, "Value", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name");
             return View(selectionCriteriaGeneral);
         }
 
@@ -119,7 +173,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SelectionCriteriaGeneralId,OperatorId,ExcelColumnNameId,Condition")] SelectionCriteriaGeneral selectionCriteriaGeneral)
+        public async Task<IActionResult> Edit(int id, SelectionCriteriaGeneral selectionCriteriaGeneral)
         {
             if (id != selectionCriteriaGeneral.SelectionCriteriaGeneralId)
             {
@@ -130,8 +184,17 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 try
                 {
-                    _context.Update(selectionCriteriaGeneral);
-                    await _context.SaveChangesAsync();
+                    var result = TestExpression(selectionCriteriaGeneral.Expression);
+                    var jsonString = JsonConvert.SerializeObject(result.Value);
+                    if (jsonString.Contains("true"))
+                    {
+                        _context.Update(selectionCriteriaGeneral);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(nameof(selectionCriteriaGeneral.Expression), "Invalid Expression!");
+                    }                  
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -146,9 +209,25 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Where(a => a.SchemeLevelId == selectionCriteriaGeneral.SchemeLevelId).Select(a => a.SchemeId).FirstOrDefault());
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "ExcelColumnNameId", selectionCriteriaGeneral.ExcelColumnNameId);
-            ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name", selectionCriteriaGeneral.OperatorId);
+            var selectNumberList = new List<SelectListItem>();
+            for (int i = 9; i>=0; i--)
+            {
+                selectNumberList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                });
+            }
+            selectNumberList.Add(new SelectListItem
+            {
+                Value = ".",
+                Text = "."
+            });
+            ViewData["NumberList"] = selectNumberList;
+            ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", _context.SchemeLevel.Find(selectionCriteriaGeneral.SchemeLevelId).SchemeId);
+            ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeLevelId", "Name", selectionCriteriaGeneral.SchemeLevelId);
+            ViewData["OperatorId"] = new SelectList(_context.Operator, "Value", "Name");
+            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName, "ExcelColumnNameId", "Name");
             return View(selectionCriteriaGeneral);
         }
 
@@ -160,9 +239,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 return NotFound();
             }
 
-            var selectionCriteriaGeneral = await _context.SelectionCriteriaGeneral
-                .Include(s => s.ExcelColumnName)
-                .Include(s => s.Operator)
+            var selectionCriteriaGeneral = await _context.SelectionCriteriaGeneral               
                 .FirstOrDefaultAsync(m => m.SelectionCriteriaGeneralId == id);
             if (selectionCriteriaGeneral == null)
             {
@@ -182,32 +259,97 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> GetSelectionCriteriaGeneral(int rrId, int SchemeLevelId, int DegreeScholarshipLevelId)
+        public async Task<IActionResult> GetSelectionCriteriaGeneral(int SchemeLevelId)
         {
-            var applicationDbContext = _context.SelectionCriteriaGeneral.Include(r => r.Operator).Include(r => r.ExcelColumnName).Where(a => a.SchemeLevelId == SchemeLevelId).ToList();
-            if (DegreeScholarshipLevelId != 0)
+            var applicationDbContext = await _context.SelectionCriteriaGeneral.Where(a => a.SchemeLevelId == SchemeLevelId).ToListAsync();                        
+            return PartialView(applicationDbContext);
+        }
+        public async Task<JsonResult> ApplySelectionCriteria(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId)
+        {
+            var record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();            
+            if (SchemeId >= 4)
             {
-                applicationDbContext = applicationDbContext.Where(a => a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).ToList();
+                record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
             }
-            ColumnLabel columnLabels = await _context.ColumnLabel.Where(a => a.ResultRepositoryId == rrId).FirstOrDefaultAsync();
-            List<ExcelColumnName> excelColumnNames = _context.ExcelColumnName.ToList();
-            List<SelectionCriteriaGeneral> selectionCriteriaGenerals = new List<SelectionCriteriaGeneral>();
-            string record = JsonConvert.SerializeObject(columnLabels);
-            foreach (var criteria in applicationDbContext)
+            
+            if (record != null)
             {
-                if (record.Contains(criteria.ExcelColumnName.Name))
+                if (record.IsDataCleaned)
                 {
-                    SelectionCriteriaGeneral obj = new SelectionCriteriaGeneral();
-                    obj = criteria;
-                    selectionCriteriaGenerals.Add(obj);
+                    if(record.IsSelctionCriteriaApplied == false)
+                    {
+                        try
+                        {
+                            var selectionCriteria = _context.SelectionCriteriaGeneral.Where(a => a.SchemeLevelId == SchemeLevelId).FirstOrDefault();
+                            var result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultContainer set IsOnCriteria=1  WHERE " + selectionCriteria.Expression + " AND ResultRepositoryId=" + record.ResultRepositoryId);
+                            result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultRepository set IsSelctionCriteriaApplied=1  WHERE ResultRepositoryId=" + record.ResultRepositoryId);
+                            return Json(new { IsValid = true, message = "Applied Successfully!" });
+                        }
+                        catch (Exception ex)
+                        {
+                            return Json(new { IsValid = false, message = "Something Went Wrong!" });
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { IsValid = false, message = "Selection Criteria Already Applied!" });
+                    }                    
+                }
+                else
+                {
+                    return Json(new { IsValid = false, message = "Assist Document Before Appling Criteria!" });
                 }
             }
-
-            return PartialView(selectionCriteriaGenerals);
+            return Json(new {IsValid = false, message = "Result not found!" });
         }
         private bool SelectionCriteriaGeneralExists(int id)
         {
             return _context.SelectionCriteriaGeneral.Any(e => e.SelectionCriteriaGeneralId == id);
+        }
+        public JsonResult TestExpression(string exp)
+        {
+            try
+            {
+                var result = _context.Database.ExecuteSqlRaw("select count(*) from ImportResult.dummy WHERE " + exp);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false });
+            }            
+            return Json(new { success = true });
+        }
+        public JsonResult GetResultStatus(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId)
+        {
+            var record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();
+            if (SchemeId >= 4)
+            {
+                record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
+            }
+            var tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();
+            if (SchemeId >= 4)
+            {
+                tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
+            }
+            if (record != null)
+            {
+                bool IsClean = false;
+                bool IsCriteriaApplied = false;
+                bool IsMeritListGenerated = false;
+                if (record.IsDataCleaned)
+                {
+                    IsClean = true;
+                }
+                if (record.IsSelctionCriteriaApplied)
+                {
+                    IsCriteriaApplied = true;
+                }
+                if (record.IsMeritListGenerated)
+                {
+                    IsMeritListGenerated = true;
+                }
+                return Json(new { success = false, isclean = IsClean, iscriteriaapplied = IsCriteriaApplied, ismeritlistgenerated = IsMeritListGenerated, rrid = tempRecord.ResultRepositoryTempId });                
+            }
+            return Json(new { success = true, isclean = false, iscriteriaapplied = false, ismeritlistgenerated = false, rrid = tempRecord.ResultRepositoryTempId });
         }
     }
 }

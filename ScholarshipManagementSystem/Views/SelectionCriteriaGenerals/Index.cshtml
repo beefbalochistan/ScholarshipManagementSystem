@@ -18,15 +18,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SchemeLevel)
-            </th>
+            </th>            
             <th>
-                @Html.DisplayNameFor(model => model.ExcelColumnName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Operator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Condition)
+                @Html.DisplayNameFor(model => model.Expression)
             </th>
 
             <th></th>
@@ -40,15 +34,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SchemeLevel.Name)
-            </td>
+            </td>            
             <td>
-                @Html.DisplayFor(modelItem => item.ExcelColumnName.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Operator.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Condition)
+                @Html.DisplayFor(modelItem => item.Expression)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SelectionCriteriaGeneralId">Edit</a> |
