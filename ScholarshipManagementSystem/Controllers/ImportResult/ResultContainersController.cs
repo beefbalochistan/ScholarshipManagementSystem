@@ -120,11 +120,13 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.ProvienceId = _context.District.Include(a=>a.Division.Provience).Where(a=>a.DistrictId == applicant.DistrictId).Select(a=>a.Division.ProvienceId).FirstOrDefault();
                 applicant.FatherName = result.Father_Name;
                 applicant.ReceivedMarks = result.Marks_;
+                applicant.ReceivedCGPA = result.CGPA;
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
                 applicant.EntryThrough = "System";
-                applicant.TotalMarks = 1100;//KDA
+                applicant.TotalMarks = result.TotalMarks_;//KDA
+                applicant.TotalGPA = result.TotalGPA;
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Selected";
                 applicant.ApplicantSelectionStatusId = 1;
@@ -154,11 +156,13 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                     applicant.FatherName = result.Father_Name;
                     applicant.ReceivedMarks = result.Marks_;
+                    applicant.ReceivedCGPA = result.CGPA;
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectionMethodId = 2;// "DOSM";
                     applicant.RegisterationNumber = result.REG_NO;
                     applicant.EntryThrough = "System";
-                    applicant.TotalMarks = 1100;//KDA
+                    applicant.TotalMarks = result.TotalMarks_;//KDA
+                    applicant.TotalGPA = result.TotalGPA;
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Selected";
                     applicant.ApplicantSelectionStatusId = 1;                    
@@ -182,11 +186,13 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                 applicant.FatherName = result.Father_Name;
                 applicant.ReceivedMarks = result.Marks_;
+                applicant.ReceivedCGPA = result.CGPA;
                 applicant.RollNumber = result.Roll_NO;
                 applicant.SelectionMethodId = 1;// "POMS";
                 applicant.RegisterationNumber = result.REG_NO;
                 applicant.EntryThrough = "System";
-                applicant.TotalMarks = 1100;//KDA
+                applicant.TotalMarks = result.TotalMarks_;//KDA
+                applicant.TotalGPA = result.TotalGPA;
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Awaited";
                 applicant.ApplicantSelectionStatusId = 2;
@@ -213,11 +219,13 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
                     applicant.FatherName = result.Father_Name;
                     applicant.ReceivedMarks = result.Marks_;
+                    applicant.ReceivedCGPA = result.CGPA;
                     applicant.RollNumber = result.Roll_NO;
                     applicant.SelectionMethodId = 2;// "DOMS";
                     applicant.RegisterationNumber = result.REG_NO;
                     applicant.EntryThrough = "System";
-                    applicant.TotalMarks = 1100;//KDA
+                    applicant.TotalMarks = result.TotalMarks_;//KDA
+                    applicant.TotalGPA = result.TotalGPA;
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Awaited";
                     applicant.ApplicantSelectionStatusId = 2;
@@ -243,6 +251,249 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             await _context.SaveChangesAsync();
             //----------------END Freez-------------------------------------
             return RedirectToAction(nameof(Details), new { id });
+        }
+
+        public async Task<IActionResult> MeritListGenerator(int SLId, int policySRCForumId, int degreeScholarshipLevelId)
+        {
+            var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForumId == policySRCForumId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
+            int rrId = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId && a.DegreeScholarshipLevelId == degreeScholarshipLevelId).Max(a => a.ResultRepositoryId);
+            var ISExist = _context.Applicant.Count(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId);
+            if(ISExist == 0)
+            {
+                var currentSchemeLevel = _context.SchemeLevel.Find(SLId);
+                int gradingSystem = currentSchemeLevel.GradingSystem;
+                if (SLId == 1 || SLId == 2 || SLId == 3)
+                {
+                    var POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round(currentPolicy.POMS)).ToList();
+                    int counter = 1;
+                    foreach (var result in POMLCandidates)
+                    {
+                        Applicant applicant = new Applicant();
+                        applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                        applicant.Name = result.Name;
+                        applicant.DistrictId = result.DistrictId;
+                        applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                        applicant.FatherName = result.Father_Name;
+                        applicant.ReceivedMarks = result.Marks_;
+                        applicant.ReceivedCGPA = result.CGPA;
+                        applicant.RollNumber = result.Roll_NO;
+                        applicant.SelectionMethodId = 1;// "POMS";
+                        applicant.RegisterationNumber = result.REG_NO;
+                        applicant.EntryThrough = "System";
+                        applicant.TotalMarks = result.TotalMarks_;//KDA
+                        applicant.TotalGPA = result.TotalGPA;
+                        applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                        applicant.SelectionStatus = "Selected";
+                        applicant.ApplicantSelectionStatusId = 1;
+                        applicant.ApplicantCurrentStatusId = 1;
+                        _context.Add(applicant);
+                        ResultContainer currentResult = new ResultContainer();
+                        currentResult = result;
+                        currentResult.IsSelected = true;
+                        _context.Update(currentResult);
+                        counter++;
+                    }
+                    await _context.SaveChangesAsync();
+                    //--------------------------------------------------------------
+                    var districts = _context.District.Include(a => a.Division).Where(a => a.IsActive == true && a.Division.ProvienceId == 1).ToList();
+                    var SRCForumId = _context.PolicySRCForum.Where(a => a.PolicySRCForumId == policySRCForumId && a.IsEndorse == true).Max(a => a.PolicySRCForumId);
+                    var districtQouta = _context.DistrictQoutaBySchemeLevel.Include(a => a.SchemeLevelPolicy).Where(a => a.PolicySRCForumId == SRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SLId).ToList();
+                    float DOMS = 0;
+                    foreach (var district in districts)
+                    {
+                        DOMS = districtQouta.Where(a => a.DistrictId == district.DistrictId && a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId).Sum(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                        var DOMSCandidates = _context.ResultContainer.Where(a => a.Candidate_District == district.Name && a.DistrictId == district.DistrictId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round(DOMS)).ToList();
+                        foreach (var result in DOMSCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0');
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = result.DistrictId;
+                            applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.SelectionMethodId = 2;// "DOSM";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.SelectionStatus = "Selected";
+                            applicant.ApplicantSelectionStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                    //----------------------------POMS 50%----------------------------------
+                    POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round((currentPolicy.POMS/2))).ToList();
+                    foreach (var result in POMLCandidates)
+                    {
+                        Applicant applicant = new Applicant();
+                        applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                        applicant.Name = result.Name;
+                        applicant.DistrictId = result.DistrictId;
+                        applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                        applicant.FatherName = result.Father_Name;
+                        applicant.ReceivedMarks = result.Marks_;
+                        applicant.ReceivedCGPA = result.CGPA;
+                        applicant.RollNumber = result.Roll_NO;
+                        applicant.SelectionMethodId = 1;// "POMS";
+                        applicant.RegisterationNumber = result.REG_NO;
+                        applicant.EntryThrough = "System";
+                        applicant.TotalMarks = result.TotalMarks_;//KDA
+                        applicant.TotalGPA = result.TotalGPA;
+                        applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                        applicant.SelectionStatus = "Awaited";
+                        applicant.ApplicantSelectionStatusId = 2;
+                        applicant.ApplicantCurrentStatusId = 1;
+                        _context.Add(applicant);
+                        ResultContainer currentResult = new ResultContainer();
+                        currentResult = result;
+                        currentResult.IsSelected = true;
+                        _context.Update(currentResult);
+                        counter++;
+                    }
+                    await _context.SaveChangesAsync();
+                    //-------------------------DOMS 50%-------------------------------------
+                    var districts2 = _context.District.Include(a => a.Division).Where(a => a.IsActive == true && a.Division.ProvienceId == 1).ToList();
+                    foreach (var district2 in districts2)
+                    {
+                        DOMS = districtQouta.Where(a => a.DistrictId == district2.DistrictId).Max(a => a.DistrictPopulationSlot + a.DistrictMPISlot + a.DistrictAdditionalSlot);
+                        var DOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.DistrictId == district2.DistrictId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round((DOMS/2))).ToList();
+                        foreach (var result in DOMSCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = result.DistrictId;
+                            applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.SelectionMethodId = 2;// "DOMS";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.SelectionStatus = "Awaited";
+                            applicant.ApplicantSelectionStatusId = 2;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                    //-------------------------------------------------------------
+                    ResultRepository resultRepository = await _context.ResultRepository.FindAsync(rrId);
+                    resultRepository.IsMeritListGenerated = true;
+                    resultRepository.currentCounter = counter;
+                    _context.Update(resultRepository);
+                    await _context.SaveChangesAsync();
+                }
+                else if (SLId == 4 || SLId == 5 || SLId == 6)
+                {
+                }
+                else if ((currentSchemeLevel.QualificationLevelId == 5 || currentSchemeLevel.QualificationLevelId == 6 || currentSchemeLevel.QualificationLevelId == 7) && currentSchemeLevel.InstituteId != 2) // Bachlor-BS (Other then first year)
+                {
+                    try
+                    {
+                        var POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round(currentPolicy.POMS)).ToList();
+                        int counter = 1;
+                        foreach (var result in POMLCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = result.DistrictId;
+                            applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.SelectionMethodId = 1;// "POMS";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.SelectionStatus = "Selected";
+                            applicant.ApplicantSelectionStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                        await _context.SaveChangesAsync();
+                        //--------------------------------------------------------------                                    
+                        var degreeQouta = _context.DegreeLevelQoutaBySchemeLevel.Include(a => a.SchemeLevelPolicy).Where(a => a.PolicySRCForumId == policySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SLId && a.DegreeScholarshipLevelId == degreeScholarshipLevelId).FirstOrDefault();
+                        var IOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round((degreeQouta.SlotAllocate + degreeQouta.AdditionalSlotAllocate))).ToList();
+                        foreach (var result in IOMSCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = 1;
+                            applicant.ProvienceId = 1;
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.SelectionMethodId = 2;// "IOMS";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.DegreeScholarshipLevelId = degreeScholarshipLevelId;
+                            applicant.SelectionStatus = "Selected";
+                            applicant.ApplicantSelectionStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                        await _context.SaveChangesAsync();
+                        //-------------------------------------------------------------
+                        ResultRepository resultRepository = await _context.ResultRepository.FindAsync(rrId);
+                        resultRepository.IsMeritListGenerated = true;
+                        resultRepository.currentCounter = counter;
+                        _context.Update(resultRepository);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var temp = 0;
+                    }
+                }
+
+                //---------------Freez Policy-----------------------------------
+                PolicySRCForum policySRCForum = await _context.PolicySRCForum.FindAsync(currentPolicy.PolicySRCForumId);
+                policySRCForum.IsFreez = true;
+                _context.Update(policySRCForum);
+                await _context.SaveChangesAsync();
+            }            
+            //----------------END Freez-------------------------------------
+            return RedirectToAction(nameof(Details), new { id = rrId });
         }
         public async Task<IActionResult> ApplyCriteria(int id)
         {            

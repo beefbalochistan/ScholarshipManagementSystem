@@ -286,6 +286,7 @@
                         </div>
                         <button type="button" id="btnAddAssistDocumentIndicator" onclick="addDocumentAssistIndicator()" class="btn btn-primary mb-2">Add</button>*@
                                     <button type="button" id="btnAssistDocument" onclick="assistDocument()" class="btn btn-primary mb-2 ml-2">Assist Document</button>
+                                    <button type="button" id="btnFetchAssistDocument" onclick="fetchAssistDocumentGeneral()" class="btn btn-primary mb-2 ml-2">Refresh</button>
                                 </form>
                             </div>
                             <div class="col-lg-10">
@@ -316,6 +317,7 @@
                                         <i id="scriteriaDiv" class="display-4"></i>
                                     </div>                              
                                     <button type="button" id="btnApplyCriteria" onclick="applyCriteria()" class="btn btn-primary mb-2 ml-2">Apply Criteria</button>
+                                    <button type="button" onclick="fetchSelectionCriteriaGeneral()" class="btn btn-primary mb-2 ml-2">Refresh</button>
                                 </form>
                             </div>
                             <div class="col-lg-10">
@@ -438,7 +440,7 @@
                             },
                             success: function (data) {
                                 $('#RRId').val(data.rrid);
-                                if (!data.success) {
+                                if (data.success) {
                                     IsResultExist = true;
                                     IsClean = data.isclean;
                                     IsCriteriaApplied = data.iscriteriaapplied;
@@ -474,7 +476,7 @@
                                     $('#btnAttachResult').prop('disabled', false);
                                     $('#btnGenerateMeritList').prop('disabled', false);
                                     $('#previousLink').removeClass();
-                                }                                
+                                }
                                 $(".analize").hide();
                             }
                         });
@@ -492,7 +494,7 @@
                     }
                     //$('#progrss-wizard').bootstrapWizard('show', 3);
                 },
-                onPrevious: function (tab, navigation, index) {                    
+                onPrevious: function (tab, navigation, index) {
                     if (IsResultExist) {
                         @*if (IsCriteriaApplied) {
                             $('#progrss-wizard').bootstrapWizard('show', 6);
@@ -604,6 +606,7 @@
                 $('#lblFile').text('Choose file');
                 //$('#selectedColumn').text('');
                 var DegreeScholarshipLevelId = $("#DegreeScholarshipLevelId").val();
+                //alert(DegreeScholarshipLevelId);
                 $(".TempDegreeScholarshipLevelId").val($("#DegreeScholarshipLevelId option:selected").text());
                 if (DegreeScholarshipLevelId == 0) {
                     $("#schemeLevelDiv").show();
@@ -882,23 +885,26 @@
             $('#btnAssistDocument').prop('disabled', true);
             $(".analize").show();
             var rrId = $('#RRId').val();
-            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
-            $.ajax({
-                url: '@Url.Action("AssistDocument", "DocumentAssistGenerals")',
+            var policySRCForumId = $('#PolicySRCForumId').val();
+            var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            @*$.ajax({
+                url: '@Url.Action("MeritListGenerator", "ResultContainers")',
                 data: {
                     rrId: rrId,
-                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
-                    SchemeLevelId: schemeLevelId
+                    policySRCForumId: policySRCForumId,
+                    SLId: schemeLevelId,
+                    degreeScholarshipLevelId: degreeScholarshipLevelId,
                 },
                 success: function (data) {
                     setTimeout(function () {
-                        $("#documentAssistOutputdiv").html(data);
                         $(".analize").hide();
                         $("#documentAssistIndicatordiv").hide();
                     }, delay);
                 }
-            });
+            });*@
+            var url = '@Url.Action("MeritListGenerator", "ResultContainers")?rrId=' + rrId + '&SLId=' + schemeLevelId + '&policySRCForumId=' + policySRCForumId + '&degreeScholarshipLevelId=' + degreeScholarshipLevelId;
+            window.location.href = url;
         }
     </script>
 

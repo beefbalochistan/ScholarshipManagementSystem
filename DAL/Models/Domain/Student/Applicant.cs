@@ -83,11 +83,11 @@ namespace DAL.Models.Domain.Student
         [Display(Name = "Total Marks")]
         public int TotalMarks { get; set; }        
         [Display(Name = "Total GPA")]
-        public float TotalGPA { get; set; }
+        public decimal TotalGPA { get; set; }
         [Display(Name = "Received Marks")]
         public int ReceivedMarks { get; set; }
         [Display(Name = "Received CGPA")]
-        public float ReceivedCGPA { get; set; }
+        public decimal ReceivedCGPA { get; set; }
         [Display(Name = "Old Institude Name With Address")]
         public string OldInstitudeNameAddress { get; set; }
         [Display(Name = "Board/University")]

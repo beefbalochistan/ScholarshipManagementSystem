@@ -40,6 +40,7 @@
                                                     @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
                                                 </th>
                                                 <th>Excel File</th>
+                                                <th>Scanned File</th>
                                                 <th>Data Cleaned</th>
                                                 <th>Criteria Applied</th>
                                                 <th>Action</th>
@@ -74,6 +75,14 @@
                                                 </td>
                                                 <td>
                                                     @{
+                                                        if (item.resultScannedFilePath != null)
+                                                        {
+                                                            <a href="@item.resultScannedFilePath">Download</a>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{
                                                         if (item.IsDataCleaned)
                                                         {
                                                             <img src="~/assets/images/tick.png" height="20" alt="Yes" />
@@ -95,7 +104,7 @@
                                                         {
                                                             <img src="~/assets/images/cross.png" height="20" alt="Yes" />
                                                         }
-                                                    }                                                    
+                                                    }
                                                 </td>
                                                 <td>
                                                     <a asp-action="Index" asp-controller="ResultContainers" class="btn-sm btn-success" asp-route-id="@item.ResultRepositoryId">View Result</a>

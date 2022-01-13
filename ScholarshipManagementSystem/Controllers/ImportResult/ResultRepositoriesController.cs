@@ -368,7 +368,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                             return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
                         }
                     }
-                    /*if (isReImportResult == true && IsResultAlreadyExist != 0)
+                    if (IsResultAlreadyExist != 0)
                     {
                         var ResultRepositoryTempId = 0;
                         if (SchemeId < 4)
@@ -384,7 +384,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         _context.Database.ExecuteSqlRaw("delete [ImportResult].[ColumnLabelTemp] where ResultRepositoryTempId = " + ResultRepositoryTempId);
                         //_context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('ImportResult.ResultContainerTemp', RESEED, 1);");                        
                         IsResultAlreadyExist = 0;
-                    }*/
+                    }
                     if (IsResultAlreadyExist == 0)
                     {
                         int MaxResultRespositoryId = 0;
@@ -423,7 +423,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                 int counter = 0;
                                 for (var val = 1; val <= 16; val++)//KDA Hard
                                 {
-                                    if (val < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
+                                    if (counter < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                     {
                                         columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
@@ -475,7 +475,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                             List<string> specificExcelRow = new List<string>();
                                             for (var val = 1; val <= 16; val++)//KDA Hard
                                             {
-                                                if (val == DbColumnList.ElementAt(counter))
+                                                if (counter < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                                 {
                                                     specificExcelRow.Add(worksheet.Cells[row, excelColumnList.ElementAt(counter)].Value?.ToString());
                                                     counter++;
@@ -485,6 +485,10 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                                     specificExcelRow.Add("");
                                                 }
                                             }
+                                            int a;
+                                            decimal b;
+                                            bool resA = int.TryParse(specificExcelRow.ElementAt(8), out a);
+                                            bool resB = decimal.TryParse(specificExcelRow.ElementAt(12), out b);
                                             var result = new ResultContainerTemp()
                                             {
                                                 //ColumnLabelId = 43,
@@ -497,14 +501,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                                 Group = specificExcelRow.ElementAt(5),
                                                 Candidate_District = specificExcelRow.ElementAt(6),
                                                 Institute_District = specificExcelRow.ElementAt(7),
-                                                Marks_ = int.Parse(specificExcelRow.ElementAt(8)),
+                                                Marks_ = resA == true ? a : 0,
                                                 Pass_Fail = specificExcelRow.ElementAt(9),
                                                 Remarks = specificExcelRow.ElementAt(10),
                                                 CNIC = specificExcelRow.ElementAt(11),
-                                                TotalGPA = currentSchemeLevel.TotalMarks_GPA,
-                                                TotalMarks_ = Convert.ToInt32(currentSchemeLevel.TotalMarks_GPA),
-                                                CGPA = decimal.Parse(specificExcelRow.ElementAt(12)),
+                                                CGPA = resB == true ? b : 0,
                                                 Department = specificExcelRow.ElementAt(13),
+                                                TotalGPA = currentSchemeLevel.TotalMarks_GPA,
+                                                TotalMarks_ = currentSchemeLevel.TotalMarks_GPA,
                                                 DistrictId = 1
                                             };
                                             string districtName = result.Candidate_District.ToLower();

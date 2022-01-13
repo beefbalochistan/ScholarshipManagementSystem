@@ -5,33 +5,31 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
 <h4>Selection Criteria</h4>
 <hr />
-@{ 
-    if(ViewBag.meesage != null)
-            {
-                <div>@ViewBag.message</div>
-            }
+@{
+    if (ViewBag.meesage != null)
+    {
+        <div>@ViewBag.message</div>
+    }
 }
-<form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <span asp-validation-for="SchemeLevelId" class="text-danger"></span>
+    <span asp-validation-for="Expression" class="text-danger"></span>    
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Select Scheme</label>
                 <select id="SchemeId" name="SchemeId" class="form-control" asp-items="ViewBag.SchemeId" required>
-                    <option value="">-Select-</option>
                 </select>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Select Scheme Level</label>
-                <select asp-for="SchemeLevelId" class="form-control" required>
-                    <option value="">-Select-</option>
+                <select asp-for="SchemeLevelId" asp-items="ViewBag.SchemeLevelId" class="form-control" required>
                 </select>
             </div>
         </div>
@@ -56,7 +54,7 @@
                     <select id="ExcelColumnNameId" class="form-control" asp-items="ViewBag.ExcelColumnNameId">
                     </select>
                 </div>
-                <button type="button" id="addColumn" onclick="addColumnFun()" class="btn btn-primary mb-2">Add</button>
+                <button type="button" id="addColumn" onclick="addColumnFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
             </div>
             <div class="form-inline">
                 <label class="control-label"></label>
@@ -67,7 +65,7 @@
                     <select id="OperatorId" class="form-control" asp-items="ViewBag.OperatorId">
                     </select>
                 </div>
-                <button type="button" id="addOperator" onclick="addOperatorFun()" class="btn btn-primary mb-2">Add</button>
+                <button type="button" id="addOperator" onclick="addOperatorFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
             </div>
             <div class="form-inline">
                 <label class="control-label"></label>
@@ -78,14 +76,21 @@
                     <select id="NumberListId" class="form-control" asp-items="ViewBag.NumberList">
                     </select>
                 </div>
-                <button type="button" id="addNumber" onclick="addNumberFun()" class="btn btn-primary mb-2">Add</button>
+                <button type="button" id="addNumber" onclick="addNumberFun()" class="btn btn-info mb-2"><i class="bx bx-add-to-queue font-size-16 align-middle mr-2"></i> Add</button>
             </div>
         </div>
         <div class="col-md-8">
             <div class="form-group" id="">
-                <button type="button" id="addOperator" onclick="clearTextAreaFun()" class="btn btn-primary mb-2">Clear Expression</button>
-                <button type="button" id="undo" onclick="undoFun()" class="btn btn-primary mb-2">Undo</button>
-                @*<textarea id="ExpressionViewer" class="form-control" cols="2" readonly="readonly" required>  </textarea>*@
+                <button type="button" id="addOperator" onclick="clearTextAreaFun()" class="btn btn-secondary mb-2">
+                    <i class="bx bxs-trash  font-size-16 align-middle mr-2"></i>Clear Expression
+                </button>
+                <button type="button" id="undo" onclick="undoFun()" class="btn btn-warning mb-2">
+                    <i class="bx bx-bx-undo font-size-16 align-middle mr-2"></i>Undo
+                </button>
+                <button type="button" id="undo" onclick="testExpressionFun()" class="btn btn-success mb-2">
+                    <i class="bx bx-test-tube font-size-16 align-middle mr-2"></i>Test Expression
+                </button>
+                <textarea id="ExpressionViewer" class="form-control" cols="2" readonly="readonly" style="display:none" required></textarea>
                 <textarea asp-for="Expression" class="form-control" cols="2" readonly="readonly" required>  </textarea>
             </div>
         </div>
@@ -93,7 +98,7 @@
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input type="submit" value="Save Expression" class="btn btn-primary" />
             </div>
         </div>
     </div>
@@ -104,36 +109,12 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
     <script>
-        let stack1 = [];
-        let stack2 = [];
-        $(document).ready(function () {                           
-            $("#SchemeLevelId").val('');
-            $("#SchemeId").val('');
-            $('#ExpressionViewer').val('');
-            $('#Expression').val('');
-            @*$("#SchemeLevelId").change(function () {
-                var SchemeLevelId = $("#SchemeLevelId").val();
-                var SchemeId = $("#SchemeId").val();
-                if (SchemeLevelId != 0) {
-                    if (SchemeId >= 4) {
-                        $.get("/SelectionCriteriaGenerals/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
-                            $("#DegreeScholarshipLevelId").empty();
-                            $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
-                            console.log(data);
-                            $.each(data, function (index, row) {
-                                console.log(row);
-                                $("#DegreeScholarshipLevelId").append("<option value='" + row.value + "'>" + row.text + "</option>")
-                            });
-                        });
-                    }
-                    return false;
-                } else {
-                    $("#DegreeScholarshipLevelId").empty();
-                    $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
-                }
-            });*@
-
+        let stack1 = [];        
+        let stack2 = [];        
+        $(document).ready(function () {
+           
             $("#SchemeId").change(function () {
                 var SchemeId = $("#SchemeId").val();
                 $("#OperatorId").val('');
@@ -157,16 +138,16 @@
                     @*$('#degreeLevelDiv').hide();*@
                 }
             });
-        });        
-        function addColumnFun() {            
+        });
+        function addColumnFun() {
             var column = $('#ExcelColumnNameId option:selected').text();
             stack1.push(" " + column + " ");
-            stack2.push(" " + column + " ");            
+            stack2.push(" " + column + " ");
             $('#ExpressionViewer').val(stack1);
             var expressionViewer = $('#ExpressionViewer').val();
             $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
             $('#Expression').val(stack2);
-            var expression = $('#Expression').val();                                    
+            var expression = $('#Expression').val();
             $('#Expression').val(expression.replace(/,/g, ''));
             console.log(stack1);
         }
@@ -174,7 +155,7 @@
             var operator = $('#OperatorId option:selected').text();
             var operatorValue = $('#OperatorId option:selected').val();
             stack1.push(" " + operator + " ");
-            stack2.push(" " + operatorValue + " ");            
+            stack2.push(" " + operatorValue + " ");
             $('#ExpressionViewer').val(stack1);
             var expressionViewer = $('#ExpressionViewer').val();
             $('#ExpressionViewer').val(expressionViewer.replace(/,/g, ''));
@@ -206,6 +187,52 @@
             $('#Expression').val(stack2);
             var expression = $('#Expression').val();
             $('#Expression').val(expression.replace(/,/g, ''));
+        }
+        function testExpressionFun() {
+
+            var exp = $('#Expression').val();
+            exp = RemoveAllSpaces(exp);
+            $.ajax({
+                url: '@Url.Action("TestExpression", "SelectionCriteriaGenerals")',
+                data: {
+                    'exp': exp
+                },
+                success: function (data) {
+                    debugger;
+                    if (data.success) {
+                        notificationme("Expression Validated Successfully!");
+                    } else {
+                        notificationme("Invalid Expression!");
+                    }
+                }
+            });
+        }
+        function RemoveAllSpaces(ToRemove) {
+            let str = new String(ToRemove);
+            while (str.includes(" ")) {
+                str = str.replace(" ", "");
+            }
+            return str;
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
         }
     </script>
 }

@@ -256,7 +256,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     }
                 }
                 ViewBag.RRId = rrId;
-                ViewBag.TotalRecord = _context.ResultContainer.Count(a => a.ResultRepositoryId == rrId);
+                ViewBag.TotalRecord = _context.ResultContainerTemp.Count(a => a.ResultRepositoryTempId == rrId);
                 List<SPAssistDocumentViewer> sPAssistDocumentViewers = new List<SPAssistDocumentViewer>();
                 int counter = 0;
                 foreach (var documentAssist in documentAssistGenerals)
@@ -318,7 +318,11 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     _context.Database.ExecuteSqlRaw("delete [ImportResult].[ResultRepositoryTemp] where ResultRepositoryTempId = " + rrId);
                     _context.Database.ExecuteSqlRaw("delete [ImportResult].[ColumnLabelTemp] where ResultRepositoryTempId = " + rrId);
                     ViewBag.IsAssist = false;
-                }                           
+                }
+                else
+                {
+                    ViewBag.IsAssist = false;
+                }                     
             }
             else
             {

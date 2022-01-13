@@ -27,6 +27,7 @@ namespace DAL.Models.Domain.MasterSetup
         public bool IsActive { get; set; } = true;
         [Display(Name = "Total Marks/GPA")]
         public decimal TotalMarks_GPA { get; set; }
+        public int GradingSystem { get; set; }
         public virtual Scheme Scheme { get; set; }
         public virtual QualificationLevel QualificationLevel { get; set; }
         public virtual Institute Institute { get; set; }

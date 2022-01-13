@@ -163,7 +163,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                                 int counter = 0;
                                 for (var val = 1; val <= 16; val++)//KDA Hard
                                 {
-                                    if (val < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
+                                    if (counter < DbColumnList.Count && val == DbColumnList.ElementAt(counter))
                                     {
                                         columnNameList.Add(selectedColumnList.ElementAt(counter).ToString());
                                         counter++;
@@ -338,7 +338,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             var degreeLevelList = degreeLevels.Select(m => new SelectListItem()
             {
                 Text = m.Name.ToString(),
-                Value = m.DegreeLevelId.ToString(),
+                Value = m.DegreeScholarshipLevelId.ToString(),
             });
             return Json(degreeLevelList);
         }

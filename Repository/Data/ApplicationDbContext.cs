@@ -36,8 +36,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear> ScholarshipFiscalYear { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.SchemeLevelPayment> SchemeLevelPayment { get; set; }        
         public DbSet<DAL.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel> DistrictQoutaBySchemeLevel { get; set; }
-        public DbSet<DAL.Models.ViewModels.PolicyView> PolicyView { get; set; }        
-        public DbSet<DAL.Models.ViewModels.SPSingleValue> SPSingleValue { get; set; }        
+        public DbSet<DAL.Models.ViewModels.PolicyView> PolicyView { get; set; }                       
         public virtual DbSet<DAL.Models.ViewModels.DegreeSecondLevel> DegreeSecondLevel { get; set; }        
         public virtual DbSet<DAL.Models.ViewModels.DegreeThirdLevel> DegreeThirdLevel { get; set; }        
         public DbSet<DAL.Models.Domain.ScholarshipSetup.SchemeLevelPolicy> SchemeLevelPolicy { get; set; }

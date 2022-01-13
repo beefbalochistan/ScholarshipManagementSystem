@@ -324,12 +324,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             if (SchemeId >= 4)
             {
                 record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
-            }
-            var tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();
-            if (SchemeId >= 4)
-            {
-                tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
-            }
+            }            
             if (record != null)
             {
                 bool IsClean = false;
@@ -347,9 +342,21 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 {
                     IsMeritListGenerated = true;
                 }
-                return Json(new { success = false, isclean = IsClean, iscriteriaapplied = IsCriteriaApplied, ismeritlistgenerated = IsMeritListGenerated, rrid = tempRecord.ResultRepositoryTempId });                
+                return Json(new { success = true, isclean = IsClean, iscriteriaapplied = IsCriteriaApplied, ismeritlistgenerated = IsMeritListGenerated, rrid = record.ResultRepositoryId });
             }
-            return Json(new { success = true, isclean = false, iscriteriaapplied = false, ismeritlistgenerated = false, rrid = tempRecord.ResultRepositoryTempId });
+            else
+            {
+                var tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();
+                if (SchemeId >= 4)
+                {
+                    tempRecord = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
+                }
+                if(tempRecord == null)
+                {
+                    return Json(new { success = false, isclean = false, iscriteriaapplied = false, ismeritlistgenerated = false, rrid = 0 });
+                }
+                return Json(new { success = false, isclean = false, iscriteriaapplied = false, ismeritlistgenerated = false, rrid = tempRecord.ResultRepositoryTempId });
+            }            
         }
     }
 }
