@@ -90,7 +90,7 @@
                                                                           if (scheme.SchemeId > 3)
                                                                           {
                                                                               <td>
-                                                                                  @Html.DisplayFor(modelItem => item.DegreeScholarshipLevelId)
+                                                                                  @Html.DisplayFor(modelItem => item.DegreeScholarshipLevel.Name)
                                                                               </td>
                                                                           }
                                                                       }
@@ -158,8 +158,8 @@
                                                   else
                                                   {
                                                       List<SchemeLevel> schemeLevelList = ViewBag.SchemeLevels;
-                                                      @foreach (var item in Model.Where(a => a.SchemeLevelPolicy.SchemeLevel.SchemeId == scheme.SchemeId))
-                                                          @foreach (var schemelevel in schemeLevelList.Where(a => a.SchemeLevelId == item.SchemeLevelPolicy.SchemeLevelId))
+                                                      @*@foreach (var item in Model.Where(a => a.SchemeLevelPolicy.SchemeLevel.SchemeId == scheme.SchemeId))*@
+                                                          @foreach (var schemelevel in schemeLevelList.Where(a => a.SchemeId == scheme.SchemeId))
                                                           {
                                           <div id=@("accordion" + counter)>
                                               <div class="card mb-1 shadow-none">
@@ -185,11 +185,10 @@
                                                                           </th>
                                                                           <th>
                                                                               @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
-                                                                          </th>
-                                                                        
-                                                                                  <th>
-                                                                                      <text>Degree Level</text>
-                                                                                  </th>                                                                              
+                                                                          </th>                                                                        
+                                                                            <th>
+                                                                                <text>Degree Level</text>
+                                                                            </th>                                                                              
                                                                           <th>Excel File</th>
                                                                           <th>Scanned File</th>
                                                                           <th>Data Cleaned</th>
@@ -210,7 +209,7 @@
                                                                           </td>
 
                                                                           <td>
-                                                                              @Html.DisplayFor(modelItem => item2.DegreeScholarshipLevelId)
+                                                                              @Html.DisplayFor(modelItem => item2.DegreeScholarshipLevel.Name)
                                                                           </td>
 
                                                                           <td>

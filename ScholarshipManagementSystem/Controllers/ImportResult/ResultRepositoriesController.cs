@@ -30,9 +30,10 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: ResultRepositories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel).Include(r => r.ScholarshipFiscalYear);
+            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel.DegreeScholarshipLevels).Include(r => r.ScholarshipFiscalYear);
             ViewBag.Schemes = _context.Scheme.ToList();
             ViewBag.SchemeLevels = _context.SchemeLevel.ToList();
+            ViewBag.DegreeScholarshipLevel = _context.DegreeScholarshipLevel.ToList();
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Index2()

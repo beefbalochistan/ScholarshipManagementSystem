@@ -10,7 +10,71 @@
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" key="t-menu">BEEF Workspace</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bxs-user"></i>
+                        <span key="t-invoices">My Workspace</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-file-txt"></i>
+                                    <span key="t-calendar" id="TotalInProcessFiles">Applicant</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar"> Applicant Tracking</span>
+                                </a>
+                            </li>
 
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormCollection.View)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="CollectForm" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-file-doc"></i>
+                                    <span key="t-calendar">Form Collection</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormEntry.View)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantFormEntry" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-file-doc"></i>
+                                    <span key="t-calendar">Form Entry</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-file-pdf"></i>
+                                    <span key="t-calendar">File Attachment</span>
+                                </a>
+                            </li>
+                        }
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                        {
+                            <li>
+                                <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
+                                    <i class="bx bxs-message-dots"></i>
+                                    <span key="t-calendar">Send SMS</span>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </li>
                 <li class="menu-title" key="t-menu">Scholarship Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
@@ -54,13 +118,14 @@
                     </li>
                 }
 
+
                 <li class="menu-title" key="t-menu">Master Setup</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
-                            <span key="t-invoices">Master Screens</span>
+                            <span key="t-invoices">Regional Setups</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
@@ -87,30 +152,14 @@
                                     <span key="t-calendar">District Detail</span>
                                 </a>
                             </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="QualificationLevels" class=" waves-effect">
-                                    <i class="bx bxs-capsule"></i>
-                                    <span key="t-calendar">Qualification Level</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="Degrees" class=" waves-effect">
-                                    <i class="bx bxs-paper-plane"></i>
-                                    <span key="t-calendar">Degree</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="DegreeLevels" class=" waves-effect">
-                                    <i class="bx bxs-paper-plane"></i>
-                                    <span key="t-calendar">Degree Level</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="DegreeScholarshipLevels" class=" waves-effect">
-                                    <i class="bx bxs-paper-plane"></i>
-                                    <span key="t-calendar">Degree Scholarship Level</span>
-                                </a>
-                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Institution Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
                             <li>
                                 <a asp-action="Index" asp-controller="Disciplines" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
@@ -153,6 +202,46 @@
                                     <span key="t-calendar">Institute Faculty</span>
                                 </a>
                             </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Qualification Setups</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li>
+                                <a asp-action="Index" asp-controller="QualificationLevels" class=" waves-effect">
+                                    <i class="bx bxs-capsule"></i>
+                                    <span key="t-calendar">Qualification Level</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="Degrees" class=" waves-effect">
+                                    <i class="bx bxs-paper-plane"></i>
+                                    <span key="t-calendar">Degree</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="DegreeLevels" class=" waves-effect">
+                                    <i class="bx bxs-paper-plane"></i>
+                                    <span key="t-calendar">Degree Level</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="DegreeScholarshipLevels" class=" waves-effect">
+                                    <i class="bx bxs-paper-plane"></i>
+                                    <span key="t-calendar">Degree Scholarship Level</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Scheme Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
                             <li>
                                 <a asp-action="Index" asp-controller="Schemes" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
@@ -165,18 +254,14 @@
                                     <span key="t-calendar">Scheme Level</span>
                                 </a>
                             </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="SectionComments" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Green Note Comments</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="PaymentMethods" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Payment Method</span>
-                                </a>
-                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Policy Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
                             <li>
                                 <a asp-action="Edit" asp-controller="Preferences" asp-route-id="4" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
@@ -185,6 +270,47 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Financial Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li>
+                                <a asp-action="Index" asp-controller="PaymentMethods" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Payment Method</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">User &amp; Section Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li>
+                                <a asp-action="Index" asp-controller="SectionComments" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Green Note Comments</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Users" asp-controller="UserAccessToForwards" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Forward Access</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Users" asp-controller="UserAccessToSchemeLevels" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Scheme Level Access</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                 }
 
                 <li class="menu-title" key="t-menu">User Management</li>
@@ -200,20 +326,9 @@
                             <li><a asp-action="Index" asp-controller="Roles" key="t-invoice-detail">Roles</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a asp-action="Users" asp-controller="UserAccessToForwards" class=" waves-effect">
-                            <i class="bx bxs-dizzy"></i>
-                            <span key="t-calendar">Forward Access</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Users" asp-controller="UserAccessToSchemeLevels" class=" waves-effect">
-                            <i class="bx bxs-dizzy"></i>
-                            <span key="t-calendar">Scheme Level Access</span>
-                        </a>
-                    </li>
+
                 }
-                <li class="menu-title" key="t-menu">Compile Result</li>
+                <li class="menu-title" key="t-menu">Result Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
                     <li>
@@ -256,69 +371,6 @@
                     </li>
                 }
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bxs-user"></i>
-                        <span key="t-invoices">Applicant</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-txt"></i>
-                                    <span key="t-calendar" id="TotalInProcessFiles">My Workplace</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar"> Applicant Tracking</span>
-                                </a>
-                            </li>                            
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormCollection.View)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="CollectForm" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-doc"></i>
-                                    <span key="t-calendar">Form Collection</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormEntry.View)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantFormEntry" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-doc"></i>
-                                    <span key="t-calendar">Form Entry</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-pdf"></i>
-                                    <span key="t-calendar">File Attachment</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-message-dots"></i>
-                                    <span key="t-calendar">Send SMS</span>
-                                </a>
-                            </li>
-                        }
-
-                    </ul>
-                </li>
                 <li class="menu-title" key="t-menu">SMS Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
