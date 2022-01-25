@@ -25,6 +25,7 @@
     }
     .disabled-link {
         cursor: not-allowed;
+        display: none;
         background-color: #798ceb;
     }
 </style>
@@ -164,7 +165,7 @@
                                             <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
                                         </div>
                                         <div class="form-group">
-                                            <button id="btnAttachResult" type="button" onclick="AttachFile()" class="btn btn-info">Attach Result</button>
+                                            @*<button id="btnAttachResult" type="button" onclick="AttachFile()" class="btn btn-info">Attach Result</button>*@
                                             <span style="display:none" id="AttachResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
                                     </div>
@@ -372,7 +373,7 @@
                 </div>
                 <ul class="pager wizard twitter-bs-wizard-pager-link">
                     <li class="previous"><a href="javascript: void(0);" id="previousLink">Previous</a></li>
-                    <li class="next"><a href="javascript: void(0);" id="nextLink" class="">Next</a></li>
+                    <li class="next"><a href="#" id="nextLink" class="">Next</a></li>
                 </ul>
             </div>
         </div>
@@ -448,7 +449,8 @@
                                     $('#btnImportResult').prop('disabled', true);
                                     $('#btnAttachResult').prop('disabled', true);
                                     if (data.ismeritlistgenerated) {
-                                        $('#btnGenerateMeritList').prop('disabled', false);
+                                        $('#btnGenerateMeritList').prop('disabled', true);
+                                        notificationme("Result Already Imported!");
                                         $('#progrss-wizard').bootstrapWizard('show', 6);
                                         CurrentTab = 6;
                                     } else if (data.iscriteriaapplied) {
@@ -481,16 +483,35 @@
                             }
                         });
                     } else if (index == 3) {
-
+                        var excelFile = document.getElementById('ExcelFile');
+                        if (excelFile.files.length == 0) {
+                            notificationme("Please attach result file!");
+                            onPrevious(tab, navigation, 3);
+                        } else {
+                            AttachFile();
+                        }
                     }
                     else if (index == 4) {
+                        if ($("#RRId").val() == "0") {
+                            notificationme("Please import result!");
+                            onPrevious(tab, navigation, 4);
+                        }
                         //fetchAssistDocumentIndicator(0);
                         fetchAssistDocumentGeneral();
                         notificationme('Document Assist Indicators defined against selected Scheme Level!');
                     }
                     else if (index == 5) {
+                        if (IsClean == false) {
+                            notificationme('Please assist document before proceed!');
+                            onPrevious(tab, navigation, 4);
+                        }
                         fetchSelectionCriteriaGeneral();
                         notificationme('Selection criteria defined against selected Scheme Level!');
+                    } else if (index == 6) {
+                        if (IsCriteriaApplied == false) {
+                            notificationme('Please apply criteria before proceed!');
+                            onPrevious(tab, navigation, 5);
+                        }
                     }
                     //$('#progrss-wizard').bootstrapWizard('show', 3);
                 },
@@ -871,7 +892,10 @@
                         setTimeout(function () {
                             notificationme(data.message);
                         }, delay);
+                        IsCriteriaApplied = true;
                     } else {
+                        IsCriteriaApplied = false;
+                        $('#btnApplyCriteria').prop('disabled', false);
                         notificationme(data.message);
                     }
                     $(".analize").hide();
@@ -902,7 +926,7 @@
                         $("#documentAssistIndicatordiv").hide();
                     }, delay);
                 }
-            });*@
+            });*@            
             var url = '@Url.Action("MeritListGenerator", "ResultContainers")?rrId=' + rrId + '&SLId=' + schemeLevelId + '&policySRCForumId=' + policySRCForumId + '&degreeScholarshipLevelId=' + degreeScholarshipLevelId;
             window.location.href = url;
         }

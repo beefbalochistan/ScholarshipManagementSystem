@@ -28,9 +28,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             return ViewComponent("FilterResult", new { id, RRId });
         }
-        public IActionResult ReloadEventMeritList(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId)
+        public IActionResult ReloadEventMeritList(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId, int GradingSystem)
         {
-            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus, RRId });
+            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus, RRId, GradingSystem });
         }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
@@ -43,6 +43,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             viewUploadedResult.columnLabel = obj;
             //-----------------------------------------
             ViewData["DistrictId"] = new SelectList(_context.District.Include(a=>a.Division).Where(a=>a.IsActive == true && a.Division.ProvienceId == 1).OrderBy(a=>a.Name), "DistrictId", "Name");
+            int GradingSystem = await _context.ResultRepository.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ResultRepositoryId == id).Select(a => a.SchemeLevelPolicy.SchemeLevel.GradingSystem).FirstOrDefaultAsync();
+            ViewData["GradingSystem"] = GradingSystem;
             return View(viewUploadedResult);
         }
         public async Task<IActionResult> CompileResult(int id)
@@ -493,7 +495,8 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 await _context.SaveChangesAsync();
             }            
             //----------------END Freez-------------------------------------
-            return RedirectToAction(nameof(Details), new { id = rrId });
+            //return RedirectToAction(nameof(Details), new { id = rrId });
+            return RedirectToAction("Index", "ResultRepositories");
         }
         public async Task<IActionResult> ApplyCriteria(int id)
         {            
@@ -519,29 +522,19 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             }
             ViewBag.Id = id;            
             ViewUploadedResult viewUploadedResult = new ViewUploadedResult();                                
-            //-----------------------------------------
-           
-            bool IsDataCleaned = true;
+            //-----------------------------------------                       
             //-----------------------------------------
             var currentRepositoryResult = await _context.ResultRepository.Include(a=>a.SchemeLevelPolicy.SchemeLevel).Where(a=>a.ResultRepositoryId == id).FirstOrDefaultAsync();
-            if (currentRepositoryResult.IsDataCleaned != IsDataCleaned)
-            {
-                currentRepositoryResult.IsDataCleaned = IsDataCleaned;
-                _context.Update(currentRepositoryResult);
-                await _context.SaveChangesAsync();
-            }
+           
             ViewBag.IsDataCleaned = currentRepositoryResult.IsDataCleaned;
             ViewBag.IsSelctionCriteriaApplied = currentRepositoryResult.IsSelctionCriteriaApplied;
             ViewBag.IsMeritListGenerated = currentRepositoryResult.IsMeritListGenerated;
             ViewBag.IsSelctionCriteriaDefined = _context.SelectionCriteria.Count(a=>a.ResultRepositoryId == id);
             ViewBag.FYearId = currentRepositoryResult.ScholarshipFiscalYearId;
             ViewBag.SLId = currentRepositoryResult.SchemeLevelPolicy.SchemeLevelId;
+            ViewBag.GradingSystem = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.GradingSystem;
             ViewBag.SLPId = currentRepositoryResult.SchemeLevelPolicyId;
-            ViewBag.SLName = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.Name;
-            if(currentRepositoryResult.IsSelctionCriteriaApplied == true)
-            {
-
-            }
+            ViewBag.SLName = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.Name;            
             var list1 = new List<SelectListItem>
             {
                new SelectListItem{ Text="All", Value = "All", Selected = true },

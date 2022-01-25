@@ -12,17 +12,22 @@
 }
 
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="form-group">
-            <label class="control-label">District</label>
-            <select id="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+@{ 
+    if(ViewBag.GradingSystem == 2)
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">District</label>
+                    <select id="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                </div>
+            </div>
+            <div class="col-md-1" style="padding-top:30px" id="loading">
+                <img src="~/assets/images/loading.gif" height="25" />
+            </div>
         </div>
-    </div>
-    <div class="col-md-1" style="padding-top:30px" id="loading">
-        <img src="~/assets/images/loading.gif" height="25" />
-    </div>
-</div>
+    }
+}
 
 @if (true)
 {

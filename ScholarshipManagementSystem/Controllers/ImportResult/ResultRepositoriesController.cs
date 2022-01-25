@@ -31,9 +31,15 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel).Include(r => r.ScholarshipFiscalYear);
+            ViewBag.Schemes = _context.Scheme.ToList();
+            ViewBag.SchemeLevels = _context.SchemeLevel.ToList();
             return View(await applicationDbContext.ToListAsync());
         }
-
+        public async Task<IActionResult> Index2()
+        {
+            var applicationDbContext = _context.Scheme;
+            return View(await applicationDbContext.ToListAsync());
+        }
         public IActionResult Test(ViewUploadedResult viewUploadedResult)
         {                        
             return View(viewUploadedResult);

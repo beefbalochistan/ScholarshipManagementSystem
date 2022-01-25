@@ -19,10 +19,10 @@ namespace ScholarshipManagementSystem.Component.CompileResult
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId)
+        public async Task<IViewComponentResult> InvokeAsync(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId, int GradingSystem)
         {            
             var applicationDbContext = await _context.Applicant.Include(a=>a.SelectionMethod).Include(a=>a.District).Include(r => r.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicyId == SLPId).Select(a=> new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, FatherName = a.FatherName, SelectionMethod = a.SelectionMethod, SelectionStatus = a.SelectionStatus, ApplicantSelectionStatusId = a.ApplicantSelectionStatusId, DistrictId = a.DistrictId, TotalMarks = a.TotalMarks, ReceivedMarks = a.ReceivedMarks, District = a.District }).OrderByDescending(a=>a.ReceivedMarks).ToListAsync();
-            if (id != 0)
+            if (id != 0 && GradingSystem == 2)
             {
                 applicationDbContext = applicationDbContext.Where(a => a.DistrictId == id).ToList();
             }     
@@ -35,6 +35,7 @@ namespace ScholarshipManagementSystem.Component.CompileResult
                 applicationDbContext = applicationDbContext.Where(a => a.SelectionStatus == selectedStatus).ToList();
             }
             ViewBag.RRId = RRId;
+            ViewBag.GradingSystem = GradingSystem;
             return await Task.FromResult((IViewComponentResult)View("MeritList", applicationDbContext));
         }
     }

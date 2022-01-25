@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,6 +30,7 @@ namespace DAL.Models.Domain.MasterSetup
         public decimal TotalMarks_GPA { get; set; }
         public int GradingSystem { get; set; }
         public virtual Scheme Scheme { get; set; }
+        public virtual ICollection<DegreeScholarshipLevel> DegreeScholarshipLevels { get; set; }
         public virtual QualificationLevel QualificationLevel { get; set; }
         public virtual Institute Institute { get; set; }
     }

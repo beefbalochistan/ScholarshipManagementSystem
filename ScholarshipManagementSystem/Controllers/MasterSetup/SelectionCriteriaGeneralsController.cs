@@ -281,9 +281,16 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         try
                         {
                             var selectionCriteria = _context.SelectionCriteriaGeneral.Where(a => a.SchemeLevelId == SchemeLevelId).FirstOrDefault();
-                            var result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultContainer set IsOnCriteria=1  WHERE " + selectionCriteria.Expression + " AND ResultRepositoryId=" + record.ResultRepositoryId);
-                            result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultRepository set IsSelctionCriteriaApplied=1  WHERE ResultRepositoryId=" + record.ResultRepositoryId);
-                            return Json(new { IsValid = true, message = "Applied Successfully!" });
+                            if(selectionCriteria == null)
+                            {                               
+                                return Json(new { IsValid = false, message = "Please Define Selection Criteria Before Proceeding!" });
+                            }
+                            else
+                            {
+                                var result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultContainer set IsOnCriteria=1  WHERE " + selectionCriteria.Expression + " AND ResultRepositoryId=" + record.ResultRepositoryId);
+                                result = _context.Database.ExecuteSqlRaw("Update ImportResult.ResultRepository set IsSelctionCriteriaApplied=1  WHERE ResultRepositoryId=" + record.ResultRepositoryId);
+                                return Json(new { IsValid = true, message = "Applied Successfully!" });
+                            }                            
                         }
                         catch (Exception ex)
                         {

@@ -1,4 +1,5 @@
-﻿using DAL.Models.Domain.ScholarshipSetup;
+﻿using DAL.Models.Domain.MasterSetup;
+using DAL.Models.Domain.ScholarshipSetup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,7 +21,7 @@ namespace DAL.Models.Domain.ImportResult
         public int ScholarshipFiscalYearId { get; set; }
         [Display(Name = "Scheme Level")]
         public int SchemeLevelPolicyId { get; set; }
-        public int DegreeScholarshipLevelId { get; set; }
+        public int? DegreeScholarshipLevelId { get; set; }
         [Display(Name = "Uploaded Date")]
         [DataType(DataType.Date)]
         public DateTime CreatedOn { get; set; }
@@ -30,6 +31,7 @@ namespace DAL.Models.Domain.ImportResult
         public int currentCounter { get; set; }
 
         public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
+        public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
     }
 }

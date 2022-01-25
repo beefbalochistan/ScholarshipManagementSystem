@@ -238,7 +238,15 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 applicationDbContext = applicationDbContext.Where(a => a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).ToList();
             }*/
             var resultRepositoryTemp = _context.ResultRepositoryTemp.Find(rrId);
-            var IsDocAssist = _context.ResultRepository.Count(a => a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId && a.IsDataCleaned == true);
+            var IsDocAssist = 0;
+            if(DegreeScholarshipLevelId != 0)
+            {
+                IsDocAssist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId && a.IsDataCleaned == true);
+            }
+            else
+            {
+                IsDocAssist = _context.ResultRepository.Count(a => a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId && a.IsDataCleaned == true);
+            }
             List<DocumentAssistGeneral> documentAssistGenerals = new List<DocumentAssistGeneral>();
             if (IsDocAssist == 0)
             {
@@ -256,6 +264,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     }
                 }
                 ViewBag.RRId = rrId;
+                ViewBag.DegreeScholarshipLevelId = DegreeScholarshipLevelId;
                 ViewBag.TotalRecord = _context.ResultContainerTemp.Count(a => a.ResultRepositoryTempId == rrId);
                 List<SPAssistDocumentViewer> sPAssistDocumentViewers = new List<SPAssistDocumentViewer>();
                 int counter = 0;
@@ -289,6 +298,29 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     _context.Add(resultRepository);
                     _context.SaveChanges();
                     int RRMaxId = _context.ResultRepository.Max(a => a.ResultRepositoryId);
+                    //-----------------------------Add Column Entry---------------------------------
+                    ColumnLabel column = new ColumnLabel();
+                    column.C1 = columnLabels.C1;
+                    column.C2 = columnLabels.C2;
+                    column.C3 = columnLabels.C3;
+                    column.C4 = columnLabels.C4;
+                    column.C5 = columnLabels.C5;
+                    column.C6 = columnLabels.C6;
+                    column.C7 = columnLabels.C7;
+                    column.C8 = columnLabels.C8;
+                    column.C9 = columnLabels.C9;
+                    column.C10 = columnLabels.C10;
+                    column.C11 = columnLabels.C11;
+                    column.C12 = columnLabels.C12;
+                    column.C13 = columnLabels.C13;
+                    column.C14 = columnLabels.C14;
+                    column.C15 = columnLabels.C15;
+                    column.C16 = columnLabels.C16;
+                    column.IsActive = columnLabels.IsActive;
+                    column.ResultRepositoryId = RRMaxId;
+                    _context.Add(column);
+                    _context.SaveChanges();
+                    //------------------------------------------------------------------------------
                     var resultContainerTemp = _context.ResultContainerTemp.Where(a => a.ResultRepositoryTempId == rrId).ToList();
                     foreach (var result in resultContainerTemp)
                     {
@@ -330,13 +362,21 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
             return PartialView(documentAssistGenerals);
         }
-        public async Task<JsonResult> ProcessResultRequestWithIssues(int rrId)
+        public async Task<JsonResult> ProcessResultRequestWithIssues(int rrId, int degreeScholarshipLevelId)
         {
             int RRMaxId = 0;
             try
             {
                 var resultRepositoryTemp = _context.ResultRepositoryTemp.Find(rrId);
-                var IsAlreadyExist = _context.ResultRepository.Count(a=>a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
+                var IsAlreadyExist = 0;
+                if(degreeScholarshipLevelId == 0)
+                {
+                    IsAlreadyExist = _context.ResultRepository.Count(a => a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
+                }
+                else
+                {
+                    IsAlreadyExist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == resultRepositoryTemp.DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
+                }                
                 if (IsAlreadyExist == 0)
                 {
                     ResultRepository resultRepository = new ResultRepository();
@@ -353,6 +393,30 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     _context.Add(resultRepository);
                     _context.SaveChanges();
                     RRMaxId = _context.ResultRepository.Max(a => a.ResultRepositoryId);
+                    //-----------------------------Add Column Entry---------------------------------
+                    ColumnLabelTemp columnLabels = await _context.ColumnLabelTemp.Where(a => a.ResultRepositoryTempId == rrId).FirstOrDefaultAsync();
+                    ColumnLabel column = new ColumnLabel();
+                    column.C1 = columnLabels.C1;
+                    column.C2 = columnLabels.C2;
+                    column.C3 = columnLabels.C3;
+                    column.C4 = columnLabels.C4;
+                    column.C5 = columnLabels.C5;
+                    column.C6 = columnLabels.C6;
+                    column.C7 = columnLabels.C7;
+                    column.C8 = columnLabels.C8;
+                    column.C9 = columnLabels.C9;
+                    column.C10 = columnLabels.C10;
+                    column.C11 = columnLabels.C11;
+                    column.C12 = columnLabels.C12;
+                    column.C13 = columnLabels.C13;
+                    column.C14 = columnLabels.C14;
+                    column.C15 = columnLabels.C15;
+                    column.C16 = columnLabels.C16;
+                    column.IsActive = columnLabels.IsActive;
+                    column.ResultRepositoryId = RRMaxId;
+                    _context.Add(column);
+                    _context.SaveChanges();
+                    //------------------------------------------------------------------------------
                     var resultContainerTemp = _context.ResultContainerTemp.Where(a => a.ResultRepositoryTempId == rrId).ToList();
                     foreach (var result in resultContainerTemp)
                     {
