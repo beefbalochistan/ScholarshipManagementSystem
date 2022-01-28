@@ -160,7 +160,7 @@
                                 </div>*@
                                 <div class="row">
                                     @{ 
-                                        if(ViewBag.GradingSystem == 2)
+                                        if(ViewBag.SLId == 1 || ViewBag.SLId == 2 || ViewBag.SLId == 3 || ViewBag.SLId == 7 || ViewBag.SLId == 8 || ViewBag.SLId == 9)
                                         {
                                             <div class="col-md-3">
                                                 <div class="form-group">
@@ -194,7 +194,7 @@
                                     </div>*@
                                 </div>
                                 <div class="table-responsive" id="events">
-                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All", RRId = ViewBag.Id, GradingSystem = ViewBag.GradingSystem }))
+                                    @(await Component.InvokeAsync("MeritList", new { id = 0, SLId = ViewBag.SLId, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All", RRId = ViewBag.Id, GradingSystem = ViewBag.GradingSystem }))
                                 </div>
                             </div>
                         </div>
@@ -279,6 +279,7 @@ else
     $('#SMethodId').change(function () {
         $("#loading").show();
         var slpId = '@ViewBag.SLPId';
+        var slId = '@ViewBag.SLId';
         var val = $("#DistrictId").val();
         var selectedM = $("#SMethodId").val();
         var selectedS = $("#SStatusId").val();
@@ -287,6 +288,7 @@ else
             url: '@Url.Action("ReloadEventMeritList", "ResultContainers")',
             data: {
                 id: val,
+                SLId: slId,
                 SLPId: slpId,
                 selectedMethod: selectedM,
                 selectedStatus: selectedS
@@ -300,6 +302,7 @@ else
     $('#SStatusId').change(function () {
         $("#loading").show();
         var slpId = '@ViewBag.SLPId';
+        var slId = '@ViewBag.SLId';
         var val = $("#DistrictId").val();
         var selectedM = $("#SMethodId").val();
         var selectedS = $("#SStatusId").val();
@@ -308,6 +311,7 @@ else
             url: '@Url.Action("ReloadEventMeritList", "ResultContainers")',
             data: {
                 id: val,
+                SLId: slId,
                 SLPId: slpId,
                 selectedMethod: selectedM,
                 selectedStatus: selectedS

@@ -26,6 +26,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.QualificationLevel> QualificationLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Discipline> Discipline { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Degree> Degree { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn> SchemeLevelMandatoryColumn { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.PaymentMethod> PaymentMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }

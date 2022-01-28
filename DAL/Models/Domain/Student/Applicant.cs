@@ -50,6 +50,9 @@ namespace DAL.Models.Domain.Student
         [ForeignKey("DegreeScholarshipLevel")]
         [Display(Name = "DegreeScholarshipLevel")]
         public int? DegreeScholarshipLevelId { get; set; }
+        [ForeignKey("DAEInstitute")]
+        [Display(Name = "DAE Institute")]
+        public int? DAEInstituteId { get; set; }
         [Display(Name = "Reference#")]
         [Required]
         public string ApplicantReferenceNo { get; set; }
@@ -81,11 +84,11 @@ namespace DAL.Models.Domain.Student
         [Display(Name = "Registeration#")]
         public string RegisterationNumber { get; set; }
         [Display(Name = "Total Marks")]
-        public int TotalMarks { get; set; }        
+        public decimal TotalMarks { get; set; }        
         [Display(Name = "Total GPA")]
         public decimal TotalGPA { get; set; }
         [Display(Name = "Received Marks")]
-        public int ReceivedMarks { get; set; }
+        public decimal ReceivedMarks { get; set; }
         [Display(Name = "Received CGPA")]
         public decimal ReceivedCGPA { get; set; }
         [Display(Name = "Old Institude Name With Address")]
@@ -126,6 +129,7 @@ namespace DAL.Models.Domain.Student
         public virtual Provience Provience { get; set; }
         public virtual SelectionMethod SelectionMethod { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
+        public virtual DAEInstitute DAEInstitute { get; set; }
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
         public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
     }

@@ -342,6 +342,16 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             });
             return Json(degreeLevelList);
         }
+        public async Task<JsonResult> GetDAEInstitutes()
+        {
+            List<DAEInstitute> dAEInstitutes = await _context.DAEInstitute.ToListAsync();
+            var dAEInstituteList = dAEInstitutes.Select(m => new SelectListItem()
+            {
+                Text = m.Name.ToString(),
+                Value = m.DAEInstituteId.ToString(),
+            });
+            return Json(dAEInstituteList);
+        }
         public async Task<JsonResult> GetSchemeLevels(int policySRCForumId, int schemeId)
         {
             List<SchemeLevel> schemeLevels = await _context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForumId == policySRCForumId && a.SchemeLevel.SchemeId == schemeId).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToListAsync();

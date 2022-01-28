@@ -68,7 +68,7 @@
        
         if (ViewBag.TotalIssues != 0)
         {
-            <button id="btnprocessResult" class="btn btn-sm btn-warning" onclick="processResult(@ViewBag.RRId, @ViewBag.DegreeScholarshipLevelId)">Process Document With Following Issues</button>
+            <button id="btnprocessResult" class="btn btn-sm btn-warning" onclick="processResult(@ViewBag.RRId, @ViewBag.DegreeScholarshipLevelId, @ViewBag.DAEInstituteId)">Process Document With Following Issues</button>
         }
             }
             else
@@ -109,7 +109,7 @@
                 }
             });
         }
-    function processResult(rrId, degreeScholarshipLevelId) {
+    function processResult(rrId, degreeScholarshipLevelId, DAEInstituteId) {
             $(".loading").show();
             $('#btnprocessResult').prop('disabled', true);
             notificationme("Processed Successfully!");
@@ -117,7 +117,8 @@
                 url: '@Url.Action("ProcessResultRequestWithIssues", "DocumentAssistGenerals")',
                 data: {
                     rrId: rrId,
-                    degreeScholarshipLevelId: degreeScholarshipLevelId
+                    degreeScholarshipLevelId: degreeScholarshipLevelId,
+                    DAEInstituteId: DAEInstituteId
                 },
                 success: function (data) {
                     if (data.isValid) {

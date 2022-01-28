@@ -120,6 +120,14 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div id="daeInstituteDiv" style="display:none">
+                                                <h5>Select DAE Institute</h5>
+                                                <div class="form-group">
+                                                    <select id="DAEInstituteId" class="form-control">
+                                                        <option value="0">-Select-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +150,7 @@
                                         </div>
                                         <div class="form-group">
                                             <button id="btnAttachResult" type="button" onclick="AttachFile()" class="btn btn-info">Attach Result</button>
-                                            <span style="display:none" id="AttachResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>                                            
+                                            <span style="display:none" id="AttachResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -155,6 +163,12 @@
                                         <div class="form-group">
                                             <label class="control-label">Degree Level</label>
                                             <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 degreeInfoStep4" style="display:none">
+                                        <div class="form-group">
+                                            <label class="control-label">DAE Institute</label>
+                                            <input class="form-control TempDAEInstituteId" readonly="readonly" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -179,32 +193,38 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="CreatedOn" />
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
                                             <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">Scheme Level</label>
                                             <input class="form-control TempSchemeLevel" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4" style="display:none" id="degreeInfoStep3">
+                                    <div class="col-md-3" style="display:none" id="degreeInfoStep3">
                                         <div class="form-group">
                                             <label class="control-label">Degree Level</label>
                                             <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3 degreeInfoStep4" style="display:none">
+                                        <div class="form-group">
+                                            <label class="control-label">DAE Institute</label>
+                                            <input class="form-control TempDAEInstituteId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label asp-for="CreatedOn" class="control-label"></label>
                                             <input asp-for="CreatedOn" class="form-control" readonly="readonly" />
                                             <span asp-validation-for="CreatedOn" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem">
                                                 <input type="checkbox" class="custom-control-input" id="checkbox">
@@ -214,20 +234,20 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Attached File Columns</label>
                                             <select id="allColumn" style="width:100%" class="select2 form-control select2-multiple" name="allColumn" multiple="multiple" disabled="disabled">
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
                                             @*<div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
-                                                <input type="checkbox" class="custom-control-input" id="isReupload">
-                                                <label class="custom-control-label" for="isReupload"> Re-Import</label>
-                                            </div>*@
+                    <input type="checkbox" class="custom-control-input" id="isReupload">
+                    <label class="custom-control-label" for="isReupload"> Re-Import</label>
+                </div>*@
                                             <input type="hidden" id="RRId" value="0" />
                                             <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
@@ -340,6 +360,12 @@
                             $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                             onPrevious(tab, navigation, 2);
                         }
+                        if (($("#SchemeLevelId").val() == 4 || $("#SchemeLevelId").val() == 5 || $("#SchemeLevelId").val() == 6) && $("#DAEInstituteId").val() == 0) {
+                            notificationme('Please select fill required fields!');
+                            $("#schemeLevelDiv").show();
+                            $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                            onPrevious(tab, navigation, 2);
+                        }
                     }else if (index == 3) {
                     }else if (index == 4) {
                         //fetchAssistDocumentIndicator(0);
@@ -388,6 +414,8 @@
                         $("#SchemeLevelId").append('<option value="0">-Select-</option>');
                         $("#DegreeScholarshipLevelId").empty();
                         $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                        $("#DAEInstituteId").empty();
+                        $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                         $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                     }
                 } else {
@@ -409,6 +437,8 @@
                         $.get("/ResultAnalyzer/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
                             $("#DegreeScholarshipLevelId").empty();
                             $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
+                            $("#DAEInstituteId").empty();
+                            $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                             console.log(data);
                             $.each(data, function (index, row) {
                                 console.log(row);
@@ -419,10 +449,30 @@
                         $("#schemeLevelDiv").show();
                         $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
                     }
+                    if (SchemeLevelId == 4 || SchemeLevelId == 5 || SchemeLevelId == 6) {
+                        $.get("/ResultAnalyzer/GetDAEInstitutes", function (data) {
+                            $("#DAEInstituteId").empty();
+                            $("#DAEInstituteId").append('<option value="0">-Select-</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#DAEInstituteId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });
+                        $('#daeInstituteDiv').show();
+                        $('.degreeInfoStep4').show();
+                    } else {
+                        $('#daeInstituteDiv').hide();
+                        $('.degreeInfoStep4').hide();
+                        $("#schemeLevelDiv").show();
+                        $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                    }
                     return false;
                 } else {
                     $("#DegreeScholarshipLevelId").empty();
                     $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                    $("#DAEInstituteId").empty();
+                    $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                     $("#schemeLevelDiv").show();
                     $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                 }
@@ -456,6 +506,21 @@
                 var DegreeScholarshipLevelId = $("#DegreeScholarshipLevelId").val();
                 $(".TempDegreeScholarshipLevelId").val($("#DegreeScholarshipLevelId option:selected").text());
                 if (DegreeScholarshipLevelId == 0) {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                } else {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                }
+            });
+            $("#DAEInstituteId").change(function () {
+                $('#excelFile').remove();
+                $('#lblFile').text('Choose file');
+                //$('#selectedColumn').text('');
+                var DAEInstituteId = $("#DAEInstituteId").val();
+                //alert(DegreeScholarshipLevelId);
+                $(".TempDAEInstituteId").val($("#DAEInstituteId option:selected").text());
+                if (DAEInstituteId == 0) {
                     $("#schemeLevelDiv").show();
                     $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                 } else {
@@ -628,13 +693,15 @@
             $("#analize").show();
             var rrId = $('#RRId').val();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var DAEInstituteId = $('#DAEInstituteId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
             $.ajax({
                 url: '@Url.Action("AssistDocumentTemp", "DocumentAssistGenerals")',
                 data: {
                     rrId: rrId,
                     DegreeScholarshipLevelId: degreeScholarshipLevelId,
-                    SchemeLevelId: schemeLevelId
+                    SchemeLevelId: schemeLevelId,
+                    DAEInstituteId: DAEInstituteId
                 },
                 success: function (data) {
                     setTimeout(function () {

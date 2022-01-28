@@ -11,12 +11,6 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-menu">BEEF Workspace</li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bxs-user"></i>
-                        <span key="t-invoices">My Workspace</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                         {
                             <li>
@@ -73,17 +67,11 @@
                             </li>
                         }
 
-                    </ul>
-                </li>
+                    
                 <li class="menu-title" key="t-menu">Scholarship Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow waves-effect">
-                            <i class="bx bxs-graduation"></i>
-                            <span key="t-layouts">Scholarships</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="true">
+                    
                             <li>
                                 <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                                     <i class="bx bxs-yin-yang"></i>
@@ -101,21 +89,7 @@
                                     <i class="bx bxs-tag"></i>
                                     <span key="t-calendar">Scholarship Type</span>
                                 </a>
-                            </li>
-                            @*<li>
-                        <a asp-action="Index" asp-controller="SchemeLevelPolicies" class=" waves-effect">
-                            <i class="bx bxs-ruler"></i>
-                            <span key="t-calendar">Scheme Policy</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="DistrictQoutaBySchemeLevels" class=" waves-effect">
-                            <i class="bx bx-shield-quarter"></i>
-                            <span key="t-calendar">District Qouta</span>
-                        </a>
-                    </li>*@
-                        </ul>
-                    </li>
+                            </li>                           
                 }
 
 
@@ -331,12 +305,7 @@
                 <li class="menu-title" key="t-menu">Result Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow waves-effect">
-                            <i class="bx bxs-user"></i>
-                            <span key="t-invoices">Result</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
+                   
                             <li>
                                 <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
@@ -366,9 +335,7 @@
                                     <i class="bx bxs-dizzy"></i>
                                     <span key="t-calendar">Import Result</span>
                                 </a>
-                            </li>
-                        </ul>
-                    </li>
+                            </li>                       
                 }
 
                 <li class="menu-title" key="t-menu">SMS Management</li>
@@ -667,7 +634,7 @@
                             <li><a href=@Url.Action("Index", "FormXeditable") key="t-form-xeditable">Form Xeditable</a></li>
                             <li><a href=@Url.Action("Index", "FormRepeater") key="t-form-repeater">Form Repeater</a></li>
                             <li><a href=@Url.Action("Index", "FormWizard") key="t-form-wizard">Form Wizard</a></li>
-                            <li><a href=@Url.Action("Index", "FormMask") key="t-form-mask">Form Mask</a></li>
+                            @*<li><a href=@Url.Action("Index", "FormMask") key="t-form-mask">Form Mask</a></li>*@
                         </ul>
                     </li>
 
@@ -713,7 +680,7 @@
                         </ul>
                     </li>
 
-                    <li>
+                    @*<li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
                             <span key="t-maps">Maps</span>
@@ -723,7 +690,7 @@
                             <li><a href=@Url.Action("Index", "MapsVector") key="t-v-maps">Vector Maps</a></li>
                             <li><a href=@Url.Action("Index", "MapsLeaflet") key="t-l-maps">Leaflet Maps</a></li>
                         </ul>
-                    </li>
+                    </li>*@
 
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220126105050_daeInstituteId")]
+    partial class daeInstituteId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,8 +382,8 @@ namespace Repository.Data.Migrations
                     b.Property<bool>("IsSelected")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Marks_")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Marks_")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -404,8 +406,8 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("TotalGPA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("TotalMarks_")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalMarks_")
+                        .HasColumnType("int");
 
                     b.HasKey("ResultContainerId");
 
@@ -1559,28 +1561,6 @@ namespace Repository.Data.Migrations
                     b.ToTable("SchemeLevel", "master");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn", b =>
-                {
-                    b.Property<int>("SchemeLevelMandatoryColumnId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ExcelColumnNameId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchemeLevelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SchemeLevelMandatoryColumnId");
-
-                    b.HasIndex("ExcelColumnNameId");
-
-                    b.HasIndex("SchemeLevelId");
-
-                    b.ToTable("SchemeLevelMandatoryColumn", "master");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SectionComment", b =>
                 {
                     b.Property<int>("SectionCommentId")
@@ -2122,9 +2102,6 @@ namespace Repository.Data.Migrations
                     b.Property<string>("CurrentInsitutePhone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DAEInstituteId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -2183,8 +2160,8 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("ReceivedCGPA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("ReceivedMarks")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ReceivedMarks")
+                        .HasColumnType("int");
 
                     b.Property<string>("RegisterationNumber")
                         .HasColumnType("nvarchar(max)");
@@ -2228,8 +2205,8 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("TotalGPA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("TotalMarks")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalMarks")
+                        .HasColumnType("int");
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
@@ -2239,8 +2216,6 @@ namespace Repository.Data.Migrations
                     b.HasIndex("ApplicantCurrentStatusId");
 
                     b.HasIndex("ApplicantSelectionStatusId");
-
-                    b.HasIndex("DAEInstituteId");
 
                     b.HasIndex("DegreeScholarshipLevelId");
 
@@ -3326,25 +3301,6 @@ namespace Repository.Data.Migrations
                     b.Navigation("Scheme");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn", b =>
-                {
-                    b.HasOne("DAL.Models.Domain.ImportResult.ExcelColumnName", "ExcelColumnName")
-                        .WithMany()
-                        .HasForeignKey("ExcelColumnNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
-                        .WithMany()
-                        .HasForeignKey("SchemeLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ExcelColumnName");
-
-                    b.Navigation("SchemeLevel");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SectionComment", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
@@ -3568,10 +3524,6 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.DAEInstitute", "DAEInstitute")
-                        .WithMany()
-                        .HasForeignKey("DAEInstituteId");
-
                     b.HasOne("DAL.Models.Domain.MasterSetup.DegreeScholarshipLevel", "DegreeScholarshipLevel")
                         .WithMany()
                         .HasForeignKey("DegreeScholarshipLevelId");
@@ -3603,8 +3555,6 @@ namespace Repository.Data.Migrations
                     b.Navigation("ApplicantCurrentStatus");
 
                     b.Navigation("ApplicantSelectionStatus");
-
-                    b.Navigation("DAEInstitute");
 
                     b.Navigation("DegreeScholarshipLevel");
 

@@ -21,6 +21,7 @@ namespace DAL.Models.Domain.ImportResult
         [Display(Name = "Scheme Level")]
         public int SchemeLevelPolicyId { get; set; }
         public int DegreeScholarshipLevelId { get; set; }
+        public int DAEInstituteId { get; set; }
         [Display(Name = "Uploaded Date")]
         [DataType(DataType.Date)]
         public DateTime CreatedOn { get; set; }     

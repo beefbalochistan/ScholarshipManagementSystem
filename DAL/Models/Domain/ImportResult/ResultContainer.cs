@@ -21,13 +21,13 @@ namespace DAL.Models.Domain.ImportResult
         public string Group { get; set; }
         public string Candidate_District { get; set; }
         public string Institute_District { get; set; }                
-        public int Marks_ { get; set; }
+        public decimal Marks_ { get; set; }
         public string Pass_Fail { get; set; }
         public string Remarks { get; set; }        
         public string CNIC { get; set; }        
         public decimal CGPA { get; set; }
         public decimal TotalGPA { get; set; }
-        public int TotalMarks_ { get; set; }
+        public decimal TotalMarks_ { get; set; }
         public string Department { get; set; }
         public int DistrictId { get; set; }
         [ForeignKey("ResultRepository")]

@@ -230,7 +230,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             return PartialView(documentAssistGenerals.OrderBy(a=>a.ExcelColumnNameId));
         }
 
-        public async Task<IActionResult> AssistDocument(int rrId, int SchemeLevelId, int DegreeScholarshipLevelId)
+        public async Task<IActionResult> AssistDocument(int rrId, int SchemeLevelId, int DegreeScholarshipLevelId, int dAEInstituteId)
         {
             /*var applicationDbContext = await _context.DocumentAssistGeneral.Include(r => r.DocumentAssist).Include(r => r.ExcelColumnName).Where(a => a.SchemeLevelId == SchemeLevelId).ToListAsync();
             if (DegreeScholarshipLevelId != 0)
@@ -242,6 +242,10 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             if(DegreeScholarshipLevelId != 0)
             {
                 IsDocAssist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId && a.IsDataCleaned == true);
+            }
+            else if(dAEInstituteId != 0)
+            {
+                IsDocAssist = _context.ResultRepository.Count(a => a.DAEInstituteId == dAEInstituteId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId && a.IsDataCleaned == true);
             }
             else
             {
@@ -265,6 +269,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 ViewBag.RRId = rrId;
                 ViewBag.DegreeScholarshipLevelId = DegreeScholarshipLevelId;
+                ViewBag.DAEInstituteId = dAEInstituteId;
                 ViewBag.TotalRecord = _context.ResultContainerTemp.Count(a => a.ResultRepositoryTempId == rrId);
                 List<SPAssistDocumentViewer> sPAssistDocumentViewers = new List<SPAssistDocumentViewer>();
                 int counter = 0;
@@ -288,6 +293,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     resultRepository.CreatedOn = DateTime.Today;
                     resultRepository.currentCounter = 0;
                     resultRepository.DegreeScholarshipLevelId = resultRepositoryTemp.DegreeScholarshipLevelId;
+                    resultRepository.DAEInstituteId = resultRepositoryTemp.DAEInstituteId;
                     resultRepository.IsDataCleaned = true;
                     resultRepository.IsMeritListGenerated = false;
                     resultRepository.IsSelctionCriteriaApplied = false;
@@ -337,6 +343,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         obj.IsOnCriteria = false;
                         obj.IsSelected = false;
                         obj.Marks_ = result.Marks_;
+                        obj.TotalMarks_ = (int)result.TotalMarks_;
+                        obj.TotalGPA = result.TotalGPA;
                         obj.Name = result.Name;
                         obj.Pass_Fail = result.Pass_Fail;
                         obj.REG_NO = result.REG_NO;
@@ -362,20 +370,24 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }
             return PartialView(documentAssistGenerals);
         }
-        public async Task<JsonResult> ProcessResultRequestWithIssues(int rrId, int degreeScholarshipLevelId)
+        public async Task<JsonResult> ProcessResultRequestWithIssues(int rrId, int degreeScholarshipLevelId, int DAEInstituteId)
         {
             int RRMaxId = 0;
             try
             {
                 var resultRepositoryTemp = _context.ResultRepositoryTemp.Find(rrId);
                 var IsAlreadyExist = 0;
-                if(degreeScholarshipLevelId == 0)
+                if(degreeScholarshipLevelId != 0)
                 {
-                    IsAlreadyExist = _context.ResultRepository.Count(a => a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
+                    IsAlreadyExist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == resultRepositoryTemp.DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);                    
+                }
+                else if(DAEInstituteId != 0)
+                {
+                    IsAlreadyExist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == resultRepositoryTemp.DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
                 }
                 else
                 {
-                    IsAlreadyExist = _context.ResultRepository.Count(a => a.DegreeScholarshipLevelId == resultRepositoryTemp.DegreeScholarshipLevelId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
+                    IsAlreadyExist = _context.ResultRepository.Count(a => a.SchemeLevelPolicyId == resultRepositoryTemp.SchemeLevelPolicyId && a.ScholarshipFiscalYearId == resultRepositoryTemp.ScholarshipFiscalYearId);
                 }                
                 if (IsAlreadyExist == 0)
                 {
@@ -383,6 +395,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     resultRepository.CreatedOn = DateTime.Today;
                     resultRepository.currentCounter = 0;
                     resultRepository.DegreeScholarshipLevelId = resultRepositoryTemp.DegreeScholarshipLevelId;
+                    resultRepository.DAEInstituteId = resultRepositoryTemp.DAEInstituteId;
                     resultRepository.IsDataCleaned = true;
                     resultRepository.IsMeritListGenerated = false;
                     resultRepository.IsSelctionCriteriaApplied = false;

@@ -144,6 +144,14 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div id="daeInstituteDiv" style="display:none">
+                                                <h5>Select DAE Institute</h5>
+                                                <div class="form-group">
+                                                    <select id="DAEInstituteId" class="form-control">
+                                                        <option value="0">-Select-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -175,10 +183,16 @@
                                             <input class="form-control TempSchemeLevel" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3" style="display:none" id="degreeInfoStep3">
+                                    <div class="col-md-3 degreeInfoStep3" style="display:none">
                                         <div class="form-group">
                                             <label class="control-label">Degree Level</label>
                                             <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 degreeInfoStep4" style="display:none">
+                                        <div class="form-group">
+                                            <label class="control-label">DAE Institute</label>
+                                            <input class="form-control TempDAEInstituteId" readonly="readonly" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -186,7 +200,16 @@
                                             <label class="control-label">Select Result to Import (Excel)</label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="ExcelFile" name="ExcelFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                                                <label id="lblFile" class="custom-file-label" for="customFile">Choose file</label>
+                                                <label id="lblFile" class="custom-file-label" for="ExcelFile">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Attested Result (Scanned Pdf)</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="PdfFile" name="PdfFile" accept="aapplication/pdf">
+                                                <label id="lblFile2" class="custom-file-label" for="PdfFile">Choose file</label>
                                             </div>
                                         </div>
                                     </div>
@@ -203,55 +226,66 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="CreatedOn" />
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
                                             <input class="form-control TempScholarshipFiscalYear" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">Scheme Level</label>
                                             <input class="form-control TempSchemeLevel" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4" style="display:none" id="degreeInfoStep3">
+                                    <div class="col-md-3 degreeInfoStep3" style="display:none">
                                         <div class="form-group">
                                             <label class="control-label">Degree Level</label>
                                             <input class="form-control TempDegreeScholarshipLevelId" readonly="readonly" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3 degreeInfoStep4" style="display:none">
+                                        <div class="form-group">
+                                            <label class="control-label">DAE Institute</label>
+                                            <input class="form-control TempDAEInstituteId" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label asp-for="CreatedOn" class="control-label"></label>
                                             <input asp-for="CreatedOn" class="form-control" readonly="readonly" />
                                             <span asp-validation-for="CreatedOn" class="text-danger"></span>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <div class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem">
-                                                <input type="checkbox" class="custom-control-input" id="checkbox">
-                                                <label class="custom-control-label" for="checkbox">Select Required Columns (Select All)</label>
-                                            </div>
-                                            <select id="selectedColumn" style="width:100%" class="select2 form-control select2-multiple" name="selectedColumn" multiple="multiple" data-placeholder="Choose Column..." asp-items="ViewBag.ExcelColumnNameId">
+                                            <label class="control-label">Select Columns</label>
+                                            <select id="selectedColumn" name="selectedColumn" style="width:100%" class="select2 form-control select2-multiple" multiple="multiple" asp-items="ViewBag.ExcelColumnNameId">
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Selected Scheme Mandatory Columns</label>
+                                            <select style="width:100%" class="select2 form-control select2-multiple" multiple="multiple" disabled="disabled" asp-items="ViewBag.SchemeLevelMandatoryColumnId">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="control-label">Attached File Columns</label>
                                             <select id="allColumn" style="width:100%" class="select2 form-control select2-multiple" name="allColumn" multiple="multiple" disabled="disabled">
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <button id="btnImportResult" type="button" onclick="UploadFile()" class="btn btn-info">Import Result</button>
                                             @*<div id="isReuploadDiv" class="custom-control custom-checkbox custom-control-right" style="margin-bottom:.5rem;display:none">
-                                    <input type="checkbox" class="custom-control-input" id="isReupload">
-                                    <label class="custom-control-label" for="isReupload"> Re-Import</label>
-                                </div>*@
+                    <input type="checkbox" class="custom-control-input" id="isReupload">
+                    <label class="custom-control-label" for="isReupload"> Re-Import</label>
+                </div>*@
                                             <input type="hidden" id="RRId" value="0" />
                                             <span style="display:none" id="ImportResultLoading"><img src="~/assets/images/96x96.gif" height="70" /></span>
                                         </div>
@@ -399,17 +433,7 @@
         var CurrentTab = 0;
         var IsCriteriaApplied = false;
         var IsMeritListGenerated = false;
-        $(document).ready(function () {
-            $('#checkbox').prop('checked', false);
-            $("#checkbox").click(function () {
-                if ($("#checkbox").is(':checked')) { //select all
-                    $("#selectedColumn").find('option').prop("selected", true);
-                    $("#selectedColumn").trigger('change');
-                } else { //deselect all
-                    $("#selectedColumn").find('option').prop("selected", false);
-                    $("#selectedColumn").trigger('change');
-                }
-            });
+        $(document).ready(function () {           
             $('#progrss-wizard').bootstrapWizard({
                 tabClass: 'nav nav-pills',
                 onNext: function (tab, navigation, index) {
@@ -431,13 +455,20 @@
                             $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                             onPrevious(tab, navigation, 2);
                         }
+                        if (($("#SchemeLevelId").val() == 4 || $("#SchemeLevelId").val() == 5 || $("#SchemeLevelId").val() == 6) && $("#DAEInstituteId").val() == 0) {
+                            notificationme('Please select fill required fields!');
+                            $("#schemeLevelDiv").show();
+                            $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                            onPrevious(tab, navigation, 2);
+                        }
                         $.ajax({
                             url: '@Url.Action("GetResultStatus", "SelectionCriteriaGenerals")',
                             data: {
                                 PolicySRCForumId: $('#PolicySRCForumId').val(),
                                 SchemeLevelId: $('#SchemeLevelId').val(),
                                 SchemeId: $('#SchemeId').val(),
-                                DegreeScholarshipLevelId: $('#DegreeScholarshipLevelId').val()
+                                DegreeScholarshipLevelId: $('#DegreeScholarshipLevelId').val(),
+                                DAEInstituteId: $('#DAEInstituteId').val()
                             },
                             success: function (data) {
                                 $('#RRId').val(data.rrid);
@@ -484,8 +515,9 @@
                         });
                     } else if (index == 3) {
                         var excelFile = document.getElementById('ExcelFile');
-                        if (excelFile.files.length == 0) {
-                            notificationme("Please attach result file!");
+                        var pdfFile = document.getElementById('PdfFile');
+                        if (excelFile.files.length == 0 || pdfFile.files.length == 0) {
+                            notificationme("Please attach required file!");
                             onPrevious(tab, navigation, 3);
                         } else {
                             AttachFile();
@@ -501,10 +533,10 @@
                         notificationme('Document Assist Indicators defined against selected Scheme Level!');
                     }
                     else if (index == 5) {
-                        if (IsClean == false) {
+                        @*if (IsClean == false) {
                             notificationme('Please assist document before proceed!');
                             onPrevious(tab, navigation, 4);
-                        }
+                        }*@
                         fetchSelectionCriteriaGeneral();
                         notificationme('Selection criteria defined against selected Scheme Level!');
                     } else if (index == 6) {
@@ -561,6 +593,8 @@
                         $("#SchemeLevelId").append('<option value="0">-Select-</option>');
                         $("#DegreeScholarshipLevelId").empty();
                         $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                        $("#DAEInstituteId").empty();
+                        $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                         $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                     }
                 } else {
@@ -570,10 +604,10 @@
                     $('#schemelevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                 }
             });
-            $("#SchemeLevelId").change(function () {
-                $('#excelFile').remove();
-                $('#lblFile').text('Choose file');
-                $("#selectedColumn").val(null).trigger('change');
+            $("#SchemeLevelId").change(function () {                
+                $('#lblFile').text('Choose file');                
+                $('#lblFile2').text('Choose file');
+                @*$("#selectedColumn").val(null).trigger('change');*@
                 var SchemeLevelId = $("#SchemeLevelId").val();
                 var SchemeId = $("#SchemeId").val();
                 $(".TempSchemeLevel").val($("#SchemeLevelId option:selected").text());
@@ -582,6 +616,8 @@
                         $.get("/ResultAnalyzer/GetDegreeLevels", { schemeLevelId: SchemeLevelId }, function (data) {
                             $("#DegreeScholarshipLevelId").empty();
                             $("#DegreeScholarshipLevelId").append('<option value="0">Select...</option>');
+                            $("#DAEInstituteId").empty();
+                            $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                             console.log(data);
                             $.each(data, function (index, row) {
                                 console.log(row);
@@ -592,17 +628,37 @@
                         $("#schemeLevelDiv").show();
                         $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
                     }
+                    if (SchemeLevelId == 4 || SchemeLevelId == 5 || SchemeLevelId == 6) {
+                        $.get("/ResultAnalyzer/GetDAEInstitutes", function (data) {
+                            $("#DAEInstituteId").empty();
+                            $("#DAEInstituteId").append('<option value="0">-Select-</option>');
+                            console.log(data);
+                            $.each(data, function (index, row) {
+                                console.log(row);
+                                $("#DAEInstituteId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                            });
+                        });                        
+                        $('#daeInstituteDiv').show();
+                        $('.degreeInfoStep4').show();                                                                          
+                    } else {
+                        $('#daeInstituteDiv').hide();
+                        $('.degreeInfoStep4').hide();
+                        $("#schemeLevelDiv").show();
+                        $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                    }
                     return false;
                 } else {
                     $("#DegreeScholarshipLevelId").empty();
                     $("#DegreeScholarshipLevelId").append('<option value="0">-Select-</option>');
+                    $("#DAEInstituteId").empty();
+                    $("#DAEInstituteId").append('<option value="0">-Select-</option>');
                     $("#schemeLevelDiv").show();
                     $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                 }
             });
-            $("#SchemeId").change(function () {
-                $('#excelFile').remove();
-                $('#lblFile').text('Choose file');
+            $("#SchemeId").change(function () {                
+                $('#lblFile').text('Choose file');                
+                $('#lblFile2').text('Choose file');
                 //$('#selectedColumn').text('');
                 $("#PolicySRCForumId").val(0);
                 $("#SchemeLevelId").val(0);
@@ -616,20 +672,35 @@
                 }
                 if (SchemeId >= 4) {
                     $('#degreeLevelDiv').show();
-                    $('#degreeInfoStep3').show();
+                    $('.degreeInfoStep3').show();
                 } else {
                     $('#degreeLevelDiv').hide();
-                    $('#degreeInfoStep3').hide();
-                }
+                    $('.degreeInfoStep3').hide();
+                }                
             });
-            $("#DegreeScholarshipLevelId").change(function () {
-                $('#excelFile').remove();
-                $('#lblFile').text('Choose file');
+            $("#DegreeScholarshipLevelId").change(function () {                
+                $('#lblFile').text('Choose file');                
+                $('#lblFile2').text('Choose file');
                 //$('#selectedColumn').text('');
                 var DegreeScholarshipLevelId = $("#DegreeScholarshipLevelId").val();
                 //alert(DegreeScholarshipLevelId);
                 $(".TempDegreeScholarshipLevelId").val($("#DegreeScholarshipLevelId option:selected").text());
                 if (DegreeScholarshipLevelId == 0) {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
+                } else {
+                    $("#schemeLevelDiv").show();
+                    $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-check text-success');
+                }
+            });
+            $("#DAEInstituteId").change(function () {                
+                $('#lblFile').text('Choose file');                
+                $('#lblFile2').text('Choose file');
+                //$('#selectedColumn').text('');
+                var DAEInstituteId = $("#DAEInstituteId").val();
+                //alert(DegreeScholarshipLevelId);
+                $(".TempDAEInstituteId").val($("#DAEInstituteId option:selected").text());
+                if (DAEInstituteId == 0) {
                     $("#schemeLevelDiv").show();
                     $('#schemeLevelDiv').removeClass().addClass('display-4 mdi mdi-progress-alert text-danger');
                 } else {
@@ -662,8 +733,9 @@
 
         function UploadFile() {
             var excelFile = document.getElementById('ExcelFile');
+            var pdfFile = document.getElementById('PdfFile');
             //alert(excelFile.files[0].name);
-            if (excelFile.files.length == 0) {
+            if (excelFile.files.length == 0 || pdfFile.files.length == 0) {
                 alert("Please attach result file!");
                 return;
             }
@@ -676,6 +748,10 @@
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
+            for (var i = 0; i < pdfFile.files.length; i++) {
+                var file = pdfFile.files[i];
+                formData.append("pdfFile", file);
+            }
             @*var isReImportResult = false;
             if ($('#isReupload').is(":checked")) {
                 isReImportResult = true;
@@ -687,6 +763,7 @@
             @*formData.append("isReImportResult", isReImportResult);*@
             formData.append("SchemeLevelId", $('#SchemeLevelId').val());
             formData.append("DegreeScholarshipLevelId", $('#DegreeScholarshipLevelId').val());
+            formData.append("DAEInstituteId", $('#DAEInstituteId').val());
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UploadFilePost", "ResultRepositories")',
@@ -699,6 +776,7 @@
                     debugger;
                     $("#ImportResultLoading").hide();
                     $('#excelFile').text('');
+                    $('#pdfFile').text('');
                     $('#RRId').val(data.resultRepositoryId);
                     RefillColumn(data.resultRepositoryId);
                     notificationme(data.message);
@@ -726,7 +804,8 @@
         function AttachFile() {
             debugger;
             var excelFile = document.getElementById('ExcelFile');
-            if (excelFile.files.length == 0) {
+            var pdfFile = document.getElementById('PdfFile');
+            if (excelFile.files.length == 0 || pdfFile.files.length == 0) {
                 alert("Please attach result file!");
                 return;
             }
@@ -737,6 +816,7 @@
                 var file = ExcelFile.files[i];
                 formData.append("excelFile", file);
             }
+           
             var studentSelect = $('#allColumn');
             studentSelect.val('').change();
             $.ajax({
@@ -802,13 +882,16 @@
             $(".analize").show();
             var rrId = $('#RRId').val();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var DAEInstituteId = $('#DAEInstituteId').val();
+            debugger;
             var schemeLevelId = $('#SchemeLevelId').val();
             $.ajax({
                 url: '@Url.Action("AssistDocument", "DocumentAssistGenerals")',
                 data: {
                     rrId: rrId,
                     DegreeScholarshipLevelId: degreeScholarshipLevelId,
-                    SchemeLevelId: schemeLevelId
+                    SchemeLevelId: schemeLevelId,
+                    dAEInstituteId: DAEInstituteId
                 },
                 success: function (data) {
                     setTimeout(function () {
@@ -878,6 +961,7 @@
             var policySRCForumId = $('#PolicySRCForumId').val();
             var schemeLevelId = $('#SchemeLevelId').val();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var DAEInstituteId = $('#DAEInstituteId').val();
             var schemeId = $('#SchemeId').val();
             $.ajax({
                 url: '@Url.Action("ApplySelectionCriteria", "SelectionCriteriaGenerals")',
@@ -885,20 +969,21 @@
                     PolicySRCForumId: policySRCForumId,
                     SchemeLevelId: schemeLevelId,
                     SchemeId: schemeId,
-                    DegreeScholarshipLevelId: degreeScholarshipLevelId
+                    DegreeScholarshipLevelId: degreeScholarshipLevelId,
+                    DAEInstituteId: DAEInstituteId
                 },
-                success: function (data) {
-                    if (data.IsValid) {
+                success: function (data) {                    
+                    if (data.isValid) {
+                        IsCriteriaApplied = true;                        
                         setTimeout(function () {
                             notificationme(data.message);
-                        }, delay);
-                        IsCriteriaApplied = true;
+                            $(".analize").hide();
+                        }, delay);                                                
                     } else {
                         IsCriteriaApplied = false;
                         $('#btnApplyCriteria').prop('disabled', false);
                         notificationme(data.message);
-                    }
-                    $(".analize").hide();
+                    }                    
                 }
             });
         }
@@ -912,6 +997,7 @@
             var schemeLevelId = $('#SchemeLevelId').val();
             var policySRCForumId = $('#PolicySRCForumId').val();
             var degreeScholarshipLevelId = $('#DegreeScholarshipLevelId').val();
+            var DAEInstituteId = $('#DAEInstituteId').val();
             @*$.ajax({
                 url: '@Url.Action("MeritListGenerator", "ResultContainers")',
                 data: {
@@ -927,7 +1013,7 @@
                     }, delay);
                 }
             });*@            
-            var url = '@Url.Action("MeritListGenerator", "ResultContainers")?rrId=' + rrId + '&SLId=' + schemeLevelId + '&policySRCForumId=' + policySRCForumId + '&degreeScholarshipLevelId=' + degreeScholarshipLevelId;
+            var url = '@Url.Action("MeritListGenerator", "ResultContainers")?rrId=' + rrId + '&SLId=' + schemeLevelId + '&policySRCForumId=' + policySRCForumId + '&degreeScholarshipLevelId=' + degreeScholarshipLevelId + '&DAEInstituteId=' + DAEInstituteId;
             window.location.href = url;
         }
     </script>

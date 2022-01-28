@@ -48,7 +48,7 @@
                                              aria-labelledby=@("heading" + counter) data-parent="#accordion">
                                           <div class="card-body" style="padding:1rem">
                                               @{
-                                                  if (scheme.SchemeId <=3)
+                                                  if (scheme.SchemeId <=1)
                                                   {
                                                       <div class="table-responsive">
                                                           <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -185,10 +185,20 @@
                                                                           </th>
                                                                           <th>
                                                                               @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
-                                                                          </th>                                                                        
-                                                                            <th>
-                                                                                <text>Degree Level</text>
-                                                                            </th>                                                                              
+                                                                          </th>
+                                                                          <th>
+                                                                              @{
+                                                                                  if (schemelevel.SchemeLevelId == 4 || schemelevel.SchemeLevelId == 5 || schemelevel.SchemeLevelId == 6)
+                                                                                  {
+                                                                                      <text>DAE Institute</text>
+                                                                                  }
+                                                                                  else
+                                                                                  {
+                                                                                      <text>Degree Level</text>
+                                                                                  }
+                                                                              }
+                                                                          </th>
+                                                                                                                                                          
                                                                           <th>Excel File</th>
                                                                           <th>Scanned File</th>
                                                                           <th>Data Cleaned</th>
@@ -207,11 +217,18 @@
                                                                           <td>
                                                                               @Html.DisplayFor(modelItem => item2.SchemeLevelPolicy.SchemeLevel.Name)
                                                                           </td>
-
                                                                           <td>
-                                                                              @Html.DisplayFor(modelItem => item2.DegreeScholarshipLevel.Name)
-                                                                          </td>
-
+                                                                              @{
+                                                                                  if (schemelevel.SchemeLevelId == 4 || schemelevel.SchemeLevelId == 5 || schemelevel.SchemeLevelId == 6)
+                                                                                  {
+                                                                                      @Html.DisplayFor(modelItem => item2.DAEInstitute.Name)
+                                                                                  }
+                                                                                  else
+                                                                                  {
+                                                                                      @Html.DisplayFor(modelItem => item2.DegreeScholarshipLevel.Name)
+                                                                                  }
+                                                                              }
+                                                                          </td>                                                                         
                                                                           <td>
                                                                               @{
                                                                                   if (item2.resultFilePath != null)

@@ -30,7 +30,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: ResultRepositories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel.DegreeScholarshipLevels).Include(r => r.ScholarshipFiscalYear);
+            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel.DegreeScholarshipLevels).Include(a=>a.DAEInstitute).Include(r => r.ScholarshipFiscalYear);
             ViewBag.Schemes = _context.Scheme.ToList();
             ViewBag.SchemeLevels = _context.SchemeLevel.ToList();
             ViewBag.DegreeScholarshipLevel = _context.DegreeScholarshipLevel.ToList();
@@ -306,9 +306,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                  PolicySRCForumId = g.Max(p => p.s.PolicySRCForumId),                 
                  Code = g.Max(p => p.i.Code)
              });
-            ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");
-            //ViewData["SchemeLevelId"] = new SelectList(_context.SchemeLevel, "SchemeId", "Name");            
-            ViewData["ExcelColumnNameId"] = new SelectList(_context.ExcelColumnName.Where(a=>a.IsActive == true), "Name", "Name", true);
+            ViewData["PolicySRCForumId"] = new SelectList(qry, "PolicySRCForumId", "Code");                                   
+            ViewData["ExcelColumnNameId"] = _context.ExcelColumnName.Where(a => a.IsActive == true)                                    
+                                    .Select(x => new SelectListItem() { Text = x.Name, Value = x.Name, Selected= true });            
+            ViewData["SchemeLevelMandatoryColumnId"] = _context.SchemeLevelMandatoryColumn
+                                    .Include(a => a.ExcelColumnName)
+                                    .Select(x => new SelectListItem() { Text = x.ExcelColumnName.Name, Value = x.ExcelColumnName.Name, Selected= true });
             ViewData["OperatorId"] = new SelectList(_context.Operator, "OperatorId", "Name");
             ViewData["DocumentAssistId"] = new SelectList(_context.DocumentAssist, "DocumentAssistId", "ConditionalOperator");
             ResultRepositoryTemp obj = new ResultRepositoryTemp();
@@ -346,41 +349,49 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     return Json(new { isValid = false, message = "Please attach result file!" });
                 }           
         }
-        public async Task<JsonResult> UploadFilePost(IFormFile excelFile/*, bool isReImportResult*/, string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId)
+        public async Task<JsonResult> UploadFilePost(IFormFile excelFile, IFormFile pdfFile/*, bool isReImportResult*/, string selectedColumn, int PolicySRCForumId, int SchemeId, int SchemeLevelId, int DegreeScholarshipLevelId, int DAEInstituteId)
         {
             try
             {
                 if (excelFile != null)
-                {
-                    var IsResultAlreadyExist = 0;
-                    if (SchemeId < 4)
+                {                    
+                    var schemeLevelMandatoryColumn = _context.SchemeLevelMandatoryColumn.Include(a=>a.ExcelColumnName).Where(a => a.SchemeLevelId == SchemeLevelId).ToList();
+                    foreach(var column in schemeLevelMandatoryColumn)
                     {
-                        if (selectedColumn.Contains("Roll_NO") && selectedColumn.Contains("Name") && selectedColumn.Contains("Father_Name") && selectedColumn.Contains("Candidate_District")  && selectedColumn.Contains("Marks_"))
-                        {
-                            IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId);
-                        }
-                        else
-                        {
+                        if (!selectedColumn.Contains(column.ExcelColumnName.Name))
+                        {                            
                             return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
                         }
                     }
+                    var IsResultAlreadyExist = 0;
+                    if (SchemeId < 4)
+                    {                        
+                            if(DAEInstituteId == 0)
+                            {
+                                IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId);
+                            }
+                            else
+                            {
+                                IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DAEInstituteId == DAEInstituteId);
+                            }                                                   
+                    }
                     else
-                    {
-                        if (selectedColumn.Contains("Roll_NO") && selectedColumn.Contains("Name") && selectedColumn.Contains("Father_Name")  && (selectedColumn.Contains("Marks_") || selectedColumn.Contains("CGPA")))
-                        {
-                            IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId);
-                        }
-                        else
-                        {
-                            return Json(new { isValid = false, reupload = false, message = "Please select mandatory columns!" });
-                        }
+                    {                        
+                        IsResultAlreadyExist = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Count(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId);                       
                     }
                     if (IsResultAlreadyExist != 0)
                     {
                         var ResultRepositoryTempId = 0;
                         if (SchemeId < 4)
                         {
-                            ResultRepositoryTempId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).Max(a => a.ResultRepositoryTempId);
+                            if(DAEInstituteId == 0)
+                            {
+                                ResultRepositoryTempId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).Max(a => a.ResultRepositoryTempId);
+                            }
+                            else
+                            {
+                                ResultRepositoryTempId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DAEInstituteId == DAEInstituteId).Max(a => a.ResultRepositoryTempId);
+                            }                       
                         }
                         else
                         {
@@ -400,7 +411,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         {
                             using (var package = new ExcelPackage(stream))
                             {
-                                var worksheet = package.Workbook.Worksheets.First();
+                                var worksheet = package.Workbook.Worksheets.First();                                
                                 var rowCount = worksheet.Dimension.Rows;
                                 var colCount = worksheet.Dimension.Columns;
                                 List<int> excelColumnList = new List<int>();
@@ -445,6 +456,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                     ResultRepositoryTemp resultRepository = new ResultRepositoryTemp();
                                     resultRepository.CreatedOn = DateTime.Today;
                                     resultRepository.DegreeScholarshipLevelId = DegreeScholarshipLevelId;
+                                    resultRepository.DAEInstituteId = DAEInstituteId;
                                     resultRepository.ScholarshipFiscalYearId = _context.PolicySRCForum.Find(PolicySRCForumId).ScholarshipFiscalYearId;
                                     resultRepository.SchemeLevelPolicyId = _context.SchemeLevelPolicy.Where(a => a.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelId == SchemeLevelId).Select(a => a.SchemeLevelPolicyId).FirstOrDefault();
                                     _context.Add(resultRepository);
@@ -474,8 +486,10 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                     //-------------------------------------------------------
                                     var currentSchemeLevel = _context.SchemeLevel.Find(SchemeLevelId);
                                     var districts = _context.District.Select(a => new District { DistrictId = a.DistrictId, Name = a.Name.ToLower() }).ToList();
+                                    
                                     for (var row = 2; row < rowCount; row++)
                                     {
+                                        bool IsRowEmpty = true;
                                         counter = 0;
                                         try
                                         {
@@ -489,8 +503,16 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                                 }
                                                 else
                                                 {
-                                                    specificExcelRow.Add("");
+                                                    specificExcelRow.Add("");                                                    
                                                 }
+                                                if(!string.IsNullOrEmpty(specificExcelRow.Last()))
+                                                {
+                                                    IsRowEmpty = false;
+                                                }
+                                            }
+                                            if(IsRowEmpty)
+                                            {
+                                                continue;
                                             }
                                             int a;
                                             decimal b;
@@ -559,6 +581,28 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                                     }
                                     _context.Update(currentObj);
                                     //----------------------End Upload Excel File-------------------------
+                                    //----------------------Upload Pdf File-----------------------------
+                                    currentObj = _context.ResultRepositoryTemp.Find(MaxResultRespositoryId);
+                                    fileName = Path.GetFileName(pdfFile.FileName);
+                                    rootPath = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot\\Documents\\ResultScanned\\RRID" + MaxResultRespositoryId.ToString() + "\\");
+                                    fileName = fileName.Replace("&", "n"); fileName = fileName.Replace(" ", ""); fileName = fileName.Replace("#", "H"); fileName = fileName.Replace("(", ""); fileName = fileName.Replace(")", "");
+                                    random = new Random();
+                                    randomNumber = random.Next(1, 1000);
+                                    fileName = "Document" + randomNumber.ToString() + fileName;
+                                    currentObj.resultScannedFilePath = Path.Combine("/Documents/ResultScanned/RRID" + MaxResultRespositoryId.ToString() + "/" + fileName);//Server Path
+                                    sPath = Path.Combine(rootPath);
+                                    if (!System.IO.Directory.Exists(sPath))
+                                    {
+                                        System.IO.Directory.CreateDirectory(sPath);
+                                    }
+                                    FullPathWithFileName = Path.Combine(sPath, fileName);
+                                    using (var stream2 = new FileStream(FullPathWithFileName, FileMode.Create))
+                                    {
+                                        await pdfFile.CopyToAsync(stream2);
+                                    }
+                                    _context.Update(currentObj);
+                                    //----------------------End Upload Pdf File-------------------------
                                     await _context.SaveChangesAsync();
                                 }
                                 else
@@ -578,7 +622,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         var resultRepositoryId = 0;
                         if (SchemeId < 4)
                         {
-                            resultRepositoryId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).Max(a => a.ResultRepositoryTempId);
+                            if(DAEInstituteId == 0)
+                            {
+                                resultRepositoryId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).Max(a => a.ResultRepositoryTempId);
+                            }
+                            else
+                            {
+                                resultRepositoryId = _context.ResultRepositoryTemp.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DAEInstituteId == DAEInstituteId).Max(a => a.ResultRepositoryTempId);
+                            }                         
                         }
                         else
                         {

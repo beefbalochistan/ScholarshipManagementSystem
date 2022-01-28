@@ -28,9 +28,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             return ViewComponent("FilterResult", new { id, RRId });
         }
-        public IActionResult ReloadEventMeritList(int id, int SLPId, int selectedMethod, string selectedStatus, int RRId, int GradingSystem)
+        public IActionResult ReloadEventMeritList(int id, int SLId, int SLPId, int selectedMethod, string selectedStatus, int RRId, int GradingSystem)
         {
-            return ViewComponent("MeritList", new { id, SLPId, selectedMethod , selectedStatus, RRId, GradingSystem });
+            return ViewComponent("MeritList", new { id, SLId, SLPId, selectedMethod , selectedStatus, RRId, GradingSystem });
         }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
@@ -43,8 +43,21 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             viewUploadedResult.columnLabel = obj;
             //-----------------------------------------
             ViewData["DistrictId"] = new SelectList(_context.District.Include(a=>a.Division).Where(a=>a.IsActive == true && a.Division.ProvienceId == 1).OrderBy(a=>a.Name), "DistrictId", "Name");
-            int GradingSystem = await _context.ResultRepository.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ResultRepositoryId == id).Select(a => a.SchemeLevelPolicy.SchemeLevel.GradingSystem).FirstOrDefaultAsync();
-            ViewData["GradingSystem"] = GradingSystem;
+            var Info = await _context.ResultRepository.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ResultRepositoryId == id).FirstOrDefaultAsync();
+            ViewData["GradingSystem"] = Info.SchemeLevelPolicy.SchemeLevel.GradingSystem;
+            ViewData["SLId"] = Info.SchemeLevelPolicy.SchemeLevelId;
+            if(Info.SchemeLevelPolicy.SchemeLevelId == 1 || Info.SchemeLevelPolicy.SchemeLevelId == 2 || Info.SchemeLevelPolicy.SchemeLevelId == 3 || Info.SchemeLevelPolicy.SchemeLevelId == 7 || Info.SchemeLevelPolicy.SchemeLevelId == 8 || Info.SchemeLevelPolicy.SchemeLevelId == 9)
+            {
+                ViewData["SLName"] = Info.SchemeLevelPolicy.SchemeLevelId;
+            }
+            else if(Info.SchemeLevelPolicy.SchemeLevelId == 4 || Info.SchemeLevelPolicy.SchemeLevelId == 5 || Info.SchemeLevelPolicy.SchemeLevelId == 6)
+            {
+                ViewData["SLName"] = _context.DAEInstitute.Find(Info.DAEInstituteId).Name;
+            }
+            else
+            {
+                ViewData["SLName"] = _context.DegreeScholarshipLevel.Find(Info.DegreeScholarshipLevelId).Name;
+            }
             return View(viewUploadedResult);
         }
         public async Task<IActionResult> CompileResult(int id)
@@ -255,11 +268,19 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        public async Task<IActionResult> MeritListGenerator(int SLId, int policySRCForumId, int degreeScholarshipLevelId)
+        public async Task<IActionResult> MeritListGenerator(int SLId, int policySRCForumId, int degreeScholarshipLevelId, int DAEInstituteId)
         {
             var currentPolicy = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel.QualificationLevel).Include(a => a.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.PolicySRCForumId == policySRCForumId && a.PolicySRCForum.IsEndorse == true && a.SchemeLevelId == SLId).FirstOrDefault();
             int rrId = _context.ResultRepository.Where(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId && a.DegreeScholarshipLevelId == degreeScholarshipLevelId).Max(a => a.ResultRepositoryId);
             var ISExist = _context.Applicant.Count(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId);
+            if (degreeScholarshipLevelId != 0)
+            {
+                ISExist = _context.Applicant.Count(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId && a.DegreeScholarshipLevelId == degreeScholarshipLevelId);
+            }
+            else if (DAEInstituteId != 0)
+            {
+                ISExist = _context.Applicant.Count(a => a.SchemeLevelPolicyId == currentPolicy.SchemeLevelPolicyId && a.DAEInstituteId == DAEInstituteId);
+            }            
             if(ISExist == 0)
             {
                 var currentSchemeLevel = _context.SchemeLevel.Find(SLId);
@@ -408,6 +429,82 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 }
                 else if (SLId == 4 || SLId == 5 || SLId == 6)
                 {
+                    try
+                    {
+                        var POMLCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round(currentPolicy.POMS)).ToList();
+                        int counter = 1;
+                        foreach (var result in POMLCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = result.DistrictId;
+                            applicant.ProvienceId = _context.District.Include(a => a.Division.Provience).Where(a => a.DistrictId == applicant.DistrictId).Select(a => a.Division.ProvienceId).FirstOrDefault();
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.DAEInstituteId = DAEInstituteId;
+                            applicant.SelectionMethodId = 1;// "POMS";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.SelectionStatus = "Selected";
+                            applicant.ApplicantSelectionStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                        await _context.SaveChangesAsync();
+                        //--------------------------------------------------------------                                    
+                        var daeQouta = _context.DAEInstituteQoutaBySchemeLevel.Include(a => a.SchemeLevelPolicy).Where(a => a.PolicySRCForumId == policySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SLId && a.DAEInstituteId == DAEInstituteId).FirstOrDefault();
+                        var IOMSCandidates = _context.ResultContainer.Where(a => a.ResultRepositoryId == rrId && a.IsOnCriteria == true && a.IsSelected == false).OrderByDescending(x => (gradingSystem == 1 ? x.CGPA : x.Marks_)).Take((int)Math.Round((daeQouta.SlotAllocate + daeQouta.InstituteAdditionalSlot))).ToList();
+                        foreach (var result in IOMSCandidates)
+                        {
+                            Applicant applicant = new Applicant();
+                            applicant.ApplicantReferenceNo = currentPolicy.PolicySRCForum.ScholarshipFiscalYear.Code + currentPolicy.SchemeLevel.QualificationLevel.Code + currentPolicy.SchemeLevel.Code + counter.ToString().PadLeft(4, '0'); ;
+                            applicant.Name = result.Name;
+                            applicant.DistrictId = 1;
+                            applicant.ProvienceId = 1;
+                            applicant.FatherName = result.Father_Name;
+                            applicant.ReceivedMarks = result.Marks_;
+                            applicant.ReceivedCGPA = result.CGPA;
+                            applicant.RollNumber = result.Roll_NO;
+                            applicant.SelectionMethodId = 2;// "IOMS";
+                            applicant.RegisterationNumber = result.REG_NO;
+                            applicant.EntryThrough = "System";
+                            applicant.TotalMarks = result.TotalMarks_;//KDA
+                            applicant.TotalGPA = result.TotalGPA;
+                            applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
+                            applicant.DAEInstituteId = DAEInstituteId;
+                            applicant.SelectionStatus = "Selected";
+                            applicant.ApplicantSelectionStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 1;
+                            _context.Add(applicant);
+                            ResultContainer currentResult = new ResultContainer();
+                            currentResult = result;
+                            currentResult.IsSelected = true;
+                            _context.Update(currentResult);
+                            counter++;
+                        }
+                        await _context.SaveChangesAsync();
+                        //-------------------------------------------------------------
+                        ResultRepository resultRepository = await _context.ResultRepository.FindAsync(rrId);
+                        resultRepository.IsMeritListGenerated = true;
+                        resultRepository.currentCounter = counter;
+                        _context.Update(resultRepository);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var temp = 0;
+                    }
                 }
                 else if ((currentSchemeLevel.QualificationLevelId == 5 || currentSchemeLevel.QualificationLevelId == 6 || currentSchemeLevel.QualificationLevelId == 7) && currentSchemeLevel.InstituteId != 2) // Bachlor-BS (Other then first year)
                 {

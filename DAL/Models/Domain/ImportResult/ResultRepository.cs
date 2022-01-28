@@ -22,6 +22,7 @@ namespace DAL.Models.Domain.ImportResult
         [Display(Name = "Scheme Level")]
         public int SchemeLevelPolicyId { get; set; }
         public int? DegreeScholarshipLevelId { get; set; }
+        public int? DAEInstituteId { get; set; }
         [Display(Name = "Uploaded Date")]
         [DataType(DataType.Date)]
         public DateTime CreatedOn { get; set; }
@@ -32,6 +33,7 @@ namespace DAL.Models.Domain.ImportResult
 
         public virtual ScholarshipFiscalYear ScholarshipFiscalYear { get; set; }
         public virtual DegreeScholarshipLevel DegreeScholarshipLevel { get; set; }
+        public virtual DAEInstitute DAEInstitute { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
     }
 }

@@ -13,7 +13,7 @@
     <thead>
         <tr>
             @{
-                if (ViewBag.GradingSystem == 2)
+                if (ViewBag.SLId == 1 || ViewBag.SLId == 2 || ViewBag.SLId == 3 || ViewBag.SLId == 7 || ViewBag.SLId == 8 || ViewBag.SLId == 9)
                 {
                     <th>
                         @Html.DisplayNameFor(model => model.District)
@@ -65,7 +65,7 @@
         {
         <tr>
             @{
-                if (ViewBag.GradingSystem == 2)
+                if (ViewBag.SLId == 1 || ViewBag.SLId == 2 || ViewBag.SLId == 3 || ViewBag.SLId == 7 || ViewBag.SLId == 8 || ViewBag.SLId == 9)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => item.District.Name)

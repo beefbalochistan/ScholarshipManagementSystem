@@ -13,7 +13,7 @@
 
 
 @{ 
-    if(ViewBag.GradingSystem == 2)
+    if(ViewBag.SLId == 1 || ViewBag.SLId == 2 || ViewBag.SLId == 3 || ViewBag.SLId == 7 || ViewBag.SLId == 8 || ViewBag.SLId == 9)
     {
         <div class="row">
             <div class="col-md-3">
@@ -45,7 +45,7 @@
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
                                 <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
-                                    <h4 class="mt-2 card-title">List of Result Record</h4>
+                                    <h4 class="mt-2 card-title">List of Result Record - <span style="color: black">Scheme Level: @ViewBag.SLName</span></h4>
                                 </div>
                                 <div class="table-responsive" id="events">
                                     @(await Component.InvokeAsync("FilterResult", new { id = 6, RRId = ViewBag.RRId }))

@@ -264,14 +264,17 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             var applicationDbContext = await _context.SelectionCriteriaGeneral.Where(a => a.SchemeLevelId == SchemeLevelId).ToListAsync();                        
             return PartialView(applicationDbContext);
         }
-        public async Task<JsonResult> ApplySelectionCriteria(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId)
+        public async Task<JsonResult> ApplySelectionCriteria(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId, int DAEInstituteId)
         {
             var record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();            
             if (SchemeId >= 4)
             {
                 record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
             }
-            
+            if (SchemeLevelId == 4 || SchemeLevelId == 5 || SchemeLevelId == 6)
+            {
+                record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DAEInstituteId == DAEInstituteId).FirstOrDefault();
+            }
             if (record != null)
             {
                 if (record.IsDataCleaned)
@@ -325,13 +328,17 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             }            
             return Json(new { success = true });
         }
-        public JsonResult GetResultStatus(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId)
+        public JsonResult GetResultStatus(int PolicySRCForumId, int SchemeLevelId, int SchemeId, int DegreeScholarshipLevelId, int DAEInstituteId)
         {
             var record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId).FirstOrDefault();
             if (SchemeId >= 4)
             {
                 record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DegreeScholarshipLevelId == DegreeScholarshipLevelId).FirstOrDefault();
-            }            
+            }
+            if (SchemeLevelId == 4 || SchemeLevelId == 5 || SchemeLevelId == 6)
+            {
+                record = _context.ResultRepository.Include(a => a.SchemeLevelPolicy).Where(a => a.SchemeLevelPolicy.PolicySRCForumId == PolicySRCForumId && a.SchemeLevelPolicy.SchemeLevelId == SchemeLevelId && a.DAEInstituteId == DAEInstituteId).FirstOrDefault();
+            }
             if (record != null)
             {
                 bool IsClean = false;
