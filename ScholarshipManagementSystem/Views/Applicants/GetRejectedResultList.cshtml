@@ -1,0 +1,68 @@
+﻿
+@model IEnumerable<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejected>
+
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<div class="table-responsive p-3">
+    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SchemeLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RollNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>Round</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SchemeLevel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RollNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <span class="badge badge-pill @((item.Round) == 1 ? "badge-soft-success" : (item.Round) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
+                    </td>
+                    <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable();
+    });
+</script>

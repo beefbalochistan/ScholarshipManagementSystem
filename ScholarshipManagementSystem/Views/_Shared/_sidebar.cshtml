@@ -13,12 +13,27 @@
                 <li class="menu-title" key="t-menu">BEEF Workspace</li>
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                         {
-                            <li>
-                                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-txt"></i>
-                                    <span key="t-calendar" id="TotalInProcessFiles">Applicant</span>
-                                </a>
-                            </li>
+                        <li>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
+                                <i class="bx bxs-eraser"></i>
+                                <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">?</span>
+                                <span key="t-forms">Applicant In Process</span>
+                            </a>                            
+                        </li>
+                        <li>
+                            <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
+                                <i class="bx bxs-eraser"></i>
+                                <span id="TotaltWaitingFiles" class="badge badge-pill badge-soft-info float-right">?</span>
+                                <span key="t-forms">Applicant Waiting</span>
+                            </a>                            
+                        </li>
+                        <li>
+                            <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
+                                <i class="bx bxs-eraser"></i>
+                                <span id="TotaltRejectedFiles" class="badge badge-pill badge-soft-info float-right">?</span>
+                                <span key="t-forms">Applicant Rejected</span>
+                            </a>
+                        </li>
                         }
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                         {

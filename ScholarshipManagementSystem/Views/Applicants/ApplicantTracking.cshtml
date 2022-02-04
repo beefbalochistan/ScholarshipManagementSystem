@@ -68,12 +68,12 @@
                                 <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
                             </div>
                         </div>
-                        <div class="col-md-2 mt-4">
-                            <div class="form-group">
-                                <label class="control-label">Roll#</label>
-                                <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
-                            </div>
-                        </div>
+                        @*<div class="col-md-2 mt-4">
+            <div class="form-group">
+                <label class="control-label">Roll#</label>
+                <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+            </div>
+        </div>*@
                         <div class="col-md-2 mt-4">
                             <div class="form-group">
                                 <label class="control-label">Name</label>
@@ -84,6 +84,11 @@
                             <div class="form-group">
                                 <label class="control-label">Father Name</label>
                                 <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="top:-35px">
+                            <div class="text-center">
+                                <img id="qrcode" alt="QRCode" width="120" src="" data-holder-rendered="true">
                             </div>
                         </div>
                         <div class="col-md-2" style="top:-55px">
@@ -116,32 +121,37 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active btnView" data-toggle="tab" href="#profile" role="tab">                                        
+                                    <a class="nav-link active btnView" data-toggle="tab" href="#profile" role="tab">
                                         <span class="d-none d-sm-block"><i class="bx bxs-graduation"></i> Profile <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btnView" data-toggle="tab" href="#attachments" role="tab">                                        
+                                    <a class="nav-link btnView" data-toggle="tab" href="#attachments" role="tab">
                                         <span class="d-none d-sm-block"><i class="mdi mdi-attachment"></i> Attachments <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btnView" data-toggle="tab" href="#recipt" role="tab">                                        
+                                    <a class="nav-link btnView" data-toggle="tab" href="#compare" role="tab">
+                                        <span class="d-none d-sm-block"><i class="mdi mdi-compare"></i> Comparison <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btnView" data-toggle="tab" href="#recipt" role="tab">
                                         <span class="d-none d-sm-block"><i class="bx bx-receipt"></i> Recipt Information </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btnView" data-toggle="tab" href="#messages" role="tab">                                        
+                                    <a class="nav-link btnView" data-toggle="tab" href="#messages" role="tab">
                                         <span class="d-none d-sm-block"><i class="far fa-envelope"></i> SMS Inbox <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btnView" data-toggle="tab" href="#greennote" role="tab">                                        
+                                    <a class="nav-link btnView" data-toggle="tab" href="#greennote" role="tab">
                                         <span class="d-none d-sm-block"><i class="mdi mdi-file-account-outline"></i> Green Note </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btnView" data-toggle="tab" href="#paymentprocess" role="tab">                                        
+                                    <a class="nav-link btnView" data-toggle="tab" href="#paymentprocess" role="tab">
                                         <span class="d-none d-sm-block"><i class="bx bx-transfer"></i> Payment Process </span>
                                     </a>
                                 </li>
@@ -152,26 +162,29 @@
                                 <div class="tab-pane active" id="profile" role="tabpanel">
                                     <div id="fetchProfile">
                                         Profile
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="attachments" role="tabpanel">
                                     @*<form class="form-inline">
-                                            <div class="input-group mb-2 mr-sm-3">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text"></div>
-                                                </div>
-                                                <input class="form-control" id="title" placeholder="Enter Document Title">
+                                        <div class="input-group mb-2 mr-sm-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"></div>
                                             </div>
-                                            <div class="input-group mb-2 mr-sm-3">
-                                                <div class="custom-file text-left">
-                                                    <input accept="application/pdf" type="file" class="custom-file-input" name="AttachDocument" id="AttachDocument">
-                                                    <label class="custom-file-label" style="justify-content:left">Document</label>
-                                                </div>
+                                            <input class="form-control" id="title" placeholder="Enter Document Title">
+                                        </div>
+                                        <div class="input-group mb-2 mr-sm-3">
+                                            <div class="custom-file text-left">
+                                                <input accept="application/pdf" type="file" class="custom-file-input" name="AttachDocument" id="AttachDocument">
+                                                <label class="custom-file-label" style="justify-content:left">Document</label>
                                             </div>
-                                            <button type="submit" class="btn btn-primary mb-2">Upload</button>
-                                        </form>*@
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mb-2">Upload</button>
+                                    </form>*@
                                     <br />
                                     <div id="attachmentdiv"></div>
+                                </div>
+                                <div class="tab-pane" id="compare" role="tabpanel">                                                                       
+                                    <div id="comparediv"></div>
                                 </div>
                                 <div class="tab-pane" id="recipt" role="tabpanel">
                                     <br />
@@ -181,7 +194,7 @@
                                     </div>
                                     <div id="reciptCard" style="display:none">
                                         <div class="col-lg-4">
-                                            <div class="card border border-success">                                             
+                                            <div class="card border border-success">
                                                 <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
                                                     <i class="mdi mdi-alert-circle-outline mr-2"></i>
                                                     Form Submitted Successfully
@@ -271,7 +284,7 @@
                                                 <div id="commentPortion">
                                                     <div class="form-inline pb-3">
                                                         <div class="input-group mb-2 mr-sm-3">
-                                                            <input type="checkbox" id="switch" switch="info" checked=""/>
+                                                            <input type="checkbox" id="switch" switch="info" checked="" />
                                                             <label for="switch" data-on-label="ON"
                                                                    data-off-label="OFF"></label>
                                                         </div>
@@ -281,7 +294,7 @@
                                                             </select>
                                                         </div>
                                                         <label class="control-label mr-2 severity">Severity</label>
-                                                        <div class="input-group mb-2 mr-sm-3 severity">                                                         
+                                                        <div class="input-group mb-2 mr-sm-3 severity">
                                                             <select id="SeverityLevelId" name="SeverityLevelId" style="max-width:130px" class="form-control select2-templating">
                                                                 <option value="0"> - - Select - -</option>
                                                                 <optgroup label="Comments Serverity">
@@ -421,6 +434,7 @@ else
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
+                        debugger;
                         $('.applicantinformation').show();
                         $('#attachment').show();
                         $('#name').val(response.name);
@@ -457,6 +471,9 @@ else
                         } else {
                             $("#pic").attr("src", response.bFormCNIC );
                         }
+                        if (response.year != "") {
+                            $("#qrcode").attr("src", response.year);
+                        }
                         debugger;
                         if (response.isFormSubmitted == true) {
                             $('#reciptAlert').hide();
@@ -474,6 +491,7 @@ else
                         fetchApplicantProgressStatus(response.applicantId, response.applicantCurrentStatusId);
                         fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);
                         fetchApplicantAttachments(response.applicantId);
+                        fetchApplicantCompareData(response.applicantId);
                         fetchApplicantMessages(response.applicantId);
                         fetchApplicantComments(response.applicantId);
                     } else {
@@ -516,7 +534,7 @@ else
             toastr.info(message);
         }
         function fetchApplicantProfileData(applicantId, applicantCurrentStatusId) {
-            $(".loading").show();            
+            $(".loading").show();
             var userCurrentAccess = '@ViewBag.UserCurrentAccess';
             if (applicantCurrentStatusId != userCurrentAccess) {
                 userCurrentAccess = 0;
@@ -534,7 +552,7 @@ else
         });
         }
         function fetchApplicantProgressStatus(applicantId, applicantCurrentStatusId) {
-            $(".loading").show();            
+            $(".loading").show();
         $.ajax({
             url: '@Url.Action("_Index", "ApplicantCurrentStatus")',
             data: {
@@ -556,6 +574,19 @@ else
                 },
                     success: function (data) {
                     $("#attachmentdiv").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+        function fetchApplicantCompareData(applicantId) {
+        $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("_IndexCompare", "ApplicantAttachments")',
+                data: {
+                    id: applicantId
+                },
+                    success: function (data) {
+                    $("#comparediv").html(data);
                     $(".loading").hide();
                 }
             });

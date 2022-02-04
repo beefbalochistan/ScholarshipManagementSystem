@@ -40,6 +40,16 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> GetWaitingResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
+        {
+            var applicationDbContext = await _context.SPApplicantWaiting.FromSqlRaw("exec [Student].[ApplicantWaiting] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, SchemeLevelId).ToListAsync();           
+            return PartialView(applicationDbContext);
+        }
+        public async Task<IActionResult> GetRejectedResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
+        {
+            var applicationDbContext = await _context.SPApplicantRejected.FromSqlRaw("exec [Student].[ApplicantRejected] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, SchemeLevelId).ToListAsync();
+            return PartialView(applicationDbContext);
+        }
         public async Task<IActionResult> GetResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
         {                                
             var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, SchemeLevelId).ToListAsync();
@@ -59,6 +69,32 @@ namespace ScholarshipManagementSystem.Controllers.Student
 
             var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
             ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
+            return View(applicationDbContext);
+        }
+        public async Task<IActionResult> ApplicantRejected()
+        {
+            int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+            ViewBag.MaxFYId = MaxFYId;
+            ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
+            ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a => a.UserId == currentUser.Id).Select(a => a.SchemeLevelId).FirstOrDefault();
+
+            var applicationDbContext = await _context.SPApplicantRejectedSummary.FromSqlRaw("exec [Student].[ApplicantRejectedSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+            ViewBag.TotalCases = applicationDbContext.Sum(a => a.Applicant);
+            return View(applicationDbContext);
+        }
+        public async Task<IActionResult> ApplicantWaiting()
+        {
+            int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+            ViewBag.MaxFYId = MaxFYId;
+            ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
+            ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a => a.UserId == currentUser.Id).Select(a => a.SchemeLevelId).FirstOrDefault();
+
+            var applicationDbContext = await _context.SPApplicantWaitingSummary.FromSqlRaw("exec [Student].[ApplicantWaitingSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+            ViewBag.TotalCases = applicationDbContext.Sum(a => a.Applicant);
             return View(applicationDbContext);
         }
         public IActionResult CollectForm(string id)
@@ -128,18 +164,29 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 Attach_Father_Mother_Guardian_CNIC = a.Attach_Father_Mother_Guardian_CNIC,
                 Attach_Minority_Certificate = a.Attach_Minority_Certificate,
                 Attach_Payslip = a.Attach_Payslip,                
-                StudentMobile = a.StudentMobile,                
+                StudentMobile = a.StudentMobile,                                              
                 ApplicantCurrentStatusId = a.ApplicantCurrentStatusId,                
                 FormSubmittedOnDate = a.FormSubmittedOnDate,                
-                BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),
+                BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),                
                 ApplicantId = a.ApplicantId
             }).FirstOrDefault();
+            if(applicantInfo != null)
+            {
+                QRCodeGenerator QrGenerator = new QRCodeGenerator();
+                QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(applicantInfo.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
+                QRCode QrCode = new QRCode(QrCodeInfo);
+                Bitmap QrBitmap = QrCode.GetGraphic(60);
+                byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+                string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+                applicantInfo.Year = QrUri;
+            }            
             return Json(applicantInfo);
         }
         public IActionResult ReloadApplicantProfileData(int id, int userCurrentAccess)
         {
             return ViewComponent("ApplicantProfileData", new { id, userCurrentAccess});
         }
+        
         public async Task<JsonResult> AjaxApplicantSubmit(int applicantId, bool fourPicture, bool dmc, bool cnic, bool guardiancnic, bool paySlip, bool deathCertificate, bool affidavit, bool minorityCertificate, string mobileNo)
         {
             var applicantInfo = await _context.Applicant.FindAsync(applicantId);

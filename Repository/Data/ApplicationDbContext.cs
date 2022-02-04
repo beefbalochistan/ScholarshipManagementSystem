@@ -82,7 +82,11 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }
         [NotMapped]
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }
+        public DbSet<DAL.Models.ViewModels.ApplicantWaiting.SPApplicantWaiting> SPApplicantWaiting { get; set; }
+        public DbSet<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejected> SPApplicantRejected { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary> SPApplicantInProcessSummary { get; set; }
+        public DbSet<DAL.Models.ViewModels.ApplicantWaiting.SPApplicantWaitingSummary> SPApplicantWaitingSummary { get; set; }
+        public DbSet<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejectedSummary> SPApplicantRejectedSummary { get; set; }
         public DbSet<DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess> GetUserSchemeLevelAccess { get; set; }
     }
 }

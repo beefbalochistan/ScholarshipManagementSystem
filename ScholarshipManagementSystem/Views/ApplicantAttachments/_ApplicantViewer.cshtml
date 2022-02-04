@@ -1,0 +1,289 @@
+﻿@model DAL.Models.Domain.Student.Applicant
+
+<style>
+    .bg-light {
+        background-color: #dcedfc;
+    }
+</style>
+<div class="card"> 
+    <div class="card-body bg-light">
+        <h4 class="card-title">Basic Information</h4>
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.FatherName)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.FatherName)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.DateOfBirth)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Religion)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Religion)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.TehsilName)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.TehsilName)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.BFormCNIC)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.BFormCNIC)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.FatherCareTakerCNIC)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.FatherCareTakerCNIC)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.RelationWithCareTaker)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.RelationWithCareTaker)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.HomeAddress)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.HomeAddress)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body bg-light">
+        <h4 class="card-title">Contact Information</h4>
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.StudentMobile)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.StudentMobile)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.StudentMobile2)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.StudentMobile2)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.FatherMobile)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.FatherMobile)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.TelephoneWithCode)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.TelephoneWithCode)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body bg-light">
+        <h4 class="card-title">Result Information</h4>
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.SelectionMethod)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.SelectionMethod.Name)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.RegisterationNumber)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.RegisterationNumber)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.RollNumber)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.RollNumber)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Year)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Year)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.TotalMarks)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.TotalMarks)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.ReceivedMarks)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.ReceivedMarks)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.TotalGPA)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.TotalGPA)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.ReceivedCGPA)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.ReceivedCGPA)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.OldInstitudeNameAddress)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.OldInstitudeNameAddress)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body bg-light">
+        <h4 class="card-title">Current Institute</h4>
+        <dl class="row">
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteName)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteName)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteHOD)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteHOD)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteFocalPerson)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteFocalPerson)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteFocalDesignation)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteFocalDesignation)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteFocalMobile)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteFocalMobile)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteFocalEmail)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteFocalEmail)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsitutePhone)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsitutePhone)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteFax)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteFax)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.CurrentInsituteAddress)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.CurrentInsituteAddress)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body bg-light">
+        <h4 class="card-title">Attachments Information</h4>
+        <dl class="row">                                           
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Picture)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Picture)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_DMC_Transcript)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_DMC_Transcript)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_CNIC_BForm)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_CNIC_BForm)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Father_Mother_Guardian_CNIC)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Father_Mother_Guardian_CNIC)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Father_Death_Certificate)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Father_Death_Certificate)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Payslip)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Payslip)
+            </dd>           
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Affidavit)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Affidavit)
+            </dd>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Attach_Minority_Certificate)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Attach_Minority_Certificate)
+            </dd>                     
+        </dl>
+    </div>
+</div>
+

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary>
+﻿@model IEnumerable<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejectedSummary>
 @{
     ViewBag.pTitle = "Applicant Pending Files";
     ViewBag.pageTitle = "Applicant";
@@ -17,64 +17,30 @@
             </div>
         </div>
     </div>
-        
+
     <div class="col-xl-3 col-lg-4">
         <div class="card">
             <div class="card-body p-4">
-                @*<div class="search-box">
-            <p class="text-muted">Search</p>
-            <div class="position-relative">
-                <input type="text" class="form-control rounded bg-light border-light" placeholder="Search...">
-                <i class="mdi mdi-magnify search-icon"></i>
-            </div>
-        </div>*@
                 <div class="title"> List of Scheme</div>
                 <hr class="my-4">
-
                 <div>
-                    <p class="text-muted">List of In Process Applicant Cases</p>
+                    <p class="text-muted">List of Rejected Applicant Cases</p>
 
                     <ul class="list-unstyled font-weight-medium">
-                        @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Design</a></li>*@
                         @foreach (var item in Model)
                         {
-                        <li>
-                            <a href="#" onclick=UpdateRecord(@(item.Applicant !=0 ? item.SchemeLevelId : 0)) class="text-muted py-2 d-block">
-                                <i class="mdi mdi-projector-screen mr-1"></i>
-                                @item.SchemeLevel
-                                <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">@item.Applicant.ToString().PadLeft(2, '0')</span>
-                            </a>                            
-                        </li>
+                            <li>
+                                <a href="#" onclick=UpdateRecord(@(item.Applicant !=0 ? item.SchemeLevelId : 0)) class="text-muted py-2 d-block">
+                                    <i class="mdi mdi-projector-screen mr-1"></i>
+                                    @item.SchemeLevel
+                                    <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">@item.Applicant.ToString().PadLeft(2, '0')</span>
+                                </a>
+                            </li>
                         }
-                        @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Business</a></li>
-                <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Project</a></li>
-                <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Travel<span class="badge badge-soft-success badge-pill ml-1 float-right font-size-12">12</span></a></li>*@
                     </ul>
                 </div>
-
-                @*<hr class="my-4">
-                <div id="sidebar-menu">
-                    <ul class="metismenu list-unstyled" id="side-menu">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="bx bx-share-alt"></i>
-                                <span key="t-multi-level">Multi Level</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="javascript: void(0);" key="t-level-1-1">Level 1.1</a></li>
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Level 1.2</a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="javascript: void(0);">Level 2.1</a></li>
-                                        <li><a href="javascript: void(0);">Level 2.2</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                </div>*@
             </div>
+        </div>
         <!-- end card -->
     </div>
 </div>
@@ -90,7 +56,7 @@
         $(document).ready(function () {
             var SchemeLevelId = '@ViewBag.SchemeLevelId';
             var TotalCases = '@ViewBag.TotalCases';
-            $("#TotalInProcessFiles").html(TotalCases);
+            $("#TotalRejectedFiles").html(TotalCases);
             fetchRecord(SchemeLevelId);
     })
         function fetchRecord(SchemeLevelId) {
@@ -98,7 +64,7 @@
             var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
             $("#fetchspinner").show();
             $.ajax({
-                url: '@Url.Action("GetResultList", "Applicants")',
+                url: '@Url.Action("GetRejectedResultList", "Applicants")',
                 data: {
                     MaxFYId: MaxFYId,
                     applicantCurrentStatusId: applicantCurrentStatusId,
@@ -113,7 +79,7 @@
         }
         function UpdateRecord(SchemeLevelId) {
             if (SchemeLevelId != 0) {
-                fetchRecord(SchemeLevelId);                
+                fetchRecord(SchemeLevelId);
             } else {
                 notificationme('No Record Found!');
             }

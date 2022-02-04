@@ -31,6 +31,17 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.ApplicantAttachment.Where(a=>a.ApplicantId == id);
             return PartialView(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> _IndexCompare(int id)
+        {
+            var applicationDbContext = await _context.ApplicantAttachment.Where(a=>a.ApplicantId == id).ToListAsync();            
+            ViewData["ApplicantAttachmentId"] = new SelectList(_context.ApplicantAttachment.Where(a => a.ApplicantId == id), "AttachmentPath", "Title");
+            return PartialView(applicationDbContext);
+        }
+        public async Task<IActionResult> _ApplicantViewer(int id)
+        {
+            var applicationDbContext = await _context.Applicant.Include(a=>a.SelectionMethod).Where(a=>a.ApplicantId == id).FirstOrDefaultAsync();
+            return PartialView(applicationDbContext);
+        }
         // GET: ApplicantAttachments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
