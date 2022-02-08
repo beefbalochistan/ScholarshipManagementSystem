@@ -13,23 +13,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DAL.Models;
 using System.Net.Mail;
+using Repository.Data;
+using Microsoft.EntityFrameworkCore;
+using ScholarshipManagementSystem.Models;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -65,9 +70,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();            
             ReturnUrl = returnUrl;
         }
         public bool IsValidEmail(string emailaddress)
@@ -104,14 +107,17 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    ApplicationUser currentUser;
                     bool emailStatus = false;
                     if (IsValidEmail(Input.Email))
                     {
                         emailStatus = await _userManager.IsEmailConfirmedAsync(await _userManager.FindByEmailAsync(Input.Email));
+                        currentUser = await _userManager.FindByEmailAsync(Input.Email);
                     }
                     else
                     {                        
                         emailStatus = await _userManager.IsEmailConfirmedAsync(await _userManager.FindByNameAsync(Input.Email));
+                        currentUser = await _userManager.FindByNameAsync(Input.Email);
                     }
 
                     if (emailStatus == false)
@@ -119,6 +125,15 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                         ModelState.AddModelError(nameof(Input.Email), "Email is unconfirmed, please confirm it first");
                         return Page();
                     }
+                    int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);                    
+                    int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                    var InProcessSummary = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+                    var RejectedSummary = await _context.SPApplicantRejectedSummary.FromSqlRaw("exec [Student].[ApplicantRejectedSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+                    var WaitingSummary = await _context.SPApplicantWaitingSummary.FromSqlRaw("exec [Student].[ApplicantWaitingSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
+                    SingletonCache serviceInstance = SingletonCache.GetInstance();
+                    serviceInstance.SetInProcessFile(InProcessSummary.Sum(a => a.Applicant));
+                    serviceInstance.SetRejectedFile(RejectedSummary.Sum(a => a.Applicant));
+                    serviceInstance.SetWaitingFile(WaitingSummary.Sum(a => a.Applicant));
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

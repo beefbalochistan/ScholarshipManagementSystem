@@ -88,9 +88,7 @@
 
     <script>
         $(document).ready(function () {
-            var SchemeLevelId = '@ViewBag.SchemeLevelId';
-            var TotalCases = '@ViewBag.TotalCases';
-            $("#TotalInProcessFiles").html(TotalCases);
+            var SchemeLevelId = '@ViewBag.SchemeLevelId';                        
             fetchRecord(SchemeLevelId);
     })
         function fetchRecord(SchemeLevelId) {

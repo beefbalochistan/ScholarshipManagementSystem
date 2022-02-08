@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
+@inject ScholarshipManagementSystem.Models.SingletonCache myService
 @using ScholarshipManagementSystem.Constants
 <!-- ========== Left Sidebar Start ========== -->
 <div class="vertical-menu">
@@ -11,100 +12,101 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-menu">BEEF Workspace</li>
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                        <li>
-                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
-                                <i class="bx bxs-eraser"></i>
-                                <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">?</span>
-                                <span key="t-forms">Applicant In Process</span>
-                            </a>                            
-                        </li>
-                        <li>
-                            <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
-                                <i class="bx bxs-eraser"></i>
-                                <span id="TotaltWaitingFiles" class="badge badge-pill badge-soft-info float-right">?</span>
-                                <span key="t-forms">Applicant Waiting</span>
-                            </a>                            
-                        </li>
-                        <li>
-                            <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
-                                <i class="bx bxs-eraser"></i>
-                                <span id="TotaltRejectedFiles" class="badge badge-pill badge-soft-info float-right">?</span>
-                                <span key="t-forms">Applicant Rejected</span>
-                            </a>
-                        </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar"> Applicant Tracking</span>
-                                </a>
-                            </li>
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                {                   
+            <li>                
+                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
+                    <i class="bx bxs-eraser"></i>
+                    <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetInProcessFile())</span>
+                    <span key="t-forms">Applicant In Process <img id="inProcesssLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                </a>
+            </li>
+                    <li>
+                        <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-eraser"></i>
+                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetRejectedFile())</span>
+                            <span key="t-forms">Applicant Waiting  <img id="waitingLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-eraser"></i>
+                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetWaitingFile())</span>
+                            <span key="t-forms">Applicant Rejected  <img id="rejectedLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar"> Applicant Tracking</span>
+                        </a>
+                    </li>
 
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormCollection.View)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="CollectForm" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-doc"></i>
-                                    <span key="t-calendar">Form Collection</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormEntry.View)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantFormEntry" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-doc"></i>
-                                    <span key="t-calendar">Form Entry</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-file-pdf"></i>
-                                    <span key="t-calendar">File Attachment</span>
-                                </a>
-                            </li>
-                        }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                        {
-                            <li>
-                                <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
-                                    <i class="bx bxs-message-dots"></i>
-                                    <span key="t-calendar">Send SMS</span>
-                                </a>
-                            </li>
-                        }
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormCollection.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="CollectForm" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-file-doc"></i>
+                            <span key="t-calendar">Form Collection</span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FormEntry.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantFormEntry" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-file-doc"></i>
+                            <span key="t-calendar">Form Entry</span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-file-pdf"></i>
+                            <span key="t-calendar">File Attachment</span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-message-dots"></i>
+                            <span key="t-calendar">Send SMS</span>
+                        </a>
+                    </li>
+                }
 
-                    
+
                 <li class="menu-title" key="t-menu">Scholarship Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                    
-                            <li>
-                                <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
-                                    <i class="bx bxs-yin-yang"></i>
-                                    <span key="t-calendar">Fiscal Year</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="PolicySRCForums" class=" waves-effect">
-                                    <i class="bx bxs-yin-yang"></i>
-                                    <span key="t-calendar">Policy SRC Forum</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="Scholarships" class=" waves-effect">
-                                    <i class="bx bxs-tag"></i>
-                                    <span key="t-calendar">Scholarship Type</span>
-                                </a>
-                            </li>                           
+
+                    <li>
+                        <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
+                            <i class="bx bxs-yin-yang"></i>
+                            <span key="t-calendar">Fiscal Year</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="PolicySRCForums" class=" waves-effect">
+                            <i class="bx bxs-yin-yang"></i>
+                            <span key="t-calendar">Policy SRC Forum</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Scholarships" class=" waves-effect">
+                            <i class="bx bxs-tag"></i>
+                            <span key="t-calendar">Scholarship Type</span>
+                        </a>
+                    </li>
+
                 }
 
 
@@ -320,37 +322,38 @@
                 <li class="menu-title" key="t-menu">Result Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                   
-                            <li>
-                                <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Assist Tool</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Seletion Criteria</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="Index" asp-controller="ResultRepositories" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">View Results</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar"> Result Analyzer</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="ResultImporter" asp-controller="ResultRepositories" class=" waves-effect">
-                                    <i class="bx bxs-dizzy"></i>
-                                    <span key="t-calendar">Import Result</span>
-                                </a>
-                            </li>                       
+
+                    <li>
+                        <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Assist Tool</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Seletion Criteria</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="ResultRepositories" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">View Results</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar"> Result Analyzer</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="ResultImporter" asp-controller="ResultRepositories" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Import Result</span>
+                        </a>
+                    </li>
+
                 }
 
                 <li class="menu-title" key="t-menu">SMS Management</li>
@@ -696,16 +699,16 @@
                     </li>
 
                     @*<li>
-                        <a href="javascript: void(0);" class="has-arrow waves-effect">
-                            <i class="bx bx-map"></i>
-                            <span key="t-maps">Maps</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href=@Url.Action("Index", "MapsGoogle") key="t-g-maps">Google Maps</a></li>
-                            <li><a href=@Url.Action("Index", "MapsVector") key="t-v-maps">Vector Maps</a></li>
-                            <li><a href=@Url.Action("Index", "MapsLeaflet") key="t-l-maps">Leaflet Maps</a></li>
-                        </ul>
-                    </li>*@
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="bx bx-map"></i>
+                    <span key="t-maps">Maps</span>
+                </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href=@Url.Action("Index", "MapsGoogle") key="t-g-maps">Google Maps</a></li>
+                    <li><a href=@Url.Action("Index", "MapsVector") key="t-v-maps">Vector Maps</a></li>
+                    <li><a href=@Url.Action("Index", "MapsLeaflet") key="t-l-maps">Leaflet Maps</a></li>
+                </ul>
+            </li>*@
 
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">

@@ -10,6 +10,7 @@ using Repository.Data;
 using DAL.Models;
 using ScholarshipManagementSystem.Permission;
 using ScholarshipManagementSystem.Services;
+using ScholarshipManagementSystem.Models;
 
 namespace ScholarshipManagementSystem
 {
@@ -48,6 +49,7 @@ namespace ScholarshipManagementSystem
 
             EmailSender emailSender = new EmailSender(smtpServer, port, password, displayName, email);
             services.AddSingleton<IEmailSender>(emailSender);
+            services.AddSingleton<SingletonCache>(new SingletonCache());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
