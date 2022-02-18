@@ -3,11 +3,41 @@
 
 <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<style>
+    table.dataTable.dt-checkboxes-select tbody tr,
+    table.dataTable thead th.dt-checkboxes-select-all,
+    table.dataTable tbody td.dt-checkboxes-cell {
+        cursor: pointer;
+    }
+
+    table.dataTable thead th.dt-checkboxes-select-all,
+    table.dataTable tbody td.dt-checkboxes-cell {
+        text-align: center;
+    }
+
+    div.dataTables_wrapper span.select-info,
+    div.dataTables_wrapper span.select-item {
+        margin-left: 0.5em;
+    }
+
+    @@media screen and (max-width: 640px) {
+        div.dataTables_wrapper span.select-info,
+        div.dataTables_wrapper span.select-item {
+            margin-left: 0;
+            display: block;
+        }
+    }
+</style>
 <div class="table-responsive p-3">
-    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>
+    <button type="button" class="btn btn-sm btn-info mb-2" id="btn-forward">Forward</button>
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
+                <th></th>
                 <th>
                     @Html.DisplayNameFor(model => model.SchemeLevel)
                 </th>
@@ -28,6 +58,7 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@item.ApplicantId</td>
                     <td>
                         @Html.DisplayFor(modelItem => item.SchemeLevel)
                     </td>
@@ -50,19 +81,67 @@
     </table>
 </div>
 
+    <div id="result"></div>    
+    <!-- JAVASCRIPT -->
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
 
 
-<!-- JAVASCRIPT -->
-<script src="~/assets/libs/jquery/jquery.min.js"></script>
-<!-- Required datatable js -->
-<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<!-- Responsive examples -->
-<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-<script>
-    $(document).ready(function () {        
-        $('#datatable').DataTable();       
-    });
-</script>
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script>
+    @*$(document).ready(function () {
+        $('#datatable').DataTable();
+    });*@
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            //$('#datatable-buttons').dataTable().fnClearTable();
+            $('#datatable').dataTable().fnDestroy();
+            $('#datatable-buttons').dataTable().fnDestroy();                        
+            var table = $("#datatable-buttons").DataTable({
+                'select': {
+                    'style': 'multi'
+                },
+                'order': [[1, 'asc']],
+                'columnDefs': [
+                    {
+                        'targets': 0,
+                        'checkboxes': {
+                            'selectRow': true
+                        }
+                    }
+                ],
+                lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"]
+            });
+            table.column(0).visible(false);
+            $('#frm-example').click(function () {               
+                table.column(0).visible(true);               
+            });
+
+            $('#btn-forward').click(function () {                                               
+                var rows_selected = table.column(0).checkboxes.selected();                
+                $.each(rows_selected, function (index, rowId) {
+                    $("#result").append(index + ": " + rowId + '<br>');
+                });
+            });
+        });
+    </script>

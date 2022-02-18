@@ -9,23 +9,56 @@
 
     @{ int counter = 1;}
     @foreach (var item in Model)
-    {
+    {        
         <li class="@((counter % 2) == 0 ? "right" : "")">
-            <div class="conversation-list">
-                <div class="ctext-wrap">
-                    <div class="conversation-name">@item.UserName - @item.ApplicantCurrentStatus.BEEFSection.Name</div>
+            <div class="conversation-list col-md-8">
+                <div class="form-inline bg-soft-info">
+                    <div class="media p-2" style="width:40%">
+                        <div class="p-2">
+                            <div class="align-self-center mr-3">
+                                <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="font-size-15 m-0">@item.UserName</h5>
+                                <p class="text-muted mb-0">@*<i class="mdi mdi-circle text-success align-middle mr-1"></i>*@ @item.ApplicantCurrentStatus.BEEFSection.Name</p>
+                            </div>
+                        </div>
+                    </div>      
+                    <div class="p-10" style="width:10%">
+                        <i class="bx bx-right-arrow-alt m-4" style="font-size:18px"></i>
+                    </div>
+                    <div class="media float-right p-2" style="width:40%">                        
+                        <div>
+                            <div class="align-self-center mr-3">
+                                <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="font-size-15 m-0">@item.UserName</h5>
+                                <p class="text-muted mb-0">@*<i class="mdi mdi-circle text-success align-middle mr-1"></i>*@ @item.ApplicantCurrentStatus.BEEFSection.Name</p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                <div class="ctext-wrap rounded-0" style="min-height: 140px; background-color: rgba(85,110,230,.1)">
                     <p>
-                        @item.Comments
-                        @if (item.AttachFileData != null)
-                        {
-                            var base64 = Convert.ToBase64String(item.AttachFileData);
-                            var pdfSrc = String.Format("data:application/pdf;base64,{0}", base64);
-                            <button type="button" class="btn btn-outline-info waves-effect waves-light shower" data-toggle="modal" data-src="@pdfSrc" data-target="#attachmentModal">
-                                <i class="mdi mdi-attachment align-middle mr-1"></i>View
-                            </button>
-                        } 
+                        @item.Comments                       
                     </p>
-                    <p class="chat-time mb-0"><i class="bx bx-time-five align-middle mr-1"></i> @item.CreatedOn</p>
+                </div>
+                <div class="form-inline bg-soft-info p-1">
+                    <div style="width:50%">                        
+                        @if (item.AttachFileData == null)
+                        {
+                            @*var base64 = Convert.ToBase64String(item.AttachFileData);
+                            var pdfSrc = String.Format("data:application/pdf;base64,{0}", base64);*@
+                            <span data-toggle="modal" data-src="" data-target="#attachmentModal">
+                                <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Attachment
+                            </span>
+                        }
+                        </div>
+                    <div style="width:50%">
+                        <p class="float-right chat-time pr-1 m-0"><i class="bx bx-time-five align-middle"></i> @item.CreatedOn.ToString("dd-MMM-yyyy HH:mm")</p>
+                    </div>
+                    
                 </div>
             </div>
         </li>

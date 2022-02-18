@@ -13,6 +13,6 @@ namespace DAL.Models.Domain.Student
     {
         [Key]
         public int ApplicantSelectionStatusId { get; set; }
-        public string SelectionStatus { get; set; }
+        public string SelectionStatus { get; set; }       
     }
 }

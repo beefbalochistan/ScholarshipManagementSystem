@@ -68,6 +68,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssist> DocumentAssist { get; set; }
         public DbSet<DAL.Models.Domain.Student.Applicant> Applicant { get; set; }
         public DbSet<DAL.Models.Domain.Student.ApplicantSelectionStatus> ApplicantSelectionStatus { get; set; }
+        public DbSet<DAL.Models.Domain.Student.ApplicantStateChanger> ApplicantStateChanger { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionMethod> SelectionMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Employee> Employee { get; set; }
         public DbSet<DAL.Models.Domain.Student.ApplicantStudent> ApplicantStudent { get; set; }
