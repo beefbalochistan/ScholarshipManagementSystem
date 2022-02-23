@@ -15,7 +15,14 @@
                     }
                     else if (counter == currentPoint)
                     {
-                        <span class="step-number" style="background-color:orange;color:white">@counter.ToString().PadLeft(2, '0')</span>
+                        if (ViewBag.ApplicantSelectionStatusId == 4)
+                        {
+                            <span class="step-number" style="background-color:red;color:white">@counter.ToString().PadLeft(2, '0')</span>
+                        }
+                        else
+                        {
+                            <span class="step-number" style="background-color:orange;color:white">@counter.ToString().PadLeft(2, '0')</span>
+                        }
                     }
                     else
                     {

@@ -56,6 +56,20 @@ namespace ScholarshipManagementSystem.Controllers.Student
             /*ParentApplicantInProcess mymodel = new ParentApplicantInProcess();
             mymodel.SPApplicantInProcessList = applicationDbContext;
             mymodel.SPApplicantInProcessSummaryList = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummary] {0}, {1}", applicantCurrentStatusId, MaxFYId).ToListAsync(); ;*/
+            //-----------------------------------
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);          
+            ViewBag.UserCurrentAccess = currentUser.ApplicantCurrentStatusId;
+            ViewData["SeverityLevelId"] = _context.SeverityLevel;
+            var SectionCommentList = _context.SectionComment.Where(a => a.BEEFSectionId == currentUser.BEEFSectionId)
+                .Select(s => new
+                {
+                    SectionCommentId = s.SeverityLevelId,
+                    Description = string.Format("{0}", s.Comment)
+                })
+                .ToList();
+            ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
+            ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUser.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
+            //-----------------------------------
             return PartialView(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantInProcess()
@@ -68,7 +82,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
 
             var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
-            ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
+            ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);            
             return View(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantRejected()
@@ -127,6 +141,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
             ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a=>a.ApplicantCurrentStatus).Where(a=>a.UserId == currentUserId.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
+            ViewBag.IsInRole = false;
+            var IsInRole = await _userManager.IsInRoleAsync(currentUserId, "Reject");
+            if(IsInRole)
+            {
+                ViewBag.IsInRole = true;
+            }
             return View();
         }
         
@@ -167,6 +187,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 StudentMobile = a.StudentMobile,                                              
                 ApplicantCurrentStatusId = a.ApplicantCurrentStatusId,                
                 FormSubmittedOnDate = a.FormSubmittedOnDate,                
+                ApplicantSelectionStatusId = a.ApplicantSelectionStatusId,                
                 BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),                
                 ApplicantId = a.ApplicantId
             }).FirstOrDefault();

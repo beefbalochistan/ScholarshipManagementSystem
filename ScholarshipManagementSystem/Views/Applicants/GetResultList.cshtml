@@ -5,6 +5,8 @@
 <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
 
 <style>
     table.dataTable.dt-checkboxes-select tbody tr,
@@ -32,8 +34,7 @@
     }
 </style>
 <div class="table-responsive p-3">
-    <button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>
-    <button type="button" class="btn btn-sm btn-info mb-2" id="btn-forward">Forward</button>
+    <button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>    
     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
@@ -50,6 +51,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Severity)
+                </th>
                 <th>Round</th>
                 <th>Action</th>
             </tr>
@@ -57,91 +61,250 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.ApplicantId</td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SchemeLevel)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RollNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        <span class="badge badge-pill @((item.Round) == 1 ? "badge-soft-success" : (item.Round) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
-                    </td>
-                    <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
-                </tr>
+            <tr>
+                <td>@item.ApplicantId</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchemeLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Severity)
+                </td>
+                <td>
+                    <span class="badge badge-pill @((item.Round) == 1 ? "badge-soft-success" : (item.Round) == 2 ? "badge-soft-warning" : "badge-soft-danger") font-size-12">Round @item.Round</span>
+                </td>
+                <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
+            </tr>
             }
         </tbody>
     </table>
 </div>
+<div>
+    <form asp-action="SubmitComment" asp-controller="ApplicantStudents" method="post" enctype="multipart/form-data">
+        <div id="commentPortion" style="display:none" class="m-3">
+            <div class="form-inline">
+                <div class="input-group mb-2 mr-sm-3">
+                    <label class="control-label severity" style="min-width:120px">Pre Comments</label>
+                    <select style="max-width: 400px;" id="SectionCommentId" name="SchemeLevelPolicyId" class="form-control" asp-items="ViewBag.SectionCommentId">
+                        <option value="0"> - - Select - -</option>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mr-sm-3">
+                    <label class="control-label severity" style="min-width:120px">Severity</label>
+                    <div class="input-group mb-2 mr-sm-3 severity">
+                        <select id="SeverityLevelId" name="SeverityLevelId" style="max-width:130px" class="form-control select2-templating">
+                            <option value="0"> - - Select - -</option>
+                            <optgroup label="Comments Serverity">
+                                @foreach (var Detail in ViewBag.SeverityLevelId)
+                                {
+                                    @*<option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>*@
+                                    <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Meaning</option>
+                                }
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-inline">
+                <label class="control-label" style="min-width:120px">Forward To</label>
+                <div class="input-group mb-2 mr-sm-3">
+                    <select style="max-width:150px" id="UserAccessToForwardId" name="UserAccessToForwardId" class="form-control" asp-items="ViewBag.UserAccessToForwardId">
+                        <option value="0"> - - Select - -</option>
+                    </select>
+                </div>
+                <div class="custom-control mb-2 mr-sm-3">
+                    <div class="custom-file demoInputBox">
+                        <input style="max-width:100px" data-toggle="tooltip" data-placement="top" title="Attach File" type="file" class="custom-file-input" name="files" id="files">
+                        <label class="custom-file-label" for="files"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="position-relative">
+                <div id="GreenNoteOnFailed" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div id="GreenNoteOnFailedText"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <textarea id="msgbox" style="font-size:13px" placeholder="Enter Comments..." required class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-inline pt-3">
+                <div>
+                    <div class="">
+                        <button id="btn-forward" type="button" class="btn btn-info btn-rounded chat-send w-md waves-effect waves-light"><span class="d-none d-sm-inline-block mr-2">Forward</span> <i class="mdi mdi-forward"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="result"></div>
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
 
-    <div id="result"></div>    
-    <!-- JAVASCRIPT -->
-    <script src="~/assets/libs/jquery/jquery.min.js"></script>
 
+<script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- Buttons examples -->
+<script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="~/assets/libs/jszip/jszip.min.js"></script>
+<script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#SectionCommentId").change(function () {
+            var allMessage = $("#SectionCommentId option:selected").text();           
+            $("#msgbox").val(allMessage);
+        });
+    });
 
+</script>
 
-    <!-- Required datatable js -->
-    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Buttons examples -->
-    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-    <script src="~/assets/libs/jszip/jszip.min.js"></script>
-    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
-    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
-    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
-    <!-- Responsive examples -->
-    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
-    <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-    <script>
-    @*$(document).ready(function () {
-        $('#datatable').DataTable();
-    });*@
-
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            //$('#datatable-buttons').dataTable().fnClearTable();
-            $('#datatable').dataTable().fnDestroy();
-            $('#datatable-buttons').dataTable().fnDestroy();                        
-            var table = $("#datatable-buttons").DataTable({
-                'select': {
-                    'style': 'multi'
-                },
-                'order': [[1, 'asc']],
-                'columnDefs': [
-                    {
-                        'targets': 0,
-                        'checkboxes': {
-                            'selectRow': true
-                        }
+<script>
+    $(document).ready(function () {
+        //$('#datatable-buttons').dataTable().fnClearTable();
+        $('#datatable').dataTable().fnDestroy();
+        $('#datatable-buttons').dataTable().fnDestroy();
+        var table = $("#datatable-buttons").DataTable({            
+            'columnDefs': [
+                {
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true
                     }
-                ],
-                lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"]
-            });
-            table.column(0).visible(false);
-            $('#frm-example').click(function () {               
-                table.column(0).visible(true);               
-            });
-
-            $('#btn-forward').click(function () {                                               
-                var rows_selected = table.column(0).checkboxes.selected();                
-                $.each(rows_selected, function (index, rowId) {
-                    $("#result").append(index + ": " + rowId + '<br>');
-                });
+                }
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [[1, 'asc']],
+            lengthChange: !1, buttons: ["copy", "excel", "pdf", "colvis"]
+        });
+        table.column(0).visible(false);
+        $('#frm-example').click(function () {            
+            table.column(0).visible(!table.column(0).visible());            
+            $("#commentPortion").toggle('slow', function () {
             });
         });
-    </script>
+
+        $('#btn-forward').click(function () {
+            var rows_selected = table.column(0).checkboxes.selected();
+            var applicantRefNo = "";
+            $.each(rows_selected, function (index, rowId) {
+                @*$("#result").append(index + ": " + rowId + '<br>');*@
+                applicantRefNo = applicantRefNo + rowId + ',';
+            });
+            applicantRefNo = applicantRefNo.replace(/,\s*$/, "");
+            debugger;
+            UploadComment(applicantRefNo);
+        });
+    });
+
+    function UploadComment(applicantRefNo) {
+        var userAccessToForwardId = $("#UserAccessToForwardId").val();
+        var comment = $("#msgbox").val();
+        var applicantId = $("#applicantId").val();        
+            var UserCurrentAccess = '@ViewBag.UserCurrentAccess';
+                if (userAccessToForwardId == 0) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
+                    return;
+                }
+                if (!$('#msgbox').val().length) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Enter Comments!");
+                    return;
+                }            
+            var severityLevelId = $("#SeverityLevelId").val();               
+            if (severityLevelId == 0) {
+                $('#GreenNoteOnFailed').show();
+                $('#GreenNoteOnFailedText').text("Please Select Severity Level!");
+                return;
+            }
+            $('#GreenNoteOnFailed').hide();
+            debugger;
+            var data = new FormData();
+            if (jQuery('#files').val() != '') {
+                var fileUpload = $("#files").get(0);
+                var files = fileUpload.files;
+                //------------Size Validate---------
+                if (!validate(files[0].size)) {
+                    return;
+                }
+                //----------------------------------
+                data.append("Attachment", files[0]);
+            }
+                data.append("applicantId", applicantId);
+                data.append("applicantIdList", applicantRefNo);
+                data.append("comment", comment);
+                //data.append("sectionCommentId", sectionCommentId);
+                data.append("severityLevelId", severityLevelId);
+                data.append("userAccessToForwardId", userAccessToForwardId);
+                data.append("userCurrentAccess", UserCurrentAccess);
+                $.ajax({
+                    type: "POST",
+                    url: "/ApplicantStudents/SubmitCommentInBulk",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    async: false,
+                    beforeSend: function () {
+                        //$("#divloader").show()
+                    },
+                    success: function (message) {
+                        notificationme(message);                        
+                        $("#SectionCommentId").val(0);
+                        $("#UserAccessToForwardId").val(0);
+                        $('#msgbox').val('');
+                        $('#msgbox').focus();
+                        $('#commentPortion').hide();
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Error Applicant Tracking!");
+                    },
+                    complete: function () {
+                        notificationme(message);
+                    }
+                });
+    }
+    function notificationme(message) {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "100",
+            "positionClass": "toast-bottom-right",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "show",
+            "hideMethod": "hide"
+        };
+        toastr.info(message);
+    }
+</script>

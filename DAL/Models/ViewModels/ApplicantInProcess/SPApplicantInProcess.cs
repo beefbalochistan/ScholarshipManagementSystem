@@ -15,5 +15,6 @@ namespace DAL.Models.ViewModels.ApplicantInProcess
         public string Name { get; set; }
         public string SchemeLevel { get; set; }
         public int Round { get; set; }
+        public string Severity { get; set; }
     }
 }

@@ -155,5 +155,13 @@ public static class Permissions
         {
             public const string View = "Permissions.SuperUser.View";            
         }
+        public static class ViewRejected
+        {
+            public const string View = "Permissions.ViewRejected.View";
+        }
+        public static class ViewWaiting
+        {
+            public const string View = "Permissions.ViewWaiting.View";
+        }
     }
 }

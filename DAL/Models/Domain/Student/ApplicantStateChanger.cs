@@ -24,7 +24,7 @@ namespace DAL.Models.Domain.Student
         public string Notes { get; set; }
         public string AttachmentPath { get; set; }
         public DateTime OnDate { get; set; }
-        public string UserId { get; set; }
+        public string UserName { get; set; }
         public virtual Applicant Applicant { get; set; }
         public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
     }

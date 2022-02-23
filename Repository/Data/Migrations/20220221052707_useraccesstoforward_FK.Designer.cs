@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220221052707_useraccesstoforward_FK")]
+    partial class useraccesstoforward_FK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2359,7 +2361,7 @@ namespace Repository.Data.Migrations
                     b.Property<string>("PreviousState")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantStateChangerId");
@@ -2404,9 +2406,6 @@ namespace Repository.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ForwardToUserName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
@@ -2453,9 +2452,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SchemeLevel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Severity")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantId");

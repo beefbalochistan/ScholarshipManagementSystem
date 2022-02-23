@@ -17,7 +17,8 @@ namespace DAL.Models.Domain.Student
         public string SelectionStatus { get; set; }
         public string ApplicantReferenceId { get; set; }
         [ForeignKey("SeverityLevel")]
-        public int SeverityLevelId { get; set; }        
+        public int SeverityLevelId { get; set; }
+        [ForeignKey("UserAccessToForward")]
         public int UserAccessToForwardId { get; set; }
         public string Comments { get; set; }
         [ForeignKey("ApplicantCurrentStatus")]
@@ -28,9 +29,11 @@ namespace DAL.Models.Domain.Student
         [MaxLength]
         public byte[] AttachFileData { get; set; }
         public string UserName { get; set; }
+        public string ForwardToUserName { get; set; }
         public DateTime CreatedOn  { get; set; }        
         public virtual Applicant Applicant { get; set; }
         public virtual SeverityLevel SeverityLevel { get; set; }
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
+        public virtual UserAccessToForward UserAccessToForward { get; set; }
     }
 }

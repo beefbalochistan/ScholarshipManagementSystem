@@ -13,21 +13,28 @@
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-menu">BEEF Workspace</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
-                {                   
-            <li>                
-                <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
-                    <i class="bx bxs-eraser"></i>
-                    <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetInProcessFile())</span>
-                    <span key="t-forms">Applicant In Process <img id="inProcesssLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
-                </a>
-            </li>
+                {
+                    <li>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-eraser"></i>
+                            <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetInProcessFile())</span>
+                            <span key="t-forms">Applicant In Process <img id="inProcesssLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                        </a>
+                    </li>
+
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)
+                {
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
                             <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetRejectedFile())</span>
                             <span key="t-forms">Applicant Waiting  <img id="waitingLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
-                    </li>
+                    </li>                    
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
+                {
                     <li>
                         <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
@@ -437,13 +444,13 @@
                         </a>
                     </li>
 
-                   @* <li>
-                        <a href=@Url.Action("Index", "FileManager") class="waves-effect">
-                            <i class="bx bx-file"></i>
-                            <span class="badge badge-pill badge-success float-right" key="t-new">New</span>
-                            <span key="t-file-manager">File Manager</span>
-                        </a>
-                    </li>*@
+                    @* <li>
+                <a href=@Url.Action("Index", "FileManager") class="waves-effect">
+                    <i class="bx bx-file"></i>
+                    <span class="badge badge-pill badge-success float-right" key="t-new">New</span>
+                    <span key="t-file-manager">File Manager</span>
+                </a>
+            </li>*@
 
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -583,7 +590,7 @@
                             <li><a href=@Url.Action("Index", "EmailVerification") key="t-email-verification">Email verification</a></li>
                             <li><a href=@Url.Action("Index", "EmailVerification2") key="t-email-verification-2">Email verification 2</a></li>
                             @*<li><a href=@Url.Action("Index", "TwoStepVerification") key="t-two-step-verification">Two step verification</a></li>
-                            <li><a href=@Url.Action("Index", "TwoStepVerification2") key="t-two-step-verification-2">Two step verification 2</a></li>*@
+                    <li><a href=@Url.Action("Index", "TwoStepVerification2") key="t-two-step-verification-2">Two step verification 2</a></li>*@
                         </ul>
                     </li>
 
