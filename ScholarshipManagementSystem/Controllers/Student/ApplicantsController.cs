@@ -141,11 +141,21 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
             ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a=>a.ApplicantCurrentStatus).Where(a=>a.UserId == currentUserId.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
-            ViewBag.IsInRole = false;
-            var IsInRole = await _userManager.IsInRoleAsync(currentUserId, "Reject");
-            if(IsInRole)
+            ViewBag.IsInRoleReject = false;
+            var IsInRoleReject = await _userManager.IsInRoleAsync(currentUserId, "Reject");
+            if(IsInRoleReject)
             {
-                ViewBag.IsInRole = true;
+                ViewBag.IsInRoleReject = true;
+            }
+            ViewBag.IsInRoleResume = false;
+            var IsInRoleResume = await _userManager.IsInRoleAsync(currentUserId, "Resume");
+            if (IsInRoleResume)
+            {
+                var IsRejected = _context.Applicant.Count(a => a.ApplicantReferenceNo == RefId && a.ApplicantSelectionStatusId == 4);
+                if(IsRejected > 0)
+                {
+                    ViewBag.IsInRoleResume = true;
+                }                
             }
             return View();
         }
@@ -258,7 +268,26 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return Json(new { isValid = false });
             }
             return Json(new { isValid = true});
-        }       
+        }     
+        [HttpPost]
+        public async Task<JsonResult> ResumeApplicant(int applicantId)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantSelectionStatusId = 1;
+                applicantInfo.ApplicantCurrentStatusId = 4;
+                applicantInfo.SelectionStatus = "Selected";
+                _context.Update(applicantInfo);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Resume!" });
+            }
+            return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
+        }
         [HttpPost]
         public async Task<JsonResult> UploadFile(IFormFile files, int applicantId, string title)
         {            
