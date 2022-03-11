@@ -39,7 +39,7 @@
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetRejectedFile())</span>
+                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetWaitingFile())</span>
                             <span key="t-forms">Applicant Waiting  <img id="waitingLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
@@ -50,7 +50,7 @@
                     <li>
                         <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetWaitingFile())</span>
+                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetRejectedFile())</span>
                             <span key="t-forms">Applicant Rejected  <img id="rejectedLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
