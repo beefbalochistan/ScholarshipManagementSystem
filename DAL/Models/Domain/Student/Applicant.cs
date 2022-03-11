@@ -1,5 +1,7 @@
 ﻿using DAL.Models.Domain.MasterSetup;
 using DAL.Models.Domain.ScholarshipSetup;
+using DAL.Models.Domain.Student.Finance;
+using DAL.Models.Domain.VirtualAccount;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -124,6 +126,11 @@ namespace DAL.Models.Domain.Student
         [ForeignKey("ApplicantCurrentStatus")]
         [Display(Name = "ApplicantCurrentStatus")]
         public int ApplicantCurrentStatusId { get; set; }
+        [ForeignKey("ApplicantFinanceCurrentStatus")]
+        [Display(Name = "Finance Current Status")]
+        public int? ApplicantFinanceCurrentStatusId { get; set; }
+        [ForeignKey("Trunch")]        
+        public int? TrunchId { get; set; }
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }
@@ -132,5 +139,7 @@ namespace DAL.Models.Domain.Student
         public virtual DAEInstitute DAEInstitute { get; set; }
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
         public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
+        public virtual ApplicantFinanceCurrentStatus ApplicantFinanceCurrentStatus { get; set; }
+        public virtual Trunch Trunch { get; set; }
     }
 }

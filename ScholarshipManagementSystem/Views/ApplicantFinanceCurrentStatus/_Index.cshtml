@@ -1,0 +1,31 @@
+﻿@model IEnumerable<DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus>
+
+<link rel="stylesheet" href="~/assets/libs/twitter-bootstrap-wizard/prettify.css">
+<div class="row text-center">
+    <div class="col-md-12 twitter-bs-wizard">
+        <ul class="twitter-bs-wizard-nav justify-content-center" style="display:ruby;">
+            @{ int counter = 1; int currentPoint = (int)ViewBag.CurrenrPoint;}
+            @foreach (var item in Model)
+            {
+                <li class="nav-item text-center d-inline-flex p-2">
+                    <a class="nav-link text-center p-0">
+                        @if (counter < currentPoint)
+                        {
+                            <span class="step-number" style="background-color:#556ee6;color:White">@counter.ToString().PadLeft(2, '0')</span>
+                        }
+                        else if (counter == currentPoint)
+                        {                            
+                            <span class="step-number" style="background-color:orange;color:white">@counter.ToString().PadLeft(2, '0')</span>                            
+                        }
+                        else
+                        {
+                            <span class="step-number" style="background-color:white;color:black">@counter.ToString().PadLeft(2, '0')</span>
+                        }
+                        <div class="mt-1">@item.VisibleStateText</div>
+                    </a>
+                </li>
+                counter = counter + 1;
+            }
+        </ul>
+    </div>
+</div>

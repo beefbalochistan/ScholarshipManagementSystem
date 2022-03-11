@@ -1,0 +1,55 @@
+﻿    @model IEnumerable<DAL.Models.Domain.VirtualAccount.Trunch>
+
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />    
+    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaymentMethod)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrentCommittedAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApprovedAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicantCount)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentMethod.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentCommittedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApprovedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicantCount)
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-success" onclick="demo()">Assign</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+<script>
+    function demo() {
+        alert('yes, hit');
+    }
+</script>

@@ -1,30 +1,31 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace ScholarshipManagementSystem.Models
 {
-    public class SingletonCache
+    public static class MyStaticClass
     {
         private static int InProcessFile = 0;
         private static int RejectedFile = 0;
         private static int WaitingFile = 0;
-        private static readonly SingletonCache _mySingletonServiceInstance = new SingletonCache();
-        public SingletonCache()
-        {            
-        }
-        public static SingletonCache GetInstance() => _mySingletonServiceInstance;
-        public int GetInProcessFile() => InProcessFile;
-        public void SetInProcessFile(int val)
+                
+        public static void SetInProcessFile(int val)
         {
             InProcessFile = val;
-        }
-        public int GetRejectedFile() => RejectedFile;
-        public void SetRejectedFile(int val)
+        }        
+        public static void SetRejectedFile(int val)
         {
             RejectedFile = val;
-        }
-        public int GetWaitingFile() => WaitingFile;
-        public void SetWaitingFile(int val)
+        }        
+        public static void SetWaitingFile(int val)
         {
             WaitingFile = val;
         }
+
+        public static Task<int> GetRejectedFile() => Task.FromResult(RejectedFile);
+      
+        public static Task<int> GetInProcessFile() => Task.FromResult(InProcessFile);
+
+        public static Task<int> GetWaitingFile() => Task.FromResult(WaitingFile);
     }
 }

@@ -196,6 +196,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 Attach_Payslip = a.Attach_Payslip,                
                 StudentMobile = a.StudentMobile,                                              
                 ApplicantCurrentStatusId = a.ApplicantCurrentStatusId,                
+                ApplicantFinanceCurrentStatusId = a.ApplicantFinanceCurrentStatusId,                
                 FormSubmittedOnDate = a.FormSubmittedOnDate,                
                 ApplicantSelectionStatusId = a.ApplicantSelectionStatusId,                
                 BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),                

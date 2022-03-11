@@ -130,10 +130,9 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
                     var InProcessSummary = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
                     var RejectedSummary = await _context.SPApplicantRejectedSummary.FromSqlRaw("exec [Student].[ApplicantRejectedSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
                     var WaitingSummary = await _context.SPApplicantWaitingSummary.FromSqlRaw("exec [Student].[ApplicantWaitingSummarySchemeLevelWise] {0}, {1},  {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();
-                    SingletonCache serviceInstance = SingletonCache.GetInstance();
-                    serviceInstance.SetInProcessFile(InProcessSummary.Sum(a => a.Applicant));
-                    serviceInstance.SetRejectedFile(RejectedSummary.Sum(a => a.Applicant));
-                    serviceInstance.SetWaitingFile(WaitingSummary.Sum(a => a.Applicant));
+                    MyStaticClass.SetInProcessFile(InProcessSummary.Sum(a => a.Applicant));
+                    MyStaticClass.SetRejectedFile(RejectedSummary.Sum(a => a.Applicant));
+                    MyStaticClass.SetWaitingFile(WaitingSummary.Sum(a => a.Applicant));
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

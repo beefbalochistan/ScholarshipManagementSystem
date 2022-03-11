@@ -26,11 +26,13 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.QualificationLevel> QualificationLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Discipline> Discipline { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Degree> Degree { get; set; }
+        public DbSet<DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus> ApplicantFinanceCurrentStatus { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn> SchemeLevelMandatoryColumn { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.PaymentMethod> PaymentMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
+        public DbSet<DAL.Models.Domain.VirtualAccount.Trunch> Trunch { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevel> SchemeLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral> SelectionCriteriaGeneral { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral> DocumentAssistGeneral { get; set; }

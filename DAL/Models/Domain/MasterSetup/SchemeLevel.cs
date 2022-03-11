@@ -25,6 +25,9 @@ namespace DAL.Models.Domain.MasterSetup
         [Display(Name = "QualificationLevel")]
         public int QualificationLevelId { get; set; }
         public int OrderBy { get; set; }
+        [ForeignKey("PaymentMethod")]
+        [Display(Name = "PaymentMethod")]
+        public int PaymentMethodId { get; set; }
         public bool IsActive { get; set; } = true;
         [Display(Name = "Total Marks/GPA")]
         public decimal TotalMarks_GPA { get; set; }
@@ -33,5 +36,6 @@ namespace DAL.Models.Domain.MasterSetup
         public virtual ICollection<DegreeScholarshipLevel> DegreeScholarshipLevels { get; set; }
         public virtual QualificationLevel QualificationLevel { get; set; }
         public virtual Institute Institute { get; set; }
+        public virtual PaymentMethod PaymentMethod { get; set; }
     }
 }

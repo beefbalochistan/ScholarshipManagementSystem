@@ -1539,6 +1539,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("OrderBy")
                         .HasColumnType("int");
 
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QualificationLevelId")
                         .HasColumnType("int");
 
@@ -1551,6 +1554,8 @@ namespace Repository.Data.Migrations
                     b.HasKey("SchemeLevelId");
 
                     b.HasIndex("InstituteId");
+
+                    b.HasIndex("PaymentMethodId");
 
                     b.HasIndex("QualificationLevelId");
 
@@ -2061,6 +2066,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ApplicantFinanceCurrentStatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ApplicantReferenceNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2231,12 +2239,17 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("TotalMarks")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("TrunchId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantId");
 
                     b.HasIndex("ApplicantCurrentStatusId");
+
+                    b.HasIndex("ApplicantFinanceCurrentStatusId");
 
                     b.HasIndex("ApplicantSelectionStatusId");
 
@@ -2251,6 +2264,8 @@ namespace Repository.Data.Migrations
                     b.HasIndex("SchemeLevelPolicyId");
 
                     b.HasIndex("SelectionMethodId");
+
+                    b.HasIndex("TrunchId");
 
                     b.ToTable("Applicant", "Student");
                 });
@@ -2431,6 +2446,90 @@ namespace Repository.Data.Migrations
                     b.HasIndex("UserAccessToForwardId");
 
                     b.ToTable("ApplicantStudent", "Student");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus", b =>
+                {
+                    b.Property<int>("ApplicantFinanceCurrentStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ProcessState")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProcessValue")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Visibility")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("VisibleStateNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VisibleStateText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicantFinanceCurrentStatusId");
+
+                    b.ToTable("ApplicantFinanceCurrentStatus", "Student");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+                {
+                    b.Property<int>("TrunchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicantCount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ApprovedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ApprovedAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ApprovedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("CurrentCommittedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClose")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLock")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrunchId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.ToTable("Trunch", "VirtualAccount");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess", b =>
@@ -3463,6 +3562,12 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.Domain.MasterSetup.QualificationLevel", "QualificationLevel")
                         .WithMany()
                         .HasForeignKey("QualificationLevelId")
@@ -3476,6 +3581,8 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Institute");
+
+                    b.Navigation("PaymentMethod");
 
                     b.Navigation("QualificationLevel");
 
@@ -3718,6 +3825,10 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus", "ApplicantFinanceCurrentStatus")
+                        .WithMany()
+                        .HasForeignKey("ApplicantFinanceCurrentStatusId");
+
                     b.HasOne("DAL.Models.Domain.Student.ApplicantSelectionStatus", "ApplicantSelectionStatus")
                         .WithMany()
                         .HasForeignKey("ApplicantSelectionStatusId")
@@ -3756,7 +3867,13 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Models.Domain.VirtualAccount.Trunch", "Trunch")
+                        .WithMany()
+                        .HasForeignKey("TrunchId");
+
                     b.Navigation("ApplicantCurrentStatus");
+
+                    b.Navigation("ApplicantFinanceCurrentStatus");
 
                     b.Navigation("ApplicantSelectionStatus");
 
@@ -3771,6 +3888,8 @@ namespace Repository.Data.Migrations
                     b.Navigation("SchemeLevelPolicy");
 
                     b.Navigation("SelectionMethod");
+
+                    b.Navigation("Trunch");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantAttachment", b =>
@@ -3847,6 +3966,17 @@ namespace Repository.Data.Migrations
                     b.Navigation("SeverityLevel");
 
                     b.Navigation("UserAccessToForward");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.DAEPolicyDetailView", b =>

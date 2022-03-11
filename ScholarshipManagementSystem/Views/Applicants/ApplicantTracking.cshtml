@@ -44,7 +44,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">Applicant: Scan QR Code</div>
                                 </div>
-                                <input id="txtbox" type="text" class="form-control" value="@ViewBag.RefId" placeholder="Reference#" readonly="readonly">
+                                <input id="txtbox" type="text" class="form-control" value="@ViewBag.RefId" placeholder="Reference#">
                             </div>
                             <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
                             <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
@@ -55,6 +55,7 @@
                     <input type="hidden" id="applicantId" />
                     <input type="hidden" id="refNo" />
                     <input type="hidden" id="applicantCurrentStatusId" />
+                    <input type="hidden" id="applicantFinanceCurrentStatusId" />
                     <input type="hidden" id="applicantSelectionStatusId" />
                     <div class="applicantinformation" style="display:flex;flex-wrap:wrap;margin-right:-12px;margin-left:-12px;max-height:100px">
                         <div class="col-md-2 mt-4">
@@ -349,7 +350,29 @@
                             </div>
                             <div class="tab-pane" id="paymentprocess" role="tabpanel">
                                 <p class="mb-0">
-                                    paymentprocess
+                                    <div id="paymentprocessDiv"></div>
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active btnView" data-toggle="tab" href="#trunchTab" role="tab">
+                                                <span class="d-none d-sm-block"><i class="bx bxs-graduation"></i> Trunch Assign <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link btnView" data-toggle="tab" href="#vdTab" role="tab">
+                                                <span class="d-none d-sm-block"><i class="mdi mdi-attachment"></i> V&amp;D <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content p-3 text-muted">
+                                        <div class="tab-pane active" id="trunchTab" role="tabpanel">
+                                            <div id="trunchDiv"></div>
+                                        </div>
+                                        <div class="tab-pane" id="vdTab" role="tabpanel">
+                                            <div id="vdDiv">vdTab</div>
+                                        </div>
+                                    </div>
                                 </p>
                             </div>
                         </div>
@@ -430,8 +453,7 @@ else
                 $('#txtbox').prop('disabled', true);
                 fetch();
             }
-        });
-
+        });        
         function fetch() {
             var refno = $("#txtbox").val();
             var UserCurrentAccess = '@ViewBag.UserCurrentAccess';
@@ -453,6 +475,7 @@ else
                         $('#selectionMethodName').val(response.religion);
                         $('#applicantId').val(response.applicantId);
                         $('#applicantCurrentStatusId').val(response.applicantCurrentStatusId);
+                        $('#applicantFinanceCurrentStatusId').val(response.applicantFinanceCurrentStatusId);
                         $('#applicantSelectionStatusId').val(response.applicantSelectionStatusId);
                         $('#refNo').val(refno);
                         //------------------
@@ -502,8 +525,10 @@ else
                         $('#FetchDataOnFailed').hide();
                         notificationme('Fetch Record Successfully!');
                         fetchApplicantProgressStatus(response.applicantId, response.applicantCurrentStatusId);
+                        fetchApplicantFinanceProgressStatus(response.applicantFinanceCurrentStatusId);
                         fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);
                         fetchApplicantAttachments(response.applicantId);
+                        fetchTrunch(response.applicantId);
                         fetchApplicantCompareData(response.applicantId);
                         fetchApplicantMessages(response.applicantId);
                         fetchApplicantComments(response.applicantId);
@@ -577,6 +602,20 @@ else
                 $(".loading").hide();
             }
         });
+        }
+        function fetchApplicantFinanceProgressStatus(applicantFinanceCurrentStatusId) {
+            $(".loading").show();
+            debugger;
+        $.ajax({
+            url: '@Url.Action("_Index", "ApplicantFinanceCurrentStatus")',
+            data: {
+                applicantFinanceCurrentStatusId: applicantFinanceCurrentStatusId
+            },
+                success: function (data) {
+                    $("#paymentprocessDiv").html(data);
+                $(".loading").hide();
+            }
+        });
     }
         function fetchApplicantAttachments(applicantId) {
         $(".loading").show();
@@ -587,6 +626,19 @@ else
                 },
                     success: function (data) {
                     $("#attachmentdiv").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+        function fetchTrunch(applicantId) {
+        $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("_Index", "Trunches")',
+                data: {
+                    id: applicantId
+                },
+                    success: function (data) {
+                        $("#trunchDiv").html(data);
                     $(".loading").hide();
                 }
             });
@@ -665,7 +717,7 @@ else
                         $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
                         return;
                     }
-                }                
+                }
                 if (!$('#msgbox').val().length) {
                     $('#GreenNoteOnFailed').show();
                     $('#GreenNoteOnFailedText').text("Please Enter Comments!");
@@ -743,18 +795,18 @@ else
         }
 
         function ResumeApplicant() {
-            var applicantId = $("#applicantId").val();            
+            var applicantId = $("#applicantId").val();
             $.ajax({
                 type: "POST",
                 url: "/Applicants/ResumeApplicant",
                 data: { applicantId: applicantId },
                 dataType: "json",
-                success: function (response) {                                       
+                success: function (response) {
                         $('#resumeDiv').hide();
                         fetch();
                         fetchApplicantProgressStatus(response.applicantId, response.applicantCurrentStatusId);
-                        fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);                    
-                    notificationme(response.message);                    
+                        fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);
+                    notificationme(response.message);
                 }
             });
         }

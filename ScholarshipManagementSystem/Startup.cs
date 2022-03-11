@@ -48,8 +48,7 @@ namespace ScholarshipManagementSystem
             string email = Configuration.GetSection("MailSettings:Mail").Value;
 
             EmailSender emailSender = new EmailSender(smtpServer, port, password, displayName, email);
-            services.AddSingleton<IEmailSender>(emailSender);
-            services.AddSingleton<SingletonCache>(new SingletonCache());
+            services.AddSingleton<IEmailSender>(emailSender);                                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

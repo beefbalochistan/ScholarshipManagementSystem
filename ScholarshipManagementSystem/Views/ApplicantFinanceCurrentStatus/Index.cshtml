@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProcessState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProcessValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisibleStateNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisibleStateText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Visibility)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProcessState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProcessValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisibleStateNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisibleStateText)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Visibility)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ApplicantFinanceCurrentStatusId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ApplicantFinanceCurrentStatusId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ApplicantFinanceCurrentStatusId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

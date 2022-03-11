@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
-@inject ScholarshipManagementSystem.Models.SingletonCache myService
+@using ScholarshipManagementSystem.Models
 @using ScholarshipManagementSystem.Constants
 <!-- ========== Left Sidebar Start ========== -->
 <div class="vertical-menu">
@@ -17,10 +17,21 @@
                     <li>
                         <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetInProcessFile())</span>
+                            <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetInProcessFile())</span>
                             <span key="t-forms">Applicant In Process <img id="inProcesssLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
+
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                {
+                    <li class="menu-title" key="t-menu">Finance Management</li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Trunches" class=" waves-effect">
+                            <i class="bx bxs-yin-yang"></i>
+                            <span key="t-calendar">Trunch</span>
+                        </a>
+                    </li>                   
 
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)
@@ -28,17 +39,18 @@
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetRejectedFile())</span>
+                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetRejectedFile())</span>
                             <span key="t-forms">Applicant Waiting  <img id="waitingLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
-                    </li>                    
+                    </li>
+
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(myService.GetWaitingFile())</span>
+                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetWaitingFile())</span>
                             <span key="t-forms">Applicant Rejected  <img id="rejectedLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
