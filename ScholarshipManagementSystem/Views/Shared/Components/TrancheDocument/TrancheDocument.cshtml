@@ -1,0 +1,122 @@
+﻿
+
+@model IEnumerable<DAL.Models.Domain.VirtualAccount.TrancheDocument>
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<table align="center" id="datatable" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th>
+                <span><i class="bx bxs-file-doc font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachment)
+            </th>
+            <th>
+                <span><i class="bx bx-loader font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachmentOn)
+            </th>
+            <th>
+                <span><i class="bx bxs-file-txt font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.PGPAttachment)
+            </th>
+            <th>
+                <span><i class="bx bx-loader font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.PGPGeneratedOn)
+            </th>
+            <th>
+                <span><i class="bx bx-cloud-upload font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsSendToServer)
+            </th>
+            <th>
+                <span><i class="bx bx-mail-send font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsEmail)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a href="@item.CSVAttachment">Download</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CSVAttachmentOn)
+            </td>
+            @{
+                if (item.IsPGPGenerated)
+                {
+                        <td>
+                            @*<a href="@item.CSVAttachment">Download</a>*@
+                            <span><img src="~/assets/images/tick.png" width="20" /></span>
+                        </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PGPGeneratedOn)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <button class="btn btn-sm btn-outline-success" type="button" onclick="generatePGPFile(@item.TrancheDocumentId)">Generate PGP</button>
+                    </td>
+                    <td>
+                        N/A
+                    </td>
+                }
+
+
+
+
+            }
+            <td>
+                @{
+                    if (item.IsPGPGenerated)
+                    {
+                        if (item.IsSendToServer)
+                        {
+                            <span><img src="~/assets/images/tick.png" width="20" /></span>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-outline-success" type="button" onclick="uploadSFTPFile(@item.TrancheDocumentId)">Send To Server</button>
+                        }
+                    }
+                    else
+                    {
+                        <span>N/A</span>
+                    }
+                }
+            </td>
+            <td>
+                @{
+                    if (item.IsPGPGenerated)
+                    {
+                        if (item.IsEmail)
+                        {
+                            <span><img src="~/assets/images/tick.png" width="20" /></span>
+                        }
+                        else
+                        {                            
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="">
+                                <i class="bx bx-send font-size-16 align-middle mr-1"></i>Send Email
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <span>N/A</span>
+                    }
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //$('#datatable-buttons').dataTable().fnClearTable();
+        $('#datatable').dataTable().fnDestroy();
+        $("#datatable").DataTable();
+    });
+</script>

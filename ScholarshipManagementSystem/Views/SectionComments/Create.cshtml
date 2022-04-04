@@ -56,22 +56,35 @@
                                                 <label asp-for="BEEFSectionId" class="control-label"></label>
                                                 <select asp-for="BEEFSectionId" class="form-control" asp-items="ViewBag.BEEFSectionId"></select>
                                             </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="ApplicantCurrentStatusId" class="control-label"></label>
+                                                <select asp-for="ApplicantCurrentStatusId" asp-items="ViewBag.ApplicantCurrentStatusId" class="form-control">
+                                                    <option>Select...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             @*<div class="form-group">
-                                                    <label asp-for="SeverityLevelId" class="control-label"></label>
-                                                    <select asp-for="SeverityLevelId" class="form-control" asp-items="ViewBag.SeverityLevelId"></select>
-                                                </div>*@
+                <label asp-for="SeverityLevelId" class="control-label"></label>
+                <select asp-for="SeverityLevelId" class="form-control" asp-items="ViewBag.SeverityLevelId"></select>
+            </div>*@
                                             <div class="form-group mb-0 templating-select">
                                                 <label asp-for="SeverityLevelId" class="control-label"></label>
                                                 <select asp-for="SeverityLevelId" id="mylist" class="form-control select2-templating">
                                                     <optgroup label="Alaskan/Hawaiian Time Zone">
                                                         @foreach (var Detail in ViewBag.SeverityLevelId)
                                                         {
-                                                            <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>                                                            
+                                                            <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>
+
                                                         }
                                                     </optgroup>
                                                 </select>
 
                                             </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="form-group form-check">
                                                 <label class="form-check-label">
                                                     <input class="form-check-input" asp-for="IsActive" checked="checked" /> @Html.DisplayNameFor(model => model.IsActive)
@@ -80,10 +93,10 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-12">                                           
                                             <div class="form-group">
                                                 <label asp-for="Comment" class="control-label"></label>
-                                                <input asp-for="Comment" class="form-control" />
+                                                <textarea class="input-large form-control" asp-for="Comment" rows="4" placeholder="Enter user comments here..."></textarea>
                                                 <span asp-validation-for="Comment" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
@@ -182,7 +195,20 @@ else
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        $(document).ready(function () {           
+        $(document).ready(function () {
+            $("#BEEFSectionId").change(function () {
+                $("#ApplicantCurrentStatusId").empty();
+                $.get("/SectionComments/GetApplicantCurrentStatusId", { sectionId: $("#BEEFSectionId").val() }, function (data) {
+                    $("#ApplicantCurrentStatusId").empty();
+                    $("#ApplicantCurrentStatusId").append('<option value="0">Select...</option>');
+                    console.log(data);
+                    $.each(data, function (index, row) {
+                        console.log(row);
+                        $("#ApplicantCurrentStatusId").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                    });
+                });
+                return false;
+            })
         });
 
     </script>

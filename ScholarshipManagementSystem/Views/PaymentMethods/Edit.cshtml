@@ -9,47 +9,88 @@
 
 <h4>PaymentMethod</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PaymentMethodId" />
-            <input type="hidden" asp-for="Logo" />
-            <div class="form-group">
-                <label asp-for="BankName" class="control-label"></label>
-                <input asp-for="BankName" class="form-control" />
-                <span asp-validation-for="BankName" class="text-danger"></span>
-            </div>
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="PaymentMethodId" />
+    <input type="hidden" asp-for="Logo" />
+    <div class="row">
+        <div class="col-md-4">            
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" placeholder="Name" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="BankName" class="control-label"></label>
+                <input asp-for="BankName" class="form-control" placeholder="Bank Name" required data-parsley-maxlength="3" />
+                <span asp-validation-for="BankName" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="SFTP_IP" class="control-label"></label>
+                <input asp-for="SFTP_IP" class="form-control" placeholder="SFTP IP" required data-parsley-maxlength="3" />
+                <span asp-validation-for="SFTP_IP" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="SFTP_Username" class="control-label"></label>
+                <input asp-for="SFTP_Username" class="form-control" placeholder="Username" required data-parsley-maxlength="3" />
+                <span asp-validation-for="SFTP_Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="SFTP_Password" class="control-label"></label>
+                <input asp-for="SFTP_Password" class="form-control" placeholder="Password" required data-parsley-maxlength="3" />
+                <span asp-validation-for="SFTP_Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="SFTP_Port" class="control-label"></label>
+                <input asp-for="SFTP_Port" class="form-control" placeholder="Port" required data-parsley-maxlength="3" />
+                <span asp-validation-for="SFTP_Port" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <div class="fallback">
-                    <input type="file" name="Attachment" multiple accept=".jpg,.jpeg,.png" required>
+                    <input type="file" name="Attachment" accept=".jpg,.jpeg,.png">
                 </div>
                 <div class="mb-1">
                     <i class="display-4 text-muted bx bxs-cloud-upload"></i>
                 </div>
-                <h5>Click here to upload logo</h5>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
+                <h5>Attach Updated Logo</h5>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save Method" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="fallback">
+                    <input type="file" name="KeyAttachment">
+                </div>
+                <div class="mb-1">
+                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                </div>
+                <h5>Attach Updated Key</h5>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea class="input-large form-control" asp-for="Description" rows="4" placeholder="Enter a description ..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-</div>
+</form>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

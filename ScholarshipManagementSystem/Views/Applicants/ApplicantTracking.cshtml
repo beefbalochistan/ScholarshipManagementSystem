@@ -353,8 +353,8 @@
                                     <div id="paymentprocessDiv"></div>
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active btnView" data-toggle="tab" href="#trunchTab" role="tab">
-                                                <span class="d-none d-sm-block"><i class="bx bxs-graduation"></i> Trunch Assign <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
+                                            <a class="nav-link active btnView" data-toggle="tab" href="#TrancheTab" role="tab">
+                                                <span class="d-none d-sm-block"><i class="bx bxs-graduation"></i> Tranche Assign <span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -366,8 +366,8 @@
 
                                     <!-- Tab panes -->
                                     <div class="tab-content p-3 text-muted">
-                                        <div class="tab-pane active" id="trunchTab" role="tabpanel">
-                                            <div id="trunchDiv"></div>
+                                        <div class="tab-pane active" id="TrancheTab" role="tabpanel">
+                                            <div id="TrancheDiv"></div>
                                         </div>
                                         <div class="tab-pane" id="vdTab" role="tabpanel">
                                             <div id="vdDiv">vdTab</div>
@@ -528,7 +528,7 @@ else
                         fetchApplicantFinanceProgressStatus(response.applicantFinanceCurrentStatusId);
                         fetchApplicantProfileData(response.applicantId, response.applicantCurrentStatusId);
                         fetchApplicantAttachments(response.applicantId);
-                        fetchTrunch(response.applicantId);
+                        fetchTranche(response.applicantId);
                         fetchApplicantCompareData(response.applicantId);
                         fetchApplicantMessages(response.applicantId);
                         fetchApplicantComments(response.applicantId);
@@ -630,15 +630,15 @@ else
                 }
             });
         }
-        function fetchTrunch(applicantId) {
+        function fetchTranche(applicantId) {
         $(".loading").show();
             $.ajax({
-                url: '@Url.Action("_Index", "Trunches")',
+                url: '@Url.Action("_Index", "Tranches")',
                 data: {
                     id: applicantId
                 },
                     success: function (data) {
-                        $("#trunchDiv").html(data);
+                        $("#TrancheDiv").html(data);
                     $(".loading").hide();
                 }
             });

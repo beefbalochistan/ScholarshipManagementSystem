@@ -25,13 +25,51 @@
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                    <li class="menu-title" key="t-menu">Finance Management</li>
+                    <li class="menu-title" key="t-menu">Finance Management</li>                    
                     <li>
-                        <a asp-action="Index" asp-controller="Trunches" class=" waves-effect">
-                            <i class="bx bxs-yin-yang"></i>
-                            <span key="t-calendar">Trunch</span>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Tranche</span>
                         </a>
-                    </li>                   
+                        <ul class="sub-menu" aria-expanded="false">
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                            {
+                                <li>
+                                    <a asp-action="Create" asp-controller="Tranches" class=" waves-effect">
+                                        <span key="t-calendar">Create Tranche</span>
+                                    </a>
+                                </li>
+
+                            }
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                            {
+                                <li>
+                                    <a asp-action="Index" asp-controller="Tranches" asp-route-w="true" asp-route-x="" asp-route-y="false" asp-route-z="true" asp-route-name="Open Tranche" class=" waves-effect">
+                                        <span key="t-calendar">Open Tranche</span>
+                                    </a>
+                                </li>
+
+                            }
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.District.View)).Result.Succeeded)
+                            {
+                                <li>
+                                    <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="true" asp-route-y="true" asp-route-z="false" asp-route-name="Ready for Disbursement" class=" waves-effect">
+                                        <span key="t-calendar">Ready for Disbursement</span>
+                                    </a>
+                                </li>
+                            }
+                            <li>
+                                <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="false" asp-route-y="false" asp-route-z="true" asp-route-name="De-Active Tranche" class=" waves-effect">
+                                    <span key="t-calendar">De-Active Tranche</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="" asp-route-y="true" asp-route-z="false" asp-route-name="Closed Tranche" class=" waves-effect">
+                                    <span key="t-calendar">Closed Tranche</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)

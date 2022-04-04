@@ -1,0 +1,131 @@
+﻿
+@model IEnumerable<DAL.Models.Domain.Student.Applicant>
+
+@{
+    ViewBag.Title = "Tranche";
+    ViewBag.pTitle = "Tranche";
+    ViewBag.pageTitle = "Account";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+@{
+    if (Model.Count() > 0)
+    {        
+    <form asp-controller="Tranches" asp-action="GenerateCSV" enctype="multipart/form-data">
+        <input type="hidden" name="trancheId" value="@ViewBag.TrancheId" />
+        <div class="form-inline p-2">
+            <label class="m-2">Start &amp; End Date</label>
+            <div>
+                <div class="input-daterange input-group" data-date-format="m/dd/yyyy" @*"dd M, yyyy"*@ data-date-autoclose="true" data-provide="datepicker">
+                    <input type="text" class="form-control" id="startDate" name="startDate" />
+                    <input type="text" class="form-control" id="endDate" name="endDate" />
+                </div>
+            </div>
+            <button class="btn btn-info ml-2" type="submit">Generate CSV File</button>            
+        </div>
+    </form>
+    }
+}
+<div class="table-responsive p-3">
+    @*<button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>*@
+    <table id="datatable" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RollNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RollNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td><a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    function generateCSVFile() {
+        var trancheId = '@ViewBag.TrancheId';
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();        
+        $('.loading').show();
+        $.ajax({
+            type: "POST",
+            url: "/Tranches/GenerateCSV",
+            data: { trancheId: trancheId, startDate: startDate, endDate: endDate },
+            dataType: "json",
+            success: function (response) {
+                if (response.isValid) {
+                    notificationme("Yes!");
+                } else {
+                    notificationme("Applicant data not found!");
+                }
+                $('.loading').hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function notificationme(message) {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "100",
+            "positionClass": "toast-bottom-right",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "show",
+            "hideMethod": "hide"
+        };
+        toastr.info(message);
+    }
+</script>

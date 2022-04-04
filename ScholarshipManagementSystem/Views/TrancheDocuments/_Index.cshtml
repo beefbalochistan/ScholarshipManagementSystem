@@ -1,0 +1,115 @@
+﻿
+
+@{
+    ViewBag.Title = "Documents";
+    ViewBag.pTitle = "Documents";
+    ViewBag.pageTitle = "Tranche";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+<style>
+    table, td, th {
+       text-align: center
+    }
+</style>
+<p>
+    <a asp-action="GetApplicantListInTrancheForDisbursement" asp-controller="Applicants" asp-route-id="@ViewBag.TrancheId">View Current Applicant Pool</a>
+</p>
+<div id="fetchTrancheDocument">
+    @(await Component.InvokeAsync("TrancheDocument", new { id = ViewBag.TrancheId }))
+</div>
+
+@section Scripts
+{
+    <script>
+    function generatePGPFile(trancheDocumentId) {
+
+        $('.loading').show();
+        $.ajax({
+            type: "POST",
+            url: "/TrancheDocuments/GeneratePGP",
+            data: { trancheDocumentId: trancheDocumentId },
+            dataType: "json",
+            success: function (response) {
+                if (response.isValid) {
+                    fetchTrancheDocumentData();
+                    $('#datatable').DataTable();
+                    notificationme("PGP File Generated Successfully!");
+                } else {
+                    notificationme("Failed to Generate PGP File!");
+                }
+                $('.loading').hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        }
+
+        function uploadSFTPFile(trancheDocumentId) {
+
+            $('.loading').show();
+            $.ajax({
+                type: "POST",
+                url: "/TrancheDocuments/SFTPUploadFile",
+                data: { trancheDocumentId: trancheDocumentId },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isValid) {
+                        fetchTrancheDocumentData();
+                        $('#datatable').DataTable();
+                        notificationme("Uploaded File Successfully!");
+                    } else {
+                        notificationme("Failed to Upload File on Server!");
+                    }
+                    $('.loading').hide();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+    function fetchTrancheDocumentData() {
+            $(".loading").show();
+            var trancheId = '@ViewBag.TrancheId';
+            $.ajax({
+            url: '@Url.Action("ReloadTrancheDocument", "TrancheDocuments")',
+            data: {
+                id: trancheId
+            },
+                success: function (data) {
+                    $("#fetchTrancheDocument").html(data);
+                $(".loading").hide();
+            }
+        });
+        }
+
+    function notificationme(message) {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "100",
+            "positionClass": "toast-bottom-right",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "show",
+            "hideMethod": "hide"
+        };
+        toastr.info(message);
+    }
+    </script>
+
+}

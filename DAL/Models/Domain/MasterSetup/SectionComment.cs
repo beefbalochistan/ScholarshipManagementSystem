@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models.Domain.Student;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,8 +22,12 @@ namespace DAL.Models.Domain.MasterSetup
         [ForeignKey("SeverityLevel")]
         [Display(Name = "Severity Level")]
         public int SeverityLevelId { get; set; }
+        [ForeignKey("ApplicantCurrentStatus")]
+        [Display(Name = "Applicant")]
+        public int ApplicantCurrentStatusId { get; set; }
         public bool IsActive { get; set; } = true;
         public virtual BEEFSection BEEFSection { get; set; }
         public virtual SeverityLevel SeverityLevel { get; set; }
+        public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
     }
 }

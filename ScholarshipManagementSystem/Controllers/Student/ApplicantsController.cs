@@ -40,6 +40,17 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicationDbContext = _context.Applicant.Include(a => a.DegreeScholarshipLevel).Include(a => a.District).Include(a => a.Provience)/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> GetApplicantListInTranche(int id)
+        {
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id).Select(a=> new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } }});/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            return View(await applicationDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> GetApplicantListInTrancheForDisbursement(int id)
+        {
+            ViewBag.TrancheId = id;
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsDisbursed == false && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            return View(await applicationDbContext.ToListAsync());
+        }
         public async Task<IActionResult> GetWaitingResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
         {
             var applicationDbContext = await _context.SPApplicantWaiting.FromSqlRaw("exec [Student].[ApplicantWaiting] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, SchemeLevelId).ToListAsync();           
@@ -60,7 +71,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);          
             ViewBag.UserCurrentAccess = currentUser.ApplicantCurrentStatusId;
             ViewData["SeverityLevelId"] = _context.SeverityLevel;
-            var SectionCommentList = _context.SectionComment.Where(a => a.BEEFSectionId == currentUser.BEEFSectionId)
+            var SectionCommentList = _context.SectionComment.Where(a => a.BEEFSectionId == currentUser.ApplicantCurrentStatusId)
                 .Select(s => new
                 {
                     SectionCommentId = s.SeverityLevelId,

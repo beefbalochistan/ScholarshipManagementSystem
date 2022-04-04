@@ -50,7 +50,7 @@
                         {
                             var base64 = Convert.ToBase64String(item.AttachFileData);
                             var pdfSrc = String.Format("data:application/pdf;base64,{0}", base64);
-                            <span data-toggle="modal" data-src="" data-target="#attachmentModal">
+                            <span data-toggle="modal" data-src="@pdfSrc" data-target="#attachmentModal">
                                 <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Attachment
                             </span>
                         }

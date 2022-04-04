@@ -129,8 +129,11 @@ namespace DAL.Models.Domain.Student
         [ForeignKey("ApplicantFinanceCurrentStatus")]
         [Display(Name = "Finance Current Status")]
         public int? ApplicantFinanceCurrentStatusId { get; set; }
-        [ForeignKey("Trunch")]        
-        public int? TrunchId { get; set; }
+        [ForeignKey("Tranche")]        
+        public int? TrancheId { get; set; }
+        public int? TrancheDocumentId { get; set; }
+        public bool IsPaymentInProcess { get; set; } = false;
+        public bool IsDisbursed { get; set; } = false;
         public virtual District District { get; set; }
         public virtual SchemeLevelPolicy SchemeLevelPolicy { get; set; }
         public virtual Provience Provience { get; set; }
@@ -140,6 +143,6 @@ namespace DAL.Models.Domain.Student
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
         public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
         public virtual ApplicantFinanceCurrentStatus ApplicantFinanceCurrentStatus { get; set; }
-        public virtual Trunch Trunch { get; set; }
+        public virtual Tranche Tranche { get; set; }
     }
 }

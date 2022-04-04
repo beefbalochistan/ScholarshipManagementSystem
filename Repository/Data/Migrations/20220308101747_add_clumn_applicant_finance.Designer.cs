@@ -2472,9 +2472,9 @@ namespace Repository.Data.Migrations
                     b.ToTable("ApplicantFinanceCurrentStatus", "Student");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
-                    b.Property<int>("TrunchId")
+                    b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -2522,11 +2522,11 @@ namespace Repository.Data.Migrations
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
 
-                    b.HasKey("TrunchId");
+                    b.HasKey("TrancheId");
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Trunch", "VirtualAccount");
+                    b.ToTable("Tranche", "VirtualAccount");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess", b =>
@@ -3959,7 +3959,7 @@ namespace Repository.Data.Migrations
                     b.Navigation("UserAccessToForward");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
                         .WithMany()

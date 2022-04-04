@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace DAL.Models.Domain.VirtualAccount
 {
-    [Table("Trunch", Schema = "VirtualAccount")]
-    public class Trunch
+    [Table("Tranche", Schema = "VirtualAccount")]
+    public class Tranche
     {
         [Key]
-        public int TrunchId { get; set; }
+        public int TrancheId { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }

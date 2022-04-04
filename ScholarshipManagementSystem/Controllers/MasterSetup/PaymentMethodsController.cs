@@ -58,7 +58,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentMethodId,BankName,Name,Description,Logo,IsActive")] PaymentMethod paymentMethod, IFormFile  Attachment)
+        public async Task<IActionResult> Create(PaymentMethod paymentMethod, IFormFile  Attachment, IFormFile KeyAttachment)
         {
             if (ModelState.IsValid)
             {
@@ -67,11 +67,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     var rootPath = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot\\PaymentMethod\\Logo\\");
                     string fileName = Path.GetFileName(Attachment.FileName);
-                    fileName = fileName.Replace("&", "n");
-                    fileName = fileName.Replace(" ", "");
-                    fileName = fileName.Replace("#", "H");
-                    fileName = fileName.Replace("(", "");
-                    fileName = fileName.Replace(")", "");
+                    fileName = fileName.Replace("&", "n");fileName = fileName.Replace(" ", "");fileName = fileName.Replace("#", "H");fileName = fileName.Replace("(", "");fileName = fileName.Replace(")", "");
                     Random random = new Random();
                     int randomNumber = random.Next(1, 1000);
                     fileName = "Logo" + randomNumber.ToString() + fileName;
@@ -86,6 +82,28 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                     using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
                     {
                         await Attachment.CopyToAsync(stream);
+                    }
+                }
+                if (KeyAttachment != null && KeyAttachment.Length > 0)
+                {
+                    var rootPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot\\PaymentMethod\\Key\\");
+                    string fileName = Path.GetFileName(KeyAttachment.FileName);
+                    fileName = fileName.Replace("&", "n"); fileName = fileName.Replace(" ", ""); fileName = fileName.Replace("#", "H"); fileName = fileName.Replace("(", ""); fileName = fileName.Replace(")", "");
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 1000);
+                    fileName = "Key" + randomNumber.ToString() + fileName;
+                    paymentMethod.Logo = Path.Combine("/PaymentMethod/Key/", fileName);//Server Path
+                    string sPath = Path.Combine(rootPath);
+                    if (!System.IO.Directory.Exists(sPath))
+                    {
+                        System.IO.Directory.CreateDirectory(sPath);
+                    }
+                    string FullPathWithFileName = Path.Combine(sPath, fileName);
+                    //-----------------------------------
+                    using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                    {
+                        await KeyAttachment.CopyToAsync(stream);
                     }
                 }
                 _context.Add(paymentMethod);
@@ -116,7 +134,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentMethodId,BankName,Name,Description,Logo,IsActive")] PaymentMethod paymentMethod, IFormFile Attachment)
+        public async Task<IActionResult> Edit(int id, PaymentMethod paymentMethod, IFormFile Attachment, IFormFile KeyAttachment)
         {
             if (id != paymentMethod.PaymentMethodId)
             {
@@ -127,20 +145,15 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 try
                 {
-                    if (Attachment != null && Attachment.Length > 0)
+                    if (KeyAttachment != null && KeyAttachment.Length > 0)
                     {
                         var rootPath = Path.Combine(
-                            Directory.GetCurrentDirectory(), "wwwroot\\PaymentMethod\\Logo\\");
-                        string fileName = Path.GetFileName(Attachment.FileName);
-                        fileName = fileName.Replace("&", "n");
-                        fileName = fileName.Replace(" ", "");
-                        fileName = fileName.Replace("#", "H");
-                        fileName = fileName.Replace("(", "");
-                        fileName = fileName.Replace(")", "");
+                            Directory.GetCurrentDirectory(), "wwwroot\\PaymentMethod\\Key\\");
+                        string fileName = Path.GetFileName(KeyAttachment.FileName);fileName = fileName.Replace("&", "n");fileName = fileName.Replace(" ", "");fileName = fileName.Replace("#", "H");fileName = fileName.Replace("(", "");fileName = fileName.Replace(")", "");
                         Random random = new Random();
                         int randomNumber = random.Next(1, 1000);
-                        fileName = "Logo" + randomNumber.ToString() + fileName;
-                        paymentMethod.Logo = Path.Combine("/PaymentMethod/Logo/", fileName);//Server Path
+                        fileName = "Key" + randomNumber.ToString() + fileName;
+                        paymentMethod.Logo = Path.Combine("/PaymentMethod/Key/", fileName);//Server Path
                         string sPath = Path.Combine(rootPath);
                         if (!System.IO.Directory.Exists(sPath))
                         {
@@ -150,7 +163,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                         //-----------------------------------
                         using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
                         {
-                            await Attachment.CopyToAsync(stream);
+                            await KeyAttachment.CopyToAsync(stream);
                         }
                     }
                     _context.Update(paymentMethod);

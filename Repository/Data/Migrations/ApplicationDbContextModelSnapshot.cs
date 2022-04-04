@@ -1197,6 +1197,21 @@ namespace Repository.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PublicKeyFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_IP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Port")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Username")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("PaymentMethodId");
 
                     b.ToTable("PaymentMethod");
@@ -1593,6 +1608,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ApplicantCurrentStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BEEFSectionId")
                         .HasColumnType("int");
 
@@ -1607,6 +1625,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SectionCommentId");
+
+                    b.HasIndex("ApplicantCurrentStatusId");
 
                     b.HasIndex("BEEFSectionId");
 
@@ -2166,10 +2186,16 @@ namespace Repository.Data.Migrations
                     b.Property<string>("HomeAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDisbursed")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsFormEntered")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFormSubmitted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaymentInProcess")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -2239,7 +2265,10 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("TotalMarks")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("TrunchId")
+                    b.Property<int?>("TrancheDocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TrancheId")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -2265,7 +2294,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("SelectionMethodId");
 
-                    b.HasIndex("TrunchId");
+                    b.HasIndex("TrancheId");
 
                     b.ToTable("Applicant", "Student");
                 });
@@ -2475,9 +2504,9 @@ namespace Repository.Data.Migrations
                     b.ToTable("ApplicantFinanceCurrentStatus", "Student");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
-                    b.Property<int>("TrunchId")
+                    b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -2525,11 +2554,58 @@ namespace Repository.Data.Migrations
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
 
-                    b.HasKey("TrunchId");
+                    b.HasKey("TrancheId");
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Trunch", "VirtualAccount");
+                    b.ToTable("Tranche", "VirtualAccount");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.TrancheDocument", b =>
+                {
+                    b.Property<int>("TrancheDocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CSVAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CSVAttachmentOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IsAutoDisbursement")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsEmail")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsExecuteSuccessfully")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPGPGenerated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSendToServer")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PGPAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PGPGeneratedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PGPKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TrancheId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrancheDocumentId");
+
+                    b.HasIndex("TrancheId");
+
+                    b.ToTable("TrancheDocument", "VirtualAccount");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess", b =>
@@ -3610,6 +3686,12 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SectionComment", b =>
                 {
+                    b.HasOne("DAL.Models.Domain.Student.ApplicantCurrentStatus", "ApplicantCurrentStatus")
+                        .WithMany()
+                        .HasForeignKey("ApplicantCurrentStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
                         .WithMany()
                         .HasForeignKey("BEEFSectionId")
@@ -3621,6 +3703,8 @@ namespace Repository.Data.Migrations
                         .HasForeignKey("SeverityLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicantCurrentStatus");
 
                     b.Navigation("BEEFSection");
 
@@ -3867,9 +3951,9 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.VirtualAccount.Trunch", "Trunch")
+                    b.HasOne("DAL.Models.Domain.VirtualAccount.Tranche", "Tranche")
                         .WithMany()
-                        .HasForeignKey("TrunchId");
+                        .HasForeignKey("TrancheId");
 
                     b.Navigation("ApplicantCurrentStatus");
 
@@ -3889,7 +3973,7 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("SelectionMethod");
 
-                    b.Navigation("Trunch");
+                    b.Navigation("Tranche");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantAttachment", b =>
@@ -3968,7 +4052,7 @@ namespace Repository.Data.Migrations
                     b.Navigation("UserAccessToForward");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
                         .WithMany()
@@ -3977,6 +4061,17 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PaymentMethod");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.TrancheDocument", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.VirtualAccount.Tranche", "Tranche")
+                        .WithMany()
+                        .HasForeignKey("TrancheId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tranche");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.DAEPolicyDetailView", b =>

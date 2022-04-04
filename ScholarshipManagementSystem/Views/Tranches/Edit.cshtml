@@ -1,0 +1,190 @@
+﻿@model DAL.Models.Domain.VirtualAccount.Tranche
+
+@{
+    ViewBag.Title = "Edit";
+    ViewBag.pTitle = "Edit";
+    ViewBag.pageTitle = "Tranche";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+<hr />
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-12">
+            <span asp-validation-for="IsClose" class="text-danger"></span>
+            <span asp-validation-for="ApprovedAttachment" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TrancheId" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CurrentCommittedAmount" />
+            <input type="hidden" asp-for="ApplicantCount" />
+            <input type="hidden" asp-for="IsLock" />
+            <input type="hidden" asp-for="PaymentMethodId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="PaymentMethodId" class="control-label"></label>
+                <select disabled="disabled" asp-for="PaymentMethodId" class="form-control" asp-items="ViewBag.PaymentMethodId"></select>
+                <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <span asp-validation-for="ApprovedOn" class="text-danger"></span>
+                <label asp-for="ApprovedOn" class="control-label"></label>
+                <input asp-for="ApprovedOn" class="form-control" />
+                <span asp-validation-for="ApprovedOn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-check">
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-check">
+                <span asp-validation-for="IsOpen" class="text-danger"></span>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOpen" /> @Html.DisplayNameFor(model => model.IsOpen)
+                </label>
+            </div>
+        </div>
+        @*<div class="col-md-4">
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsLock" /> @Html.DisplayNameFor(model => model.IsLock)
+                </label>
+            </div>
+        </div>*@
+        <div class="col-md-4">
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsClose" /> @Html.DisplayNameFor(model => model.IsClose)
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Approved Attachment</label>
+                @{
+                    if (Model.ApprovedAttachment == null)
+                    {
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="attachment" name="attachment" accept="application/pdf">
+                            <label style="overflow: hidden; text-overflow: ellipsis;" class="custom-file-label" for="attachment">Choose file</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <a style="cursor:pointer" id="viewer" data-toggle="modal" data-src="@Model.ApprovedAttachment" data-target="#attachmentModal">
+                            <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Attachment
+                        </a>
+                    }
+                }
+            </div>   
+            <div class="form-group">
+                @{
+                    if (Model.IsApproved)
+                    {
+                        <a class="btn btn-sm btn-outline-info" asp-controller="Applicants" asp-action="GetApplicantListInTranche" asp-route-id="@Model.TrancheId">View List</a>
+                    }
+                    else
+                    {
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-check">
+                <span asp-validation-for="IsApproved" class="text-danger"></span>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsApproved" /> @Html.DisplayNameFor(model => model.IsApproved)
+                </label>
+            </div>            
+        </div>       
+    </div>
+    <div class="row">
+        @{
+            if (Model.IsApproved)
+            {
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <a class="btn btn-sm btn-outline-info" asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@Model.TrancheId">View List of CSV files</a>
+                    </div>
+                </div>
+            }
+        }
+        <div class="col-md-4">        
+    </div>
+    </div>    
+</form>
+
+
+<div id="attachmentModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body pb-0">
+                <embed id="pdfFileAttachment" src="" frameborder="0" width="100%" height="550px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <script>
+        $(document).ready(function () {            
+            $("#viewer").click(function () {                
+                $('#pdfFileAttachment').attr("src", $(this).attr("data-src"));
+            });
+        });
+    </script>
+    <script>
+        $('#IsOpen').click(function () {
+            var chkOpen = $("#IsOpen");
+            var chkClose = $("#IsClose");
+            var IsChecked = chkOpen[0].checked;
+            if (IsChecked) {
+                chkClose.prop('checked', false);
+            }
+            else {
+                //chk.removeAttr('checked');
+                chkClose.prop('checked', true);
+            }
+            //chkOpen.attr('value', IsChecked);
+        });
+        $('#IsClose').click(function () {
+            var chkOpen = $("#IsOpen");
+            var chkClose = $("#IsClose");
+            var IsChecked = chkClose[0].checked
+            if (IsChecked) {
+                //chk.attr('checked', 'checked');
+                chkOpen.prop('checked', false);
+            }
+            else {
+                //chk.removeAttr('checked');
+                chkOpen.prop('checked', true);
+            }
+            //chkClose.attr('value', IsChecked);
+        });
+    </script>
+}

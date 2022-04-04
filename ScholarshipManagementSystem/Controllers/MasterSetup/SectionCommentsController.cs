@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models.Domain.MasterSetup;
 using Repository.Data;
+using DAL.Models.Domain.Student;
 
 namespace ScholarshipManagementSystem.Controllers.MasterSetup
 {
@@ -45,11 +46,22 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
 
             return View(sectionComment);
         }
-
+        public async Task<JsonResult> GetApplicantCurrentStatusId(int sectionId)
+        {
+            List<ApplicantCurrentStatus> applicantCurrentStatuses = await _context.ApplicantCurrentStatus.Where(a => a.BEEFSectionId == sectionId && a.IsActive == true).ToListAsync();
+            var operatorList = applicantCurrentStatuses.Select(m => new SelectListItem()
+            {
+                Text = m.ProcessState.ToString(),
+                Value = m.ApplicantCurrentStatusId.ToString(),
+            });
+            var test = Json(operatorList);
+            return test;
+        }
         // GET: SectionComments/Create
         public IActionResult Create()
         {
             ViewData["BEEFSectionId"] = new SelectList(_context.BEEFSection, "BEEFSectionId", "Name");
+            ViewData["ApplicantCurrentStatusId"] = new SelectList(_context.ApplicantCurrentStatus.Where(a=>a.BEEFSectionId == 1 && a.IsActive == true && a.ApplicantCurrentStatusId > 3), "ApplicantCurrentStatusId", "ProcessState");
             ViewData["SeverityLevelId"] = _context.SeverityLevel;
             return View();
         }        

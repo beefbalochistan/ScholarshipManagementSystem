@@ -32,7 +32,8 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
-        public DbSet<DAL.Models.Domain.VirtualAccount.Trunch> Trunch { get; set; }
+        public DbSet<DAL.Models.Domain.VirtualAccount.Tranche> Tranche { get; set; }
+        public DbSet<DAL.Models.Domain.VirtualAccount.TrancheDocument> TrancheDocument { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevel> SchemeLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral> SelectionCriteriaGeneral { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral> DocumentAssistGeneral { get; set; }

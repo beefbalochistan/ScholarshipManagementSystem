@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.Data.Migrations
 {
-    public partial class tbl_trunch : Migration
+    public partial class tbl_Tranche : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,11 +11,11 @@ namespace Repository.Data.Migrations
                 name: "VirtualAccount");
 
             migrationBuilder.CreateTable(
-                name: "Trunch",
+                name: "Tranche",
                 schema: "VirtualAccount",
                 columns: table => new
                 {
-                    TrunchId = table.Column<int>(type: "int", nullable: false)
+                    TrancheId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -35,9 +35,9 @@ namespace Repository.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Trunch", x => x.TrunchId);
+                    table.PrimaryKey("PK_Tranche", x => x.TrancheId);
                     table.ForeignKey(
-                        name: "FK_Trunch_PaymentMethod_PaymentMethodId",
+                        name: "FK_Tranche_PaymentMethod_PaymentMethodId",
                         column: x => x.PaymentMethodId,
                         principalTable: "PaymentMethod",
                         principalColumn: "PaymentMethodId",
@@ -45,16 +45,16 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trunch_PaymentMethodId",
+                name: "IX_Tranche_PaymentMethodId",
                 schema: "VirtualAccount",
-                table: "Trunch",
+                table: "Tranche",
                 column: "PaymentMethodId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Trunch",
+                name: "Tranche",
                 schema: "VirtualAccount");
         }
     }

@@ -59,7 +59,7 @@ namespace ScholarshipManagementSystem.Controllers
             MyStaticClass.SetRejectedFile(RejectedSummary.Sum(a => a.Applicant));
             MyStaticClass.SetWaitingFile(WaitingSummary.Sum(a => a.Applicant));
 
-            return Json(new { isValid = true, inProcessValue = MyStaticClass.GetInProcessFile(), waitingValue = MyStaticClass.GetWaitingFile(), rejectedValue = MyStaticClass.GetRejectedFile() });
+            return Json(new { isValid = true, inProcessValue = MyStaticClass.GetInProcessFile().Result, waitingValue = MyStaticClass.GetWaitingFile().Result, rejectedValue = MyStaticClass.GetRejectedFile().Result });
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

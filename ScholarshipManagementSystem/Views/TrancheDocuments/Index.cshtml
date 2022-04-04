@@ -1,0 +1,83 @@
+﻿@model IEnumerable<DAL.Models.Domain.VirtualAccount.TrancheDocument>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CSVAttachment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CSVAttachmentOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPGPGenerated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PGPAttachment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PGPGeneratedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PGPKey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSendToServer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tranche)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CSVAttachment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CSVAttachmentOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPGPGenerated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PGPAttachment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PGPGeneratedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PGPKey)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSendToServer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tranche.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TrancheDocumentId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TrancheDocumentId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TrancheDocumentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

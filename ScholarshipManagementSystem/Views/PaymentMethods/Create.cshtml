@@ -51,26 +51,14 @@
                                     </div>
                                 </div>
                                 <form asp-action="Create" enctype="multipart/form-data">
-                                    <div class="row">                                     
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                             <div class="form-group">
                                                 <label asp-for="Name" class="control-label"></label>
                                                 <input asp-for="Name" class="form-control" placeholder="Name" required />
                                                 <span asp-validation-for="Name" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="fallback">
-                                                    <input type="file" name="Attachment" multiple accept=".jpg,.jpeg,.png" required>
-                                                </div>
-                                                <div class="mb-1">
-                                                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
-                                                </div>
-                                                <h5>Click here to upload logo</h5>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="submit" value="Add Method" class="btn btn-primary" />
-                                            </div>
+                                            </div>                                            
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -81,10 +69,63 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
+                                                <label asp-for="SFTP_IP" class="control-label"></label>
+                                                <input asp-for="SFTP_IP" class="form-control" placeholder="SFTP IP" data-parsley-maxlength="3" />
+                                                <span asp-validation-for="SFTP_IP" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="SFTP_Username" class="control-label"></label>
+                                                <input asp-for="SFTP_Username" class="form-control" placeholder="SFTP Username" data-parsley-maxlength="3" />
+                                                <span asp-validation-for="SFTP_Username" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="SFTP_Password" class="control-label"></label>
+                                                <input asp-for="SFTP_Password" class="form-control" placeholder="SFTP Password" data-parsley-maxlength="3" />
+                                                <span asp-validation-for="SFTP_Password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="SFTP_Port" class="control-label"></label>
+                                                <input asp-for="SFTP_Port" class="form-control" placeholder="Port" data-parsley-maxlength="3" />
+                                                <span asp-validation-for="SFTP_Port" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="fallback">
+                                                    <input type="file" name="Attachment" accept=".jpg,.jpeg,.png">
+                                                </div>
+                                                <div class="mb-1">
+                                                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                                                </div>
+                                                <h5>Upload logo</h5>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Add Method" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="fallback">
+                                                    <input type="file" name="KeyAttachment">
+                                                </div>
+                                                <div class="mb-1">
+                                                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                                                </div>
+                                                <h5>Upload Security Key</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
                                                 <label asp-for="Description" class="control-label"></label>
                                                 <textarea class="input-large form-control" asp-for="Description" rows="4" placeholder="Enter a description ..."></textarea>
                                                 <span asp-validation-for="Description" class="text-danger"></span>
-                                            </div>                                          
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

@@ -9,30 +9,42 @@ using DAL.Models.Domain.VirtualAccount;
 using Repository.Data;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using DAL.Models.Domain.Student;
+using CsvHelper;
+using ScholarshipManagementSystem.Models;
+using System.Text;
+using System.Globalization;
+using DAL.Models.Domain.ScholarshipSetup;
+using DAL.Models.Domain.MasterSetup;
 
 namespace ScholarshipManagementSystem.Controllers.VirtualAccount
 {
-    public class TrunchesController : Controller
+    public class TranchesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TrunchesController(ApplicationDbContext context)
+        public TranchesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Trunches
-        public async Task<IActionResult> Index()
+        // GET: Tranchees
+        public async Task<IActionResult> Index(bool w, bool x, bool y, bool z, string name)
         {
-            var applicationDbContext = _context.Trunch.Include(t => t.PaymentMethod);
+            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a=>a.IsActive == w && a.IsClose == y && a.IsOpen == z);
+            if (x)
+            {
+                applicationDbContext = applicationDbContext.Where(a=>a.IsApproved == x);
+            }
+            ViewBag.heading = name;
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> _Index(int id)
         {
-            var applicationDbContext = _context.Trunch.Include(t => t.PaymentMethod).Where(a=>a.IsActive == true && a.IsOpen == true && a.IsLock == false);
+            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a=>a.IsActive == true && a.IsOpen == true && a.IsLock == false);
             return PartialView(await applicationDbContext.ToListAsync());
         }
-        // GET: Trunches/Details/5
+        // GET: Tranchees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,22 +52,22 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 return NotFound();
             }
 
-            var trunch = await _context.Trunch
+            var Tranche = await _context.Tranche
                 .Include(t => t.PaymentMethod)
-                .FirstOrDefaultAsync(m => m.TrunchId == id);
-            if (trunch == null)
+                .FirstOrDefaultAsync(m => m.TrancheId == id);
+            if (Tranche == null)
             {
                 return NotFound();
             }
 
-            return View(trunch);
+            return View(Tranche);
         }
 
-        // GET: Trunches/Create
+        // GET: Tranchees/Create
         public IActionResult Create()
         {
             ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name");            
-            Trunch obj = new Trunch();
+            Tranche obj = new Tranche();
             obj.IsActive = true;
             obj.IsApproved = false;
             obj.IsClose = false;
@@ -66,25 +78,25 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             return View(obj);
         }
 
-        // POST: Trunches/Create
+        // POST: Tranchees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrunchId,Name,PaymentMethodId,SchemeLevelId,IsOpen,IsClose,IsLock,IsApproved,CreatedOn,ApprovedOn,ApprovedAttachment,CurrentCommittedAmount,ApprovedAmount,IsActive,ApplicantCount")] Trunch trunch)
+        public async Task<IActionResult> Create([Bind("TrancheId,Name,PaymentMethodId,SchemeLevelId,IsOpen,IsClose,IsLock,IsApproved,CreatedOn,ApprovedOn,ApprovedAttachment,CurrentCommittedAmount,ApprovedAmount,IsActive,ApplicantCount")] Tranche Tranche)
         {
             if (ModelState.IsValid)
             {
-                trunch.CreatedOn = DateTime.Today.Date;
-                _context.Add(trunch);
+                Tranche.CreatedOn = DateTime.Today.Date;
+                _context.Add(Tranche);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new {w = true, x = false, y = false, z = true, name = "Open Tranche" });
             }
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "name", trunch.PaymentMethodId);            
-            return View(trunch);
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "name", Tranche.PaymentMethodId);            
+            return View(Tranche);
         }
 
-        // GET: Trunches/Edit/5
+        // GET: Tranchees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,28 +104,48 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 return NotFound();
             }
 
-            var trunch = await _context.Trunch.FindAsync(id);
-            if (trunch == null)
+            var Tranche = await _context.Tranche.FindAsync(id);
+            if (Tranche == null)
             {
                 return NotFound();
             }
-            trunch.ApprovedOn = DateTime.Today.Date;
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name", trunch.PaymentMethodId);            
-            return View(trunch);
+            Tranche.ApprovedOn = DateTime.Today.Date;
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name", Tranche.PaymentMethodId);            
+            return View(Tranche);
         }
 
-        // POST: Trunches/Edit/5
+        // POST: Tranchees/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Trunch trunch, IFormFile attachment)
+        public async Task<IActionResult> Edit(int id, Tranche Tranche, IFormFile attachment)
         {
-            if (id != trunch.TrunchId)
+            if (id != Tranche.TrancheId)
             {
                 return NotFound();
             }
-
+            if (Tranche.IsClose)
+            {
+                if (!Tranche.IsApproved)
+                {
+                    ModelState.AddModelError(nameof(Tranche.IsClose), "You should approve tranche before closing it!");
+                    ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name", Tranche.PaymentMethodId);
+                    return View(Tranche);
+                }
+                else
+                {
+                    Tranche.IsActive = false;
+                }                
+            }
+            if (Tranche.IsApproved)
+            {
+                if (attachment == null)
+                {
+                    ModelState.AddModelError(nameof(Tranche.ApprovedAttachment), "You should attach evidence before approving the tranche!");
+                    return View(Tranche);
+                }                
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -121,7 +153,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                     if (attachment != null && attachment.Length > 0)
                     {                        
                         var rootPath = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Trunch\\TId" + trunch.TrunchId + "\\");
+                        Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Tranche\\TId" + Tranche.TrancheId.ToString() + "\\");
                         string fileName = Path.GetFileName(attachment.FileName);
                         fileName = fileName.Replace("&", "n");
                         fileName = fileName.Replace(" ", "");
@@ -129,9 +161,8 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                         fileName = fileName.Replace("(", "");
                         fileName = fileName.Replace(")", "");
                         Random random = new Random();
-                        int randomNumber = random.Next(1, 1000);
-                        fileName = "SRCMinutes" + randomNumber.ToString() + fileName;
-                        trunch.ApprovedAttachment = Path.Combine("/Documents/Trunch/TId", fileName);//Server Path
+                        int randomNumber = random.Next(1, 1000);                        
+                        Tranche.ApprovedAttachment = Path.Combine("/Documents/Tranche/TId" + Tranche.TrancheId.ToString(), fileName);//Server Path
                         string sPath = Path.Combine(rootPath);
                         if (!System.IO.Directory.Exists(sPath))
                         {
@@ -143,13 +174,13 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                             await attachment.CopyToAsync(stream);
                         }                                                                                     
                     }
-                    //-----------------------------------    
-                    _context.Update(trunch);
+                    //-----------------------------------                       
+                    _context.Update(Tranche);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TrunchExists(trunch.TrunchId))
+                    if (!TrancheExists(Tranche.TrancheId))
                     {
                         return NotFound();
                     }
@@ -160,11 +191,11 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "PaymentMethodId", trunch.PaymentMethodId);            
-            return View(trunch);
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "PaymentMethodId", Tranche.PaymentMethodId);            
+            return View(Tranche);
         }
 
-        // GET: Trunches/Delete/5
+        // GET: Tranchees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -172,31 +203,107 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 return NotFound();
             }
 
-            var trunch = await _context.Trunch
+            var Tranche = await _context.Tranche
                 .Include(t => t.PaymentMethod)
-                .FirstOrDefaultAsync(m => m.TrunchId == id);
-            if (trunch == null)
+                .FirstOrDefaultAsync(m => m.TrancheId == id);
+            if (Tranche == null)
             {
                 return NotFound();
             }
 
-            return View(trunch);
+            return View(Tranche);
         }
 
-        // POST: Trunches/Delete/5
+        // POST: Tranchees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trunch = await _context.Trunch.FindAsync(id);
-            _context.Trunch.Remove(trunch);
+            var Tranche = await _context.Tranche.FindAsync(id);
+            _context.Tranche.Remove(Tranche);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TrunchExists(int id)
+        public async Task<IActionResult> GenerateCSV(int trancheId, string startDate, string endDate)
         {
-            return _context.Trunch.Any(e => e.TrunchId == id);
+            var applicants = await _context.Applicant.Include(a=>a.SchemeLevelPolicy).Include(a=>a.District).Where(a => a.TrancheId == trancheId && a.IsDisbursed == false).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, Name = a.Name, BFormCNIC = a.BFormCNIC, StudentMobile = a.StudentMobile, District = new District { Name = a.District.Name}, SchemeLevelPolicy = new SchemeLevelPolicy { Amount = a.SchemeLevelPolicy.Amount } }).ToArrayAsync();
+            List<CSVModel> mylist = new List<CSVModel>();
+            int counter = 1;
+            string updateCSV_paymentInProcess = "";
+            foreach(Applicant applicant in applicants)
+            {
+                CSVModel student = new CSVModel();
+                student.Sno = counter++;
+                student.ApplicantReferenceNo = applicant.ApplicantReferenceNo;
+                student.Name = applicant.Name;
+                student.CNIC = applicant.BFormCNIC;
+                student.StudentMobile = applicant.StudentMobile;
+                student.District = applicant.District.Name;
+                student.Amount = applicant.SchemeLevelPolicy.Amount;
+                student.StartDate = startDate.ToString();
+                student.EndDate = endDate;
+                mylist.Add(student);
+                updateCSV_paymentInProcess += applicant.ApplicantId + ",";
+            }
+            
+            //Here We are calling function to write file  
+            //WriteCSVFile(@"D:\Documents\NewStudentFile.csv", mylist);
+            var rootPath = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\TrancheId" + trancheId.ToString() + "\\CSV\\");            
+            if (!System.IO.Directory.Exists(rootPath))
+            {
+                System.IO.Directory.CreateDirectory(rootPath);
+            }
+            string filename = "ApplicantCSVFile" + RandomNo(10000, 99999).ToString() + ".csv";
+            bool response = WriteCSVFile(rootPath + filename, mylist);
+            if (response)
+            {
+                TrancheDocument trancheDocument = new TrancheDocument();
+                trancheDocument.CSVAttachment = Path.Combine("/Documents/Finance/TrancheId" + trancheId.ToString() + "/CSV/" + filename);//Server Path
+                trancheDocument.CSVAttachmentOn = DateTime.Today;
+                trancheDocument.TrancheId = trancheId;
+                _context.Add(trancheDocument);
+                _context.SaveChanges();
+                var TrancheMaxId = _context.TrancheDocument.Max(a=>a.TrancheDocumentId);
+                if (updateCSV_paymentInProcess != "")
+                {
+                    updateCSV_paymentInProcess = updateCSV_paymentInProcess.TrimEnd(',');
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE [Student].[Applicant] SET [IsPaymentInProcess] = 1, [TrancheDocumentId] = { TrancheMaxId } WHERE [ApplicantId] IN( {updateCSV_paymentInProcess} )");
+                }
+            }
+            return RedirectToAction("_Index","TrancheDocuments", new { id = trancheId});
+        }
+        private readonly Random _random = new Random();
+        public int RandomNo(int min, int max)
+        {
+            return _random.Next(min, max);
+        }
+        public bool WriteCSVFile(string path, List<CSVModel> student)
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(path, false, new UTF8Encoding(true)))
+                using (CsvWriter cw = new CsvWriter(sw, CultureInfo.InvariantCulture))
+                {
+                    cw.WriteHeader<CSVModel>();
+                    cw.NextRecord();
+                    foreach (CSVModel stu in student)
+                    {
+                        cw.WriteRecord<CSVModel>(stu);
+                        cw.NextRecord();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool TrancheExists(int id)
+        {           
+            return _context.Tranche.Any(e => e.TrancheId == id);
         }
     }
 }

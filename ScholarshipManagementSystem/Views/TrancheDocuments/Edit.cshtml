@@ -1,0 +1,71 @@
+﻿@model DAL.Models.Domain.VirtualAccount.TrancheDocument
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TrancheDocument</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TrancheDocumentId" />
+            <div class="form-group">
+                <label asp-for="TrancheId" class="control-label"></label>
+                <select asp-for="TrancheId" class="form-control" asp-items="ViewBag.TrancheId"></select>
+                <span asp-validation-for="TrancheId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CSVAttachment" class="control-label"></label>
+                <input asp-for="CSVAttachment" class="form-control" />
+                <span asp-validation-for="CSVAttachment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CSVAttachmentOn" class="control-label"></label>
+                <input asp-for="CSVAttachmentOn" class="form-control" />
+                <span asp-validation-for="CSVAttachmentOn" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPGPGenerated" /> @Html.DisplayNameFor(model => model.IsPGPGenerated)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="PGPAttachment" class="control-label"></label>
+                <input asp-for="PGPAttachment" class="form-control" />
+                <span asp-validation-for="PGPAttachment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PGPGeneratedOn" class="control-label"></label>
+                <input asp-for="PGPGeneratedOn" class="form-control" />
+                <span asp-validation-for="PGPGeneratedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PGPKey" class="control-label"></label>
+                <input asp-for="PGPKey" class="form-control" />
+                <span asp-validation-for="PGPKey" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsEmail" /> @Html.DisplayNameFor(model => model.IsEmail)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsSendToServer" /> @Html.DisplayNameFor(model => model.IsSendToServer)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

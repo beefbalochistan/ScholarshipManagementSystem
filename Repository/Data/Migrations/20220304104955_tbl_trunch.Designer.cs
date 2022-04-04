@@ -10,8 +10,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220304104955_tbl_trunch")]
-    partial class tbl_trunch
+    [Migration("20220304104955_tbl_Tranche")]
+    partial class tbl_Tranche
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -2440,9 +2440,9 @@ namespace Repository.Data.Migrations
                     b.ToTable("ApplicantStudent", "Student");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
-                    b.Property<int>("TrunchId")
+                    b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -2493,11 +2493,11 @@ namespace Repository.Data.Migrations
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
 
-                    b.HasKey("TrunchId");
+                    b.HasKey("TrancheId");
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Trunch", "VirtualAccount");
+                    b.ToTable("Tranche", "VirtualAccount");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess", b =>
@@ -3924,7 +3924,7 @@ namespace Repository.Data.Migrations
                     b.Navigation("UserAccessToForward");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
                         .WithMany()

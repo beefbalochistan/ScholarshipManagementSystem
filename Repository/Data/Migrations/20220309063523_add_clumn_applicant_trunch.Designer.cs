@@ -10,8 +10,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220309063523_add_clumn_applicant_trunch")]
-    partial class add_clumn_applicant_trunch
+    [Migration("20220309063523_add_clumn_applicant_Tranche")]
+    partial class add_clumn_applicant_Tranche
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -2241,7 +2241,7 @@ namespace Repository.Data.Migrations
                     b.Property<decimal>("TotalMarks")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("TrunchId")
+                    b.Property<int?>("TrancheId")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -2267,7 +2267,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("SelectionMethodId");
 
-                    b.HasIndex("TrunchId");
+                    b.HasIndex("TrancheId");
 
                     b.ToTable("Applicant", "Student");
                 });
@@ -2477,9 +2477,9 @@ namespace Repository.Data.Migrations
                     b.ToTable("ApplicantFinanceCurrentStatus", "Student");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
-                    b.Property<int>("TrunchId")
+                    b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -2527,11 +2527,11 @@ namespace Repository.Data.Migrations
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
 
-                    b.HasKey("TrunchId");
+                    b.HasKey("TrancheId");
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Trunch", "VirtualAccount");
+                    b.ToTable("Tranche", "VirtualAccount");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess", b =>
@@ -3869,9 +3869,9 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.VirtualAccount.Trunch", "Trunch")
+                    b.HasOne("DAL.Models.Domain.VirtualAccount.Tranche", "Tranche")
                         .WithMany()
-                        .HasForeignKey("TrunchId");
+                        .HasForeignKey("TrancheId");
 
                     b.Navigation("ApplicantCurrentStatus");
 
@@ -3891,7 +3891,7 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("SelectionMethod");
 
-                    b.Navigation("Trunch");
+                    b.Navigation("Tranche");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantAttachment", b =>
@@ -3970,7 +3970,7 @@ namespace Repository.Data.Migrations
                     b.Navigation("UserAccessToForward");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Trunch", b =>
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
                         .WithMany()

@@ -426,17 +426,18 @@
     $.ajax({
         url: '@Url.Action("ReloadInbox", "Home")',
         success: function (data) {
+            debugger;
             $("#TotalInProcessFiles").hide();
             $("#TotalRejectedFiles").hide();
             $("#TotalWaitingFiles").hide();
             $("#inProcesssLoad").show();
             $("#waitingLoad").show();
             $("#rejectedLoad").show();
-            if (data.isValid) {
-                setTimeout(function () {
-                    $("#TotalInProcessFiles").html(data.inProcessValue);
-                    $("#TotalRejectedFiles").html(data.rejectedValue);
-                    $("#TotalWaitingFiles").html(data.waitingValue);
+            if (data.isValid) {                
+                $("#TotalInProcessFiles").text(data.inProcessValue);
+                $("#TotalRejectedFiles").text(data.rejectedValue);
+                $("#TotalWaitingFiles").text(data.waitingValue);
+                setTimeout(function () {                   
                     $("#inProcesssLoad").hide();
                     $("#waitingLoad").hide();
                     $("#rejectedLoad").hide();
