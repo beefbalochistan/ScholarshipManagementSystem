@@ -2,7 +2,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+@*<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">*@
 <header id="page-topbar">
     <div class="navbar-header">
         <div class="d-flex">
@@ -285,7 +285,7 @@
                 </button>
             </div>
             <div class="dropdown d-none d-lg-inline-block ml-1">
-                <button type="button" class="btn header-item noti-icon waves-effect" onclick="ReloadInbox()">
+                <button type="button" class="btn header-item noti-icon waves-effect" @*onclick="ReloadInbox()*@">
                     <i class="mdi mdi-cloud-refresh"></i>
                 </button>
             </div>
@@ -419,9 +419,9 @@
 </header>
 
 
-<script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+@*<script src="~/assets/libs/toastr/build/toastr.min.js"></script>*@
 <script>
-    function ReloadInbox() {
+    @*function ReloadInbox() {
         var delay = 2000;
     $.ajax({
         url: '@Url.Action("ReloadInbox", "Home")',
@@ -451,8 +451,8 @@
             }
         }
     });
-        }
-        function notificationme(message) {
+        }*@
+        @*function notificationme(message) {
             toastr.options = {
                 "closeButton": false,
                 "debug": false,
@@ -471,5 +471,5 @@
                 "hideMethod": "hide"
             };
             toastr.info(message);
-        }
+        }*@
     </script>

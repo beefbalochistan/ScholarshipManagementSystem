@@ -74,7 +74,43 @@
                 }
             });
         }
+        function uploadDisbursementFile(trancheDocumentId) {
 
+            $('.loading').show();
+
+             var excelFile = document.getElementById('ExcelFile');
+            //alert(excelFile.files[0].name);
+            if (excelFile.files.length == 0) {
+                notificationme("Please attach file!");
+                //return;
+            } else {
+                formData = new FormData();
+            $("#ImportResultLoading").show();
+            $('#btnImportResult').prop('disabled', true);
+            for (var i = 0; i < excelFile.files.length; i++) {
+                var file = ExcelFile.files[i];
+                formData.append("excelFile", file);
+            }
+            formData.append("trancheDocumentId", trancheDocumentId);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadDisbursementFile", "TrancheDocuments")',
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('#uploadForm').trigger("reset");
+                    $('#myModal').modal('hide');
+                    notificationme(data.message);
+                },
+                error: function (data) {
+                    alert(data.message);
+                }
+            });
+            }
+        }
     function fetchTrancheDocumentData() {
             $(".loading").show();
             var trancheId = '@ViewBag.TrancheId';

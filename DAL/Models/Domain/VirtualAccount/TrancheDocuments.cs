@@ -18,22 +18,24 @@ namespace DAL.Models.Domain.VirtualAccount
         public int TrancheId { get; set; }
         [Display(Name = "CSV File")]
         public string CSVAttachment { get; set; }
-        [Display(Name = "CSV Date")]
+        [Display(Name = "CSV On")]
         [DataType(DataType.Date)]
         public DateTime CSVAttachmentOn { get; set; }
         public bool IsPGPGenerated { get; set; }
         [Display(Name = "PGP File")]
         public string PGPAttachment { get; set; }
-        [Display(Name = "PGP Generated On")]
+        [Display(Name = "PGP On")]
         [DataType(DataType.Date)]
         public DateTime PGPGeneratedOn { get; set; }
         public string PGPKey { get; set; }
-        [Display(Name = "Email Send")]
+        [Display(Name = "Email")]
         public bool IsEmail { get; set; }
-        [Display(Name = "SFTP Uploaded")]
+        [Display(Name = "SFTP")]
         public bool IsSendToServer { get; set; }
-        public bool IsExecuteSuccessfully { get; set; } = false;
+        [Display(Name = "Is Execute")]
+        public int IsExecuteSuccessfully { get; set; } = 0;
         public int IsAutoDisbursement { get; set; } = 0;
+        public string SuccessList { get; set; }
 
         public virtual Tranche Tranche { get; set; }
     }

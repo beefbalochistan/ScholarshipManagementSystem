@@ -9,6 +9,12 @@ using DAL.Models.Domain.VirtualAccount;
 using Repository.Data;
 using System.IO;
 using OpenPGP.Services;
+using Microsoft.AspNetCore.Http;
+using System.Text;
+using CsvHelper;
+using ScholarshipManagementSystem.Models;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace ScholarshipManagementSystem.Controllers.VirtualAccount
 {
@@ -92,6 +98,49 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                     return Json(new { isValid = true, message = "Uploaded File Successfully!" });
                 }
             }            
+            return Json(new { isValid = false, message = "Failed to Upload File!" });
+        }
+
+
+        public async Task<JsonResult> UploadDisbursementFile(int trancheDocumentId, IFormFile excelFile)
+        {
+            
+            var tranchdoc = _context.TrancheDocument.Find(trancheDocumentId);
+            List<OmniDisbursement> applicantList;
+            if (tranchdoc != null)
+            {
+                try
+                {
+                    string filePath = @"D:\LMS\disbursement.csv";
+                    string test = "";
+                        FileInfo inputFile = new FileInfo(filePath);
+                    using (var reader = new StreamReader(inputFile.FullName))
+                    {
+                        test = reader.ReadLine();                        
+                        test = reader.ReadLine();                        
+                        test = reader.ReadLine();                        
+                        test = reader.ReadLine();                        
+                        test = reader.ReadLine();                        
+                        using (var csvReader = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
+                        {
+                            csvReader.Context.RegisterClassMap<DataRecordMap>();
+                            applicantList = csvReader.GetRecords<OmniDisbursement>().ToList();                            
+                            //decimal d = decimal.Parse(bookList.ElementAt(1).CustomerCnic, NumberStyles.Float);                            
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+                foreach(var applicant in applicantList)
+                {
+
+                }
+                _context.Update(tranchdoc);
+                //await _context.SaveChangesAsync();
+                return Json(new { isValid = true, message = "Uploaded File Successfully!" });                
+            }
             return Json(new { isValid = false, message = "Failed to Upload File!" });
         }
         // GET: TrancheDocuments/Details/5

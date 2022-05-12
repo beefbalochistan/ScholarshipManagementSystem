@@ -200,7 +200,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.UserAccessToForwardId = userAccessToForwardId;
                 if (!IsReject)
                 {
-                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
+                    //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
+                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == obj.UserAccessToForwardId).FirstName;
                     applicantInfo.ApplicantCurrentStatusId = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
                 }
                 /*else
@@ -263,18 +264,21 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 }                              
                 if (userCurrentAccess == 15)//KDA Hard
                 {
-                    var applicantPolicyInfo = _context.SchemeLevelPolicy.Include(a=>a.SchemeLevel).Where(a=>a.SchemeLevelPolicyId == applicantInfo.SchemeLevelPolicyId).FirstOrDefault();
-                    var applicantPaymentMethodId = applicantPolicyInfo.SchemeLevel.PaymentMethodId;
-                    if (applicantPaymentMethodId == 0)
+                    if(applicantInfo.TrancheId != null)
                     {
-                        return "Failed, Tranche not available so far!";
-                    }                           
-                    var trancheId = _context.Tranche.Where(a=>a.IsActive == true && a.IsOpen == true && a.PaymentMethodId == applicantPaymentMethodId).Select(a=>a.TrancheId).FirstOrDefault();
-                    applicantInfo.TrancheId = trancheId;
-                    var currentTranche = _context.Tranche.Find(trancheId);
-                    currentTranche.ApplicantCount++;
-                    currentTranche.CurrentCommittedAmount += applicantPolicyInfo.Amount;
-                    _context.Update(currentTranche);
+                        var applicantPolicyInfo = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.SchemeLevelPolicyId == applicantInfo.SchemeLevelPolicyId).FirstOrDefault();
+                        var applicantPaymentMethodId = applicantPolicyInfo.SchemeLevel.PaymentMethodId;
+                        if (applicantPaymentMethodId == 0)
+                        {
+                            return "Failed, Tranche not available so far!";
+                        }
+                        var trancheId = _context.Tranche.Where(a => a.IsActive == true && a.IsOpen == true && a.PaymentMethodId == applicantPaymentMethodId).Select(a => a.TrancheId).FirstOrDefault();
+                        applicantInfo.TrancheId = trancheId;
+                        var currentTranche = _context.Tranche.Find(trancheId);
+                        currentTranche.ApplicantCount++;
+                        currentTranche.CurrentCommittedAmount += applicantPolicyInfo.Amount;
+                        _context.Update(currentTranche);
+                    }                    
                 }
                 _context.Update(applicantInfo);
                 await _context.SaveChangesAsync();

@@ -7,67 +7,312 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
+
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <div class="row">
-    <div class="col-lg-12">
+    @foreach (var item in Model)
+    {
 
-        <div class="row">
-            @foreach (var item in Model)
+
+        <div class="col-md-3">
+            @*<div class="mt-2">
+                    <h5>Tranche</h5>
+                </div>*@
+            <div class="card">
+                <div class="card-body">
+                    <div class="product-img position-relative">
+                        @*<div class="avatar-sm product-ribbon">
+                <span class="avatar-title rounded-circle  bg-primary">
+                    - 25 %
+                </span>
+            </div>*@
+                        <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
+                            <img src="@item.PaymentMethod.Logo"  style="height:80px" alt="" class="img-fluid mx-auto d-block">
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>
+                        @*@{
+            if (item.IsActive)03105656325 
             {
+                <i class="display-4 mdi mdi-progress-wrench text-success"></i>
+            }
+            else if (item.IsClose)
+            {
+                <i class="display-4 mdi mdi-progress-close text-warning"></i>
+            }
+            else if (item.IsApproved)
+            {
+                <i class="display-4 mdi mdi-progress-check text-success"></i>
+            }
+            else
+            {
+                <i class="display-4 mdi mdi-progress-clock text-danger"></i>
+            }
+        }*@
 
-
-<div class="col-xl-4 col-sm-6">
-                    @*<div class="mt-2">
-                        <h5>Tranche</h5>
-                    </div>*@
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="product-img position-relative">
-                                @*<div class="avatar-sm product-ribbon">
-                                        <span class="avatar-title rounded-circle  bg-primary">
-                                            - 25 %
-                                        </span>
-                                    </div>*@
-                                <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
-                                    @{
-                                        if (item.IsApproved)
-                                        {
-                                            <img src="~/assets/images/icon_SCO.gif" width="230" alt="" class="img-fluid mx-auto d-block">
-                                        }
-                                        else
-                                        {
-                                            <img src="~/assets/images/bank.png" width="230" alt="" class="img-fluid mx-auto d-block">
-                                        }
-                                    }                                    
-                                </a>
-                            </div>
-                            <div class="text-center">
-                                <h5 class="mb-1 text-truncate"><a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">@item.Name </a></h5>
-                                @{
-                                    if (item.IsActive)
-                                    {
-                                        <i class="display-4 mdi mdi-progress-wrench text-success"></i>
-                                    }                                    
-                                    else if (item.IsClose)
-                                    {
-                                        <i class="display-4 mdi mdi-progress-close text-warning"></i>
-                                    }
-                                    else if (item.IsApproved)
-                                    {
-                                        <i class="display-4 mdi mdi-progress-check text-success"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="display-4 mdi mdi-progress-clock text-danger"></i>
-                                    }
-                                }
-                                <div class="my-0">Commit Amount: <a asp-action="GetApplicantListInTranche" asp-controller="Applicants" asp-route-id="@item.TrancheId"><b>@item.CurrentCommittedAmount</b></a></div>
-                                <div class="my-0">Approved Amount: <b>@item.ApprovedAmount</b></div>
+                        <div class="square-switch mt-2">
+                            <input type="checkbox" id=@("switchONOFF" + item.TrancheId) switch="info" checked="@(item.IsActive == true)" onclick="OnOffTranche(@item.TrancheId)" disabled="@(item.IsLock == true)" />
+                            <label for=@("switchONOFF" + item.TrancheId) data-on-label="ON" class="m-0" data-off-label="OFF"></label>
+                            <div class="custom-control custom-switch" dir="ltr">
+                                <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp(@item.TrancheId)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
+                                <label class="custom-control-label" for=@("customSwitchRFA" + item.TrancheId)>Request for Approval</label>
                             </div>
                         </div>
                     </div>
+                    <div class="mt-2 mb-2">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item mr-3">
+                                <span class="badge badge-success">No of Applicants</span>
+                            </li>
+                            <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="No of Applicants">
+                                <i class="bx bx-user mr-1"></i> <span class="badge badge-pill badge-soft-success font-size-12">@item.ApplicantCount</span>
+                            </li>
+                        </ul>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item mr-3">
+                                <span class="badge badge-success">Committed</span>
+                            </li>
+                            <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Committed Amount">
+                                <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@item.CurrentCommittedAmount</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-1">
+                        <button class="mr-2 btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Tranche Approval" data-original-title="Track" onclick="TrancheApprovedRequest(@item.TrancheId, @item.CurrentCommittedAmount)">Approval</button>
+                        <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
+                    </div>
+
                 </div>
-            }
+            </div>
         </div>
-        <!-- end row -->
-    </div>  
+    }
 </div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rendercontent">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/assets/js/pages/form-element.init.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#myInput").change(function () {
+                alert("A file has been selected.");
+            });
+        });
+    </script>
+    <script>
+        function OnOffTranche(TrancheId) {
+            //alert(TrancheId)
+            var switchONOFF = $("#switchONOFF" + TrancheId);
+            var IsChecked = switchONOFF[0].checked;
+            var message = "";
+            if (IsChecked) {
+                message = "Tranche Active Successfully!";
+            } else {
+                message = "Tranche De-Active Successfully!";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Tranches/OnOffTranche",
+                data: { trancheId: TrancheId, IsChecked: IsChecked },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isValid) {
+                        Swal.fire({
+                            title: "Done!",
+                            text: message,
+                            type: "success",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#34c38f"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong!",
+                            type: "warning",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#556ee6"
+                        });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        function reqForApp(TrancheId) {
+            //alert(TrancheId)
+            var switchONOFF = $("#switchONOFF" + TrancheId);
+            var IsChecked = switchONOFF[0].checked;
+            //alert(IsChecked)
+            if (IsChecked) {
+                switchONOFF.prop('checked', false);
+                switchONOFF.attr('disabled', true);
+            } else {
+                switchONOFF.attr('disabled', false);
+            }
+            var message = "";
+            if (IsChecked) {
+                message = "Tranche: Request for Approval is In Process!";
+            } else {
+                message = "Tranche: Request for Approval Withdraw!";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Tranches/RequestForApprovalTranche",
+                data: { trancheId: TrancheId, IsChecked: IsChecked },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isValid) {
+                        Swal.fire({
+                            title: "Done!",
+                            text: message,
+                            type: "success",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#34c38f"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong!",
+                            type: "warning",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#556ee6"
+                        });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        function createModal(trancheId) {
+            debugger;
+            $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("ApplicantInTranche", "Applicants")',
+                data: {
+                    trancheId: trancheId
+                },
+                success: function (data) {
+                    $("#rendercontent").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }
+        function TrancheApprovedRequest(trancheId, committedamount) {
+            Swal.fire({
+                title: "Please Attach Tranche Approval Document",
+                html: "<div class='col-md-10'><ul class='list-inline mb-2'><li class='list-inline-item mr-3'><span class='badge badge-success'>Committed Amount</span></li><li class='list-inline-item mr-3 float-right' data-toggle='tooltip' data-placement='top' title='' data-original-title='Committed Amount'><i class='bx bx-lock mr-1'></i> <span class='badge badge-pill badge-soft-info font-size-12'>"+ committedamount +"</span></li></ul><input data-toggle ='tooltip' data-placement='top' title='Attach File' type='file' name='scannedcopy' id='scannedcopy' required></div><div class='col-md-10'><label class='control-label' stype='font-size:12px'>Enter Approved Amount</label><input data-toggle ='tooltip' data-placement='top' title='Approved Amount' type='number' name='approvedamount' id='approvedamount' required></div>",
+                showCancelButton: !0,
+                confirmButtonText: "Submit",
+                //showLoaderOnConfirm: !0,
+                confirmButtonColor: "#556ee6",
+                cancelButtonColor: "#f46a6a",
+                preConfirm: () => {
+                    if (document.getElementById('scannedcopy').files.length == 0) {
+                        Swal.showValidationMessage(
+                            `Please Attach Document`
+                        )
+                    }
+                    if (document.getElementById('approvedamount').value <= 0 || document.getElementById('approvedamount').value != committedamount) {
+                        Swal.showValidationMessage(
+                            `Please Enter Valid Amount`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value) {
+                    //var text = document.getElementById('scannedcopy').value;
+                    var data = new FormData();
+                    var files = $("#scannedcopy").get(0).files;
+                    if (files.length > 0) {
+                        data.append("Attachment", files[0]);
+                    }
+                    data.append("TrancheId", trancheId);
+                    data.append("ApprovedAmount", document.getElementById('approvedamount').value);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Tranches/TrancheApprovedRequest",
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: data,
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    t.value && Swal.fire("Back", response.message, "success");
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 3000);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    Swal.fire({
+                        type: "success",
+                        title: "Ajax request finished!",
+                        html: "Submitted email: " + t
+                    })
+                } @*else {
+                    notificationme();
+                } *@
+            })
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+    </script>
+}

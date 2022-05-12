@@ -30,7 +30,9 @@ namespace DAL.Models.Domain.VirtualAccount
         public string ApprovedAttachment { get; set; }
         public decimal CurrentCommittedAmount { get; set; }
         public decimal ApprovedAmount { get; set; } = 0;
+        public decimal DisbursedAmount { get; set; } = 0;
         public bool IsActive { get; set; } = true;
+        public bool IsDisbursementInProcess { get; set; } = false;
         public int ApplicantCount { get; set; } = 0;
         public virtual PaymentMethod PaymentMethod { get; set; }                     
     }

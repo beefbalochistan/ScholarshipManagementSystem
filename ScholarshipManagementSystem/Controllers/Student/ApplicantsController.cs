@@ -20,6 +20,10 @@ using DAL.Models.Domain.ScholarshipSetup;
 using Microsoft.AspNetCore.Identity;
 using DAL.Models;
 using DAL.Models.ViewModels.ApplicantInProcess;
+using DAL.Models.Domain.VirtualAccount;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Font = iTextSharp.text.Font;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -83,6 +87,23 @@ namespace ScholarshipManagementSystem.Controllers.Student
             //-----------------------------------
             return PartialView(applicationDbContext);
         }
+        public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int TrancheId)
+        {
+            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1}", TrancheId, MaxFYId).ToListAsync();                       
+            return PartialView(applicationDbContext);
+        }
+        public async Task<IActionResult> ApplicantInProcessForVD()
+        {
+            int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
+            //var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            //int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+            ViewBag.MaxFYId = MaxFYId;
+            //ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
+            ViewBag.TrancheId = _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).Select(a => a.TrancheId).FirstOrDefault();
+
+            var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}", MaxFYId).ToListAsync();
+            return View(applicationDbContext);
+        }
         public async Task<IActionResult> ApplicantInProcess()
         {
             int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
@@ -131,7 +152,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToList(), "SchemeLevelId", "Name");
             ViewBag.refId = id;
             return View();
-        }
+        }        
+
         public async Task<IActionResult> ApplicantTracking(string RefId)
         {            
             if(RefId != null)
@@ -148,7 +170,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     SectionCommentId = s.SeverityLevelId,
                     Description = string.Format("{0} - Severity {1}", s.Comment, s.SeverityLevel.Meaning)
                 })
-                .ToList();            
+                .ToList();
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
             ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a=>a.ApplicantCurrentStatus).Where(a=>a.UserId == currentUserId.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
@@ -179,6 +201,119 @@ namespace ScholarshipManagementSystem.Controllers.Student
         public IActionResult ApplicantFileAttachment()
         {            
             return View();
+        }
+        public JsonResult GenerateLetter(int id)
+        {
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            var commitAmount = _context.Tranche.Find(id).CurrentCommittedAmount;
+            var rootPath = Path.Combine(
+                                  Directory.GetCurrentDirectory(), "wwwroot\\Documents\\TrancheList");
+            if (!System.IO.Directory.Exists(rootPath))
+            {
+                System.IO.Directory.CreateDirectory(rootPath);
+            }
+            string link = "/Documents/Test.pdf";
+           /* Document doc = new Document();
+            PdfWriter.GetInstance(doc, new FileStream(Path.Combine(rootPath, "Test.pdf"), FileMode.Create));
+            doc.Open();
+            PdfPTable tableLayout = new PdfPTable(4);
+            doc.Add(Add_Content_To_PDF(tableLayout));
+            doc.Close();*/
+
+            Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 15);            
+            PdfWriter.GetInstance(pdfDoc, new FileStream(Path.Combine(rootPath, "Test2.pdf"), FileMode.Create));
+            pdfDoc.Open();
+            Chunk chunk = new Chunk("BEEF", FontFactory.GetFont("Arial", 20, Font.BOLDITALIC, BaseColor.MAGENTA));
+            pdfDoc.Add(chunk);
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            pdfDoc.Add(line);
+            //Table
+            PdfPTable table = new PdfPTable(2);
+            table.WidthPercentage = 100;
+            table.HorizontalAlignment = 0; //0=Left, 1=Centre, 2=Right
+            table.SpacingBefore = 20f;
+            table.SpacingAfter = 30f;
+
+            //Cell no 1
+            PdfPCell cell = new PdfPCell();
+            cell.Border = 0;
+            iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(Path.Combine(
+                                  Directory.GetCurrentDirectory(), "wwwroot\\assets\\images\\BEEF.png"));
+            image.ScaleAbsolute(100, 70);
+            cell.AddElement(image);
+            table.AddCell(cell);
+
+            //Cell no 2
+            chunk = new Chunk("Total No of Applicants: "+ applicationDbContext.Count().ToString() +",\nCommitted Amount: " + commitAmount.ToString(), FontFactory.GetFont("Arial", 15, Font.NORMAL, BaseColor.PINK));
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.AddElement(chunk);
+            table.AddCell(cell);
+
+            //Add table to document    
+            pdfDoc.Add(table);            
+            //Table
+            table = new PdfPTable(6);
+            
+            table.WidthPercentage = 100;
+            table.HorizontalAlignment = 0;
+            table.SpacingBefore = 20f;
+            table.SpacingAfter = 30f;
+
+            //Cell
+            cell = new PdfPCell();
+            chunk = new Chunk("List of applicants");
+            cell.AddElement(chunk);
+            cell.Colspan = 6;            
+            cell.PaddingBottom = 5;
+            cell.BackgroundColor = BaseColor.PINK;
+            table.AddCell(cell);
+            table.AddCell("S.No");
+            table.AddCell("Scheme Level");
+            table.AddCell("Applicant Reference");
+            table.AddCell("Roll Number");
+            table.AddCell("Name");
+            table.AddCell("Father Name");
+            int counter = 1;
+            foreach(var obj in applicationDbContext)
+            {
+                table.AddCell(counter.ToString());
+                table.AddCell(obj.SchemeLevelPolicy.SchemeLevel.Name);
+                table.AddCell(obj.ApplicantReferenceNo);
+                table.AddCell(obj.RollNumber);
+                table.AddCell(obj.Name);
+                table.AddCell(obj.FatherName);
+                counter++;
+            }                       
+
+            //Add table to document
+            pdfDoc.Add(table);
+            Paragraph para = new Paragraph();
+            para.Add("System generated list.");
+            pdfDoc.Add(para);
+            /*chunk = new Chunk("How to Create a Pdf File");
+            chunk.Font = FontFactory.GetFont("Arial", 25, Font.BOLD, BaseColor.RED);
+            chunk.SetAnchor("https://www.yogihosting.com/create-pdf-asp-net-mvc/");
+            pdfDoc.Add(chunk);            */
+            pdfDoc.Close();
+            return Json(new { isValid = true, link = link });
+        }
+        private PdfPTable Add_Content_To_PDF(PdfPTable tableLayout)
+        {
+            float[] headers = { 20, 20, 20, 30}; //Header Widths  
+            tableLayout.SetWidths(headers); //Set the pdf headers  
+            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
+                                               //Add Title to the PDF file at the top        
+            string heading = "Public Health Engineering Department";
+
+            tableLayout.AddCell(new PdfPCell(new Phrase("test", new Font(Font.NORMAL, 10, 1)))
+            {
+                Colspan = 4,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                PaddingBottom = 8,
+                Border = iTextSharp.text.Rectangle.NO_BORDER
+            });
+            return tableLayout;
         }
         public IActionResult ApplicantSendSMS()
         {            
@@ -299,6 +434,71 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return Json(new { isValid = false, message = "Failed to Resume!" });
             }
             return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
+        }
+        public async Task<JsonResult> SendBack(int applicantId)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.IsPaymentInProcess = false;    
+                _context.Update(applicantInfo);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Resume!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been pushed back successfully." });
+        }
+        public async Task<IActionResult> ApplicantInTranche(int trancheId)
+        {
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == trancheId && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            return PartialView(await applicationDbContext.ToListAsync());
+        }
+        [HttpPost]
+        public async Task<JsonResult> PaymentComplete(PaymentDisbursement payment)
+        {
+            var applicantInfo = _context.Applicant.Find(1);
+            if (applicantInfo != null)
+            {
+                applicantInfo.IsPaymentInProcess = false;
+                _context.Update(applicantInfo);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Resume!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been pushed back successfully." });
+        }
+        public async Task<JsonResult> SendBackWithIssue(int applicantId, string Issues)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.IsPaymentInProcess = false;
+                _context.Update(applicantInfo);
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = Issues;
+                obj.CreatedOn = DateTime.Now;
+                obj.SeverityLevelId = 4;//KDA Hard
+                obj.ApplicantCurrentStatusId = 25;//KDA Hard
+                obj.UserName = User.Identity.Name;
+                obj.UserAccessToForwardId = 16;//KDA Hard
+                obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == obj.UserAccessToForwardId).FirstName;
+                _context.Add(obj);
+                //await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Resume!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been pushed back successfully." });
         }
         [HttpPost]
         public async Task<JsonResult> UploadFile(IFormFile files, int applicantId, string title)

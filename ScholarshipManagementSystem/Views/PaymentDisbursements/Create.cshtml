@@ -1,0 +1,153 @@
+﻿@model DAL.Models.Domain.VirtualAccount.PaymentDisbursement
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>PaymentDisbursement</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TrancheDocumentId" class="control-label"></label>
+                <input asp-for="TrancheDocumentId" class="form-control" />
+                <span asp-validation-for="TrancheDocumentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicantReferenceNo" class="control-label"></label>
+                <input asp-for="ApplicantReferenceNo" class="form-control" />
+                <span asp-validation-for="ApplicantReferenceNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDNo" class="control-label"></label>
+                <input asp-for="DDNo" class="form-control" />
+                <span asp-validation-for="DDNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChequeNo" class="control-label"></label>
+                <input asp-for="ChequeNo" class="form-control" />
+                <span asp-validation-for="ChequeNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDReceiver" class="control-label"></label>
+                <input asp-for="DDReceiver" class="form-control" />
+                <span asp-validation-for="DDReceiver" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDReceiverCNIC" class="control-label"></label>
+                <input asp-for="DDReceiverCNIC" class="form-control" />
+                <span asp-validation-for="DDReceiverCNIC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDRelationWithScholar" class="control-label"></label>
+                <input asp-for="DDRelationWithScholar" class="form-control" />
+                <span asp-validation-for="DDRelationWithScholar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDReceiverContactNo" class="control-label"></label>
+                <input asp-for="DDReceiverContactNo" class="form-control" />
+                <span asp-validation-for="DDReceiverContactNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionId" class="control-label"></label>
+                <input asp-for="TransactionId" class="form-control" />
+                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionStatus" class="control-label"></label>
+                <input asp-for="TransactionStatus" class="form-control" />
+                <span asp-validation-for="TransactionStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerName" class="control-label"></label>
+                <input asp-for="CustomerName" class="form-control" />
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerCnic" class="control-label"></label>
+                <input asp-for="CustomerCnic" class="form-control" />
+                <span asp-validation-for="CustomerCnic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label"></label>
+                <input asp-for="MobileNumber" class="form-control" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="District" class="control-label"></label>
+                <input asp-for="District" class="form-control" />
+                <span asp-validation-for="District" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DisbursementAmount" class="control-label"></label>
+                <input asp-for="DisbursementAmount" class="form-control" />
+                <span asp-validation-for="DisbursementAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionType" class="control-label"></label>
+                <input asp-for="TransactionType" class="form-control" />
+                <span asp-validation-for="TransactionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionAmount" class="control-label"></label>
+                <input asp-for="TransactionAmount" class="form-control" />
+                <span asp-validation-for="TransactionAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionDate" class="control-label"></label>
+                <input asp-for="TransactionDate" class="form-control" />
+                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DirectAgentId" class="control-label"></label>
+                <input asp-for="DirectAgentId" class="form-control" />
+                <span asp-validation-for="DirectAgentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AgentName" class="control-label"></label>
+                <input asp-for="AgentName" class="form-control" />
+                <span asp-validation-for="AgentName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicantId" class="control-label"></label>
+                <select asp-for="ApplicantId" class ="form-control" asp-items="ViewBag.ApplicantId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentMethodId" class="control-label"></label>
+                <select asp-for="PaymentMethodId" class ="form-control" asp-items="ViewBag.PaymentMethodId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DDScannedCopy" class="control-label"></label>
+                <input asp-for="DDScannedCopy" class="form-control" />
+                <span asp-validation-for="DDScannedCopy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChequeScannedCopy" class="control-label"></label>
+                <input asp-for="ChequeScannedCopy" class="form-control" />
+                <span asp-validation-for="ChequeScannedCopy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherDocumentScannedCopy" class="control-label"></label>
+                <input asp-for="OtherDocumentScannedCopy" class="form-control" />
+                <span asp-validation-for="OtherDocumentScannedCopy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,192 @@
+﻿@model IEnumerable<DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcessSummary>
+@{
+    ViewBag.pTitle = "Applicant In Process Cases";
+    ViewBag.pageTitle = "Applicant";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<div class="row">
+    <div class="col-xl-9 col-lg-8 p-0">
+        <div class="card">
+            <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div id="ApplicantDataPlace">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="title"> List of Tranche</div>
+                <hr class="my-4">
+
+                <div>
+                    <p class="text-muted">Applicant Cases</p>
+
+                    <ul class="list-unstyled font-weight-medium">
+                        @foreach (var item in Model)
+                        {
+                            <li>
+                                <a href="#" onclick=UpdateRecord(@(item.TrancheId !=0 ? item.TrancheId : 0)) class="text-muted py-2 d-block">
+                                    <i class="mdi mdi-projector-screen mr-1"></i>
+                                    @item.Name
+                                    <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">@item.Applicant.ToString().PadLeft(2, '0')</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- toastr plugin -->
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            var TrancheId = '@ViewBag.TrancheId';
+            fetchRecord(TrancheId);            
+    })
+        function fetchRecord(TrancheId) {
+            var MaxFYId = '@ViewBag.MaxFYId';
+            $("#fetchspinner").show();
+            $.ajax({
+                url: '@Url.Action("GetPaymentResultList", "Applicants")',
+                data: {
+                    MaxFYId: MaxFYId,
+                    TrancheId: TrancheId
+                },
+                success: function (data) {
+                    $("#ApplicantDataPlace").html(data);
+                    notificationme('Fetch Record Successfully!');
+                    $("#fetchspinner").hide();
+                }
+            });
+        }
+        function UpdateRecord(TrancheId) {
+            if (TrancheId != 0) {
+                fetchRecord(TrancheId);
+            } else {
+                notificationme('No Record Found!');
+            }
+        }
+        function sendBack(applicantId, trancheId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You want to send applicant back to "ready for payment queue!"',
+                type: "warning",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendBack",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(trancheId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+
+
+        function sendBackWithIssue(applicantId, trancheId) {
+            Swal.fire({
+                title: "Please Write Issue of Applicant",
+                html: "<textarea rows='5' placeholder='Enter description here....' id='swal-input1' class='swal2-input' required autofocus maxlength='500' style='height: 100px'></textarea>",
+                showCancelButton: !0,
+                confirmButtonText: "Submit",
+                //showLoaderOnConfirm: !0,
+                confirmButtonColor: "#556ee6",
+                cancelButtonColor: "#f46a6a",
+                preConfirm: () => {
+                    if ((document.getElementById('swal-input1').value == "") || (document.getElementById('swal-input1').value == '') || ((document.getElementById('swal-input1').value == null))) {
+                        Swal.showValidationMessage(
+                            `Pleae provide Issue(s)`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value) {
+                    var text = document.getElementById('swal-input1').value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendBackWithIssue",
+                        data: { applicantId: applicantId , Issues : text},
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    t.value && Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(trancheId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    Swal.fire({
+                        type: "success",
+                        title: "Ajax request finished!",
+                        html: "Submitted email: " + t
+                    })
+                } @*else {
+                    notificationme();
+                } *@
+            })
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+    </script>
+}

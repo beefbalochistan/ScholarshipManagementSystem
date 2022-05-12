@@ -1,0 +1,372 @@
+﻿
+@model IEnumerable<DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcess>
+
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+<style>
+    .txtbox {
+        background-color: azure;
+    }
+</style>
+<div class="table-responsive p-3">
+    <table id="datatable" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                @*<th></th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.SchemeLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RollNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>@item.ApplicantId</td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SchemeLevel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RollNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <a style="cursor:pointer" id="sa-warning" class="mr-2 text-warning" data-toggle="tooltip" data-placement="top" title="Back" data-original-title="Track" onclick="sendBack(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-reply font-size-18"></i></a>|
+                        <a style="cursor:pointer" data-toggle="modal" data-target="#paymentsubmitform" class="mr-2 text-success" data-placement="top" title="Forward" data-original-title="Track" onclick="setValue('@item.ApplicantId','@item.Name','@item.FatherName','@item.ApplicantReferenceNo','@item.SchemeLevel','@item.District','@item.Institute','@item.PaymentMethodId','@item.TrancheDocumentId')"><i class="dripicons-forward font-size-18"></i></a>|
+                        <a style="cursor:pointer" class="mr-2 text-danger" data-toggle="tooltip" data-placement="top" title="Back with Issue" data-original-title="Track" onclick="sendBackWithIssue(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-warning font-size-18"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+</div>
+<div class="modal fade" id="paymentsubmitform" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Scrollable Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Name</label>
+                            <input name="applicantName" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Father Name</label>
+                            <input name="applicantFatherName" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Reference#</label>
+                            <input name="applicantRef" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Scheme</label>
+                            <input name="applicantSchemeLevel" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">District</label>
+                            <input name="applicantDistrict" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Institute</label>
+                            <input name="applicantInstitute" class="form-control" readonly="readonly" style="background-color:azure" />
+                        </div>
+                    </div>
+                </div>
+                <form class="custom-validation" method="post" enctype="multipart/form-data" onsubmit="return AjaxPost(this)">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="TrancheDocumentId" />
+                    <input type="hidden" name="ApplicantId" />
+                    <input type="hidden" name="PaymentMethodId" />
+                    <input type="hidden" name="ApplicantReferenceNo" />
+                    <div id="dd" class="form-row">
+                        <div class="form-group col-md-6">
+                            @*<label name="DDNo" class="control-label">DD#</label>*@
+                            <input name="DDNo" class="form-control" placeholder="Demand Draft No/Cheque No" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="DDReceiver" class="control-label">Receiver</label>*@
+                            <input name="DDReceiver" class="form-control" placeholder="Receiver Name" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="DDReceiverCNIC" class="control-label">Receiver CNIC</label>*@
+                            <input id="input-mask" name="DDReceiverCNIC" class="form-control input-mask" placeholder="Receiver CNIC" required data-inputmask="'mask': '99999-9999999-9'">
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="DDRelationWithScholar" class="control-label">Relation With Scholar</label>*@
+                            <input name="DDRelationWithScholar" class="form-control" placeholder="Relation With Scholar" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="DDReceiverContactNo" class="control-label">Receiver Contact#</label>*@
+                            <input name="DDReceiverContactNo" type="number" class="form-control" placeholder="Enter Contact" required />
+                        </div>
+                        <div class="custom-file col-md-6">
+                            <input style="max-width:100px" data-toggle="tooltip" data-placement="top" title="Attach File" type="file" class="custom-file-input" name="scannedcopy" id="scannedcopy" required>
+                            <label class="custom-file-label" for="scannedcopy" style="overflow:hidden;text-overflow:ellipsis">Choose file</label>
+                        </div>
+                    </div>
+                    <div id="online" class="form-row">
+                        <div class="form-group col-md-6">
+                            @*<label name="TransactionId" class="control-label">Transaction Id</label>*@
+                            <input name="TransactionId" class="form-control" placeholder="Transaction Id" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="CustomerName" class="control-label">Receiver</label>*@
+                            <input name="CustomerName" class="form-control" placeholder="Receiver Name" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="CustomerCnic" class="control-label">Customer CNIC</label>*@
+                            <input id="input-mask" name="CustomerCnic" class="form-control input-mask" placeholder="Enter CNIC" required data-inputmask="'mask': '99999-9999999-9'">
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="MobileNumber" class="control-label">Mobile No</label>*@
+                            <input name="MobileNumber" type="text" class="form-control input-mask" data-inputmask="'mask': '0399-9999999'" placeholder="Enter Mobile No" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="District" class="control-label">District</label>*@
+                            <input name="District" class="form-control" placeholder="Enter District Name" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="DisbursementAmount" class="control-label">Disbursement Amount</label>*@
+                            <input name="DisbursementAmount" type="number" class="form-control" placeholder="Enter Amount" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="TransactionType" class="control-label">Transaction Type</label>*@
+                            <input name="TransactionType" class="form-control" placeholder="Enter Transaction Type" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="TransactionType" class="control-label">Transaction Status</label>*@
+                            <input name="TransactionStatus" class="form-control" placeholder="Enter Transaction Status" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="TransactionAmount" class="control-label">Transaction Amount</label>*@
+                            <input name="TransactionAmount" type="number" class="form-control" placeholder="Transaction Amount" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            @*<label name="TransactionDate" class="control-label">Transaction Date</label>*@
+                            <input type="date" name="TransactionDate" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- JAVASCRIPT -->
+<script src="~/assets/libs/jquery/jquery.min.js"></script>
+<!-- Sweet Alerts js -->
+<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+<!-- Required datatable js -->
+<script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- Responsive examples -->
+<script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<!-- bs custom file input plugin -->
+<script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+<script src="~/assets/js/pages/form-element.init.js"></script>
+<script src="~/assets/libs/parsleyjs/parsley.min.js"></script>
+
+<script src="~/assets/js/pages/form-validation.init.js"></script>
+<!-- form mask -->
+<script src="~/assets/libs/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+<!-- form mask init -->
+<script src="~/assets/js/pages/form-mask.init.js"></script>
+<script>
+    function AjaxPost(formData) {
+        var ajaxConfig = {
+            type: "POST",
+            url: "/Applicants/PaymentComplete",
+            data: new FormData(formData),
+            success: function (result) {
+                alert(result);
+                //window.location.href = "/Product/AddNewProduct";
+            }
+        }
+        if ($(formData).attr('enctype') == "multipart/form-data") {
+            ajaxConfig["contentType"] = false;
+            ajaxConfig["processData"] = false;
+        }
+        $.ajax(ajaxConfig);
+        return false;
+    }
+    $(document).ready(function () {
+        $("#datatable").DataTable();
+        $("#btnsubmit").click(function (e) {
+            //Serialize the form datas.
+            var valdata = $("#paymentform").serialize();
+            //to get alert popup
+            alert(valdata);
+            debugger;
+            var fileUpload = $("#scannedcopy").get(0);
+            var files = fileUpload.files;
+            var fileData = new FormData();
+            fileData.append("ScannedCopy", files[0]);
+            $.ajax({
+                url: "/Applicants/PaymentComplete",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                async: false,
+                data: fileData,
+                
+            });
+            });
+    });
+    function setValue(applicantId,Name,FatherName,ApplicantReferenceNo,SchemeLevel,District,Institute,PaymentMethodId,TrancheDocumentId) {
+        $("input[name*='applicantName']").val(Name);        
+        $("input[name*='applicantId']").val(applicantId);        
+        $("input[name*='applicantFatherName']").val(FatherName);
+        $("input[name*='applicantRef']").val(ApplicantReferenceNo);
+        $("input[name*='ApplicantReferenceNo']").val(ApplicantReferenceNo);
+        $("input[name*='applicantSchemeLevel']").val(SchemeLevel);
+        $("input[name*='applicantDistrict']").val(District);
+        $("input[name*='applicantInstitute']").val(Institute);
+        $("input[name*='TrancheDocumentId']").val(TrancheDocumentId);
+        $("input[name*='PaymentMethodId']").val(PaymentMethodId);
+       @* if (PaymentMethodId == 1) {
+            $("#dd").show();
+            $("#online").hide();
+        } else {
+            $("#dd").hide();
+            $("#online").show();
+        }*@
+    }
+    function UploadComment(applicantRefNo) {
+        var userAccessToForwardId = $("#UserAccessToForwardId").val();
+        var comment = $("#msgbox").val();
+        var applicantId = $("#applicantId").val();
+            var UserCurrentAccess = '@ViewBag.UserCurrentAccess';
+                if (userAccessToForwardId == 0) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Select 'Forward To'");
+                    return;
+                }
+                if (!$('#msgbox').val().length) {
+                    $('#GreenNoteOnFailed').show();
+                    $('#GreenNoteOnFailedText').text("Please Enter Comments!");
+                    return;
+                }
+            var severityLevelId = $("#SeverityLevelId").val();
+            if (severityLevelId == 0) {
+                $('#GreenNoteOnFailed').show();
+                $('#GreenNoteOnFailedText').text("Please Select Severity Level!");
+                return;
+            }
+            $('#GreenNoteOnFailed').hide();
+            debugger;
+            var data = new FormData();
+            if (jQuery('#files').val() != '') {
+                var fileUpload = $("#files").get(0);
+                var files = fileUpload.files;
+                //------------Size Validate---------
+                if (!validate(files[0].size)) {
+                    return;
+                }
+                //----------------------------------
+                data.append("Attachment", files[0]);
+            }
+                data.append("applicantId", applicantId);
+                data.append("applicantIdList", applicantRefNo);
+                data.append("comment", comment);
+                //data.append("sectionCommentId", sectionCommentId);
+                data.append("severityLevelId", severityLevelId);
+                data.append("userAccessToForwardId", userAccessToForwardId);
+                data.append("userCurrentAccess", UserCurrentAccess);
+                $.ajax({
+                    type: "POST",
+                    url: "/ApplicantStudents/SubmitCommentInBulk",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    async: false,
+                    beforeSend: function () {
+                        //$("#divloader").show()
+                    },
+                    success: function (message) {
+                        notificationme(message);
+                        $("#SectionCommentId").val(0);
+                        $("#UserAccessToForwardId").val(0);
+                        $('#msgbox').val('');
+                        $('#msgbox').focus();
+                        $('#commentPortion').hide();
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Error Applicant Tracking!");
+                    },
+                    complete: function () {
+                        notificationme(message);
+                    }
+                });
+    }
+    function notificationme(message) {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "100",
+            "positionClass": "toast-bottom-right",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "show",
+            "hideMethod": "hide"
+        };
+        toastr.info(message);
+    }
+</script>
+
+
+<!-- Sweet alert init js-->
+@*<script src="~/assets/js/pages/sweet-alerts.init.js"></script>*@
+

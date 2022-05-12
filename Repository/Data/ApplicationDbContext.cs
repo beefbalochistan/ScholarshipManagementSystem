@@ -34,6 +34,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }
         public DbSet<DAL.Models.Domain.VirtualAccount.Tranche> Tranche { get; set; }
         public DbSet<DAL.Models.Domain.VirtualAccount.TrancheDocument> TrancheDocument { get; set; }
+        public DbSet<DAL.Models.Domain.VirtualAccount.PaymentDisbursement> PaymentDisbursement { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevel> SchemeLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SelectionCriteriaGeneral> SelectionCriteriaGeneral { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.DocumentAssistGeneral> DocumentAssistGeneral { get; set; }
@@ -86,9 +87,11 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }
         [NotMapped]
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }
+        public DbSet<DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcess> SPApplicantPaymentInProcess { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantWaiting.SPApplicantWaiting> SPApplicantWaiting { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejected> SPApplicantRejected { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary> SPApplicantInProcessSummary { get; set; }
+        public DbSet<DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcessSummary> SPApplicantPaymentInProcessSummary { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantWaiting.SPApplicantWaitingSummary> SPApplicantWaitingSummary { get; set; }
         public DbSet<DAL.Models.ViewModels.ApplicantRejected.SPApplicantRejectedSummary> SPApplicantRejectedSummary { get; set; }
         public DbSet<DAL.Models.ViewModels.UserManagement.GetUserSchemeLevelAccess> GetUserSchemeLevelAccess { get; set; }

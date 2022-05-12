@@ -17,8 +17,8 @@
                     <li>
                         <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalInProcessFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetInProcessFile())</span>
-                            <span key="t-forms">Applicant In Process <img id="inProcesssLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                            <span @*id="TotalInProcessFiles"*@ class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetInProcessFile())*@</span>
+                            <span key="t-forms">Applicant In Process <img @*id="inProcesssLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
 
@@ -29,7 +29,7 @@
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
-                            <span key="t-invoices">Tranche</span>
+                            <span key="t-invoices">Disbursement</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
@@ -44,8 +44,8 @@
                             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                             {
                                 <li>
-                                    <a asp-action="Index" asp-controller="Tranches" asp-route-w="true" asp-route-x="" asp-route-y="false" asp-route-z="true" asp-route-name="Open Tranche" class=" waves-effect">
-                                        <span key="t-calendar">Open Tranche</span>
+                                    <a asp-action="Index" asp-controller="Tranches" asp-route-x="true" asp-route-y="false" asp-route-name="Tranche Setup/Configuration" class=" waves-effect">
+                                        <span key="t-calendar">Tranche SetUp/Config</span>
                                     </a>
                                 </li>
 
@@ -53,21 +53,21 @@
                             @if ((AuthorizationService.AuthorizeAsync(User, Permissions.District.View)).Result.Succeeded)
                             {
                                 <li>
-                                    <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="true" asp-route-y="true" asp-route-z="false" asp-route-name="Ready for Disbursement" class=" waves-effect">
-                                        <span key="t-calendar">Ready for Disbursement</span>
+                                    <a asp-action="ActiveTrancheDisbursement" asp-controller="Tranches" class=" waves-effect">
+                                        <span key="t-calendar">Tranche Disbursement</span>
                                     </a>
                                 </li>
                             }
                             <li>
                                 <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="false" asp-route-y="false" asp-route-z="true" asp-route-name="De-Active Tranche" class=" waves-effect">
-                                    <span key="t-calendar">De-Active Tranche</span>
+                                    <span key="t-calendar">Completed Tranches</span>
                                 </a>
                             </li>
-                            <li>
+                            @*<li>
                                 <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="" asp-route-y="true" asp-route-z="false" asp-route-name="Closed Tranche" class=" waves-effect">
                                     <span key="t-calendar">Closed Tranche</span>
                                 </a>
-                            </li>
+                            </li>*@
                         </ul>
                     </li>
 
@@ -77,8 +77,8 @@
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalWaitingFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetWaitingFile())</span>
-                            <span key="t-forms">Applicant Waiting  <img id="waitingLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                            <span @*id="TotalWaitingFiles" *@class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetWaitingFile())*@</span>
+                            <span key="t-forms">Applicant Waiting  <img @*id="waitingLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
 
@@ -88,8 +88,8 @@
                     <li>
                         <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span id="TotalRejectedFiles" class="badge badge-pill badge-soft-info float-right">@(await MyStaticClass.GetRejectedFile())</span>
-                            <span key="t-forms">Applicant Rejected  <img id="rejectedLoad" style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                            <span @*id="TotalRejectedFiles"*@ class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetRejectedFile())*@</span>
+                            <span key="t-forms">Applicant Rejected  <img @*id="rejectedLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
                 }

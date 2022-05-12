@@ -1,0 +1,185 @@
+﻿@model IEnumerable<DAL.Models.Domain.VirtualAccount.PaymentDisbursement>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TrancheDocumentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChequeNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDReceiver)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDReceiverCNIC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDRelationWithScholar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDReceiverContactNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerCnic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisbursementAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DirectAgentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DDScannedCopy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChequeScannedCopy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OtherDocumentScannedCopy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMethod)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrancheDocumentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChequeNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDReceiver)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDReceiverCNIC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDRelationWithScholar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDReceiverContactNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerCnic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MobileNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DisbursementAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DirectAgentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DDScannedCopy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChequeScannedCopy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OtherDocumentScannedCopy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Applicant.ApplicantReferenceNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMethod.PaymentMethodId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PaymentDisbursementId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PaymentDisbursementId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PaymentDisbursementId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

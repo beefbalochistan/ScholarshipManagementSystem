@@ -29,20 +29,93 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
         }
 
         // GET: Tranchees
-        public async Task<IActionResult> Index(bool w, bool x, bool y, bool z, string name)
+        public async Task<IActionResult> Index(bool x, bool y, string name)
         {
-            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a=>a.IsActive == w && a.IsClose == y && a.IsOpen == z);
-            if (x)
-            {
-                applicationDbContext = applicationDbContext.Where(a=>a.IsApproved == x);
-            }
+            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a=> a.IsApproved == y);            
             ViewBag.heading = name;
+            return View(await applicationDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> ActiveTrancheDisbursement()
+        {
+            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a => a.IsApproved == true && a.IsClose == false);            
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> _Index(int id)
         {
             var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a=>a.IsActive == true && a.IsOpen == true && a.IsLock == false);
             return PartialView(await applicationDbContext.ToListAsync());
+        }
+        [HttpPost]
+        public async Task<JsonResult> OnOffTranche(int trancheId, bool IsChecked)
+        {
+            var tranche = _context.Tranche.Find(trancheId);
+            tranche.IsActive = IsChecked;
+            _context.Update(tranche);
+            await _context.SaveChangesAsync();
+            return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
+        }
+        [HttpPost]
+        public async Task<JsonResult> RequestForApprovalTranche(int trancheId, bool IsChecked)
+        {
+            var tranche = _context.Tranche.Find(trancheId);
+            tranche.IsLock = IsChecked;            
+            if (IsChecked)
+            {
+                tranche.IsActive = false;
+            }
+            _context.Update(tranche);
+            await _context.SaveChangesAsync();
+            return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
+        }
+        [HttpPost]
+        public async Task<JsonResult> TrancheApprovedRequest(int TrancheId, decimal ApprovedAmount, IFormFile Attachment)
+        {
+            var currentTrache = _context.Tranche.Find(TrancheId);
+            //----------------Upload Attachment----------------------
+            if (Attachment != null)
+            {
+                if (Attachment.Length > 0)
+                {
+                    //Getting FileName
+                    var fileName = Path.GetFileName(Attachment.FileName);
+                    //Getting file Extension
+                    var fileExtension = Path.GetExtension(fileName);
+                    // concatenating  FileName + FileExtension                                             
+                    /*using (var target = new MemoryStream())
+                    {
+                        Attachment.CopyTo(target);
+                        obj.AttachFileData = target.ToArray();
+                    }*/
+                    var rootPath = Path.Combine(
+                      Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Tranche\\TId" + TrancheId.ToString() + "\\");
+                    fileName = fileName.Replace("&", "n"); fileName = fileName.Replace(" ", ""); fileName = fileName.Replace("#", "H"); fileName = fileName.Replace("(", ""); fileName = fileName.Replace(")", "");
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 1000);
+                    fileName = "Document" + randomNumber.ToString() + fileName;
+                    currentTrache.ApprovedAttachment = Path.Combine("/Documents/Tranche/TId" + TrancheId + "/" + fileName);//Server Path
+                    string sPath = Path.Combine(rootPath);
+                    if (!System.IO.Directory.Exists(sPath))
+                    {
+                        System.IO.Directory.CreateDirectory(sPath);
+                    }
+                    string FullPathWithFileName = Path.Combine(sPath, fileName);
+                    using (var stream = new FileStream(FullPathWithFileName, FileMode.Create))
+                    {
+                        await Attachment.CopyToAsync(stream);
+                    }
+                }
+            }
+            //-------------------------------------------------------
+            currentTrache.ApprovedOn = DateTime.Today;
+            currentTrache.ApprovedAmount = ApprovedAmount;
+            currentTrache.IsApproved = true;
+            currentTrache.IsActive = false;
+            currentTrache.IsLock = true;
+            currentTrache.IsClose = true;
+            currentTrache.IsOpen = false;
+            _context.Update(currentTrache);
+            await _context.SaveChangesAsync();
+            return Json(new { isValid = true, message = "Tranche Approved Successfully!" });
         }
         // GET: Tranchees/Details/5
         public async Task<IActionResult> Details(int? id)

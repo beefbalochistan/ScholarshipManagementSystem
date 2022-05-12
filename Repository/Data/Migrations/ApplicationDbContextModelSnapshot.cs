@@ -16,7 +16,7 @@ namespace Repository.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.12")
+                .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
@@ -1183,6 +1183,9 @@ namespace Repository.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -2504,6 +2507,100 @@ namespace Repository.Data.Migrations
                     b.ToTable("ApplicantFinanceCurrentStatus", "Student");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentDisbursement", b =>
+                {
+                    b.Property<int>("PaymentDisbursementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AgentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ApplicantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicantReferenceNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChequeNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChequeScannedCopy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerCnic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDReceiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDReceiverCNIC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDReceiverContactNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDRelationWithScholar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DDScannedCopy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DirectAgentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DisbursementAmount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherDocumentScannedCopy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrancheDocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransactionAmount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentDisbursementId");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.ToTable("PaymentDisbursement");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.Property<int>("TrancheId")
@@ -2532,6 +2629,9 @@ namespace Repository.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("DisbursedAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -2539,6 +2639,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsClose")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisbursementInProcess")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsLock")
@@ -2580,8 +2683,8 @@ namespace Repository.Data.Migrations
                     b.Property<bool>("IsEmail")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsExecuteSuccessfully")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsExecuteSuccessfully")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsPGPGenerated")
                         .HasColumnType("bit");
@@ -2596,6 +2699,9 @@ namespace Repository.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PGPKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SuccessList")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TrancheId")
@@ -3074,6 +3180,69 @@ namespace Repository.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("GetUserSchemeLevelAccess");
+                });
+
+            modelBuilder.Entity("DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcess", b =>
+                {
+                    b.Property<int>("ApplicantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicantReferenceNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institute")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RollNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchemeLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TrancheDocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrancheId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicantId");
+
+                    b.ToTable("SPApplicantPaymentInProcess");
+                });
+
+            modelBuilder.Entity("DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcessSummary", b =>
+                {
+                    b.Property<int>("TrancheId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Applicant")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TrancheId");
+
+                    b.ToTable("SPApplicantPaymentInProcessSummary");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -4050,6 +4219,25 @@ namespace Repository.Data.Migrations
                     b.Navigation("SeverityLevel");
 
                     b.Navigation("UserAccessToForward");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentDisbursement", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.Student.Applicant", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
+
+                    b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
