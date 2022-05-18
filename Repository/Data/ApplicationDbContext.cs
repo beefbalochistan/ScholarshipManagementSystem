@@ -29,6 +29,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus> ApplicantFinanceCurrentStatus { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn> SchemeLevelMandatoryColumn { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.PaymentMethod> PaymentMethod { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.CompanyInfo> CompanyInfo { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Scheme> Scheme { get; set; }

@@ -55,14 +55,15 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
         }
         [HttpPost]
-        public async Task<JsonResult> RequestForApprovalTranche(int trancheId, bool IsChecked)
+        public async Task<JsonResult> RequestForApprovalTranche(int trancheId, bool IsChecked, string ChequeNo)
         {
             var tranche = _context.Tranche.Find(trancheId);
-            tranche.IsLock = IsChecked;            
+            tranche.IsLock = true;            
             if (IsChecked)
             {
                 tranche.IsActive = false;
             }
+            tranche.ChequeNo = ChequeNo;
             _context.Update(tranche);
             await _context.SaveChangesAsync();
             return Json(new { isValid = true, message = "Applicant Resumed Successfully!" });
@@ -111,7 +112,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             currentTrache.IsApproved = true;
             currentTrache.IsActive = false;
             currentTrache.IsLock = true;
-            currentTrache.IsClose = true;
+            //currentTrache.IsClose = true;
             currentTrache.IsOpen = false;
             _context.Update(currentTrache);
             await _context.SaveChangesAsync();
@@ -337,6 +338,11 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 trancheDocument.CSVAttachmentOn = DateTime.Today;
                 trancheDocument.TrancheId = trancheId;
                 _context.Add(trancheDocument);
+                //------------------------------
+                var currentTranche = _context.Tranche.Find(trancheId);
+                currentTranche.IsDisbursementInProcess = true;
+                _context.Update(currentTranche);
+                //------------------------------
                 _context.SaveChanges();
                 var TrancheMaxId = _context.TrancheDocument.Max(a=>a.TrancheDocumentId);
                 if (updateCSV_paymentInProcess != "")

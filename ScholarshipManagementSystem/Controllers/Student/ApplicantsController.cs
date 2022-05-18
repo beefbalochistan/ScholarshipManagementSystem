@@ -202,119 +202,315 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {            
             return View();
         }
-        public JsonResult GenerateLetter(int id)
+        public async Task<JsonResult> GenerateLetter(int id)
         {
-            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            Tranche trancheObj = _context.Tranche.Find(id);
+            var CompanyInfo = _context.CompanyInfo.Find(1);
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, FatherName = a.FatherName, Name = a.Name, BFormCNIC = a.BFormCNIC, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, Amount = a.SchemeLevelPolicy.Amount, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } }).ToList();/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             var commitAmount = _context.Tranche.Find(id).CurrentCommittedAmount;
             var rootPath = Path.Combine(
-                                  Directory.GetCurrentDirectory(), "wwwroot\\Documents\\TrancheList");
+                            Directory.GetCurrentDirectory(), "wwwroot\\Documents\\TrancheList\\Attachments\\ID" + id + "\\");
             if (!System.IO.Directory.Exists(rootPath))
             {
                 System.IO.Directory.CreateDirectory(rootPath);
             }
-            string link = "/Documents/Test.pdf";
-           /* Document doc = new Document();
-            PdfWriter.GetInstance(doc, new FileStream(Path.Combine(rootPath, "Test.pdf"), FileMode.Create));
-            doc.Open();
-            PdfPTable tableLayout = new PdfPTable(4);
-            doc.Add(Add_Content_To_PDF(tableLayout));
-            doc.Close();*/
-
-            Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 15);            
-            PdfWriter.GetInstance(pdfDoc, new FileStream(Path.Combine(rootPath, "Test2.pdf"), FileMode.Create));
+           
+            string fileName = "TranchLetter";            
+            Random random = new Random();
+            int randomNumber = random.Next(1, 1000);
+            fileName = "Document" + randomNumber.ToString() + fileName + ".pdf";
+            trancheObj.LetterAttachment = Path.Combine("/Documents/TrancheList/Attachments/ID" + id + "/" + fileName);//Server Path
+            
+            Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 15);
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, new FileStream(Path.Combine(rootPath, fileName), FileMode.Create));
             pdfDoc.Open();
-            Chunk chunk = new Chunk("BEEF", FontFactory.GetFont("Arial", 20, Font.BOLDITALIC, BaseColor.MAGENTA));
-            pdfDoc.Add(chunk);
+            Phrase chunk = new Phrase("BEEF", FontFactory.GetFont("Arial", 20, Font.BOLDITALIC, BaseColor.MAGENTA));
+            //pdfDoc.Add(chunk);
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            pdfDoc.Add(line);
+            //pdfDoc.Add(line);
             //Table
-            PdfPTable table = new PdfPTable(2);
-            table.WidthPercentage = 100;
-            table.HorizontalAlignment = 0; //0=Left, 1=Centre, 2=Right
-            table.SpacingBefore = 20f;
-            table.SpacingAfter = 30f;
-
+            PdfPTable tableHeader = new PdfPTable(2);
+            tableHeader.WidthPercentage = 100;
+            float[] headers = { 30,70 }; //Header Widths  
+            tableHeader.SetWidths(headers);
+            tableHeader.HorizontalAlignment = 2; //0=Left, 1=Centre, 2=Right
+            tableHeader.SpacingBefore = 20f;
+            tableHeader.SpacingAfter = 30f;
+            /*tableLayout.AddCell(new PdfPCell(new Phrase(heading, new Font(Font.NORMAL, 13, 1)))
+                    {
+                        Colspan = 8,
+                        PaddingBottom = 4,
+                        HorizontalAlignment = Element.ALIGN_CENTER,
+                        Border = Rectangle.NO_BORDER
+                    });*/
             //Cell no 1
             PdfPCell cell = new PdfPCell();
-            cell.Border = 0;
+            cell.Border = 0;            
             iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(Path.Combine(
-                                  Directory.GetCurrentDirectory(), "wwwroot\\assets\\images\\BEEF.png"));
+                                  Directory.GetCurrentDirectory(), CompanyInfo.Logo));
             image.ScaleAbsolute(100, 70);
             cell.AddElement(image);
-            table.AddCell(cell);
+            tableHeader.AddCell(cell).Rowspan = 5;
 
             //Cell no 2
-            chunk = new Chunk("Total No of Applicants: "+ applicationDbContext.Count().ToString() +",\nCommitted Amount: " + commitAmount.ToString(), FontFactory.GetFont("Arial", 15, Font.NORMAL, BaseColor.PINK));
+            /*chunk = new Phrase("Balochistan Education Endowment Fund", FontFactory.GetFont("Arial", 15, Font.BOLD | Font.UNDERLINE, BaseColor.BLACK));
             cell = new PdfPCell();
+            cell.HorizontalAlignment = Element.ALIGN_RIGHT;
             cell.Border = 0;
             cell.AddElement(chunk);
-            table.AddCell(cell);
-
-            //Add table to document    
-            pdfDoc.Add(table);            
-            //Table
-            table = new PdfPTable(6);
-            
-            table.WidthPercentage = 100;
-            table.HorizontalAlignment = 0;
-            table.SpacingBefore = 20f;
-            table.SpacingAfter = 30f;
-
-            //Cell
-            cell = new PdfPCell();
-            chunk = new Chunk("List of applicants");
-            cell.AddElement(chunk);
-            cell.Colspan = 6;            
-            cell.PaddingBottom = 5;
-            cell.BackgroundColor = BaseColor.PINK;
-            table.AddCell(cell);
-            table.AddCell("S.No");
-            table.AddCell("Scheme Level");
-            table.AddCell("Applicant Reference");
-            table.AddCell("Roll Number");
-            table.AddCell("Name");
-            table.AddCell("Father Name");
-            int counter = 1;
-            foreach(var obj in applicationDbContext)
+            table.AddCell(cell);*/
+            tableHeader.AddCell(new PdfPCell(new Phrase(CompanyInfo.FullName, FontFactory.GetFont("Arial", 15, Font.BOLD | Font.UNDERLINE, BaseColor.BLACK)))
             {
-                table.AddCell(counter.ToString());
-                table.AddCell(obj.SchemeLevelPolicy.SchemeLevel.Name);
-                table.AddCell(obj.ApplicantReferenceNo);
-                table.AddCell(obj.RollNumber);
-                table.AddCell(obj.Name);
-                table.AddCell(obj.FatherName);
-                counter++;
-            }                       
+                Colspan = 4,
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,                
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase(CompanyInfo.AuthorizeThrough, FontFactory.GetFont("Arial", 10, Font.NORMAL, BaseColor.BLACK)))
+            {                
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase(CompanyInfo.Address, FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Telephone: "+ CompanyInfo.Telephone +" Fax: " + CompanyInfo.Fax, FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Web: "+ CompanyInfo.Web +" Email: " + CompanyInfo.Email, FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase("No.0027/V&D/BEEF/QTA/_____", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+            });
+            tableHeader.AddCell(new PdfPCell(new Phrase(DateTime.Today.ToString(), FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Border = 0,
+            });
+            //Add table to document    
+            pdfDoc.Add(tableHeader);
+            //Para
+            //Table2
+            PdfPTable tableLetter = new PdfPTable(2);
+            tableLetter.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
+            tableLetter.SpacingBefore = 20f;
+            tableLetter.SpacingAfter = 30f;
+            tableLetter.WidthPercentage = 95;
+            float[] headers2 = { 15, 85 }; //Header Widths  
+            tableLetter.SetWidths(headers2);
+            //Cell no 1            
+            tableLetter.AddCell(new PdfPCell(new Phrase("To,\n\n\n", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+                Colspan = 2,
+            });
 
+            //Cell no 2
+            tableLetter.AddCell(new PdfPCell(new Phrase("", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+            });
+            tableLetter.AddCell(new PdfPCell(new Phrase("The Concerned official / Head,", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {                
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+                PaddingBottom = 2
+            });
+            tableLetter.AddCell(new PdfPCell(new Phrase("", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+            });
+            tableLetter.AddCell(new PdfPCell(new Phrase("@PaymentMethodAdress\n\n\n", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+                PaddingBottom = 2
+            });
+            tableLetter.AddCell(new PdfPCell(new Phrase("Subject:", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+            });
+            tableLetter.AddCell(new PdfPCell(new Phrase("Cheque for Disbursement of stipend to @100 Scholars of Tranch @TranchName\n\n\n", FontFactory.GetFont("Arial", 11, Font.BOLD | Font.UNDERLINE, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Border = 0,
+            });
+            Paragraph paragraph = new Paragraph("        With reference to the above-quoted subject, @paymentMethod has been selected for disbursement of stipends to @100 Scholars for the Tranch @TranceName year @fiscalyear. A cheque amounting to PKRs.@AmountofTranch / -bearing number @chequeNumber drawn to @PaymentMethodadress, is enclosed herewith for which the, detail is as below:", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK));            
+            paragraph.IndentationLeft = 20f;       
+            paragraph.FirstLineIndent = 20f;
+            tableLetter.AddCell(new PdfPCell(paragraph)
+            {
+                HorizontalAlignment = Element.ALIGN_JUSTIFIED,
+                Border = 0,
+                Colspan = 2,
+                MinimumHeight = 101f
+            });
+            //Add table to document    
+            pdfDoc.Add(tableLetter);
+            PdfPTable tblTrancheSummary = new PdfPTable(3);
+
+            tblTrancheSummary.WidthPercentage = 100;
+            tblTrancheSummary.HorizontalAlignment = 0;
+            tblTrancheSummary.SpacingBefore = 20f;
+            tblTrancheSummary.SpacingAfter = 30f;
+
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("S.No", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                BackgroundColor = BaseColor.PINK
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("Particulars", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                BackgroundColor = BaseColor.PINK
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("Amount", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                BackgroundColor = BaseColor.PINK
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("1.", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,                
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("@StudentCount of Tranch @ ID", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,                
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PKRs. @TranchAmount", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,                
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("Total Amount", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                Colspan = 2,
+                HorizontalAlignment = Element.ALIGN_LEFT,                
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PK Rs. 2,400,000/-", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,                
+            });
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("\n\nList of Scholars for Disbursement is enclosed and would be shared along with instructions and requirements via email and MIS using payment method @paymentMethod.", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Colspan = 3,
+                Border = 0
+            });
             //Add table to document
-            pdfDoc.Add(table);
-            Paragraph para = new Paragraph();
-            para.Add("System generated list.");
-            pdfDoc.Add(para);
+            pdfDoc.Add(tblTrancheSummary);
+            //--------------------------------Signature------------------------------
+            PdfPTable tblSignature = new PdfPTable(2);
+
+            tblSignature.WidthPercentage = 100;
+            tblSignature.HorizontalAlignment = 0;
+            tblSignature.SpacingBefore = 20f;
+            tblSignature.SpacingAfter = 30f;
+
+            tblSignature.AddCell(new PdfPCell(new Phrase("Signatory 1 BEEF:", FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0
+            });
+            tblSignature.AddCell(new PdfPCell(new Phrase("Signatory 2 BEEF:", FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0,
+                PaddingBottom = 80
+            });
+            tblSignature.AddCell(new PdfPCell(new Phrase(CompanyInfo.Singatory1Name, FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0
+            });
+            tblSignature.AddCell(new PdfPCell(new Phrase(CompanyInfo.Singatory2Name, FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0
+            });
+            tblSignature.AddCell(new PdfPCell(new Phrase(CompanyInfo.Singatory1Designation, FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0,
+                PaddingBottom = 10
+            });
+            tblSignature.AddCell(new PdfPCell(new Phrase(CompanyInfo.Singatory2Designation, FontFactory.GetFont("Arial", 12, Font.BOLD, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                Border = 0
+            });
+            //Add table to document
+            pdfDoc.Add(tblSignature);
+            //----------------------------------END----------------------------------                                   
+            writer.PageEvent = new Footer();
             /*chunk = new Chunk("How to Create a Pdf File");
             chunk.Font = FontFactory.GetFont("Arial", 25, Font.BOLD, BaseColor.RED);
             chunk.SetAnchor("https://www.yogihosting.com/create-pdf-asp-net-mvc/");
             pdfDoc.Add(chunk);            */
-            pdfDoc.Close();
-            return Json(new { isValid = true, link = link });
-        }
-        private PdfPTable Add_Content_To_PDF(PdfPTable tableLayout)
-        {
-            float[] headers = { 20, 20, 20, 30}; //Header Widths  
-            tableLayout.SetWidths(headers); //Set the pdf headers  
-            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
-                                               //Add Title to the PDF file at the top        
-            string heading = "Public Health Engineering Department";
-
-            tableLayout.AddCell(new PdfPCell(new Phrase("test", new Font(Font.NORMAL, 10, 1)))
+            pdfDoc.NewPage();                        
+            //Add table to document    
+            pdfDoc.Add(tableHeader);
+            PdfPTable tblApplicantList = new PdfPTable(7);
+            float[] tblApplicantListHeaders = { 5,20,15,20,15,15,10 }; //Header Widths  
+            tblApplicantList.SetWidths(tblApplicantListHeaders);
+            tblApplicantList.WidthPercentage = 100;
+            tblApplicantList.HorizontalAlignment = 0;
+            tableHeader.SpacingAfter = 20f;
+            //Cell
+            cell = new PdfPCell();
+            if (applicationDbContext.Count() > 0)
             {
-                Colspan = 4,
-                HorizontalAlignment = Element.ALIGN_LEFT,
-                PaddingBottom = 8,
-                Border = iTextSharp.text.Rectangle.NO_BORDER
-            });
-            return tableLayout;
-        }
+                chunk = new Phrase(applicationDbContext.Count().ToString() + " Scholarships of " + applicationDbContext.ElementAt(0).SchemeLevelPolicy.SchemeLevel.Name);
+            }
+            else
+            {
+                chunk = new Phrase("0 Scholarships List");
+            }    
+            cell.AddElement(chunk);
+            cell.Colspan = 7;
+            cell.PaddingBottom = 5;
+            cell.BackgroundColor = BaseColor.PINK;
+            tblApplicantList.AddCell(cell);
+            tblApplicantList.AddCell(new Phrase("S.No", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("Scheme", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("Reference#", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("Name", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("CNIC", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("Contact#", FontFactory.GetFont("Arial", 10, Font.BOLD)));
+            tblApplicantList.AddCell(new Phrase("Amount", FontFactory.GetFont("Arial", 10, Font.BOLD)));            
+            int counter = 1;
+            foreach (var obj in applicationDbContext)
+            {
+                tblApplicantList.AddCell(new Phrase(counter.ToString(), FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.SchemeLevelPolicy.SchemeLevel.Name, FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.ApplicantReferenceNo, FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.Name, FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.BFormCNIC, FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.StudentMobile, FontFactory.GetFont("Arial", 9, Font.NORMAL)));                
+                tblApplicantList.AddCell(new Phrase(obj.SchemeLevelPolicy.Amount.ToString(), FontFactory.GetFont("Arial", 9, Font.NORMAL)));                               
+                counter++;
+            }
+            //Add table to document
+            pdfDoc.Add(tblApplicantList);
+            pdfDoc.Add(tblSignature);
+            writer.PageEvent = new Footer();
+            pdfDoc.Close();            
+            trancheObj.IsLetterGenerated = true;
+            _context.Update(trancheObj);
+            await _context.SaveChangesAsync();
+            return Json(new { isValid = true, link = trancheObj.LetterAttachment });
+        }      
         public IActionResult ApplicantSendSMS()
         {            
             return View();

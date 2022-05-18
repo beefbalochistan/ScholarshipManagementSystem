@@ -16,13 +16,65 @@
         font-size: 14px;
         text-align: center;
     }
+    l {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .ull li {
+        list-style: none;
+        margin: 0 20px;
+    }
+
+        .ull li a {
+            position: relative;
+            display: block;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            line-height: 63px;
+            background: #50a5f1;
+            border-radius: 50%;
+            font-size: 30px;
+            color: #1d971d;
+            transition: .5s;
+        }
+
+            .ull li a::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: #ffee10;
+                transition: .5s;
+                transform: scale(.9);
+                z-index: -1;
+            }
+
+            .ull li a:hover::before {
+                transform: scale(1.1);
+                box-shadow: 0 0 15px #ffee10;
+            }
+
+            .ull li a:hover {
+                color: #ffee10;
+                box-shadow: 0 0 5px #ffee10;
+                text-shadow: 0 0 5px #ffee10;
+            }
 </style>
 <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
 <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <div class="row">
     @foreach (var item in Model)
     {
-
 
         <div class="col-md-3">
             @*<div class="mt-2">
@@ -32,22 +84,43 @@
                 <div class="card-body">
                     <div class="product-img position-relative">
                         @*<div class="avatar-sm product-ribbon">
-                <span class="avatar-title rounded-circle  bg-primary">
-                    - 25 %
-                </span>
-            </div>*@
+                                <span class="avatar-title rounded-circle  bg-primary">
+                                    - 25 %
+                                </span>
+                            </div>*@
                         <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
                             <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
                         </a>
                     </div>
                     <div class="text-center">
-                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>
-                        <a asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@item.TrancheId"><button data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track" class="btn btn-success btn-circle btn-xl">Disburse</button></a>
-                        <div class="m-2">
-                            <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
-                        </div>
-                    </div>                  
-                    
+                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>                        
+                            <ul class="ull m-0">
+                                <li>
+                                    @{
+                                        if (item.IsDisbursementInProcess)
+                                        {
+                                            <a onclick="notificationme('Tranche Is already in process!')" style="cursor:not-allowed;background-color:orange" data-toggle="tooltip" data-placement="top" title="Disbursement already in process" data-original-title="Track">
+                                                <i class="fab fa-chrome"></i>
+                                            </a>                                            
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@item.TrancheId" data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track">
+                                                <i class="fab fa-chrome"></i>
+                                            </a>
+                                        }
+                                    }
+                                </li>
+                            </ul>                            
+                            @*<button data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track" class="btn btn-success btn-circle btn-xl">Disburse</button>*@                        
+                    <div>
+                        @*<button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>*@
+                        <span id="shower" style="color:#50a5f1;cursor:pointer;" data-toggle="modal" data-src="@item.ApprovedAttachment" data-target="#attachmentModal">
+                            <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Approved Letter
+                        </span>
+                    </div>
+                    </div>
+
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item mr-3">
                             <span class="badge badge-info">Approved</span>
@@ -78,6 +151,8 @@
     }
 </div>
 
+
+
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -87,6 +162,18 @@
             <div class="modal-body">
                 <div id="rendercontent">
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="attachmentModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">           
+            <div class="modal-body pb-0">
+                <embed id="pdfFileAttachment" src="" frameborder="0" width="100%" height="550px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -104,6 +191,9 @@
         $(document).ready(function () {
             $("#myInput").change(function () {
                 alert("A file has been selected.");
+            });
+            $("#shower").click(function () {
+                $('#pdfFileAttachment').attr("src", $(this).attr("data-src"));
             });
         });
     </script>

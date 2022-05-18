@@ -24,10 +24,13 @@ namespace DAL.Models.Domain.VirtualAccount
         public bool IsClose { get; set; } = false;
         public bool IsLock { get; set; } = false;
         public bool IsApproved { get; set; } = false;
+        public bool IsLetterGenerated { get; set; } = false;
         public DateTime CreatedOn { get; set; } = DateTime.Today.Date;
         [DataType(DataType.Date)]
         public DateTime ApprovedOn { get; set; }
         public string ApprovedAttachment { get; set; }
+        public string LetterAttachment { get; set; }
+        public string ChequeNo { get; set; }
         public decimal CurrentCommittedAmount { get; set; }
         public decimal ApprovedAmount { get; set; } = 0;
         public decimal DisbursedAmount { get; set; } = 0;

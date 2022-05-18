@@ -595,6 +595,64 @@ namespace Repository.Data.Migrations
                     b.ToTable("BEEFSection", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.CompanyInfo", b =>
+                {
+                    b.Property<int>("CompanyInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorizeThrough")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory1Designation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory1Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory2Designation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory2Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory3Designation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Singatory3Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Web")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyInfoId");
+
+                    b.ToTable("CompanyInfo", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
                 {
                     b.Property<int>("DAEInstituteId")
@@ -2620,6 +2678,9 @@ namespace Repository.Data.Migrations
                     b.Property<DateTime>("ApprovedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ChequeNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -2644,11 +2705,17 @@ namespace Repository.Data.Migrations
                     b.Property<bool>("IsDisbursementInProcess")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsLetterGenerated")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsLock")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LetterAttachment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

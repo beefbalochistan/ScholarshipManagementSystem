@@ -22,43 +22,43 @@
             <div class="card">
                 <div class="card-body">
                     <div class="product-img position-relative">
-                        @*<div class="avatar-sm product-ribbon">
-                <span class="avatar-title rounded-circle  bg-primary">
-                    - 25 %
-                </span>
-            </div>*@
                         <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
-                            <img src="@item.PaymentMethod.Logo"  style="height:80px" alt="" class="img-fluid mx-auto d-block">
+                            <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
                         </a>
                     </div>
                     <div class="text-center">
                         <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>
                         @*@{
-            if (item.IsActive)03105656325 
-            {
-                <i class="display-4 mdi mdi-progress-wrench text-success"></i>
-            }
-            else if (item.IsClose)
-            {
-                <i class="display-4 mdi mdi-progress-close text-warning"></i>
-            }
-            else if (item.IsApproved)
-            {
-                <i class="display-4 mdi mdi-progress-check text-success"></i>
-            }
-            else
-            {
-                <i class="display-4 mdi mdi-progress-clock text-danger"></i>
-            }
-        }*@
+                if (item.IsActive)03105656325
+                {
+                    <i class="display-4 mdi mdi-progress-wrench text-success"></i>
+                }
+                else if (item.IsClose)
+                {
+                    <i class="display-4 mdi mdi-progress-close text-warning"></i>
+                }
+                else if (item.IsApproved)
+                {
+                    <i class="display-4 mdi mdi-progress-check text-success"></i>
+                }
+                else
+                {
+                    <i class="display-4 mdi mdi-progress-clock text-danger"></i>
+                }
+            }*@
 
                         <div class="square-switch mt-2">
                             <input type="checkbox" id=@("switchONOFF" + item.TrancheId) switch="info" checked="@(item.IsActive == true)" onclick="OnOffTranche(@item.TrancheId)" disabled="@(item.IsLock == true)" />
                             <label for=@("switchONOFF" + item.TrancheId) data-on-label="ON" class="m-0" data-off-label="OFF"></label>
-                            <div class="custom-control custom-switch" dir="ltr">
-                                <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp(@item.TrancheId)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
-                                <label class="custom-control-label" for=@("customSwitchRFA" + item.TrancheId)>Request for Approval</label>
-                            </div>
+                            @{
+                                if (!item.IsLock)
+                                {
+                                    <div class="custom-control custom-switch" dir="ltr">
+                                        <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp(@item.TrancheId, @item.CurrentCommittedAmount)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
+                                        <label class="custom-control-label" for=@("customSwitchRFA" + item.TrancheId)>Request for Approval</label>
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
                     <div class="mt-2 mb-2">
@@ -79,11 +79,33 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="mt-1">
-                        <button class="mr-2 btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Tranche Approval" data-original-title="Track" onclick="TrancheApprovedRequest(@item.TrancheId, @item.CurrentCommittedAmount)">Approval</button>
-                        <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
-                    </div>
+                    @{
+                        if (item.IsLock)
+                        {
 
+
+                            <div class="mt-1 text-center">
+                                @if (item.IsLetterGenerated)
+                                {
+                                <a href="@item.LetterAttachment" style="font-size: 11px; color: #50a5f1;" target="_blank" id=@("btnDownload" + item.TrancheId)> <i class="bx bx-file label-icon"></i> View - Letter for request</a>
+                                }
+                                else
+                                {
+                                    <p style="cursor: pointer; color: #50a5f1; font-size: 11px; margin:0" id=@("btnGenerateLetter" + item.TrancheId) onclick="generateLetter('@item.TrancheId')">Generate Letter</p>
+                                    <a href="#" target="_blank" style="display: none; font-size: 11px; color: #50a5f1;" id=@("btnDownload" + item.TrancheId)> <i class="bx bx-file label-icon"></i> View - Letter for request</a>
+                                }
+                            </div>
+                        }
+                    }
+                    <div class="mt-1">
+                        @{
+                            if (item.IsLock)
+                            {
+                                <button class="mr-2 btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Tranche Approval" data-original-title="Track" onclick="TrancheApprovedRequest(@item.TrancheId, @item.CurrentCommittedAmount)"><i class="bx bx-paperclip label-icon"></i> Approval</button>
+                            }
+                        }
+                        <button id=@("btnView" + item.TrancheId) type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,7 +144,7 @@
     <script>
         function OnOffTranche(TrancheId) {
             //alert(TrancheId)
-            var switchONOFF = $("#switchONOFF" + TrancheId);
+            var switchONOFF = $("#switchONOFF" + TrancheId);            
             var IsChecked = switchONOFF[0].checked;
             var message = "";
             if (IsChecked) {
@@ -163,55 +185,122 @@
                 }
             });
         }
-        function reqForApp(TrancheId) {
+        function reqForApp(TrancheId, committedamount) {
             //alert(TrancheId)
             var switchONOFF = $("#switchONOFF" + TrancheId);
+            var switchONOFFRequestForApproval = $("#customSwitchRFA" + TrancheId);
             var IsChecked = switchONOFF[0].checked;
-            //alert(IsChecked)
-            if (IsChecked) {
-                switchONOFF.prop('checked', false);
-                switchONOFF.attr('disabled', true);
-            } else {
-                switchONOFF.attr('disabled', false);
-            }
+           
             var message = "";
             if (IsChecked) {
                 message = "Tranche: Request for Approval is In Process!";
             } else {
                 message = "Tranche: Request for Approval Withdraw!";
             }
-
-            $.ajax({
-                type: "POST",
-                url: "/Tranches/RequestForApprovalTranche",
-                data: { trancheId: TrancheId, IsChecked: IsChecked },
-                dataType: "json",
-                success: function (response) {
-                    if (response.isValid) {
-                        Swal.fire({
-                            title: "Done!",
-                            text: message,
-                            type: "success",
-                            showCancelButton: 0,
-                            confirmButtonColor: "#34c38f"
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Failed",
-                            text: "Something Went Wrong!",
-                            type: "warning",
-                            showCancelButton: 0,
-                            confirmButtonColor: "#556ee6"
-                        });
-                    }
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You want to De-Active Selectd Tranche!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Submit Request!"
+            }).then(function (t) {                
+                if (t.value) {
+                    Swal.fire({
+                        title: "Please Enter the Cheque Number",
+                        html: "<div class='col-md-10'><ul class='list-inline mb-2'><li class='list-inline-item mr-3'><span class='badge badge-success'>Committed Amount</span></li><li class='list-inline-item mr-3 float-right' data-toggle='tooltip' data-placement='top' title='' data-original-title='Committed Amount'><i class='bx bx-lock mr-1'></i> <span class='badge badge-pill badge-soft-info font-size-12'>" + committedamount + "</span></li></ul><div class='col-md-10'><label class='control-label' stype='font-size:12px'>Enter Cheque Number</label><input data-toggle ='tooltip' data-placement='top' title='Cheque Number' name='chequeno' id='chequeno' required></div>",
+                        showCancelButton: !0,
+                        confirmButtonText: "Submit",
+                        //showLoaderOnConfirm: !0,
+                        confirmButtonColor: "#556ee6",
+                        cancelButtonColor: "#f46a6a",
+                        preConfirm: () => {                           
+                            if (document.getElementById('chequeno').value === "") {
+                                Swal.showValidationMessage(
+                                    `Please Enter Valid Cheque Number`
+                                )
+                            }
+                        }
+                    }).then(function (t) {
+                        if (t.value) {                            
+                            $.ajax({
+                                type: "POST",
+                                url: "/Tranches/RequestForApprovalTranche",
+                                data: { trancheId: TrancheId, IsChecked: IsChecked, ChequeNo: document.getElementById('chequeno').value },
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.isValid) {
+                                        Swal.fire({
+                                            title: "Done!",
+                                            text: message,
+                                            type: "success",
+                                            showCancelButton: 0,
+                                            confirmButtonColor: "#34c38f"
+                                        });
+                                        switchONOFF.prop('checked', false);
+                                        switchONOFF.attr('disabled', true);
+                                        switchONOFFRequestForApproval.attr('disabled', true);
+                                    } else {
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: "Something Went Wrong!",
+                                            type: "warning",
+                                            showCancelButton: 0,
+                                            confirmButtonColor: "#556ee6"
+                                        });
+                                    }
+                                },
+                                failure: function (response) {
+                                    alert(response.responseText);
+                                },
+                                error: function (response) {
+                                    alert(response.responseText);
+                                }
+                            });                            
+                        } @*else {
+                            notificationme();
+                        } *@
+            })
+                    @*$.ajax({
+                        type: "POST",
+                        url: "/Tranches/RequestForApprovalTranche",
+                        data: { trancheId: TrancheId, IsChecked: IsChecked },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.isValid) {
+                                Swal.fire({
+                                    title: "Done!",
+                                    text: message,
+                                    type: "success",
+                                    showCancelButton: 0,
+                                    confirmButtonColor: "#34c38f"
+                                });
+                                switchONOFF.prop('checked', false);
+                                switchONOFF.attr('disabled', true);
+                                switchONOFFRequestForApproval.attr('disabled', true);
+                            } else {
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: "Something Went Wrong!",
+                                    type: "warning",
+                                    showCancelButton: 0,
+                                    confirmButtonColor: "#556ee6"
+                                });
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });*@
+                    //Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                } else {
+                    switchONOFFRequestForApproval.prop('checked', false);
                 }
-            });
+            })            
         }
         function createModal(trancheId) {
             debugger;
@@ -313,6 +402,47 @@
                 "hideMethod": "hide"
             };
             toastr.info(message);
+        }
+
+        function generateLetter(TrancheId) {
+            //alert(TrancheId)
+            var btnLetter = $("#btnGenerateLetter" + TrancheId);
+            var link = $("#btnDownload" + TrancheId);            
+            $.ajax({
+                type: "POST",
+                url: "/Applicants/GenerateLetter",
+                data: { id: TrancheId},
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    if (response.isValid) {
+                        Swal.fire({
+                            title: "Done!",
+                            text: "Letter generated successfully!",
+                            type: "success",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#34c38f"
+                        });
+                        link.show();
+                        btnLetter.hide();
+                        link.attr("href", response.link);
+                    } else {
+                        Swal.fire({
+                            title: "Failed",
+                            text: "Something Went Wrong!",
+                            type: "warning",
+                            showCancelButton: 0,
+                            confirmButtonColor: "#556ee6"
+                        });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
         }
     </script>
 }
