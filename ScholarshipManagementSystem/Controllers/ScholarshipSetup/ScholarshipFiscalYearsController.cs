@@ -48,9 +48,8 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // GET: ScholarshipFiscalYears/Create
         public IActionResult Create()
         {
-            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 2), 2).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
-            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 2, 2).Select(x =>
-
+            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 3), 3).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - (2000 + 3), 3).Select(x =>
            new SelectListItem()
            {
                Text = x.ToString(),
@@ -64,7 +63,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScholarshipFiscalYearId,Name,Code,Description")] ScholarshipFiscalYear scholarshipFiscalYear)
+        public async Task<IActionResult> Create([Bind("ScholarshipFiscalYearId,Name,Code,Description, IsActive")] ScholarshipFiscalYear scholarshipFiscalYear)
         {
             if (ModelState.IsValid)
             {
@@ -88,13 +87,13 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
             {
                 return NotFound();
             }
-            ViewBag.YearsList = new SelectList(Enumerable.Range((DateTime.Now.Year - 2), 2).Select(g => 
+            ViewBag.YearsList = new SelectList(Enumerable.Range((DateTime.Now.Year - 3), 3).Select(g => 
             new SelectListItem() 
             { 
                 Value = (g.ToString() + " - " + (g + 1).ToString()), 
                 Text = (g.ToString() + " - " + (g + 1).ToString()) 
-            }), "Value", "Text", scholarshipFiscalYear.Name);
-            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 2, 2).Select(x =>
+            }), "Value", "Text", scholarshipFiscalYear.Name);           
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - (2000 + 3), 3).Select(x =>
            new SelectListItem()
            {
                Text = x.ToString(),
@@ -108,7 +107,7 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScholarshipFiscalYearId,Name,Code,Description")] ScholarshipFiscalYear scholarshipFiscalYear)
+        public async Task<IActionResult> Edit(int id, [Bind("ScholarshipFiscalYearId,Name,Code,Description,IsActive")] ScholarshipFiscalYear scholarshipFiscalYear)
         {
             if (id != scholarshipFiscalYear.ScholarshipFiscalYearId)
             {
@@ -135,16 +134,85 @@ namespace ScholarshipManagementSystem.Controllers.ScholarshipSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 2), 2).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
-            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - 2, 2).Select(x =>
+            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 3), 3).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - (2000 + 3), 3).Select(x =>
+            new SelectListItem()
+            {
+                Text = x.ToString(),
+                Value = x.ToString()
+            }), "Value", "Text", scholarshipFiscalYear.Code);
+            return View(scholarshipFiscalYear);
+        }
+
+        public async Task<IActionResult> ActiveDeactive(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var scholarshipFiscalYear = await _context.ScholarshipFiscalYear.FindAsync(id);
+            if (scholarshipFiscalYear == null)
+            {
+                return NotFound();
+            }
+            var yearList = Enumerable.Range((DateTime.Now.Year - 3), 3).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();             
+            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 3), 3).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - (2000 + 3), 3).Select(x =>
            new SelectListItem()
            {
                Text = x.ToString(),
                Value = x.ToString()
-           }), "Value", "Text");
+           }), "Value", "Text", scholarshipFiscalYear.Code);
+
+
             return View(scholarshipFiscalYear);
         }
 
+        // POST: ScholarshipFiscalYears/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActiveDeactive(int id, [Bind("ScholarshipFiscalYearId,Name,Code,Description,IsActive")] ScholarshipFiscalYear scholarshipFiscalYear)
+        {
+            if (id != scholarshipFiscalYear.ScholarshipFiscalYearId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var matchedRecords = _context.ScholarshipFiscalYear.Where(a=>a.ScholarshipFiscalYearId != scholarshipFiscalYear.ScholarshipFiscalYearId).ToList();
+                    matchedRecords.ForEach(e => e.IsActive = false);
+                    _context.Update(matchedRecords);
+                    _context.Update(scholarshipFiscalYear);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ScholarshipFiscalYearExists(scholarshipFiscalYear.ScholarshipFiscalYearId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.YearsList = Enumerable.Range((DateTime.Now.Year - 2), 2).Select(g => new SelectListItem { Value = (g.ToString() + " - " + (g + 1).ToString()), Text = (g.ToString() + " - " + (g + 1).ToString()) }).ToList();
+            ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year - (2000 + 3), 3).Select(x =>
+           new SelectListItem()
+           {
+               Text = x.ToString(),
+               Value = x.ToString()
+           }), "Value", "Text", scholarshipFiscalYear.Code);
+            return View(scholarshipFiscalYear);
+        }
         // GET: ScholarshipFiscalYears/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -16,6 +16,7 @@ using System.Text;
 using System.Globalization;
 using DAL.Models.Domain.ScholarshipSetup;
 using DAL.Models.Domain.MasterSetup;
+using OpenPGP.Services;
 
 namespace ScholarshipManagementSystem.Controllers.VirtualAccount
 {
@@ -148,6 +149,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             obj.IsLock = false;
             obj.IsOpen = true;
             obj.ApplicantCount = 0;
+
             obj.CurrentCommittedAmount = 0;
             return View(obj);
         }
@@ -298,7 +300,32 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<JsonResult> GeneratePGP(int trancheDocumentId)
+        {
+            //string outFileServerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\csvfile324.csv.pgp");
+            string publicKeyFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\22D3A388A3A8EAEDB539C3890FCB241B3A6D0898.asc");
+            string inFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\TrancheId2\\CSV\\ApplicantCSVFile56711.csv");
 
+            var tranchdoc = _context.TrancheDocument.Find(trancheDocumentId);
+            if (tranchdoc != null)
+            {
+                string outFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\" + tranchdoc.CSVAttachment + ".pgp");
+                inFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\" + tranchdoc.CSVAttachment);
+                bool RESULT = PGPService.GeneratePGPFile(outFilePath, inFilePath, publicKeyFilePath);
+                if (RESULT)
+                {
+                    tranchdoc.IsPGPGenerated = true;
+                    tranchdoc.PGPGeneratedOn = DateTime.Today;
+                    tranchdoc.PGPAttachment = tranchdoc.CSVAttachment + ".pgp";
+                    tranchdoc.PGPKey = publicKeyFilePath;
+
+                    _context.Update(tranchdoc);
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, message = "PGP Generated Successfully!" });
+                }
+            }
+            return Json(new { isValid = false, message = "Failed to Generate PGP File!" });
+        }
         public async Task<IActionResult> GenerateCSV(int trancheId, string startDate, string endDate)
         {
             var applicants = await _context.Applicant.Include(a=>a.SchemeLevelPolicy).Include(a=>a.District).Where(a => a.TrancheId == trancheId && a.IsDisbursed == false).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, Name = a.Name, BFormCNIC = a.BFormCNIC, StudentMobile = a.StudentMobile, District = new District { Name = a.District.Name}, SchemeLevelPolicy = new SchemeLevelPolicy { Amount = a.SchemeLevelPolicy.Amount } }).ToArrayAsync();
@@ -350,7 +377,9 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                     updateCSV_paymentInProcess = updateCSV_paymentInProcess.TrimEnd(',');
                     await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE [Student].[Applicant] SET [IsPaymentInProcess] = 1, [TrancheDocumentId] = { TrancheMaxId } WHERE [ApplicantId] IN( {updateCSV_paymentInProcess} )");
                 }
-            }
+                var MaxTranchDocumentId = _context.TrancheDocument.Max(a=>a.TrancheDocumentId);
+                await GeneratePGP(MaxTranchDocumentId);
+            }            
             return RedirectToAction("_Index","TrancheDocuments", new { id = trancheId});
         }
         private readonly Random _random = new Random();

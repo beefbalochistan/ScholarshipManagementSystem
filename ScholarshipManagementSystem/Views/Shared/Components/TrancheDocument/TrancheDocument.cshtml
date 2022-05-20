@@ -71,7 +71,7 @@
                             }
                             else
                             {
-                                <button class="btn btn-sm btn-outline-success" type="button" onclick="uploadSFTPFile(@item.TrancheDocumentId)">Send To Server</button>
+                                <button id="sendToServer" class="btn btn-sm btn-outline-success" type="button" onclick="uploadSFTPFile(@item.TrancheDocumentId)">Send To Server</button><span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span>
                             }
                         }
                         else

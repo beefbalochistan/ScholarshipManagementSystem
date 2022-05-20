@@ -8,13 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using DAL.Models.Domain.VirtualAccount;
 using Repository.Data;
 using System.IO;
-using OpenPGP.Services;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using CsvHelper;
 using ScholarshipManagementSystem.Models;
 using System.Globalization;
 using System.Collections.Generic;
+using Renci.SshNet;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ScholarshipManagementSystem.Controllers.VirtualAccount
 {
@@ -22,6 +23,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
+        IWebHostEnvironment _env;
         public TrancheDocumentsController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
@@ -45,45 +47,48 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
         {
             return ViewComponent("TrancheDocument", new { id });
         }
-        public async Task<JsonResult> GeneratePGP(int trancheDocumentId)
+        
+        public static bool Send(string host, string username, string password, string port, string fileName)
         {
-            string outFilePath = "";// Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\csvfile324.csv.pgp");
-            string publicKeyFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\22D3A388A3A8EAEDB539C3890FCB241B3A6D0898.asc");
-            string inFilePath = "";// Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Documents\\Finance\\TrancheId2\\CSV\\ApplicantCSVFile56711.csv");
-
-            var tranchdoc = _context.TrancheDocument.Find(trancheDocumentId);
-            if (tranchdoc != null)
-            {               
-                outFilePath = tranchdoc.CSVAttachment + ".pgp";
-                inFilePath = tranchdoc.CSVAttachment;
-                bool RESULT = PGPService.GeneratePGPFile(outFilePath, inFilePath, publicKeyFilePath);
-                if (RESULT)
+            try
+            {
+                var connectionInfo = new Renci.SshNet.ConnectionInfo(host, username, new PasswordAuthenticationMethod(username, password));
+                var fileName1 = Path.GetFileName(fileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\" + fileName);
+                var path = Path.Combine(
+                              Directory.GetCurrentDirectory(), "wwwroot", fileName);
+                // Upload File
+                using (var sftp = new SftpClient(host, username, password))
                 {
-                    tranchdoc.IsPGPGenerated = true;
-                    tranchdoc.PGPGeneratedOn = DateTime.Today;
-                    tranchdoc.PGPAttachment = outFilePath;
-                    tranchdoc.PGPKey = publicKeyFilePath;
-
-                    _context.Update(tranchdoc);
-                    await _context.SaveChangesAsync();
-                    return Json(new { isValid = true, message = "PGP Generated Successfully!" });
+                    sftp.ConnectionInfo.Timeout = TimeSpan.FromMinutes(5);
+                    sftp.Connect();
+                    //sftp.ChangeDirectory("/Desktop");
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                    {
+                        //sftp.BufferSize = 4 * 1024;
+                        sftp.UploadFile(fs, Path.GetFileName(fileName));
+                    }
+                    sftp.Disconnect();
                 }
-            }                        
-            return Json(new { isValid = false, message = "Failed to Generate PGP File!" });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
-
         public async Task<JsonResult> SFTPUploadFile(int trancheDocumentId)
         {
-            string host = "192.168.0.199";            
-            string username = "ali";            
-            string password = "123";
+            string host = "103.8.14.69";            
+            string username = "beef";            
+            string password = "FeUbQtB9";
             string port = "22";
             string uploadFile = "";
             var tranchdoc = _context.TrancheDocument.Find(trancheDocumentId);
             if (tranchdoc != null)
             {
-                uploadFile = tranchdoc.PGPAttachment;
-                bool RESULT = SendFileToServer.Send(host, username, password, port, uploadFile);                
+                uploadFile = Path.Combine(Directory.GetCurrentDirectory(), tranchdoc.PGPAttachment);
+                bool RESULT = Send(host, username, password, port, uploadFile);                
                 if (RESULT)
                 {
                     tranchdoc.IsSendToServer = true;

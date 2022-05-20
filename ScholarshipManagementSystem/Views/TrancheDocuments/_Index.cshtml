@@ -8,9 +8,10 @@
 }
 <style>
     table, td, th {
-       text-align: center
+        text-align: center
     }
 </style>
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
 <p>
     <a asp-action="GetApplicantListInTrancheForDisbursement" asp-controller="Applicants" asp-route-id="@ViewBag.TrancheId">View Current Applicant Pool</a>
 </p>
@@ -20,9 +21,10 @@
 
 @section Scripts
 {
+    <script src="~/js/bootstrap-waitingfor.js"></script>
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
     <script>
-    function generatePGPFile(trancheDocumentId) {
-
+    function generatePGPFile(trancheDocumentId) {       
         $('.loading').show();
         $.ajax({
             type: "POST",
@@ -31,10 +33,10 @@
             dataType: "json",
             success: function (response) {
                 if (response.isValid) {
-                    uploadSFTPFile(trancheDocumentId);
+                    //uploadSFTPFile(trancheDocumentId);
                     //fetchTrancheDocumentData();
                     $('#datatable').DataTable();
-                    //notificationme("PGP File Generated Successfully!");                    
+                    notificationme("PGP File Generated Successfully!");
                 } else {
                     notificationme("Failed to Generate PGP File!");
                 }
@@ -49,18 +51,37 @@
         });
         }
 
-        function uploadSFTPFile(trancheDocumentId) {
-
+        function uploadSFTPFile(trancheDocumentId) {            
+            waitingDialog.show('Uploading PGP File On Server...', {
+                // if the option is set to boolean false, it will hide the header and "message" will be set in a paragraph above the progress bar.
+                // When headerText is a not-empty string, "message" becomes a content above the progress bar and headerText string will be set as a text inside the H3;
+                headerText: '',
+                // this will generate a heading corresponding to the size number
+                headerSize: 3,
+                // extra class(es) for the header tag
+                headerClass: '',
+                // bootstrap postfix for dialog size, e.g. "sm", "m"
+                dialogSize: 'sm',
+                // bootstrap postfix for progress bar type, e.g. "success", "warning";
+                progressType: 'success',
+                // determines the tag of the content element
+                contentElement: 'p',
+                // extra class(es) for the content tag
+                contentClass: 'content'
+            });
             $('.loading').show();
+            $("#sendToServer").attr('disabled', 'disabled');
             $.ajax({
                 type: "POST",
                 url: "/TrancheDocuments/SFTPUploadFile",
                 data: { trancheDocumentId: trancheDocumentId },
                 dataType: "json",
                 success: function (response) {
+                    waitingDialog.hide();
+                    $("#sendToServer").removeAttr('disabled');
                     if (response.isValid) {
                         fetchTrancheDocumentData();
-                        $('#datatable').DataTable();
+                        $('#datatable').DataTable();                                               
                         notificationme("Uploaded File Successfully!");
                     } else {
                         notificationme("Failed to Upload File on Server!");

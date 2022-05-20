@@ -55,13 +55,17 @@
                                                 </th>
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.Code)
-                                                </th>
+                                                </th>                                               
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.Code)
+                                                    Is Active
                                                 </th>
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                               @* @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <th>Edit</th>
+                                                }*@
+                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                {
+                                                    <th>Activate</th>
                                                 }
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
                                                 {
@@ -80,19 +84,24 @@
                                                     @Html.DisplayFor(modelItem => item.Code)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Description)
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
                                                 </td>
                                                 @*<td>
             <a asp-action="Details" class="btn btn-primary btn-sm btn-rounded" asp-route-id="@item.ScholarshipId">View Details</a>
         </td>*@
 
-                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
                                                 {
                                                     <td>
                                                         <a asp-action="Edit" asp-route-id="@item.ScholarshipFiscalYearId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                                     </td>
+                                                }*@
+                                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Edit)).Result.Succeeded)
+                                                {
+                                                    <td>
+                                                        <a asp-action="ActiveDeactive" asp-route-id="@item.ScholarshipFiscalYearId" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                    </td>
                                                 }
-
                                                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
                                                 {
                                                     <td>
