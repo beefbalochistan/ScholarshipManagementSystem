@@ -16,6 +16,8 @@ namespace DAL.Models.Domain.VirtualAccount
         [ForeignKey("Tranche")]
         [Display(Name = "Tranche")]
         public int TrancheId { get; set; }
+        [Display(Name = "Tranche Document Name")]
+        public string TrancheDocumentName { get; set; }
         [Display(Name = "CSV File")]
         public string CSVAttachment { get; set; }
         [Display(Name = "CSV On")]

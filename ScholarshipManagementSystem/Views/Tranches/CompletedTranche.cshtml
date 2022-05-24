@@ -1,0 +1,145 @@
+﻿@model IEnumerable<DAL.Models.Domain.VirtualAccount.Tranche>
+
+@{
+    ViewBag.Title = ViewBag.heading;
+    ViewBag.pTitle = ViewBag.heading;
+    ViewBag.pageTitle = "Account";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+
+        <div class="col-md-3">
+            @*<div class="mt-2">
+                    <h5>Tranche</h5>
+                </div>*@
+            <div class="card">
+                <div class="card-body">
+                    <div class="product-img position-relative">
+                        <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
+                            <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>                       
+                        <div class="square-switch mt-2">
+                            <input type="checkbox" id=@("switchONOFF" + item.TrancheId) switch="info" checked="@(item.IsActive == true)" onclick="OnOffTranche(@item.TrancheId)" disabled="@(item.IsLock == true)" />
+                            <label for=@("switchONOFF" + item.TrancheId) data-on-label="ON" class="m-0" data-off-label="OFF"></label>
+                            @{
+                                if (!item.IsLock)
+                                {
+                                    <div class="custom-control custom-switch" dir="ltr">
+                                        <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp(@item.TrancheId, @item.CurrentCommittedAmount)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
+                                        <label class="custom-control-label" for=@("customSwitchRFA" + item.TrancheId)>Request for Approval</label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="mt-2 mb-2">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item mr-3">
+                                <span class="badge badge-success">No of Applicants</span>
+                            </li>
+                            <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="No of Applicants">
+                                <i class="bx bx-user mr-1"></i> <span class="badge badge-pill badge-soft-success font-size-12">@item.ApplicantCount</span>
+                            </li>
+                        </ul>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item mr-3">
+                                <span class="badge badge-success">Committed</span>
+                            </li>
+                            <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Committed Amount">
+                                <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@item.CurrentCommittedAmount</span>
+                            </li>
+                        </ul>
+                    </div>
+                    @{
+                        if (item.IsLock)
+                        {
+
+
+                            <div class="mt-1 text-center">
+                                @if (item.IsLetterGenerated)
+                                {
+                                    <a href="@item.LetterAttachment" style="font-size: 11px; color: #50a5f1;" target="_blank" id=@("btnDownload" + item.TrancheId)> <i class="bx bx-file label-icon"></i> View - Letter for request</a>
+                                }
+                                else
+                                {
+                                    <p style="cursor: pointer; color: #50a5f1; font-size: 11px; margin:0" id=@("btnGenerateLetter" + item.TrancheId) onclick="generateLetter('@item.TrancheId')">Generate Letter</p>
+                                    <a href="#" target="_blank" style="display: none; font-size: 11px; color: #50a5f1;" id=@("btnDownload" + item.TrancheId)> <i class="bx bx-file label-icon"></i> View - Letter for request</a>
+                                }
+                            </div>
+                        }
+                    }                   
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="rendercontent">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+
+  
+    <script>           
+        function createModal(trancheId) {
+            debugger;
+            $(".loading").show();
+            $.ajax({
+                url: '@Url.Action("ApplicantInTranche", "Applicants")',
+                data: {
+                    trancheId: trancheId
+                },
+                success: function (data) {
+                    $("#rendercontent").html(data);
+                    $(".loading").hide();
+                }
+            });
+        }        
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
+        }
+
+    </script>
+}

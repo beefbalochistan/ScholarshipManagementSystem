@@ -25,7 +25,8 @@
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-                    <li class="menu-title" key="t-menu">Finance Management</li>                    
+                    <li class="menu-title" key="t-menu">Finance Management</li>
+
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
@@ -59,25 +60,31 @@
                                 </li>
                             }
                             <li>
-                                <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="false" asp-route-y="false" asp-route-z="true" asp-route-name="De-Active Tranche" class=" waves-effect">
-                                    <span key="t-calendar">Completed Tranches</span>
+                                <a asp-action="CompletedTranche" asp-controller="Tranches" asp-route-name="Closed Tranche" class=" waves-effect">
+                                    <span key="t-calendar">Closed Tranche</span>
                                 </a>
                             </li>
                             @*<li>
-                                <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="" asp-route-y="true" asp-route-z="false" asp-route-name="Closed Tranche" class=" waves-effect">
-                                    <span key="t-calendar">Closed Tranche</span>
-                                </a>
-                            </li>*@
+                        <a asp-action="Index" asp-controller="Tranches" asp-route-w="false" asp-route-x="" asp-route-y="true" asp-route-z="false" asp-route-name="Closed Tranche" class=" waves-effect">
+                            <span key="t-calendar">Closed Tranche</span>
+                        </a>
+                    </li>*@
                         </ul>
                     </li>
-
+                    <li>
+                        <a asp-action="ApplicantInProcessforvd" asp-controller="Applicants" class=" waves-effect">
+                            <i class="bx bxs-eraser"></i>
+                            <span @*id="TotalInProcessFiles"*@ class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetInProcessFile())*@</span>
+                            <span key="t-forms">Applicant In V&amp;D <img @*id="inProcesssLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                        </a>
+                    </li>
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-eraser"></i>
-                            <span @*id="TotalWaitingFiles" *@class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetWaitingFile())*@</span>
+                            <span @*id="TotalWaitingFiles" *@="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetWaitingFile())*@</span>
                             <span key="t-forms">Applicant Waiting  <img @*id="waitingLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>

@@ -2774,6 +2774,9 @@ namespace Repository.Data.Migrations
                     b.Property<string>("SuccessList")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TrancheDocumentName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TrancheId")
                         .HasColumnType("int");
 

@@ -99,7 +99,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             //int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
             ViewBag.MaxFYId = MaxFYId;
             //ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
-            ViewBag.TrancheId = _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).Select(a => a.TrancheId).FirstOrDefault();
+            ViewBag.TrancheId = _context.Tranche.Where(a => a.IsApproved == true && a.IsClose == false).Select(a => a.TrancheId).FirstOrDefault();
 
             var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}", MaxFYId).ToListAsync();
             return View(applicationDbContext);

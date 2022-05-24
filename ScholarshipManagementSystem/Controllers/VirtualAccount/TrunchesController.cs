@@ -36,6 +36,12 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             ViewBag.heading = name;
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> CompletedTranche(string name)
+        {
+            var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a => a.IsClose == true);
+            ViewBag.heading = name;
+            return View(await applicationDbContext.ToListAsync());
+        }
         public async Task<IActionResult> ActiveTrancheDisbursement()
         {
             var applicationDbContext = _context.Tranche.Include(t => t.PaymentMethod).Where(a => a.IsApproved == true && a.IsClose == false);            
@@ -149,7 +155,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             obj.IsLock = false;
             obj.IsOpen = true;
             obj.ApplicantCount = 0;
-
+            ViewBag.CurrentFiscalYearCode = _context.PolicySRCForum.Include(a => a.ScholarshipFiscalYear).OrderByDescending(a=>a.ScholarshipFiscalYearId).Select(a=>a.ScholarshipFiscalYear.Code).FirstOrDefault();
             obj.CurrentCommittedAmount = 0;
             return View(obj);
         }
@@ -364,6 +370,8 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 trancheDocument.CSVAttachment = Path.Combine("/Documents/Finance/TrancheId" + trancheId.ToString() + "/CSV/" + filename);//Server Path
                 trancheDocument.CSVAttachmentOn = DateTime.Today;
                 trancheDocument.TrancheId = trancheId;
+                string count = (_context.TrancheDocument.Count(a => a.TrancheId == trancheId) + 1).ToString();                
+                trancheDocument.TrancheDocumentName = _context.Tranche.Find(trancheId).Name + "-" + count.PadLeft(3, '0');
                 _context.Add(trancheDocument);
                 //------------------------------
                 var currentTranche = _context.Tranche.Find(trancheId);
@@ -408,6 +416,12 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 return false;
             }
             return true;
+        }
+        public async Task<JsonResult> GetTrancheName(int PaymentMethodId, string CurrentFYCode)
+        {
+            string count = (_context.Tranche.Count(a => a.PaymentMethodId == PaymentMethodId) + 1).ToString();
+            string name = "T" + CurrentFYCode + _context.PaymentMethod.Find(PaymentMethodId).Code + count.PadLeft(3, '0');
+            return Json(new { isValid = true, name = name });
         }
         private bool TrancheExists(int id)
         {           
