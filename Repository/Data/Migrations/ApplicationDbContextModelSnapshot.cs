@@ -1233,6 +1233,21 @@ namespace Repository.Data.Migrations
                     b.ToTable("Operator", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.PaymentDisbursementMode", b =>
+                {
+                    b.Property<int>("PaymentDisbursementModeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentDisbursementModeId");
+
+                    b.ToTable("PaymentDisbursementMode", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.PaymentMethod", b =>
                 {
                     b.Property<int>("PaymentMethodId")
@@ -1249,28 +1264,25 @@ namespace Repository.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Designation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FocalPerson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Logo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MobileNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublicKeyFilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SFTP_IP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SFTP_Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SFTP_Port")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SFTP_Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PaymentMethodId");
@@ -2662,6 +2674,46 @@ namespace Repository.Data.Migrations
                     b.ToTable("PaymentDisbursement");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentMethodMode", b =>
+                {
+                    b.Property<int>("PaymentMethodModeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentDisbursementModeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicKeyFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_IP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Port")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFTP_Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentMethodModeId");
+
+                    b.HasIndex("PaymentDisbursementModeId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.ToTable("PaymentMethodMode", "VirtualAccount");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.Property<int>("TrancheId")
@@ -2771,6 +2823,9 @@ namespace Repository.Data.Migrations
                     b.Property<string>("PGPKey")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PaymentMethodModeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SuccessList")
                         .HasColumnType("nvarchar(max)");
 
@@ -2781,6 +2836,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TrancheDocumentId");
+
+                    b.HasIndex("PaymentMethodModeId");
 
                     b.HasIndex("TrancheId");
 
@@ -4313,6 +4370,25 @@ namespace Repository.Data.Migrations
                     b.Navigation("PaymentMethod");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentMethodMode", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentDisbursementMode", "PaymentDisbursementMode")
+                        .WithMany()
+                        .HasForeignKey("PaymentDisbursementModeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentDisbursementMode");
+
+                    b.Navigation("PaymentMethod");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.Tranche", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
@@ -4326,11 +4402,19 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.TrancheDocument", b =>
                 {
+                    b.HasOne("DAL.Models.Domain.VirtualAccount.PaymentMethodMode", "PaymentMethodMode")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodModeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.Domain.VirtualAccount.Tranche", "Tranche")
                         .WithMany()
                         .HasForeignKey("TrancheId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PaymentMethodMode");
 
                     b.Navigation("Tranche");
                 });

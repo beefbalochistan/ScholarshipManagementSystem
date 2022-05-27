@@ -39,7 +39,7 @@
 
   <ItemGroup>
     <Reference Include="OpenPGP">
-      <HintPath>..\..\OpenPGP\OpenPGP\bin\Release\net5.0\OpenPGP.dll</HintPath>
+      <HintPath>Common\DLL\OpenPGP.dll</HintPath>
     </Reference>
   </ItemGroup>
 

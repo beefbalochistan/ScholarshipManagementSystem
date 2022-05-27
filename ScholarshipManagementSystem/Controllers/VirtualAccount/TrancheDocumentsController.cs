@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using Renci.SshNet;
 using Microsoft.AspNetCore.Hosting;
+using OpenPGP.Services;
 
 namespace ScholarshipManagementSystem.Controllers.VirtualAccount
 {
@@ -47,36 +48,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
         {
             return ViewComponent("TrancheDocument", new { id });
         }
-        
-        public static bool Send(string host, string username, string password, string port, string fileName)
-        {
-            try
-            {
-                var connectionInfo = new Renci.SshNet.ConnectionInfo(host, username, new PasswordAuthenticationMethod(username, password));
-                var fileName1 = Path.GetFileName(fileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\" + fileName);
-                var path = Path.Combine(
-                              Directory.GetCurrentDirectory(), "wwwroot", fileName);
-                // Upload File
-                using (var sftp = new SftpClient(host, username, password))
-                {
-                    sftp.ConnectionInfo.Timeout = TimeSpan.FromMinutes(5);
-                    sftp.Connect();
-                    //sftp.ChangeDirectory("/Desktop");
-                    using (FileStream fs = new FileStream(filePath, FileMode.Open))
-                    {
-                        //sftp.BufferSize = 4 * 1024;
-                        sftp.UploadFile(fs, Path.GetFileName(fileName));
-                    }
-                    sftp.Disconnect();
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-            return true;
-        }
+                
         public async Task<JsonResult> SFTPUploadFile(int trancheDocumentId)
         {
             string host = "103.8.14.69";            
@@ -88,7 +60,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             if (tranchdoc != null)
             {
                 uploadFile = Path.Combine(Directory.GetCurrentDirectory(), tranchdoc.PGPAttachment);
-                bool RESULT = Send(host, username, password, port, uploadFile);                
+                bool RESULT = SendFileToServer.Send(host, username, password, port, uploadFile);                
                 if (RESULT)
                 {
                     tranchdoc.IsSendToServer = true;

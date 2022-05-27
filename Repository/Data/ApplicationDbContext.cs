@@ -16,6 +16,9 @@ namespace Repository.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<DegreeSecondLevel>().HasNoKey();
             modelBuilder.Entity<DegreeThirdLevel>().HasNoKey();
+
+            /*modelBuilder.Entity<DAL.Models.Domain.VirtualAccount.PaymentMethodMode>()
+            .HasKey(c => new { c.PaymentDisbursementModeId, c.PaymentMethodId });*/
         }
         public DbSet<DAL.Models.Domain.MasterSetup.Provience> Provience { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Division> Division { get; set; }
@@ -29,6 +32,8 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.Student.Finance.ApplicantFinanceCurrentStatus> ApplicantFinanceCurrentStatus { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.SchemeLevelMandatoryColumn> SchemeLevelMandatoryColumn { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.PaymentMethod> PaymentMethod { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.PaymentDisbursementMode> PaymentDisbursementMode { get; set; }
+        public DbSet<DAL.Models.Domain.VirtualAccount.PaymentMethodMode> PaymentMethodMode { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.CompanyInfo> CompanyInfo { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.InstituteDepartment> InstituteDepartment { get; set; }
         public DbSet<DAL.Models.Domain.ScholarshipSetup.Scholarship> Scholarship { get; set; }

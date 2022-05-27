@@ -332,7 +332,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             }
             return Json(new { isValid = false, message = "Failed to Generate PGP File!" });
         }
-        public async Task<IActionResult> GenerateCSV(int trancheId, string startDate, string endDate)
+        public async Task<IActionResult> GenerateCSV(int trancheId, string startDate, string endDate, int paymentMethodModeId)
         {
             var applicants = await _context.Applicant.Include(a=>a.SchemeLevelPolicy).Include(a=>a.District).Where(a => a.TrancheId == trancheId && a.IsDisbursed == false).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, Name = a.Name, BFormCNIC = a.BFormCNIC, StudentMobile = a.StudentMobile, District = new District { Name = a.District.Name}, SchemeLevelPolicy = new SchemeLevelPolicy { Amount = a.SchemeLevelPolicy.Amount } }).ToArrayAsync();
             List<CSVModel> mylist = new List<CSVModel>();
@@ -370,6 +370,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 trancheDocument.CSVAttachment = Path.Combine("/Documents/Finance/TrancheId" + trancheId.ToString() + "/CSV/" + filename);//Server Path
                 trancheDocument.CSVAttachmentOn = DateTime.Today;
                 trancheDocument.TrancheId = trancheId;
+                trancheDocument.PaymentMethodModeId = paymentMethodModeId;
                 string count = (_context.TrancheDocument.Count(a => a.TrancheId == trancheId) + 1).ToString();                
                 trancheDocument.TrancheDocumentName = _context.Tranche.Find(trancheId).Name + "-" + count.PadLeft(3, '0');
                 _context.Add(trancheDocument);

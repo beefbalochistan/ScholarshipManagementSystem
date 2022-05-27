@@ -7,136 +7,142 @@
     <thead>
         <tr>
             <th>
-                <span><i class="bx bxs-file-doc font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachment)
+                <span><i class="bx bxs-bank font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.TrancheDocumentName)
             </th>
             <th>
-                <span><i class="bx bx-loader font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachmentOn)
+                <span><i class="bx bxs-file-doc font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachment)
             </th>
+           @* <th>
+                <span><i class="bx bx-loader font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.CSVAttachmentOn)
+            </th>*@
             <th>
                 <span><i class="bx bxs-file-blank font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.PGPAttachment)
             </th>
-            <th>
+           @* <th>
                 <span><i class="bx bx-loader font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.PGPGeneratedOn)
-            </th>
+            </th>*@
             <th>
                 <span><i class="bx bx-cloud-upload font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsSendToServer)
             </th>
-            <th>
-                <span><i class="bx bx-mail-send font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsEmail)
-            </th>
             @* <th>
-                    <span><i class="bx bx-closet font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsExecuteSuccessfully)
-                </th>*@
-            <th><span><i class="bx bx-cloud-upload font-size-18 align-middle mr-1"></i></span>Disbursment</th>
+            <span><i class="bx bx-mail-send font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsEmail)
+        </th>*@
+            @* <th>
+            <span><i class="bx bx-closet font-size-18 align-middle mr-1"></i></span>@Html.DisplayNameFor(model => model.IsExecuteSuccessfully)
+        </th>*@
+            @*<th><span><i class="bx bx-cloud-upload font-size-18 align-middle mr-1"></i></span>Disbursment</th>*@
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    <a href="@item.CSVAttachment">Download</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CSVAttachmentOn)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrancheDocumentName)
+            </td>
+            <td>
+                <a href="@item.CSVAttachment">Download</a>
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.CSVAttachmentOn)
+            </td>*@
+            @{
+                if (item.IsPGPGenerated)
+                {
+                    <td>
+                        @*<a href="@item.CSVAttachment">Download</a>*@
+                        <span><img src="~/assets/images/tick.png" width="20" /></span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PGPGeneratedOn)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <button class="btn btn-sm btn-outline-success" type="button" onclick="generatePGPFile(@item.TrancheDocumentId)">Generate PGP</button>
+                    </td>
+                    <td>
+                        N/A
+                    </td>
+                }
+            }
+            <td>
                 @{
                     if (item.IsPGPGenerated)
                     {
-                        <td>
-                            @*<a href="@item.CSVAttachment">Download</a>*@
+                        if (item.IsSendToServer)
+                        {
                             <span><img src="~/assets/images/tick.png" width="20" /></span>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PGPGeneratedOn)
-                        </td>
+                        }
+                        else
+                        {
+                            <button id="sendToServer" class="btn btn-sm btn-outline-success" type="button" onclick="uploadSFTPFile(@item.TrancheDocumentId)">Send To Server</button><span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span>
+                        }
                     }
                     else
                     {
-                        <td>
-                            <button class="btn btn-sm btn-outline-success" type="button" onclick="generatePGPFile(@item.TrancheDocumentId)">Generate PGP</button>
-                        </td>
-                        <td>
-                            N/A
-                        </td>
+                        <span>N/A</span>
                     }
                 }
-                <td>
-                    @{
-                        if (item.IsPGPGenerated)
+            </td>
+            @*<td>
+                @{
+                    if (item.IsPGPGenerated)
+                    {
+                        if (item.IsEmail)
                         {
-                            if (item.IsSendToServer)
-                            {
-                                <span><img src="~/assets/images/tick.png" width="20" /></span>
-                            }
-                            else
-                            {
-                                <button id="sendToServer" class="btn btn-sm btn-outline-success" type="button" onclick="uploadSFTPFile(@item.TrancheDocumentId)">Send To Server</button><span class="loading" style="display:none"> <img src="~/assets/images/loading.gif" height="18" /></span>
-                            }
+                            <span><img src="~/assets/images/tick.png" width="20" /></span>
                         }
                         else
                         {
-                            <span>N/A</span>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="">Send Email</button>
                         }
                     }
-                </td>
-                <td>
-                    @{
-                        if (item.IsPGPGenerated)
-                        {
-                            if (item.IsEmail)
-                            {
-                                <span><img src="~/assets/images/tick.png" width="20" /></span>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="">Send Email</button>
-                            }
-                        }
-                        else
-                        {
-                            <span>N/A</span>
-                        }
+                    else
+                    {
+                        <span>N/A</span>
                     }
-                </td>
-                @*<td>
-                        @{
-                            if (item.IsPGPGenerated)
-                            {
-                                if (item.IsExecuteSuccessfully == 1)
-                                {
-                                    <span><img src="~/assets/images/tick.png" width="20" /></span>
-                                }
-                                else if (item.IsExecuteSuccessfully == 0)
-                                {
+                }
+            </td>*@
+            @*<td>
+            @{
+                if (item.IsPGPGenerated)
+                {
+                    if (item.IsExecuteSuccessfully == 1)
+                    {
+                        <span><img src="~/assets/images/tick.png" width="20" /></span>
+                    }
+                    else if (item.IsExecuteSuccessfully == 0)
+                    {
 
-                                    <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="">Passed</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger waves-effect waves-light" onclick="">Failed</button>
-                                }
-                                else
-                                {
-                                    <span><img src="~/assets/images/cross.png" width="20" /></span>
-                                }
-                            }
-                            else
-                            {
-                                <span>N/A</span>
-                            }
-                        }
-                    </td>*@
-                <td>
-                    @{
-                        if (item.IsSendToServer)
-                        {
-                            <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="setId(@item.TrancheDocumentId)" data-toggle="modal" data-target=".bs-example-modal-center">Upload</button>
-                        }
-                        else
-                        {
-                            <span>N/A</span>
-                        }
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="">Passed</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger waves-effect waves-light" onclick="">Failed</button>
                     }
-                </td>
-            </tr>
+                    else
+                    {
+                        <span><img src="~/assets/images/cross.png" width="20" /></span>
+                    }
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            }
+        </td>*@
+            <td>
+                @{
+                    if (item.IsSendToServer)
+                    {
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect waves-light" onclick="setId(@item.TrancheDocumentId)" data-toggle="modal" data-target=".bs-example-modal-center">Upload</button>
+                    }
+                    else
+                    {
+                        <span>N/A</span>
+                    }
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -12,10 +12,9 @@
 <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 @{
-    if (Model.Count() > 0)
-    {        
     <form asp-controller="Tranches" asp-action="GenerateCSV" enctype="multipart/form-data">
         <input type="hidden" name="trancheId" value="@ViewBag.TrancheId" />
+        <input type="hidden" name="paymentMethodModeId" />
         <div class="form-inline p-2">
             <label class="m-2">Start &amp; End Date</label>
             <div>
@@ -23,12 +22,31 @@
                     <input type="text" class="form-control" id="startDate" name="startDate" />
                     <input type="text" class="form-control" id="endDate" name="endDate" />
                 </div>
+                <label>Payment Mode</label>
+                <select class="form-control" id="paymentMethodModeId" asp-items="@ViewBag.PaymentMethodModeId"></select>
             </div>
-            <button class="btn btn-info ml-2" type="submit">Generate CSV File</button>            
+           
+            @if (Model.Count() > 0)
+            {
+                <button class="btn btn-info ml-2" type="submit">Start to Disburse Payment</button>
+            }
+            else
+            {
+        <button disabled="disabled" style="cursor:not-allowed" class="btn btn-info ml-2" type="submit">Start to Disburse Payment</button>
+            }
         </div>
     </form>
+    if (Model.Count() == 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            There is no Applicant in ready to payment pool so far!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     }
 }
+
 <div class="table-responsive p-3">
     @*<button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>*@
     <table id="datatable" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -84,12 +102,17 @@
     function generateCSVFile() {
         var trancheId = '@ViewBag.TrancheId';
         var startDate = $("#startDate").val();
-        var endDate = $("#endDate").val();        
+        var endDate = $("#endDate").val();
+        var paymentMethodModeId = $("#paymentMethodModeId").val();
+        if (paymentMethodModeId == 0) {
+            notificationme('Please Select Payment Mode!');
+            return;
+        }
         $('.loading').show();
         $.ajax({
             type: "POST",
             url: "/Tranches/GenerateCSV",
-            data: { trancheId: trancheId, startDate: startDate, endDate: endDate },
+            data: { trancheId: trancheId, startDate: startDate, endDate: endDate, paymentMethodModeId: paymentMethodModeId },
             dataType: "json",
             success: function (response) {
                 if (response.isValid) {

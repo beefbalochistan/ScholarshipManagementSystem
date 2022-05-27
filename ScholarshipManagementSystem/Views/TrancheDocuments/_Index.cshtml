@@ -12,9 +12,9 @@
     }
 </style>
 <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
-<p>
+@*<p>
     <a asp-action="GetApplicantListInTrancheForDisbursement" asp-controller="Applicants" asp-route-id="@ViewBag.TrancheId">View Current Applicant Pool</a>
-</p>
+</p>*@
 <div id="fetchTrancheDocument">
     @(await Component.InvokeAsync("TrancheDocument", new { id = ViewBag.TrancheId }))
 </div>

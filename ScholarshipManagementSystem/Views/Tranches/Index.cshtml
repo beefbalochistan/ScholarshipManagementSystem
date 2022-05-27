@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="product-img position-relative">
-                        <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
+                        <a href="#" class="text-dark">
                             <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
                         </a>
                     </div>
@@ -54,7 +54,8 @@
                                 if (!item.IsLock)
                                 {
                                     <div class="custom-control custom-switch" dir="ltr">
-                                        <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp(@item.TrancheId, @item.CurrentCommittedAmount)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
+                                        <input type="checkbox" class="custom-control-input" id=@("customSwitchRFA" + item.TrancheId) onclick="reqForApp
+        (@item.TrancheId, @item.CurrentCommittedAmount)" checked="@(item.IsLock == true)" disabled="@(item.IsLock == true)">
                                         <label class="custom-control-label" for=@("customSwitchRFA" + item.TrancheId)>Request for Approval</label>
                                     </div>
                                 }
@@ -101,10 +102,10 @@
                         @{
                             if (item.IsLock)
                             {
-                                <button class="mr-2 btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Tranche Approval" data-original-title="Track" onclick="TrancheApprovedRequest(@item.TrancheId, @item.CurrentCommittedAmount)"><i class="bx bx-paperclip label-icon"></i> Approval</button>
+                                <button class="mr-2 btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Tranche Approval" data-original-title="Track" onclick="TrancheApprovedRequest(@item.TrancheId, @item.CurrentCommittedAmount)"><i class="bx bx-paperclip label-icon"></i>Total Amount</button>
                             }
                         }
-                        <button id=@("btnView" + item.TrancheId) type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>
+                        <button id=@("btnView" + item.TrancheId) type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i>List</button>
                     </div>
                 </div>
             </div>
@@ -199,7 +200,7 @@
             }
             Swal.fire({
                 title: "Are you sure?",
-                text: "You want to De-Active Selectd Tranche!",
+                text: "You want to submit tranche for approval. After that, new applicant can not be added to this tranche!",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonColor: "#34c38f",
@@ -208,7 +209,7 @@
             }).then(function (t) {                
                 if (t.value) {
                     Swal.fire({
-                        title: "Please Enter the Cheque Number",
+                        title: "Approval Request",
                         html: "<div class='col-md-10'><ul class='list-inline mb-2'><li class='list-inline-item mr-3'><span class='badge badge-success'>Committed Amount</span></li><li class='list-inline-item mr-3 float-right' data-toggle='tooltip' data-placement='top' title='' data-original-title='Committed Amount'><i class='bx bx-lock mr-1'></i> <span class='badge badge-pill badge-soft-info font-size-12'>" + committedamount + "</span></li></ul><div class='col-md-10'><label class='control-label' stype='font-size:12px'>Enter Cheque Number</label><input data-toggle ='tooltip' data-placement='top' title='Cheque Number' name='chequeno' id='chequeno' required></div>",
                         showCancelButton: !0,
                         confirmButtonText: "Submit",

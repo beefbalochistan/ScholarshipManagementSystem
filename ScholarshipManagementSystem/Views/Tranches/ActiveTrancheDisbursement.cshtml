@@ -88,7 +88,7 @@
                                     - 25 %
                                 </span>
                             </div>*@
-                        <a asp-controller="Tranches" asp-action="Edit" asp-route-id="@item.TrancheId" class="text-dark">
+                        <a asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@item.TrancheId" class="text-dark">
                             <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
                         </a>
                     </div>
@@ -105,7 +105,7 @@
                                         }
                                         else
                                         {
-                                            <a asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@item.TrancheId" data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track">
+                                            <a asp-controller="Applicants" asp-action="GetApplicantListInTrancheForDisbursement" asp-route-id="@item.TrancheId" data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track">
                                                 <i class="fab fa-chrome"></i>
                                             </a>
                                         }
@@ -123,7 +123,7 @@
 
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item mr-3">
-                            <span class="badge badge-info">Approved</span>
+                            <span class="badge badge-info">Total Amount</span>
                         </li>
                         <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Approved">
                             <i class="bx bx-list-check mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@item.ApprovedAmount</span>

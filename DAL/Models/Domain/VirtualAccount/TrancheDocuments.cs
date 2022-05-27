@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models.Domain.MasterSetup;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -38,7 +39,11 @@ namespace DAL.Models.Domain.VirtualAccount
         public int IsExecuteSuccessfully { get; set; } = 0;
         public int IsAutoDisbursement { get; set; } = 0;
         public string SuccessList { get; set; }
+        [ForeignKey("PaymentMethodMode")]
+        [Display(Name = "Payment Disbursement Mode")]
+        public int PaymentMethodModeId { get; set; }
 
-        public virtual Tranche Tranche { get; set; }
+        public virtual Tranche Tranche { get; set; }        
+        public virtual PaymentMethodMode PaymentMethodMode { get; set; }
     }
 }

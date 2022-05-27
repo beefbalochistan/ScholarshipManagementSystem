@@ -53,6 +53,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {
             ViewBag.TrancheId = id;
             var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsDisbursed == false && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            ViewData["PaymentMethodModeId"] = new SelectList(_context.PaymentMethodMode.Include(a=>a.PaymentDisbursementMode), "PaymentMethodModeId", "PaymentDisbursementMode.Name");
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> GetWaitingResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId)
