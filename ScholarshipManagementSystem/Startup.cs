@@ -11,6 +11,7 @@ using DAL.Models;
 using ScholarshipManagementSystem.Permission;
 using ScholarshipManagementSystem.Services;
 using ScholarshipManagementSystem.Models;
+using ScholarshipManagementSystem.Common;
 
 namespace ScholarshipManagementSystem
 {
@@ -48,7 +49,8 @@ namespace ScholarshipManagementSystem
             string email = Configuration.GetSection("MailSettings:Mail").Value;
 
             EmailSender emailSender = new EmailSender(smtpServer, port, password, displayName, email);
-            services.AddSingleton<IEmailSender>(emailSender);                                
+            services.AddSingleton<IEmailSender>(emailSender);
+            services.AddTransient<reCaptchaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +69,7 @@ namespace ScholarshipManagementSystem
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseFileServer();
             app.UseRouting();
 
             app.UseAuthentication();

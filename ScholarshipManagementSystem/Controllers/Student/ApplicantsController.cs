@@ -206,8 +206,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
         public async Task<JsonResult> GenerateLetter(int id)
         {
             Tranche trancheObj = _context.Tranche.Find(id);
+            PaymentMethod paymentMethod = _context.PaymentMethod.Find(trancheObj.PaymentMethodId);
             var CompanyInfo = _context.CompanyInfo.Find(1);
-            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, FatherName = a.FatherName, Name = a.Name, BFormCNIC = a.BFormCNIC, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, Amount = a.SchemeLevelPolicy.Amount, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } }).ToList();/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Include(a=>a.SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYear).Where(a => a.TrancheId == id && a.IsPaymentInProcess == false && a.IsDisbursed == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, FatherName = a.FatherName, Name = a.Name, BFormCNIC = a.BFormCNIC, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, Amount = a.SchemeLevelPolicy.Amount, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } }).ToList();/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             var commitAmount = _context.Tranche.Find(id).CurrentCommittedAmount;
             var rootPath = Path.Combine(
                             Directory.GetCurrentDirectory(), "wwwroot\\Documents\\TrancheList\\Attachments\\ID" + id + "\\");
@@ -321,7 +322,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
             });
-            tableLetter.AddCell(new PdfPCell(new Phrase("The Concerned official / Head,", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            tableLetter.AddCell(new PdfPCell(new Phrase("The Concerned Official / Head,", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
             {                
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
@@ -332,7 +333,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
             });
-            tableLetter.AddCell(new PdfPCell(new Phrase("@PaymentMethodAdress\n\n\n", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            tableLetter.AddCell(new PdfPCell(new Phrase(paymentMethod.BankName + " " + paymentMethod.Name + "\n\n\n", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
@@ -343,21 +344,24 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
             });
-            tableLetter.AddCell(new PdfPCell(new Phrase("Cheque for Disbursement of stipend to @100 Scholars of Tranch @TranchName\n\n\n", FontFactory.GetFont("Arial", 11, Font.BOLD | Font.UNDERLINE, BaseColor.BLACK)))
+            tableLetter.AddCell(new PdfPCell(new Phrase("Cheque for Disbursement of stipend to "+ applicationDbContext.Count().ToString() +" Scholars of Tranch "+ trancheObj.Name +"\n\n\n", FontFactory.GetFont("Arial", 11, Font.BOLD | Font.UNDERLINE, BaseColor.BLACK)))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Border = 0,
             });
-            Paragraph paragraph = new Paragraph("        With reference to the above-quoted subject, @paymentMethod has been selected for disbursement of stipends to @100 Scholars for the Tranch @TranceName year @fiscalyear. A cheque amounting to PKRs.@AmountofTranch / -bearing number @chequeNumber drawn to @PaymentMethodadress, is enclosed herewith for which the, detail is as below:", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK));            
-            paragraph.IndentationLeft = 20f;       
-            paragraph.FirstLineIndent = 20f;
-            tableLetter.AddCell(new PdfPCell(paragraph)
+            if(applicationDbContext.Count() > 0)
             {
-                HorizontalAlignment = Element.ALIGN_JUSTIFIED,
-                Border = 0,
-                Colspan = 2,
-                MinimumHeight = 101f
-            });
+                Paragraph paragraph = new Paragraph("        With reference to the above-quoted subject, " + paymentMethod.BankName + " " + paymentMethod.Name + " has been selected for disbursement of stipends to " + applicationDbContext.Count().ToString() + " Scholars for the Tranch " + trancheObj.Name + " year "+ applicationDbContext.ElementAt(0).SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYear.Name +". A cheque amounting to PKRs." + applicationDbContext.Sum(a => a.SchemeLevelPolicy.Amount).ToString() + " / -bearing number " + trancheObj.ChequeNo + " drawn to " + paymentMethod.Address + ", is enclosed herewith for which the, detail is as below:", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK));
+                paragraph.IndentationLeft = 20f;
+                paragraph.FirstLineIndent = 20f;
+                tableLetter.AddCell(new PdfPCell(paragraph)
+                {
+                    HorizontalAlignment = Element.ALIGN_JUSTIFIED,
+                    Border = 0,
+                    Colspan = 2,
+                    MinimumHeight = 101f
+                });
+            }                       
             //Add table to document    
             pdfDoc.Add(tableLetter);
             PdfPTable tblTrancheSummary = new PdfPTable(3);
@@ -386,11 +390,22 @@ namespace ScholarshipManagementSystem.Controllers.Student
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,                
             });
-            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("@StudentCount of Tranch @ ID", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            if(applicationDbContext.Count() > 0)
             {
-                HorizontalAlignment = Element.ALIGN_LEFT,                
-            });
-            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PKRs. @TranchAmount", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+                tblTrancheSummary.AddCell(new PdfPCell(new Phrase(applicationDbContext.Count().ToString() + " students of " + applicationDbContext.ElementAt(0).SchemeLevelPolicy.SchemeLevel.Name + " " + applicationDbContext.ElementAt(0).SchemeLevelPolicy.PolicySRCForum.ScholarshipFiscalYear.Name, FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+                {
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                });
+            }
+            else
+            {
+                tblTrancheSummary.AddCell(new PdfPCell(new Phrase(applicationDbContext.Count().ToString() + "0 students", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+                {
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                });
+            }
+            
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PKRs. " + applicationDbContext.Sum(a=>a.SchemeLevelPolicy.Amount).ToString(), FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,                
             });
@@ -399,11 +414,11 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 Colspan = 2,
                 HorizontalAlignment = Element.ALIGN_LEFT,                
             });
-            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PK Rs. 2,400,000/-", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("PK Rs. "+ applicationDbContext.Sum(a=>a.SchemeLevelPolicy.Amount).ToString() +"/-", FontFactory.GetFont("Arial", 11, Font.BOLD, BaseColor.BLACK)))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,                
             });
-            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("\n\nList of Scholars for Disbursement is enclosed and would be shared along with instructions and requirements via email and MIS using payment method @paymentMethod.", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
+            tblTrancheSummary.AddCell(new PdfPCell(new Phrase("\n\nList of Scholars for Disbursement is enclosed and would be shared along with instructions and requirements via email and MIS using payment method "+ paymentMethod.BankName + " " + paymentMethod.Name +".", FontFactory.GetFont("Arial", 11, Font.NORMAL, BaseColor.BLACK)))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 Colspan = 3,

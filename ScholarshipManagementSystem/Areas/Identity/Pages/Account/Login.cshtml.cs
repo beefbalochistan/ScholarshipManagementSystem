@@ -16,6 +16,7 @@ using System.Net.Mail;
 using Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using ScholarshipManagementSystem.Models;
+using ScholarshipManagementSystem.Common;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 {
@@ -26,15 +27,16 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        private readonly reCaptchaService _reCaptchaService;       
+        public LoginModel(SignInManager<ApplicationUser> signInManager, reCaptchaService reCaptchaService,
+            ILogger<LoginModel> logger,            
+        UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _context = context;
+            _reCaptchaService = reCaptchaService;
         }
 
         [BindProperty]
@@ -57,6 +59,8 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
             public string Password { get; set; }
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+            [Required]
+            public string token { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -88,7 +92,14 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+            //google reCaptcha confirmation
+            var reCaptcharesult = _reCaptchaService.tokenVerify(Input.token);
+            if (!reCaptcharesult.Result.success && reCaptcharesult.Result.score <= 0.5)
+            {
+                ModelState.AddModelError(string.Empty, "You are not a human.");
+                return Page();
 
+            }
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         
             if (ModelState.IsValid)

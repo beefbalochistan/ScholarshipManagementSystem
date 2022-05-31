@@ -362,7 +362,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             {
                 System.IO.Directory.CreateDirectory(rootPath);
             }
-            string filename = "ApplicantCSVFile" + RandomNo(10000, 99999).ToString() + ".csv";
+            string filename = _context.Tranche.Find(trancheId).Name /*+ "-" + RandomNo(10000, 99999).ToString()*/ + ".csv";
             bool response = WriteCSVFile(rootPath + filename, mylist);
             if (response)
             {

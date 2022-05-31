@@ -16,6 +16,7 @@ namespace DAL.Models.Domain.MasterSetup
         public string BankName { get; set; }
         [Display(Name = "Payment Through")]
         public string Name { get; set; }
+        public string Address { get; set; }
         public string Code { get; set; }
         public string FocalPerson { get; set; }
         public string Designation { get; set; }

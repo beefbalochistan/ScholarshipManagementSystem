@@ -18,7 +18,7 @@
         <div class="form-inline p-2">
             <label class="m-2">Start &amp; End Date</label>
             <div>
-                <div class="input-daterange input-group" data-date-format="m/dd/yyyy" @*"dd M, yyyy"*@ data-date-autoclose="true" data-provide="datepicker">
+                <div id="datepicker" class="input-daterange input-group" data-date-format="m/dd/yyyy" @*"dd M, yyyy"*@ data-date-autoclose="true" data-provide="datepicker">
                     <input type="text" class="form-control" id="startDate" name="startDate" />
                     <input type="text" class="form-control" id="endDate" name="endDate" />
                 </div>
@@ -99,6 +99,15 @@
 <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
 <script>
+    $(document).ready(function () {
+    
+        $('#startDate').datepicker().$('#startDate').datepicker('setDate', 'today');
+       @* $("#datepicker").datepicker({
+            viewMode: 'years',
+            format: 'mm-yyyy'            
+        });*@
+    });
+  
     function generateCSVFile() {
         var trancheId = '@ViewBag.TrancheId';
         var startDate = $("#startDate").val();

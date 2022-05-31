@@ -165,6 +165,7 @@
                                 <div class="mt-4 text-center">
                                     <a href="#" class="text-muted"><i class="mdi mdi-lock mr-1"></i> Forgot your password?</a>
                                 </div>
+                                <input id="input-token" asp-for="Input.token" type="hidden"/>
                             </form>
                         </div>
 
@@ -185,5 +186,21 @@
 
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />            
+    <partial name="_ValidationScriptsPartial" />       
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcaHCwgAAAAACFTHycpX_NTYPsL1oUHmpjGt_IG"></script>   
+    <script>
+        function getToken(){
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LcaHCwgAAAAACFTHycpX_NTYPsL1oUHmpjGt_IG', { action: 'submit' }).then(function (token) {
+                    // Add your logic to submit to your backend server here.
+                    console.log(token);
+                    $("#input-token").val(token);
+                });
+            });
+        }
+        setInterval(getToken, 115000);
+        $(function () {
+            getToken();
+        });
+    </script>     
 }
