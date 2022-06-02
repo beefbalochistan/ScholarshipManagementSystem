@@ -84,43 +84,51 @@
                 <div class="card-body">
                     <div class="product-img position-relative">
                         @*<div class="avatar-sm product-ribbon">
-                                <span class="avatar-title rounded-circle  bg-primary">
-                                    - 25 %
-                                </span>
-                            </div>*@
+                <span class="avatar-title rounded-circle  bg-primary">
+                    - 25 %
+                </span>
+            </div>*@
+
                         <a asp-controller="TrancheDocuments" asp-action="_Index" asp-route-id="@item.TrancheId" class="text-dark">
                             <img src="@item.PaymentMethod.Logo" style="height:80px" alt="" class="img-fluid mx-auto d-block">
                         </a>
                     </div>
                     <div class="text-center">
-                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>                        
-                            <ul class="ull m-0">
-                                <li>
-                                    @{
-                                        if (item.IsDisbursementInProcess)
-                                        {
-                                            <a onclick="notificationme('Tranche Is already in process!')" style="cursor:not-allowed;background-color:orange" data-toggle="tooltip" data-placement="top" title="Disbursement already in process" data-original-title="Track">
-                                                <i class="fab fa-chrome"></i>
-                                            </a>                                            
-                                        }
-                                        else
-                                        {
-                                            <a asp-controller="Applicants" asp-action="GetApplicantListInTrancheForDisbursement" asp-route-id="@item.TrancheId" data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track">
-                                                <i class="fab fa-chrome"></i>
-                                            </a>
-                                        }
+                        <h5 class="mb-1 text-truncate"><b style="color:brown">@item.Name</b></h5>
+                        <ul class="ull m-0">
+                            <li>
+                                @{
+                                    if (item.IsDisbursementInProcess)
+                                    {
+                                        <a onclick="notificationme('Tranche Is already in process!')" style="cursor:not-allowed;background-color:orange" data-toggle="tooltip" data-placement="top" title="Disbursement already in process" data-original-title="Track">
+                                            <i class="fab fa-chrome"></i>
+                                        </a>
                                     }
-                                </li>
-                            </ul>                            
-                            @*<button data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track" class="btn btn-success btn-circle btn-xl">Disburse</button>*@                        
-                    <div>
-                        @*<button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>*@
-                        <span id="shower" style="color:#50a5f1;cursor:pointer;" data-toggle="modal" data-src="@item.ApprovedAttachment" data-target="#attachmentModal">
-                            <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Approved Letter
-                        </span>
+                                    else
+                                    {
+                                        <a asp-controller="Applicants" asp-action="GetApplicantListInTrancheForDisbursement" asp-route-id="@item.TrancheId" data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track">
+                                            <i class="fab fa-chrome"></i>
+                                        </a>
+                                    }
+                                }
+                            </li>
+                        </ul>
+                        @*<button data-toggle="tooltip" data-placement="top" title="Click to Disburse" data-original-title="Track" class="btn btn-success btn-circle btn-xl">Disburse</button>*@
+                        <div>
+                            @*<button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View</button>*@
+                            <span id="shower" style="color:#50a5f1;cursor:pointer;" data-toggle="modal" data-src="@item.ApprovedAttachment" data-target="#attachmentModal">
+                                <i class="mdi mdi-attachment align-middle pl-1" style="font-size:21px"></i> Approved Letter
+                            </span>
+                        </div>
                     </div>
-                    </div>
-
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <span class="badge badge-secondary">Approve On</span>
+                        </li>
+                        <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Approved">
+                            @*<i class="bx bx-calendar mr-1"></i> *@<span class="badge badge-pill badge-soft-info font-size-12">@item.ApprovedOn.ToString("dd-MM-yyyy")</span>
+                        </li>
+                    </ul>
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item mr-3">
                             <span class="badge badge-info">Total Amount</span>
@@ -131,20 +139,29 @@
                     </ul>
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item mr-3">
-                            <span class="badge badge-warning">Commit</span>
-                        </li>
-                        <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Commit">
-                            <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-warning font-size-12">@item.CurrentCommittedAmount</span>
-                        </li>
-                    </ul>
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item mr-3">
                             <span class="badge badge-success">Disbursed</span>
                         </li>
                         <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Disbursed">
                             <i class="bx bx-transfer mr-1"></i> <span class="badge badge-pill badge-soft-success font-size-12">@item.DisbursedAmount</span>
                         </li>
                     </ul>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <span class="badge badge-warning">Remaining</span>
+                        </li>
+                        <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Commit">
+                            <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-warning font-size-12">@(item.ApprovedAmount - item.DisbursedAmount)</span>
+                        </li>
+                    </ul>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <span class="badge badge-soft-success">Total Applicant</span>
+                        </li>
+                        <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Commit">
+                            <i class="bx bxs-graduation mr-1"></i> <span class="badge badge-pill badge-soft-warning font-size-12">@(item.ApplicantCount)</span>
+                        </li>
+                    </ul>
+                    <button id=@("btnView" + item.TrancheId) type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@item.TrancheId')" class="btn btn-info btn-sm waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i>List</button>
                 </div>
             </div>
         </div>

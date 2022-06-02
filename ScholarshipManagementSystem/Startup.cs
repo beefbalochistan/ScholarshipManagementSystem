@@ -32,7 +32,7 @@ namespace ScholarshipManagementSystem
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {
-                opt.Password.RequiredLength = 7;
+                opt.Password.RequiredLength = 7;                
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireUppercase = false;
                 opt.User.RequireUniqueEmail = true;
@@ -40,7 +40,8 @@ namespace ScholarshipManagementSystem
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
-            .AddDefaultTokenProviders();           
+            .AddDefaultTokenProviders();
+            services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = System.TimeSpan.FromHours(24));
             services.AddControllersWithViews();
             string smtpServer = Configuration.GetSection("MailSettings:Host").Value;
             int.TryParse(Configuration.GetSection("MailSettings:Port").Value, out int port);            

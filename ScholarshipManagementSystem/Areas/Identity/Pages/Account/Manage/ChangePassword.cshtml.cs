@@ -98,7 +98,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
             //--------------------SMS Alert------------------------------
-            SMSAPIService ConfigObj = new SMSAPIService();
+          /*  SMSAPIService ConfigObj = new SMSAPIService();
             ConfigObj = _context.SMSAPIService.Find(1);
             SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.SendSMSURL);
             var mobileNo = AlignPhoneNo(user.PhoneNumber);
@@ -115,7 +115,7 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account.Manage
             SMSRecord.MessageFor = DAL.Enums.MessageFor.Employee.ToString();
             SMSRecord.UserId = user.Id;
             _context.Add(SMSRecord);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
             //-----------------------------------------------------------
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");

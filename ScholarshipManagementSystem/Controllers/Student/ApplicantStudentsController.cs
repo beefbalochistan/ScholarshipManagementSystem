@@ -201,7 +201,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 if (!IsReject)
                 {
                     //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
-                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == obj.UserAccessToForwardId).FirstName;
+                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
                     applicantInfo.ApplicantCurrentStatusId = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
                 }
                 /*else
@@ -308,7 +308,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     obj.ApplicantCurrentStatusId = userCurrentAccess;
                     obj.UserName = User.Identity.Name;
                     obj.UserAccessToForwardId = userAccessToForwardId;
-                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
+                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
                     //----------------Upload Attachment----------------------
                     if (Attachment != null)
                     {

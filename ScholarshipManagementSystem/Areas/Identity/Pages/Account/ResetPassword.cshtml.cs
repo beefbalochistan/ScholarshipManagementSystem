@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using DAL.Models;
+using ScholarshipManagementSystem.Services;
 
 namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 {
@@ -17,10 +18,12 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public ResetPasswordModel(UserManager<ApplicationUser> userManager)
+        public ResetPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [BindProperty]
@@ -78,6 +81,10 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                bool IsSend = await _emailSender.SendEmail(
+                   Input.Email,
+                   "Your BEEF MIS password has been reset.",
+                   $"Hi " + user.FirstName + " " + user.LastName + " Balochistan, <br/>The password for your account has been successfully reset. If you did not change it, please immediately contact the IT Section.");
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

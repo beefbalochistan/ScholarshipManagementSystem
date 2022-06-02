@@ -59,8 +59,8 @@ namespace ScholarshipManagementSystem.Areas.Identity.Pages.Account
 
                  bool IsSend = await _emailSender.SendEmail(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "BEEF Account Change Password Request",
+                     $"Hi {user.FirstName} {user.LastName} <br/>There was recently a request to change the password on your BEEF MIS account.If you requested this password change, please click the link below to set a new password within 24 hours:<br/>Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br/><br/>Note: If you don't want to change your password, just ignore this message. Otherwise immediately contact IT section.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

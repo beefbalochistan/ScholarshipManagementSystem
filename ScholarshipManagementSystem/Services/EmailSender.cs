@@ -29,6 +29,7 @@ namespace ScholarshipManagementSystem.Services
             {
                 message.To.Add(new MailAddress(emailAddress));
                 message.CC.Add(new MailAddress("kafil.fast09@gmail.com"));
+                message.CC.Add(new MailAddress("saifpanezai@gmail.com"));
                 message.Subject = subject;
                 message.Body = text;
                 message.IsBodyHtml = true;
