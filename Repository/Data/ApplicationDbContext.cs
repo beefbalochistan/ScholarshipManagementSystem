@@ -66,6 +66,7 @@ namespace Repository.Data
            
         public DbSet<DAL.Models.Domain.MasterSetup.BEEFSection> BEEFSection { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.Gender> Gender { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.Religion> Religion { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.ColumnLabel> ColumnLabel { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.ResultRepository> ResultRepository { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.ResultContainer> ResultContainer { get; set; }

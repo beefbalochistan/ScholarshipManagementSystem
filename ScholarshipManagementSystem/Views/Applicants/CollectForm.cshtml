@@ -4,7 +4,11 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-
+<style>
+    .page-title-box{
+        padding:0;
+    }
+</style>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -28,9 +32,10 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">Applicant</div>
                         </div>
-                        <input id="txtbox" type="text" class="form-control" value="@ViewBag.refId" placeholder="Reference#">
+                        <input id="txtbox" type="text" class="form-control" value="@ViewBag.RefId" placeholder="Reference#">
                     </div>
                     <button onclick="fetch()" id="btnSearchForm" type="button" class="btn btn-info waves-effect btn-label waves-light mb-2"><i class="bx bx-check-double label-icon"></i> Search</button>
+                    <a asp-action="indexformcollector" asp-controller="ResultRepositories" class="btn btn-info waves-effect btn-label waves-light mb-2 ml-2"><i class="bx bx-bar-chart label-icon"></i> Track Result</a>
                     <button type="button" class="btn btn-outline-primary waves-effect btn-label waves-light mb-2 ml-5" data-toggle="modal" data-target="#exampleModal"><i class="bx bx-add-to-queue label-icon"></i> Add New SQS Applicant</button>
                     <div id="fetchspinner" style="display:none" class="spinner-grow text-dark m-2 mb-3" role="status">
                         <span class="sr-only">Loading...</span>
@@ -224,9 +229,15 @@
     <!-- bs custom file input plugin -->
     <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script src="~/assets/js/pages/form-element.init.js"></script> 
-<script>
-        $(document).ready(function () {            
+    <script>
+        $(document).ready(function () {
             if ($('#txtbox').val().length == 13) {
+                fetch();
+            }
+              var refId = '@ViewBag.RefId';
+            if (refId != "") {
+                $("#txtbox").val(refId);
+                @*$('#txtbox').prop('disabled', true);*@
                 fetch();
             }
             $('#btnSearchForm').prop('disabled', true);
@@ -259,6 +270,8 @@
                     });
                 });
             });
+
+            $('#txtbox').focus();
         });
         function validate_input(inputText) {
             if (inputText.length == 11) {
@@ -435,5 +448,5 @@
                 $('#SubmitDataOnModal').hide();
             }
         }
-</script>
+    </script>
 }

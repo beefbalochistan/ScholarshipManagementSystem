@@ -146,12 +146,15 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public IActionResult CollectForm(string id)
         {
+            if (id != null)
+            {
+                ViewBag.RefId = id;
+            }
             ViewData["SelectedMethodId"] = new SelectList(_context.SelectionMethod.Where(a => a.SelectionMethodId > 2), "SelectionMethodId", "Name");           
             ViewData["DistrictId"] = new SelectList(_context.District.Where(a => a.Division.ProvienceId == 1), "DistrictId", "Name");
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a=>a.PolicySRCForum.ScholarshipFiscalYearId == 0), "SchemeLevelPolicyId", "SchemeLevel.Name");                        
             ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name");                        
-            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToList(), "SchemeLevelId", "Name");
-            ViewBag.refId = id;
+            ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.PolicySRCForum.ScholarshipFiscalYearId == 0).Select(a => new SchemeLevel { SchemeLevelId = a.SchemeLevelId, Name = a.SchemeLevel.Name }).ToList(), "SchemeLevelId", "Name");            
             return View();
         }        
 
@@ -1150,6 +1153,16 @@ namespace ScholarshipManagementSystem.Controllers.Student
             {
                 return NotFound();
             }
+            var QualificationLevel = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ApplicantId == applicant.ApplicantId).Max(a => a.SchemeLevelPolicy.SchemeLevel.QualificationLevelId);
+            if (QualificationLevel < 3)
+            {
+                ViewBag.QoutaFrom = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel.Institute).Max(a => a.SchemeLevelPolicy.SchemeLevel.Institute.Name);
+            }
+            else
+            {
+                ViewBag.QoutaFrom = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel.Institute).Max(a => a.SchemeLevelPolicy.SchemeLevel.Institute.Name);
+            }
+           
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
             QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("https://beef.org.pk/wp-content/uploads/2021/10/QRCodeBEEFForm.pdf?" + applicant.ApplicantReferenceNo, QRCodeGenerator.ECCLevel.Q);
             QRCode QrCode = new QRCode(QrCodeInfo);
@@ -1167,7 +1180,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var provienceList = _context.Provience.ToList();
             provienceList.Insert(0, new Provience { ProvienceId = 0, Name = "Select" });
             ViewData["ProvienceId"] = new SelectList(provienceList, "ProvienceId", "Name", applicant.ProvienceId);
-            ViewData["DistrictId"] = new SelectList(_context.District.Include(a => a.Division).Where(a => a.Division.ProvienceId == applicant.ProvienceId), "DistrictId", "Name", applicant.DistrictId);
+            ViewData["ReligionId"] = new SelectList(_context.Religion.OrderBy(a=>a.Sno), "Name", "Name", applicant.Religion);
+            //ViewData["DistrictId"] = new SelectList(_context.District.Include(a => a.Division).Where(a => a.Division.ProvienceId == applicant.ProvienceId), "DistrictId", "Name", applicant.DistrictId);
             ViewData["DegreeScholarshipLevelId"] = new SelectList(_context.DegreeScholarshipLevel, "DegreeScholarshipLevelId", "DegreeScholarshipLevelId");
             ViewData["SchemeLevelPolicyId"] = new SelectList(_context.SchemeLevelPolicy.Include(a => a.SchemeLevel), "SchemeLevelPolicyId", "SchemeLevel.Name", applicant.SchemeLevelPolicyId);
             if (applicant.Picture != null)
@@ -1182,7 +1196,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApplicantFormEdit(int id, Applicant applicant, IFormFile scannedDocument, IFormFile scannedOtherDocument, IFormFile picture)
+        public async Task<IActionResult> ApplicantFormEdit(int id, Applicant applicant, IFormFile scannedDocument, IFormFile scannedOtherDocument, IFormFile picture, string submitButton)
         {
             if (id != applicant.ApplicantId)
             {
@@ -1264,8 +1278,11 @@ namespace ScholarshipManagementSystem.Controllers.Student
                             applicant.Picture = dataStream.ToArray();
                         }
                     }
-                    applicant.IsFormEntered = true;
-                    applicant.ApplicantCurrentStatusId = 4;//KDA Hard
+                    if(submitButton == "SaveForward")
+                    {
+                        applicant.IsFormEntered = true;
+                        applicant.ApplicantCurrentStatusId = 4;//KDA Hard
+                    }                    
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();
                 }

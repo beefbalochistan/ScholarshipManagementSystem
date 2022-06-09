@@ -1556,6 +1556,19 @@ namespace Repository.Data.Migrations
                     b.ToTable("QualificationLevel", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Religion", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Sno")
+                        .HasColumnType("int");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Religion", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SMSMassage", b =>
                 {
                     b.Property<int>("SMSMassageTypeId")
@@ -2237,6 +2250,9 @@ namespace Repository.Data.Migrations
 
                     b.Property<int?>("DegreeScholarshipLevelId")
                         .HasColumnType("int");
+
+                    b.Property<string>("DisbursementCNIC")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");

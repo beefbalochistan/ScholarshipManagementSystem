@@ -81,6 +81,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         {
             if (ModelState.IsValid)
             {
+                var IsExist = _context.userAccessToForward.Count(a => a.UserId == userAccessToForward.UserId && a.ApplicantCurrentStatusId == userAccessToForward.ApplicantCurrentStatusId);
+                if (IsExist > 0)
+                {
+                    ModelState.AddModelError(nameof(userAccessToForward.ApplicantCurrentStatusId), "Access already Assigned!");
+                    return BadRequest(ModelState);
+                }
                 _context.Add(userAccessToForward);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { Id = userAccessToForward.UserId});

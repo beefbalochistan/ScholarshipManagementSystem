@@ -1,0 +1,224 @@
+﻿@model DAL.Models.ViewModels.ViewUploadedResult
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+
+@{
+    ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "Result";
+    ViewBag.Title = "Repository";
+    ViewBag.pTitle = "Repository";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+<!-- DataTables -->
+<link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+@if (true)
+{
+    <div class="checkout-tabs">      
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                                <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                                    <h4 class="mt-2 card-title">Detail of Result Records - <span style="color: black">Scheme Level: @ViewBag.SLName</span></h4>
+                                </div>                               
+                                <div class="row">
+                                    @{
+                                        if (ViewBag.SLId == 1 || ViewBag.SLId == 2 || ViewBag.SLId == 3 || ViewBag.SLId == 7 || ViewBag.SLId == 8 || ViewBag.SLId == 9)
+                                        {
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">District</label>
+                                                    <select id="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Selection Method</label>
+                                            <select id="SMethodId" class="form-control" asp-items="ViewBag.ddMethodList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Selected Status</label>
+                                            <select id="SStatusId" class="form-control" asp-items="ViewBag.ddStatusList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="padding-top:30px" id="loading">
+                                        <img src="~/assets/images/loading.gif" height="25" />
+                                    </div>                                 
+                                </div>
+                                <div class="table-responsive" id="events">
+                                    @(await Component.InvokeAsync("MeritListFormCollector", new { id = 0, SLId = ViewBag.SLId, SLPId = ViewBag.SLPId, selectedMethod = 0, selectedStatus = "All", RRId = ViewBag.Id, GradingSystem = ViewBag.GradingSystem }))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@*<div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-4 float-sm-left">Fullfill Selection Criteria - DistrictWise</h4>
+            <div class="clearfix"></div>
+
+            <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+        </div>
+    </div>
+*@
+
+
+@section Scripts
+{
+    @*<script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>*@
+    <script>
+
+    $(document).ready(function () {
+        $("#loading").hide();
+    });
+    $('#DistrictId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var rrId = '@ViewBag.Id';
+        var GradingSystem = '@ViewBag.GradingSystem';
+        var val = $(this).val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritListFormCollector", "ResultContainers")',
+            data: {
+                id: val,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS,
+                RRId: rrId,
+                GradingSystem: GradingSystem
+            },
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
+    });
+    $('#SMethodId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var slId = '@ViewBag.SLId';
+        var val = $("#DistrictId").val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritListFormCollector", "ResultContainers")',
+            data: {
+                id: val,
+                SLId: slId,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS
+            },
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
+    });
+    $('#SStatusId').change(function () {
+        $("#loading").show();
+        var slpId = '@ViewBag.SLPId';
+        var slId = '@ViewBag.SLId';
+        var val = $("#DistrictId").val();
+        var selectedM = $("#SMethodId").val();
+        var selectedS = $("#SStatusId").val();
+        debugger;
+            $.ajax({
+            url: '@Url.Action("ReloadEventMeritListFormCollector", "ResultContainers")',
+            data: {
+                id: val,
+                SLId: slId,
+                SLPId: slpId,
+                selectedMethod: selectedM,
+                selectedStatus: selectedS
+            },
+            success: function (data) {
+                $("#events").html(data);
+                $("#loading").hide();
+            }
+        });
+    });
+    </script>
+
+    @*<script>
+            $(document).ready(function () {
+                var options = {
+                    chart: {
+                        height: 359,
+                        type: "bar",
+                        stacked: !0,
+                        toolbar: { show: !1 },
+                        zoom: { enabled: !0 }
+                    },
+                    plotOptions: {
+                        bar: { horizontal: !1, columnWidth: "15%", endingShape: "rounded" }
+                    },
+                    dataLabels: { enabled: !1 },
+                    series: [
+                        {
+                            name: "Applicate", data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
+                        },
+                        {
+                            name: "Non Applicable", data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
+                        },
+                    ],
+                    xaxis: {
+                        categories: ["Awaran", "Barkhan", "Chaghi", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    },
+                    colors: ["#556ee6", "#f1b44c"],//, "#34c38f"],
+                    legend: { position: "bottom" },
+                    fill: { opacity: 1 }
+                },
+                    chart = new ApexCharts(document.querySelector("#stacked-column-chart"), options); chart.render(); options = { chart: { height: 180, type: "radialBar", offsetY: -10 }, plotOptions: { radialBar: { startAngle: -135, endAngle: 135, dataLabels: { name: { fontSize: "13px", color: void 0, offsetY: 60 }, value: { offsetY: 22, fontSize: "16px", color: void 0, formatter: function (e) { return e + "%" } } } } }, colors: ["#556ee6"], fill: { type: "gradient", gradient: { shade: "dark", shadeIntensity: .15, inverseColors: !1, opacityFrom: 1, opacityTo: 1, stops: [0, 50, 65, 91] } }, stroke: { dashArray: 4 }, series: [67], labels: ["Series A"] }; (chart = new ApexCharts(document.querySelector("#radialBar-chart"), options)).render();
+            });
+        </script>*@
+}

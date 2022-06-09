@@ -84,6 +84,12 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         {
             if (ModelState.IsValid)
             {
+                var IsExist = _context.UserAccessToSchemeLevel.Count(a => a.UserId == userAccessToSchemeLevel.UserId && a.SchemeLevelId == userAccessToSchemeLevel.SchemeLevelId);
+                if (IsExist > 0)
+                {
+                    ModelState.AddModelError(nameof(userAccessToSchemeLevel.SchemeLevelId), "Access already Assigned!");
+                    return BadRequest(ModelState);
+                }
                 _context.Add(userAccessToSchemeLevel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { Id = userAccessToSchemeLevel.UserId });

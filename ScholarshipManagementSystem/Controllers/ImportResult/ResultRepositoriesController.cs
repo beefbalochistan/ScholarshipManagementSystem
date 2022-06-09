@@ -36,6 +36,14 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             ViewBag.DegreeScholarshipLevel = _context.DegreeScholarshipLevel.ToList();
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> IndexFormCollector()
+        {
+            var applicationDbContext = _context.ResultRepository.Include(r => r.SchemeLevelPolicy.SchemeLevel.DegreeScholarshipLevels).Include(a => a.DAEInstitute).Include(r => r.ScholarshipFiscalYear).Where(a=>a.IsMeritListGenerated == true);
+            ViewBag.Schemes = _context.Scheme.ToList();
+            ViewBag.SchemeLevels = _context.SchemeLevel.ToList();
+            ViewBag.DegreeScholarshipLevel = _context.DegreeScholarshipLevel.ToList();
+            return View(await applicationDbContext.ToListAsync());
+        }
         public async Task<IActionResult> Index2()
         {
             var applicationDbContext = _context.Scheme;

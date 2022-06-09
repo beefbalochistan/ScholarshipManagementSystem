@@ -32,6 +32,10 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
         {
             return ViewComponent("MeritList", new { id, SLId, SLPId, selectedMethod , selectedStatus, RRId, GradingSystem });
         }
+        public IActionResult ReloadEventMeritListFormCollector(int id, int SLId, int SLPId, int selectedMethod, string selectedStatus, int RRId, int GradingSystem)
+        {
+            return ViewComponent("MeritListFormCollector", new { id, SLId, SLPId, selectedMethod, selectedStatus, RRId, GradingSystem });
+        }
         // GET: ResultContainers
         public async Task<IActionResult> Index(int id)
         {
@@ -650,6 +654,44 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
             return View(viewUploadedResult);
         }
 
+        public async Task<IActionResult> ResultDetailFormCollector(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Id = id;
+            ViewUploadedResult viewUploadedResult = new ViewUploadedResult();
+            //-----------------------------------------                       
+            //-----------------------------------------
+            var currentRepositoryResult = await _context.ResultRepository.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.ResultRepositoryId == id).FirstOrDefaultAsync();
+
+            ViewBag.IsDataCleaned = currentRepositoryResult.IsDataCleaned;
+            ViewBag.IsSelctionCriteriaApplied = currentRepositoryResult.IsSelctionCriteriaApplied;
+            ViewBag.IsMeritListGenerated = currentRepositoryResult.IsMeritListGenerated;
+            ViewBag.IsSelctionCriteriaDefined = _context.SelectionCriteria.Count(a => a.ResultRepositoryId == id);
+            ViewBag.FYearId = currentRepositoryResult.ScholarshipFiscalYearId;
+            ViewBag.SLId = currentRepositoryResult.SchemeLevelPolicy.SchemeLevelId;
+            ViewBag.GradingSystem = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.GradingSystem;
+            ViewBag.SLPId = currentRepositoryResult.SchemeLevelPolicyId;
+            ViewBag.SLName = currentRepositoryResult.SchemeLevelPolicy.SchemeLevel.Name;
+            var list1 = new List<SelectListItem>
+            {
+               new SelectListItem{ Text="All", Value = "All", Selected = true },
+               new SelectListItem{ Text="Selected", Value = "Selected" },
+               new SelectListItem{ Text="Awaited", Value = "Awaited" },
+            };
+            ViewData["ddStatusList"] = list1;
+            var selectionMethodList = _context.SelectionMethod.ToList();
+            selectionMethodList.Insert(0, new SelectionMethod { SelectionMethodId = 0, Name = "All" });
+            ViewData["ddMethodList"] = new SelectList(selectionMethodList, "SelectionMethodId", "Name");
+            var districtList = _context.District.Where(a => a.IsActive == true).ToList();
+            districtList.Insert(0, new District { DistrictId = 0, Name = "All" });
+            ViewData["DistrictId"] = new SelectList(districtList, "DistrictId", "Name");
+            var currentPolicy = _context.SchemeLevelPolicy.Find(currentRepositoryResult.SchemeLevelPolicyId);
+            viewUploadedResult.schemeLevelPolicy = currentPolicy;
+            return View(viewUploadedResult);
+        }
         // GET: ResultContainers/Create
         public IActionResult Create()
         {

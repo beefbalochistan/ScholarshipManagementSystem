@@ -1,0 +1,245 @@
+﻿@model IEnumerable<DAL.Models.Domain.ImportResult.ResultRepository>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ScholarshipManagementSystem.Constants
+@using DAL.Models.Domain.MasterSetup
+@{
+    ViewData["Title"] = "Index";
+    ViewBag.pageTitle = "Result";
+    ViewBag.Title = "Repository";
+    ViewBag.pTitle = "Repository";
+    Layout = "~/Views/_Shared/_Layout.cshtml";
+}
+
+@if (true)
+{
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/assets/libs/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <div class="checkout-tabs">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-info" style="padding: .40rem 1.25rem" role="alert">
+                            <h4 class="mt-2 card-title">List of Result</h4>
+                        </div>
+                        <div id="accordion">
+                            @{int counter = 0; int counterInner = 0;}
+                            @foreach (Scheme scheme in ViewBag.Schemes)
+                            {
+
+
+                                <div class="card mb-1 shadow-none">
+                                    <div class="card-header" id=@("heading" + counter)>
+                                        <h6 class="m-0">
+                                            <a href=@("#collapse" + counter) class="text-dark" data-toggle="collapse"
+                                               aria-expanded="true"
+                                               aria-controls=@("collapse" + counter)>
+                                                @scheme.Name
+                                            </a>
+                                        </h6>
+                                    </div>
+                                    @{
+                                        <div id=@("collapse" + counter) class="collapse"
+                                             aria-labelledby=@("heading" + counter) data-parent="#accordion">
+                                            <div class="card-body" style="padding:1rem">
+                                                @{
+                                                    if (scheme.SchemeId <= 1)
+                                                    {
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+                                                                        </th>
+                                                                        <th>
+                                                                            @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
+                                                                        </th>
+                                                                        @{
+                                                                            if (scheme.SchemeId > 3)
+                                                                            {
+                                                                                <th>
+                                                                                    <text>Degree Level</text>
+                                                                                </th>
+                                                                            }
+                                                                        }                                                                                                                                              
+                                                                        <th>Merit List</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var item in Model.Where(a => a.SchemeLevelPolicy.SchemeLevel.SchemeId == scheme.SchemeId))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Name)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(modelItem => item.SchemeLevelPolicy.SchemeLevel.Name)
+                                                                            </td>
+                                                                            @{
+                                                                                if (scheme.SchemeId > 3)
+                                                                                {
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(modelItem => item.DegreeScholarshipLevel.Name)
+                                                                                    </td>
+                                                                                }
+                                                                            }                                                                                                                                                        
+                                                                            <td>
+                                                                                @{
+                                                                                    if (item.IsMeritListGenerated)
+                                                                                    {
+                                                                                        <a asp-action="ResultDetailFormCollector" asp-controller="ResultContainers" class="btn-sm btn-success" asp-route-id="@item.ResultRepositoryId">View</a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <text>Pending</text>
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        List<SchemeLevel> schemeLevelList = ViewBag.SchemeLevels;
+                                                        @*@foreach (var item in Model.Where(a => a.SchemeLevelPolicy.SchemeLevel.SchemeId == scheme.SchemeId))*@
+                                                        @foreach (var schemelevel in schemeLevelList.Where(a => a.SchemeId == scheme.SchemeId))
+                                                        {
+                                                            <div id=@("accordion" + counter)>
+                                                                <div class="card mb-1 shadow-none">
+                                                                    <div class="card-header" id=@("headingInner" + counterInner)>
+                                                                        <h6 class="m-0">
+                                                                            <a href=@("#collapseInner" + counterInner) class="text-dark" data-toggle="collapse"
+                                                                               aria-expanded="true"
+                                                                               aria-controls=@("collapseInner" + counterInner)>
+                                                                                @schemelevel.Name
+                                                                            </a>
+                                                                        </h6>
+                                                                    </div>
+
+                                                                    <div id=@("collapseInner" + counterInner) class="collapse"
+                                                                         aria-labelledby=@("headingInner" + counterInner) data-parent=@("#accordion" + counter)>
+                                                                        <div class="card-body" style="padding:1rem">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>
+                                                                                                @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+                                                                                            </th>
+                                                                                            <th>
+                                                                                                @Html.DisplayNameFor(model => model.SchemeLevelPolicy.SchemeLevel)
+                                                                                            </th>
+                                                                                            <th>
+                                                                                                @{
+                                                                                                    if (schemelevel.SchemeLevelId == 4 || schemelevel.SchemeLevelId == 5 || schemelevel.SchemeLevelId == 6)
+                                                                                                    {
+                                                                                                        <text>DAE Institute</text>
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        <text>Degree Level</text>
+                                                                                                    }
+                                                                                                }
+                                                                                            </th>
+                                                                                           
+                                                                                            <th>Merit List</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach (var item2 in Model.Where(a => a.SchemeLevelPolicy.SchemeLevelId == schemelevel.SchemeLevelId))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    @Html.DisplayFor(modelItem => item2.ScholarshipFiscalYear.Name)
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    @Html.DisplayFor(modelItem => item2.SchemeLevelPolicy.SchemeLevel.Name)
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    @{
+                                                                                                        if (schemelevel.SchemeLevelId == 4 || schemelevel.SchemeLevelId == 5 || schemelevel.SchemeLevelId == 6)
+                                                                                                        {
+                                                                                                            @Html.DisplayFor(modelItem => item2.DAEInstitute.Name)
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            @Html.DisplayFor(modelItem => item2.DegreeScholarshipLevel.Name)
+                                                                                                        }
+                                                                                                    }
+                                                                                                </td>                                                                                                                                                                                              
+                                                                                                <td>
+                                                                                                    @{
+                                                                                                        @if (item2.IsMeritListGenerated)
+                                                                                                        {
+                                                                                                            <a asp-action="Details" asp-controller="ResultContainers" class="btn-sm btn-success" asp-route-id="@item2.ResultRepositoryId">View</a>
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <text>Pending</text>
+                                                                                                        }
+                                                                                                    }
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            counterInner = counterInner + 1;
+                                                        }
+                                                    }
+
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                counter = counter + 1;
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="account-pages my-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                        <h4 class="text-uppercase">Sorry, page not found</h4>
+                        @*<div class="mt-5 text-center">
+                                <a class="btn btn-primary waves-effect waves-light" href=@Url.Action("Index", "index")>Back to Dashboard</a>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xl-6">
+                    <div>
+                        <img src="~/assets/images/error-img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
