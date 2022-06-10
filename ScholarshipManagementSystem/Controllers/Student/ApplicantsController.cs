@@ -1282,7 +1282,11 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     {
                         applicant.IsFormEntered = true;
                         applicant.ApplicantCurrentStatusId = 4;//KDA Hard
-                    }                    
+                    }
+                    else
+                    {
+                        applicant.ApplicantCurrentStatusId = 1;//KDA Hard
+                    }          
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();
                 }

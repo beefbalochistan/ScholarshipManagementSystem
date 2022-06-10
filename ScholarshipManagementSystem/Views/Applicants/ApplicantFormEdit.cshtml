@@ -168,20 +168,7 @@
                                                 <span asp-validation-for="TehsilName" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Father CNIC</label>
-                                                <div>
-                                                    <input asp-for="FatherCareTakerCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" placeholder="Father/Care Taker CNIC" required />
-                                                </div>
-                                                <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required
-                                                           data-parsley-equalto="#FatherCareTakerCNIC"
-                                                           placeholder="Re-Type Father/Care Taker CNIC" />
-                                                </div>
-                                                @*<span asp-validation-for="FatherCareTakerCNIC" class="text-danger"></span>*@
-                                            </div>
-                                        </div>
+
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>BForm/CNIC</label>
@@ -195,20 +182,32 @@
                                                 <span asp-validation-for="BFormCNIC" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label asp-for="RelationWithCareTaker" class="control-label"></label>
-                                                <input asp-for="RelationWithCareTaker" class="form-control inputBox" required/>
-                                                <span asp-validation-for="RelationWithCareTaker" class="text-danger"></span>
+                                                <label asp-for="DisbursementCNIC"></label>
+                                                <div>
+                                                    <input asp-for="DisbursementCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" placeholder="Disbursement CNIC" required />
+                                                </div>
+                                                <div class="mt-2">
+                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required
+                                                           data-parsley-equalto="#DisbursementCNIC"
+                                                           placeholder="Re-Type Disbursement CNIC" />
+                                                </div>
+                                                @*<span asp-validation-for="FatherCareTakerCNIC" class="text-danger"></span>*@
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label asp-for="FatherCareTakerCNIC" class="control-label"></label>
+                                                <input asp-for="FatherCareTakerCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required />
+                                                <span asp-validation-for="FatherCareTakerCNIC" class="text-danger"></span>
+                                            </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label asp-for="DisbursementCNIC" class="control-label"></label>
-                                                <input asp-for="DisbursementCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required />
-                                                <span asp-validation-for="DisbursementCNIC" class="text-danger"></span>
+                                                <label asp-for="RelationWithCareTaker" class="control-label"></label>
+                                                <input asp-for="RelationWithCareTaker" class="form-control inputBox" required />
+                                                <span asp-validation-for="RelationWithCareTaker" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -261,7 +260,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label asp-for="StudentMobile2" class="control-label"></label>
-                                                <label class="form-control" style="background-color:aquamarine;">@Model.StudentMobile2</label>
+                                                <label class="form-control" style="background-color: #f8f8f8;">@Model.StudentMobile2</label>
                                                 <span asp-validation-for="StudentMobile2" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -297,7 +296,7 @@
                                             <div class="form-group">
                                                 <label asp-for="HomeAddress"></label>
                                                 <div>
-                                                    <textarea asp-for="HomeAddress" required class="form-control" rows="4"></textarea>
+                                                    <textarea asp-for="HomeAddress" class="form-control" rows="2"></textarea>
                                                 </div>
                                                 <span asp-validation-for="HomeAddress" class="text-danger"></span>
                                             </div>
@@ -339,7 +338,7 @@
                                     <div class="form-group">
                                         <label asp-for="OldInstitudeNameAddress"></label>
                                         <div>
-                                            <textarea asp-for="OldInstitudeNameAddress" required class="form-control" rows="3"></textarea>
+                                            <textarea asp-for="OldInstitudeNameAddress" class="form-control" rows="3"></textarea>
                                         </div>
                                         <span asp-validation-for="OldInstitudeNameAddress" class="text-danger"></span>
                                     </div>
@@ -462,7 +461,7 @@
                                     <div class="form-group">
                                         <label asp-for="CurrentInsituteAddress"></label>
                                         <div>
-                                            <textarea asp-for="CurrentInsituteAddress" required class="form-control" rows="3"></textarea>
+                                            <textarea asp-for="CurrentInsituteAddress" class="form-control" rows="3"></textarea>
                                         </div>
                                         <span asp-validation-for="CurrentInsituteAddress" class="text-danger"></span>
                                     </div>

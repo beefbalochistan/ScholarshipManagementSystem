@@ -29,8 +29,9 @@ namespace DAL.Models.Domain.Student
         public string FatherCareTakerCNIC { get; set; }
         [Display(Name = "Disbursement CNIC")]
         public string DisbursementCNIC { get; set; }
-        [Display(Name = "Applicant Mobile")]
+        [Display(Name = "Student Mobile#1")]
         public string StudentMobile { get; set; }
+        [Display(Name = "Student Mobile#2")]
         public string StudentMobile2 { get; set; }
         [Display(Name = "Father Mobile")]
         public string FatherMobile { get; set; }
