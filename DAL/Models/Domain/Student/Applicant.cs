@@ -129,6 +129,8 @@ namespace DAL.Models.Domain.Student
         [ForeignKey("ApplicantCurrentStatus")]
         [Display(Name = "ApplicantCurrentStatus")]
         public int ApplicantCurrentStatusId { get; set; }
+        [ForeignKey("ApplicantInbox")]
+        public int ApplicantInboxId { get; set; } = 1;
         [ForeignKey("ApplicantFinanceCurrentStatus")]
         [Display(Name = "Finance Current Status")]
         public int? ApplicantFinanceCurrentStatusId { get; set; }
@@ -147,5 +149,6 @@ namespace DAL.Models.Domain.Student
         public virtual ApplicantSelectionStatus ApplicantSelectionStatus { get; set; }
         public virtual ApplicantFinanceCurrentStatus ApplicantFinanceCurrentStatus { get; set; }
         public virtual Tranche Tranche { get; set; }
+        public virtual ApplicantInbox ApplicantInbox { get; set; }
     }
 }

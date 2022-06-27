@@ -15,12 +15,48 @@
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                 {
                     <li>
-                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" class=" waves-effect">
-                            <i class="bx bxs-eraser"></i>
-                            <span @*id="TotalInProcessFiles"*@ class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetInProcessFile())*@</span>
-                            <span key="t-forms">Applicant In Process <img @*id="inProcesssLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="1" asp-route-title="Applicant In Process" class=" waves-effect">
+                            <i class="bx bx-data"></i><span key="t-calendar">Main - Inbox</span>
                         </a>
                     </li>
+                    <li>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="2" asp-route-title="Return Cases" class=" waves-effect">
+                            <i class="bx bx-arrow-back"></i><span key="t-calendar">Return Cases Inbox</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="3" asp-route-title="Pending Cases" class=" waves-effect">
+                            <i class="bx bx-info-circle"></i><span key="t-calendar">Pending Cases Inbox</span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                {
+
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
+                    {
+                        <li>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="4" asp-route-title="Rejected Cases" class=" waves-effect">
+                                <i class="fa fa-step-backward"></i><span key="t-calendar">Rejected Cases Inbox</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)
+                    {
+                        <li>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="5" asp-route-title="Waiting Cases" class=" waves-effect">
+                                <i class="fa fa-step-forward"></i><span key="t-calendar">Waiting Cases Inbox</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewISRC.View)).Result.Succeeded)
+                    {
+                        <li>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="6" asp-route-title="ISRC Cases" class=" waves-effect">
+                                <i class="bx bxs-alarm-add"></i><span key="t-calendar">ISRC Cases Inbox</span>
+                            </a>
+                        </li>
+                    }
 
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
@@ -88,7 +124,6 @@
                             <span key="t-forms">Applicant Waiting  <img @*id="waitingLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
                         </a>
                     </li>
-
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
                 {
@@ -100,7 +135,7 @@
                         </a>
                     </li>
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.TrackApplicant.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantTracking" asp-controller="Applicants" class=" waves-effect">
@@ -124,11 +159,12 @@
                     <li>
                         <a asp-action="ApplicantFormEntry" asp-controller="Applicants" class=" waves-effect">
                             <i class="bx bxs-file-doc"></i>
-                            <span key="t-calendar">Form Entry</span>
+                            <span key="t-calendar">Track Applicant</span>
                         </a>
                     </li>
+
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Attachment.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantFileAttachment" asp-controller="Applicants" class=" waves-effect">
@@ -137,7 +173,7 @@
                         </a>
                     </li>
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.SMS.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantSendSMS" asp-controller="Applicants" class=" waves-effect">
@@ -384,41 +420,50 @@
 
                 }
                 <li class="menu-title" key="t-menu">Result Management</li>
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Result.Analyzer)).Result.Succeeded)
                 {
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                    {
+                        <li>
+                            <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar">Assist Tool</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
+                                <i class="bx bxs-dizzy"></i>
+                                <span key="t-calendar">Seletion Criteria</span>
+                            </a>
+                        </li>
+                    }
 
-                    <li>
-                        <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
-                            <i class="bx bxs-dizzy"></i>
-                            <span key="t-calendar">Assist Tool</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
-                            <i class="bx bxs-dizzy"></i>
-                            <span key="t-calendar">Seletion Criteria</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="ResultRepositories" class=" waves-effect">
-                            <i class="bx bxs-dizzy"></i>
-                            <span key="t-calendar">View Results</span>
-                        </a>
-                    </li>
                     <li>
                         <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
                             <i class="bx bxs-dizzy"></i>
                             <span key="t-calendar"> Result Analyzer</span>
                         </a>
                     </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Result.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="Index" asp-controller="ResultRepositories" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">View Results</span>
+                        </a>
+                    </li>
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Result.Import)).Result.Succeeded)
+                {
                     <li>
                         <a asp-action="ResultImporter" asp-controller="ResultRepositories" class=" waves-effect">
                             <i class="bx bxs-dizzy"></i>
                             <span key="t-calendar">Import Result</span>
                         </a>
                     </li>
-
                 }
+
 
                 <li class="menu-title" key="t-menu">SMS Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)

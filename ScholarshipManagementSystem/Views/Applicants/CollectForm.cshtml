@@ -9,6 +9,7 @@
         padding:0;
     }
 </style>
+<link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -58,15 +59,15 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="form-group">                    
+                <div class="form-group">
                     <label class="control-label">Scheme</label>
                     <input style="background-color:aliceblue" id="scheme" class="form-control" disabled="disabled" />
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label">Roll#</label>
-                    <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                    <label class="control-label">Reference#</label>
+                    <input style="background-color:aliceblue" id="refno" class="form-control" disabled="disabled" />
                 </div>
             </div>
             <div class="col-md-3">
@@ -79,6 +80,18 @@
                 <div class="form-group">
                     <label class="control-label">Father Name</label>
                     <input style="background-color:aliceblue" id="fathername" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Roll#</label>
+                    <input style="background-color:aliceblue" id="rollno" class="form-control" disabled="disabled" />
+                </div>
+            </div>
+            <div class="col-md-5" id="degreeleveldiv">
+                <div class="form-group">
+                    <label class="control-label">Degree Level</label>
+                    <input style="background-color:aliceblue" id="degreelevel" class="form-control" disabled="disabled" />
                 </div>
             </div>
         </div>
@@ -226,6 +239,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
     <!-- bs custom file input plugin -->
     <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script src="~/assets/js/pages/form-element.init.js"></script> 
@@ -299,10 +313,21 @@
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
+                        debugger;
                         $('#applicantinformation').show();
                         $('#attachment').show();
                         $('#name').val(response.name);
                         $('#rollno').val(response.rollNumber);
+                        $('#refno').val(response.applicantReferenceNo);
+                        if (response.degreeScholarshipLevel.name != null) {
+                            $('#degreelevel').val(response.degreeScholarshipLevel.name);
+                            $("#degreeleveldiv").show();
+                        } else if (response.daeInstitute.name != null) {
+                            $('#degreelevel').val(response.daeInstitute.name);
+                            $("#degreeleveldiv").show();
+                        } else {
+                            $("#degreeleveldiv").hide();
+                        }
                         $('#fathername').val(response.fatherName);
                         $('#scheme').val(response.homeAddress);
                         $('#selectionMethodName').val(response.religion);
@@ -322,8 +347,9 @@
                             }
                             $("#txtbox").val('');
                             $('#btnSearchForm').prop('disabled', true);
-                            $('#FetchDataOnSuccess').show();
-                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");
+                            @*$('#FetchDataOnSuccess').show();
+                            $('#FetchDataOnSuccessText').text("Fetch data successfully!");*@
+                            notificationme("Fetch data successfully!");
                             $('#FetchDataOnFailed').hide();
                         }
 
@@ -447,6 +473,26 @@
             } else {
                 $('#SubmitDataOnModal').hide();
             }
+        }
+        function notificationme(message) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "positionClass": "toast-bottom-right",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+            toastr.info(message);
         }
     </script>
 }

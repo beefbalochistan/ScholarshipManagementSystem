@@ -8,6 +8,24 @@
                 ViewBag.pTitle = "Permission";
                 Layout = "~/Views/_Shared/_Layout.cshtml"; }
 
+<style>
+  @*  table {
+        display: inline-grid;
+        grid-template-areas:
+            "head-fixed"
+            "body-scrollable";
+    }*@
+
+    thead {
+        grid-area: head-fixed;
+    }
+
+    tbody {
+        grid-area: body-scrollable;
+        overflow: auto;
+        height: 400px; /* define height depending on your needs */
+    }
+</style>
 @if (true)
 {<!-- DataTables -->
     <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -43,7 +61,7 @@
                                 <div class="table-responsive">
                                     <form asp-controller="permission" method="post" asp-action="Update" class="d-inline">
                                         <input asp-for="@Model.RoleId" type="hidden" />
-                                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <table id="datatable1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -173,3 +191,13 @@
         </div>
     </div>
     }
+
+<script>
+    $(document).ready(function () {
+        $('#datatable1').DataTable({
+            "scrollY": "220px",
+            "paging": false,
+            "scrollCollapse": true,
+        });        
+    });
+</script>

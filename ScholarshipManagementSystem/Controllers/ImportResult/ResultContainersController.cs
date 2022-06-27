@@ -149,6 +149,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Selected";
                 applicant.ApplicantSelectionStatusId = 1;
+                applicant.ApplicantCurrentStatusId = 2;
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -185,6 +186,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Selected";
                     applicant.ApplicantSelectionStatusId = 1;                    
+                    applicant.ApplicantCurrentStatusId = 2;                    
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;
@@ -214,7 +216,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                 applicant.TotalGPA = result.TotalGPA;
                 applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                 applicant.SelectionStatus = "Awaited";
+                applicant.ApplicantInboxId = 5;
                 applicant.ApplicantSelectionStatusId = 2;
+                applicant.ApplicantCurrentStatusId = 2;
                 _context.Add(applicant);
                 ResultContainer currentResult = new ResultContainer();
                 currentResult = result;
@@ -247,7 +251,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                     applicant.TotalGPA = result.TotalGPA;
                     applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                     applicant.SelectionStatus = "Awaited";
+                    applicant.ApplicantInboxId = 5;
                     applicant.ApplicantSelectionStatusId = 2;
+                    applicant.ApplicantCurrentStatusId = 2;
                     _context.Add(applicant);
                     ResultContainer currentResult = new ResultContainer();
                     currentResult = result;
@@ -312,7 +318,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                         applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                         applicant.SelectionStatus = "Selected";
                         applicant.ApplicantSelectionStatusId = 1;
-                        applicant.ApplicantCurrentStatusId = 1;
+                        applicant.ApplicantCurrentStatusId = 2;
                         _context.Add(applicant);
                         ResultContainer currentResult = new ResultContainer();
                         currentResult = result;
@@ -349,7 +355,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                             applicant.SelectionStatus = "Selected";
                             applicant.ApplicantSelectionStatusId = 1;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;
@@ -379,8 +385,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                         applicant.TotalGPA = result.TotalGPA;
                         applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                         applicant.SelectionStatus = "Awaited";
+                        applicant.ApplicantInboxId = 5;
                         applicant.ApplicantSelectionStatusId = 2;
-                        applicant.ApplicantCurrentStatusId = 1;
+                        applicant.ApplicantCurrentStatusId = 2;
                         _context.Add(applicant);
                         ResultContainer currentResult = new ResultContainer();
                         currentResult = result;
@@ -413,8 +420,9 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.TotalGPA = result.TotalGPA;
                             applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                             applicant.SelectionStatus = "Awaited";
+                            applicant.ApplicantInboxId = 5;
                             applicant.ApplicantSelectionStatusId = 2;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;
@@ -457,7 +465,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                             applicant.SelectionStatus = "Selected";
                             applicant.ApplicantSelectionStatusId = 1;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;
@@ -489,7 +497,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.DAEInstituteId = DAEInstituteId;
                             applicant.SelectionStatus = "Selected";
                             applicant.ApplicantSelectionStatusId = 1;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;
@@ -535,7 +543,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.SchemeLevelPolicyId = currentPolicy.SchemeLevelPolicyId;
                             applicant.SelectionStatus = "Selected";
                             applicant.ApplicantSelectionStatusId = 1;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;
@@ -567,7 +575,7 @@ namespace ScholarshipManagementSystem.Controllers.ImportResult
                             applicant.DegreeScholarshipLevelId = degreeScholarshipLevelId;
                             applicant.SelectionStatus = "Selected";
                             applicant.ApplicantSelectionStatusId = 1;
-                            applicant.ApplicantCurrentStatusId = 1;
+                            applicant.ApplicantCurrentStatusId = 2;
                             _context.Add(applicant);
                             ResultContainer currentResult = new ResultContainer();
                             currentResult = result;

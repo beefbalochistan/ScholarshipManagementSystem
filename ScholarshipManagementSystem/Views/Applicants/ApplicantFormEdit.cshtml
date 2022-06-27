@@ -5,9 +5,10 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 <style>
-    .page-title-box{
+    .page-title-box {
         padding: 0;
     }
+
     .inputSelect {
         background-color: #F8F8F8;
     }
@@ -86,14 +87,27 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <input type="hidden" asp-for="ApplicantId" />
+                        <input type="hidden" asp-for="DAEInstituteId" />
+                        <input type="hidden" asp-for="TrancheId" />
+                        <input type="hidden" asp-for="TrancheDocumentId" />
+                        <input type="hidden" asp-for="IsDisbursed" />
+                        <input type="hidden" asp-for="IsPaymentInProcess" />
                         <input type="hidden" asp-for="ApplicantCurrentStatusId" />
                         <input type="hidden" asp-for="ApplicantSelectionStatusId" />
                         <input type="hidden" asp-for="SchemeLevelPolicyId" />
                         <input type="hidden" asp-for="ScanDocument" />
                         <input type="hidden" asp-for="ScanOtherDocument" />
                         <input type="hidden" asp-for="ProvienceId" />
+                        <input type="hidden" asp-for="RollNumber" />
+                        <input type="hidden" asp-for="Name" />
+                        <input type="hidden" asp-for="FatherName" />
+                        <input type="hidden" asp-for="RegisterationNumber" />
                         <input type="hidden" asp-for="DistrictId" />
                         <input type="hidden" asp-for="Picture" />
+                        <input type="hidden" asp-for="TotalGPA" />
+                        <input type="hidden" asp-for="TotalMarks" />
+                        <input type="hidden" asp-for="ReceivedCGPA" />
+                        <input type="hidden" asp-for="ReceivedMarks" />
                         <input type="hidden" asp-for="SelectionMethodId" />
                         <input type="hidden" asp-for="SelectionStatus" />
                         <input type="hidden" asp-for="ApplicantReferenceNo" />
@@ -117,14 +131,14 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label asp-for="RegisterationNumber" class="control-label"></label>
-                                                <input asp-for="RegisterationNumber" disabled="disabled" style="background-color: #f8f8f8" class="form-control" />
+                                                <input asp-for="RegisterationNumber" readonly="readonly" style="background-color: #f8f8f8" class="form-control" />
                                                 <span asp-validation-for="RegisterationNumber" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label asp-for="RollNumber" class="control-label"></label>
-                                                <input asp-for="RollNumber" disabled="disabled" style="background-color: #f8f8f8" class="form-control" />
+                                                <input asp-for="RollNumber" readonly="readonly" style="background-color: #f8f8f8" class="form-control" />
                                                 <span asp-validation-for="RollNumber" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -272,7 +286,7 @@
                                                     <input asp-for="FatherMobile" id="fmobile" class="form-control inputBox input-mask" data-inputmask="'mask': '0399-9999999'" placeholder="Type Mobile#" />
                                                 </div>
                                                 <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask':'0399-9999999'" 
+                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask':'0399-9999999'"
                                                            data-parsley-equalto="#fmobile" placeholder="Re-Type Mobile#" />
                                                 </div>
                                                 <span asp-validation-for="FatherMobile" class="text-danger"></span>
@@ -285,7 +299,7 @@
                                                 <span asp-validation-for="Email" class="text-danger"></span>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label asp-for="TelephoneWithCode" class="control-label"></label>
@@ -327,13 +341,13 @@
                                     <div class="form-group">
                                         <label class="control-label">Merit From</label>
                                         @*<select disabled="disabled" asp-for="DistrictId" asp-items="@ViewBag.DistrictId" class="form-control inputSelect">
-                                            <option>-Select-</option>
-                                        </select>*@
+                                                <option>-Select-</option>
+                                            </select>*@
                                         <label style="background-color:#f8f8f8" class="form-control">@ViewBag.QoutaFrom</label>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
-                           
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -344,54 +358,54 @@
                                         <span asp-validation-for="OldInstitudeNameAddress" class="text-danger"></span>
                                     </div>
                                 </div>
-                               
-                                  
 
-                                        @{
-                                            if (Model.ReceivedMarks == 0)
-                                            {
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="TotalGPA" class="control-label"></label>
-                                                        <label class="form-control inputBox">@Model.TotalGPA</label>
-                                                        <span asp-validation-for="TotalGPA" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="TotalMarks" class="control-label"></label>
-                                                        <label class="form-control inputBox">@Model.TotalMarks</label>
-                                                        <span asp-validation-for="TotalMarks" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-                                        @{
-                                            if (Model.ReceivedMarks == 0)
-                                            {
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="ReceivedCGPA" class="control-label"></label>
-                                                        <label class="form-control inputBox">@Model.ReceivedCGPA</label>
-                                                        <span asp-validation-for="ReceivedCGPA" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label asp-for="ReceivedMarks" class="control-label"></label>
-                                                        <label class="form-control inputBox">@Model.ReceivedMarks</label>
-                                                        <span asp-validation-for="ReceivedMarks" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-                                    </div>                                
+
+
+                                @{
+                                    if (Model.ReceivedMarks == 0)
+                                    {
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="TotalGPA" class="control-label"></label>
+                                                <label class="form-control inputBox">@Model.TotalGPA</label>
+                                                <span asp-validation-for="TotalGPA" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="TotalMarks" class="control-label"></label>
+                                                <label class="form-control inputBox">@Model.TotalMarks</label>
+                                                <span asp-validation-for="TotalMarks" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                @{
+                                    if (Model.ReceivedMarks == 0)
+                                    {
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="ReceivedCGPA" class="control-label"></label>
+                                                <label class="form-control inputBox">@Model.ReceivedCGPA</label>
+                                                <span asp-validation-for="ReceivedCGPA" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label asp-for="ReceivedMarks" class="control-label"></label>
+                                                <label class="form-control inputBox">@Model.ReceivedMarks</label>
+                                                <span asp-validation-for="ReceivedMarks" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="card">
@@ -452,7 +466,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label asp-for="CurrentInsituteFocalEmail" class="control-label"></label>
-                                        <input asp-for="CurrentInsituteFocalEmail" class="form-control inputBox input-mask"  parsley-type="email" data-inputmask="'alias': 'email'">
+                                        <input asp-for="CurrentInsituteFocalEmail" class="form-control inputBox input-mask" parsley-type="email" data-inputmask="'alias': 'email'">
                                         <span asp-validation-for="CurrentInsituteFocalEmail" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -474,38 +488,38 @@
                         <div class="card-body">
                             <h4 class="card-title">Upload Attachments</h4>
                             <div class="row">
-
-                                @{
-                                    if (Model.ScanDocument != null)
-                                    {
-                                        <div class="col-md-3" style="margin-top:10px">
-                                            <div class="form-group">
-                                                <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@Model.ScanDocument')" class="btn btn-info waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View Documents</button>
+                                <div class="col-md-12">
+                                    <div class="form-inline">
+                                        <div class="col-md-4" style="margin-top:10px">
+                                            <div class="custom-file">
+                                                <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedDocument" id="scannedDocument">
+                                                <label class="custom-file-label" style="justify-content:left" for="scannedDocument">Attachment</label>
                                             </div>
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-3">
-                                            <div class="text-center" style="margin-top:10px">
-                                                <div class="custom-file text-left">
-                                                    <input accept="application/pdf" asp-for="ScanDocument" type="file" class="custom-file-input" name="scannedDocument" id="scannedDocument">
-                                                    <label class="custom-file-label">Scanned Documents</label>
+                                        @{
+                                            if (Model.ScanDocument != null)
+                                            {
+                                                <div class="col-md-3" style="margin-top:10px">
+                                                    <div class="form-group">
+                                                        <button type="button" data-toggle="modal" data-target="#myModal" onclick="createModal('@Model.ScanDocument')" class="btn btn-warning waves-effect btn-label waves-light"><i class="bx bxs-file label-icon"></i> View Documents</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group" style="margin-top:10px">
+                                            }
+                                        }
+                                        <div class="col-md-4" style="margin-top:10px">
+                                            <div>
+                                                <label class="sr-only" for="inlineFormemail2">Email</label>
                                                 <button type="submit" class="btn btn-info w-md" name="submitButton" value="Save">Save</button>
                                                 <button type="submit" class="btn btn-success w-md" name="submitButton" value="SaveForward">Save &amp; Forward</button>
                                             </div>
-                                            <div>
-                                                <a asp-action="ApplicantFormEntry" asp-controller="Applicants" asp-route-id="@ViewBag.RRId">Back to List</a>
-                                            </div>
                                         </div>
-                                    }
-                                }
-
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div>
+                                <a class="m-2" asp-action="ApplicantFormEntry" asp-controller="Applicants" asp-route-id="@ViewBag.RRId">Back to List</a>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -530,12 +544,10 @@
                 </div>
                 <div class="modal-body">
 
-                    <8 id="pdfFile" src=""
-                       frameborder="0" width="100%" height="500px">
+                    <embed id="pdfFile" src="" frameborder="0" width="100%" height="100%">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                        </div>
-                </div>
+                        </div>                
 
             </div>
         </div>
@@ -551,6 +563,9 @@
     <!-- form mask init -->
     <script src="~/assets/js/pages/form-mask.init.js"></script>
     <script src="~/assets/js/pages/form-validation.init.js"></script>
+    <!-- bs custom file input plugin -->
+    <script src="~/assets/libs/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/assets/js/pages/form-element.init.js"></script>
     <script>
         $(document).ready(function () {
             $("#ProvienceId").change(function () {

@@ -194,15 +194,20 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantRefNo;
                 obj.Comments = comment;
                 obj.CreatedOn = DateTime.Now;                
-                obj.SeverityLevelId = severityLevelId;                
+                obj.SeverityLevelId = severityLevelId;                  
                 obj.ApplicantCurrentStatusId = userCurrentAccess;
                 obj.UserName = User.Identity.Name;
-                obj.UserAccessToForwardId = userAccessToForwardId;
+                obj.UserAccessToForwardId = userAccessToForwardId;    
+                var forwardTo = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
+                if (applicantInfo.ApplicantCurrentStatusId > forwardTo)
+                {
+                    applicantInfo.ApplicantInboxId = 2;
+                }
                 if (!IsReject)
                 {
                     //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
                     obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
-                    applicantInfo.ApplicantCurrentStatusId = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
+                    applicantInfo.ApplicantCurrentStatusId = forwardTo;
                 }
                 /*else
                 {
@@ -261,6 +266,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     _context.Add(applicantStateChanger);
                     applicantInfo.ApplicantSelectionStatusId = 4;
                     applicantInfo.SelectionStatus = "Rejected";
+                    applicantInfo.ApplicantInboxId = 4;//KDA Hard
                 }                              
                 if (userCurrentAccess == 15)//KDA Hard
                 {

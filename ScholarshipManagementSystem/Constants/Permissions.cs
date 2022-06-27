@@ -12,6 +12,8 @@ public static class Permissions
             $"Permissions.{module}.View",
             $"Permissions.{module}.Edit",
             $"Permissions.{module}.Delete",
+            $"Permissions.{module}.Analyzer",
+            $"Permissions.{module}.Import",
         };
     }
 
@@ -158,10 +160,32 @@ public static class Permissions
         public static class ViewRejected
         {
             public const string View = "Permissions.ViewRejected.View";
-        }
+        }       
         public static class ViewWaiting
         {
             public const string View = "Permissions.ViewWaiting.View";
+        }
+        public static class ViewISRC
+        {
+            public const string View = "Permissions.ViewISRC.View";
+        }
+        public static class TrackApplicant
+        {
+            public const string View = "Permissions.TrackApplicant.View";
+        }       
+        public static class Result
+        {
+            public const string View = "Permissions.Result.View";
+            public const string Analyzer = "Permissions.Result.Analyzer";
+            public const string Import = "Permissions.Result.Import";
+        }
+        public static class SMS
+        {
+            public const string View = "Permissions.SMS.View";                      
+        }
+        public static class Attachment
+        {
+            public const string View = "Permissions.Attachment.View";            
         }
     }
 }

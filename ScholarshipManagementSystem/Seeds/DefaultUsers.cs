@@ -67,6 +67,12 @@ namespace ScholarshipManagementSystem.Seeds
             await roleManager.AddPermissionClaim(adminRole, "FormEntry");        
             await roleManager.AddPermissionClaim(adminRole, "ViewRejected");        
             await roleManager.AddPermissionClaim(adminRole, "ViewWaiting");        
+            await roleManager.AddPermissionClaim(adminRole, "ViewISRC");        
+            await roleManager.AddPermissionClaim(adminRole, "TrackApplicant");        
+            await roleManager.AddPermissionClaim(adminRole, "Result");        
+            await roleManager.AddPermissionClaim(adminRole, "SMS");        
+            await roleManager.AddPermissionClaim(adminRole, "Attachment");        
+            await roleManager.AddPermissionClaim(adminRole, "ViewISRC");        
         }
 
         public static async Task AddPermissionClaim(this RoleManager<IdentityRole> roleManager, IdentityRole role, string module)

@@ -723,6 +723,21 @@ namespace Repository.Data.Migrations
                     b.ToTable("DAEInstitute", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DefaultComment", b =>
+                {
+                    b.Property<int>("DefaultCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ForwardCaseDefaultComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DefaultCommentId");
+
+                    b.ToTable("DefaultComment", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Degree", b =>
                 {
                     b.Property<int>("DegreeId")
@@ -2181,6 +2196,9 @@ namespace Repository.Data.Migrations
                     b.Property<int?>("ApplicantFinanceCurrentStatusId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ApplicantInboxId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ApplicantReferenceNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2375,6 +2393,8 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("ApplicantFinanceCurrentStatusId");
 
+                    b.HasIndex("ApplicantInboxId");
+
                     b.HasIndex("ApplicantSelectionStatusId");
 
                     b.HasIndex("DAEInstituteId");
@@ -2453,6 +2473,22 @@ namespace Repository.Data.Migrations
                     b.HasIndex("BEEFSectionId");
 
                     b.ToTable("ApplicantCurrentStatus", "Student");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantInbox", b =>
+                {
+                    b.Property<int>("ApplicantInboxId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicantInboxId");
+
+                    b.ToTable("ApplicantInbox", "Student");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantSelectionStatus", b =>
@@ -4231,6 +4267,12 @@ namespace Repository.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicantFinanceCurrentStatusId");
 
+                    b.HasOne("DAL.Models.Domain.Student.ApplicantInbox", "ApplicantInbox")
+                        .WithMany()
+                        .HasForeignKey("ApplicantInboxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.Domain.Student.ApplicantSelectionStatus", "ApplicantSelectionStatus")
                         .WithMany()
                         .HasForeignKey("ApplicantSelectionStatusId")
@@ -4276,6 +4318,8 @@ namespace Repository.Data.Migrations
                     b.Navigation("ApplicantCurrentStatus");
 
                     b.Navigation("ApplicantFinanceCurrentStatus");
+
+                    b.Navigation("ApplicantInbox");
 
                     b.Navigation("ApplicantSelectionStatus");
 

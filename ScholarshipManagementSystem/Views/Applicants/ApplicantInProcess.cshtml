@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcessSummary>
 @{
-    ViewBag.pTitle = "Applicant In Process Cases";
+    ViewBag.pTitle = ViewBag.Title;
     ViewBag.pageTitle = "Applicant";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
 <link href="~/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 <div class="row">
     <div class="col-xl-9 col-lg-8 p-0">
         <div class="card">
@@ -84,14 +85,16 @@
     <partial name="_ValidationScriptsPartial" />
     <!-- toastr plugin -->
     <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
-
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
     <script>
         $(document).ready(function () {
             var SchemeLevelId = '@ViewBag.SchemeLevelId';                        
-            fetchRecord(SchemeLevelId);
+            var inbox = '@ViewBag.Inbox';                        
+            fetchRecord(SchemeLevelId, inbox);
     })
-        function fetchRecord(SchemeLevelId) {
+        function fetchRecord(SchemeLevelId, inbox) {
             var MaxFYId = '@ViewBag.MaxFYId';
             var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
             $("#fetchspinner").show();
@@ -100,7 +103,8 @@
                 data: {
                     MaxFYId: MaxFYId,
                     applicantCurrentStatusId: applicantCurrentStatusId,
-                    SchemeLevelId: SchemeLevelId
+                    SchemeLevelId: SchemeLevelId,
+                    Inbox: inbox
                 },
                 success: function (data) {
                     $("#ApplicantDataPlace").html(data);
@@ -135,6 +139,151 @@
                 "hideMethod": "hide"
             };
             toastr.info(message);
+        }
+
+
+        function MoveToPend(applicantId, schemeLevelId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Send Applicant File in "Pending Cases!"',
+                type: "warning",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendPend",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+
+        function MoveToPrimary(applicantId, schemeLevelId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Resume Applicant File in "Primary Cases"',
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendPrimary",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+        function MoveToISRC(applicantId, schemeLevelId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Send Applicant File in "ISRC Forum"',
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendISRC",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+
+
+        function ForwardCase(applicantId, schemeLevelId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Forward Applicant With Default Comments',
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/ForwardCase",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
         }
     </script>
 }
