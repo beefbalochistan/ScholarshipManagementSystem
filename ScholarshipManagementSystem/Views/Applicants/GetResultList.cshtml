@@ -90,27 +90,28 @@
                         </td>*@
                 <td>
                     @{
+
+                        <a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-show font-size-18"></i></a>
                         if (ViewBag.UserCurrentAccess == 3)
                         {
-                            <a asp-controller="Applicants" asp-action="ApplicantFormEdit" asp-route-id="@item.ApplicantId"><i class="bx bx-file-find font-size-18"></i></a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-search font-size-18"></i></a>
+                            <span> | </span><a asp-controller="Applicants" asp-action="ApplicantFormEdit" asp-route-id="@item.ApplicantId"><i class="bx bx-detail font-size-18"></i></a>
                         }
                         if (ViewBag.Inbox == 1 || ViewBag.Inbox == 2)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-warning" data-toggle="tooltip" data-placement="top" title="Pending" data-original-title="Track" onclick="MoveToPend(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-reply font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-warning" data-toggle="tooltip" data-placement="top" title="Pending" data-original-title="Track" onclick="MoveToPend(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="bx bx-downvote font-size-18"></i></a>
                         }
                         else if (ViewBag.Inbox == 3)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Move to Primary Inbox" data-original-title="Track" onclick="MoveToPrimary(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-forward font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Move to Primary Inbox" data-original-title="Track" onclick="MoveToPrimary(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="bx bx-upvote font-size-18"></i></a>
                         }
                         @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewISRC.View)).Result.Succeeded && ViewBag.Inbox != 6)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-arrow-up font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="bx bxs-comment-error font-size-18"></i></a>
                         }
-                        <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-forward font-size-18"></i></a>
+                        if (ViewBag.UserCurrentAccess > 3)
+                        {
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-forward font-size-18"></i></a>
+                        }
                     }
                 </td>
                 </tr>
