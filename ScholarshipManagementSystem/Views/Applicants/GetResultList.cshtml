@@ -91,7 +91,7 @@
                 <td>
                     @{
 
-                        <a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="mr-2 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-show font-size-18"></i></a>
+                        <a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Track"><i class="bx bx-show font-size-18"></i></a>
                         if (ViewBag.UserCurrentAccess == 3)
                         {
                             <span> | </span><a asp-controller="Applicants" asp-action="ApplicantFormEdit" asp-route-id="@item.ApplicantId"><i class="bx bx-detail font-size-18"></i></a>

@@ -16,28 +16,28 @@
                 {
                     <li>
                         <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="1" asp-route-title="Applicant In Process" class=" waves-effect">
-                            <i class="bx bx-data"></i><span key="t-calendar">Main - Inbox</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="2" asp-route-title="Return Cases" class=" waves-effect">
-                            <i class="bx bx-arrow-back"></i><span key="t-calendar">Return Cases Inbox</span>
+                            @*<i class="bx bx-data"></i>*@<span class="mr-2 ml-2"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">Main - Inbox</span>
                         </a>
                     </li>
                     <li>
                         <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="3" asp-route-title="Pending Cases" class=" waves-effect">
-                            <i class="bx bx-info-circle"></i><span key="t-calendar">Pending Cases Inbox</span>
+                            <span class="mr-2 ml-2"><img src="~/assets/images/icons/PendInbox.svg" height="22" /></span><span key="t-calendar">Pending Cases Inbox</span>
                         </a>
                     </li>
+                    <li>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="2" asp-route-title="Return Cases" class=" waves-effect">
+                            <span class="mr-2 ml-2"><img src="~/assets/images/icons/ReturnInbox.svg" height="22" /></span><span key="t-calendar">Return Cases Inbox</span>
+                        </a>
+                    </li>
+
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                 {
-
-                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewISRC.View)).Result.Succeeded)
                     {
                         <li>
-                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="4" asp-route-title="Rejected Cases" class=" waves-effect">
-                                <i class="fa fa-step-backward"></i><span key="t-calendar">Rejected Cases Inbox</span>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="6" asp-route-title="ISRC Cases" class=" waves-effect">
+                                <span class="mr-2 ml-2"><img src="~/assets/images/icons/ISRCInbox.svg" height="22" /></span><span key="t-calendar">ISRC Cases Inbox</span>
                             </a>
                         </li>
                     }
@@ -45,19 +45,18 @@
                     {
                         <li>
                             <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="5" asp-route-title="Waiting Cases" class=" waves-effect">
-                                <i class="fa fa-step-forward"></i><span key="t-calendar">Waiting Cases Inbox</span>
+                                <span class="mr-2 ml-2"><img src="~/assets/images/icons/WaitingInbox.svg" height="22" /></span><span key="t-calendar">Waiting Cases Inbox</span>
                             </a>
                         </li>
                     }
-                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewISRC.View)).Result.Succeeded)
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
                     {
                         <li>
-                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="6" asp-route-title="ISRC Cases" class=" waves-effect">
-                                <i class="bx bxs-alarm-add"></i><span key="t-calendar">ISRC Cases Inbox</span>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="4" asp-route-title="Rejected Cases" class=" waves-effect">
+                                <span class="mr-2 ml-2"><img src="~/assets/images/icons/RejectedInbox.svg" height="22" /></span><span key="t-calendar">Rejected Cases Inbox</span>
                             </a>
                         </li>
                     }
-
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
