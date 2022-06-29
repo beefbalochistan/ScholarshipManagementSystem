@@ -77,7 +77,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignRights([Bind("UserAccessToForwardId,UserId,ApplicantCurrentStatusId")] UserAccessToForward userAccessToForward)
+        public async Task<IActionResult> AssignRights([Bind("UserAccessToForwardId,UserId,ApplicantCurrentStatusId,IsDefault")] UserAccessToForward userAccessToForward)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserAccessToForwardId,UserId,ApplicantCurrentStatusId")] UserAccessToForward userAccessToForward)
+        public async Task<IActionResult> Edit(int id, [Bind("UserAccessToForwardId,UserId,ApplicantCurrentStatusId,IsDefault")] UserAccessToForward userAccessToForward)
         {
             if (id != userAccessToForward.UserAccessToForwardId)
             {

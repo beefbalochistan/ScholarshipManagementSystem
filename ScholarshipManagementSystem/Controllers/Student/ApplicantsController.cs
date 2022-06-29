@@ -84,7 +84,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 })
                 .ToList();
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
-            ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUser.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
+            var result = _context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUser.Id);
+            ViewData["UserAccessToForwardId"] = new SelectList(result, "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
+            if(result.Count(a => a.IsDefault == true) > 0)
+            {
+                ViewBag.DefaultForward = result.Where(a => a.IsDefault == true).Select(a => a.ApplicantCurrentStatusId).FirstOrDefault();
+                ViewBag.AccessToForwardId = result.Where(a => a.IsDefault == true).Select(a => a.UserAccessToForwardId).FirstOrDefault();
+            }            
             ViewBag.SchemeLevelId = SchemeLevelId;
             ViewBag.Inbox = Inbox;
             //-----------------------------------
@@ -727,7 +733,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been moved in ISRC queue successfully." });
         }
-        public async Task<JsonResult> ForwardCase(int applicantId)
+        public async Task<JsonResult> ForwardCase(int applicantId, int ForwardId, int UserAccessToForwardId)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
@@ -746,9 +752,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);             
                 obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
                 obj.UserName = User.Identity.Name;
-                obj.UserAccessToForwardId = applicantInfo.ApplicantCurrentStatusId;
-                var forwardTo = _context.userAccessToForward.Find(applicantInfo.ApplicantCurrentStatusId).ApplicantCurrentStatusId;                                   
-                obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
+                obj.UserAccessToForwardId = UserAccessToForwardId;                
+                obj.ForwardToUserName = _context.ApplicantCurrentStatus.Include(a=>a.BEEFSection).Where(a=>a.ApplicantCurrentStatusId == ForwardId).Select(a=>a.BEEFSection.Name).FirstOrDefault();
                 _context.Add(obj);
                 //-----------------------------------------------------------
                 await _context.SaveChangesAsync();

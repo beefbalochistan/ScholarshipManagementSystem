@@ -193,12 +193,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantId = applicantId;
                 obj.ApplicantReferenceId = applicantRefNo;
                 obj.Comments = comment;
-                obj.CreatedOn = DateTime.Now;                
-                obj.SeverityLevelId = severityLevelId;                  
+                obj.CreatedOn = DateTime.Now;
+                obj.SeverityLevelId = 1;// severityLevelId;      KDA Hard            
                 obj.ApplicantCurrentStatusId = userCurrentAccess;
                 obj.UserName = User.Identity.Name;
                 obj.UserAccessToForwardId = userAccessToForwardId;    
                 var forwardTo = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
+                applicantInfo.ApplicantInboxId = 1;
                 if (applicantInfo.ApplicantCurrentStatusId > forwardTo)
                 {
                     applicantInfo.ApplicantInboxId = 2;

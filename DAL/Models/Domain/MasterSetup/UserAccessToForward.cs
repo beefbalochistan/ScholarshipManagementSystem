@@ -13,6 +13,7 @@ namespace DAL.Models.Domain.MasterSetup
         [ForeignKey("ApplicantCurrentStatus")]
         [Display(Name = "ApplicantCurrentStatus")]
         public int ApplicantCurrentStatusId { get; set; }
+        public bool IsDefault { get; set; } = false;
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
     }
 }

@@ -108,9 +108,9 @@
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="bx bxs-comment-error font-size-18"></i></a>
                         }
-                        if (ViewBag.UserCurrentAccess > 3)
+                        if (ViewBag.UserCurrentAccess > 3 && ViewBag.DefaultForward != 0)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="dripicons-forward font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="mr-2 text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId, @ViewBag.DefaultForward, @ViewBag.AccessToForwardId)"><i class="dripicons-forward font-size-18"></i></a>
                         }
                     }
                 </td>

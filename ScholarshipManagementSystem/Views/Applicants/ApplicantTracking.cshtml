@@ -299,18 +299,17 @@
                                                         </select>
                                                     </div>
                                                     <label class="control-label mr-2 severity">Severity</label>
-                                                    <div class="input-group mb-2 mr-sm-3 severity">
+                                                    @*<div class="input-group mb-2 mr-sm-3 severity">
                                                         <select id="SeverityLevelId" name="SeverityLevelId" style="max-width:130px" class="form-control select2-templating">
                                                             <option value="0"> - - Select - -</option>
                                                             <optgroup label="Comments Serverity">
                                                                 @foreach (var Detail in ViewBag.SeverityLevelId)
-                                                                {
-                                                                    @*<option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Color : @Detail.Meaning</option>*@
+                                                                {                                                                    
                                                                     <option value="@Detail.SeverityLevelId" style="color:@Detail.Color">@Detail.Meaning</option>
                                                                 }
                                                             </optgroup>
                                                         </select>
-                                                    </div>
+                                                    </div>*@
                                                     <label class="control-label mr-2">Forward To</label>
                                                     <div class="input-group mb-2 mr-sm-3">
                                                         <select style="max-width:150px" id="UserAccessToForwardId" name="UserAccessToForwardId" class="form-control" asp-items="ViewBag.UserAccessToForwardId">

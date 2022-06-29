@@ -250,7 +250,7 @@
         }
 
 
-        function ForwardCase(applicantId, schemeLevelId) {
+        function ForwardCase(applicantId, schemeLevelId, ForwardId, AccessToForwardId) {
             Swal.fire({
                 title: "Are you sure?",
                 text: 'You Want to Forward Applicant With Default Comments',
@@ -263,7 +263,7 @@
                     $.ajax({
                         type: "POST",
                         url: "/Applicants/ForwardCase",
-                        data: { applicantId: applicantId },
+                        data: { applicantId: applicantId, ForwardId: ForwardId, UserAccessToForwardId: AccessToForwardId },
                         dataType: "json",
                         success: function (response) {
                             if (response != null) {

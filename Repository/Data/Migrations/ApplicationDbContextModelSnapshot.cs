@@ -1806,6 +1806,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
