@@ -701,6 +701,22 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been pushed in pending queue successfully." });
         }
+        public async Task<JsonResult> SendIA(int applicantId)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantInboxId = 7;//KDA Hard
+                _context.Update(applicantInfo);
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Push on IA Queue!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been pushed in IA queue successfully." });
+        }
         public async Task<JsonResult> SendPrimary(int applicantId)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);

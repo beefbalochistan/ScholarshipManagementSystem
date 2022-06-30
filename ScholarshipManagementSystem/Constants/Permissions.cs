@@ -169,6 +169,10 @@ public static class Permissions
         {
             public const string View = "Permissions.ViewISRC.View";
         }
+        public static class ViewIA
+        {
+            public const string View = "Permissions.ViewIA.View";
+        }
         public static class TrackApplicant
         {
             public const string View = "Permissions.TrackApplicant.View";

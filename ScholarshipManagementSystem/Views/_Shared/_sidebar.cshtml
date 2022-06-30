@@ -10,7 +10,7 @@
         <!--- Sidemenu -->
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
-            <ul class="metismenu list-unstyled" id="side-menu">               
+            <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-calendar">BEEF Workspace</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                 {
@@ -38,6 +38,14 @@
                         <li>
                             <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="6" asp-route-title="ISRC Cases" class=" waves-effect">
                                 <span class="mr-2 ml-1"><img src="~/assets/images/icons/ISRCInbox.svg" height="22" /></span><span key="t-calendar">ISRC Cases Inbox</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewIA.View)).Result.Succeeded)
+                    {
+                        <li>
+                            <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="7" asp-route-title="Internal Audit Cases" class=" waves-effect">
+                                <i class="mdi mdi-account-question-outline"></i><span key="t-calendar">IA Cases Inbox</span>
                             </a>
                         </li>
                     }
@@ -183,10 +191,9 @@
                 }
 
 
-                <li class="menu-title" key="t-menu">Scholarship Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
-
+                    <li class="menu-title" key="t-menu">Scholarship Management</li>
                     <li>
                         <a asp-action="Index" asp-controller="ScholarshipFiscalYears" class=" waves-effect">
                             <i class="bx bxs-yin-yang"></i>
@@ -208,10 +215,9 @@
 
                 }
 
-
-                <li class="menu-title" key="t-menu">Master Setup</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
+                    <li class="menu-title" key="t-menu">Master Setup</li>
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
@@ -402,10 +408,9 @@
                     </li>
 
                 }
-
-                <li class="menu-title" key="t-menu">User Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
+                    <li class="menu-title" key="t-menu">User Management</li>
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bxs-user"></i>
@@ -418,11 +423,9 @@
                     </li>
 
                 }
-                <li class="menu-title" key="t-menu">Result Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Result.Analyzer)).Result.Succeeded)
                 {
-                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
-                    {
+                    <li class="menu-title" key="t-menu">Result Management</li>                   
                         <li>
                             <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
                                 <i class="bx bxs-dizzy"></i>
@@ -434,9 +437,7 @@
                                 <i class="bx bxs-dizzy"></i>
                                 <span key="t-calendar">Seletion Criteria</span>
                             </a>
-                        </li>
-                    }
-
+                        </li>                    
                     <li>
                         <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
                             <i class="bx bxs-dizzy"></i>
@@ -463,10 +464,9 @@
                     </li>
                 }
 
-
-                <li class="menu-title" key="t-menu">SMS Management</li>
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                 {
+                    <li class="menu-title" key="t-menu">SMS Management</li>
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bxs-user"></i>

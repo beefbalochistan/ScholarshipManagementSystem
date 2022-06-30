@@ -50,6 +50,7 @@ public class PermissionController : Controller
         allPermissions.GetPermissions(typeof(Permissions.SMS), roleId);
         allPermissions.GetPermissions(typeof(Permissions.Attachment), roleId);
         allPermissions.GetPermissions(typeof(Permissions.ViewISRC), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.ViewIA), roleId);
         var role = await _roleManager.FindByIdAsync(roleId);
         model.RoleId = roleId;
         var claims = await _roleManager.GetClaimsAsync(role);

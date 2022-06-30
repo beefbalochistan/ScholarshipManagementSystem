@@ -207,7 +207,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 if (!IsReject)
                 {
                     //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
-                    obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
+                    //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
+                    obj.ForwardToUserName = _context.ApplicantCurrentStatus.Include(a => a.BEEFSection).Where(a => a.ApplicantCurrentStatusId == userAccessToForwardId).Select(a => a.BEEFSection.Name).FirstOrDefault();
                     applicantInfo.ApplicantCurrentStatusId = forwardTo;
                 }
                 /*else
