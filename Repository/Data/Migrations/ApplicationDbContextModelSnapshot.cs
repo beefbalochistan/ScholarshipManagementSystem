@@ -1811,11 +1811,13 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserAccessToForwardId");
 
                     b.HasIndex("ApplicantCurrentStatusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAccessToForward", "master");
                 });
@@ -1832,11 +1834,13 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserAccessToSchemeLevelId");
 
                     b.HasIndex("SchemeLevelId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAccessToSchemeLevel", "master");
                 });
@@ -2586,14 +2590,14 @@ namespace Repository.Data.Migrations
                     b.Property<string>("ForwardToUserName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeverityLevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserAccessToForwardId")
-                        .HasColumnType("int");
+                    b.Property<string>("ToUserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
@@ -2603,10 +2607,6 @@ namespace Repository.Data.Migrations
                     b.HasIndex("ApplicantCurrentStatusId");
 
                     b.HasIndex("ApplicantId");
-
-                    b.HasIndex("SeverityLevelId");
-
-                    b.HasIndex("UserAccessToForwardId");
 
                     b.ToTable("ApplicantStudent", "Student");
                 });
@@ -4087,7 +4087,15 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApplicantCurrentStatus");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel", b =>
@@ -4097,6 +4105,14 @@ namespace Repository.Data.Migrations
                         .HasForeignKey("SchemeLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DAL.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("SchemeLevel");
                 });
@@ -4396,25 +4412,9 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Domain.MasterSetup.SeverityLevel", "SeverityLevel")
-                        .WithMany()
-                        .HasForeignKey("SeverityLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Domain.MasterSetup.UserAccessToForward", "UserAccessToForward")
-                        .WithMany()
-                        .HasForeignKey("UserAccessToForwardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Applicant");
 
                     b.Navigation("ApplicantCurrentStatus");
-
-                    b.Navigation("SeverityLevel");
-
-                    b.Navigation("UserAccessToForward");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentDisbursement", b =>

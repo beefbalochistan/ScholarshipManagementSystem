@@ -14,10 +14,12 @@ namespace DAL.Models.Domain.MasterSetup
         [Key]
         public int UserAccessToSchemeLevelId { get; set; }
         [Required]
+        [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
         [ForeignKey("SchemeLevel")]
         [Display(Name = "Scheme")]
         public int SchemeLevelId { get; set; }
         public virtual SchemeLevel SchemeLevel { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

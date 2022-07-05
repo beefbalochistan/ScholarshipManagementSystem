@@ -24,6 +24,7 @@ using DAL.Models.Domain.VirtualAccount;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Font = iTextSharp.text.Font;
+using ScholarshipManagementSystem.Models;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -74,23 +75,18 @@ namespace ScholarshipManagementSystem.Controllers.Student
             mymodel.SPApplicantInProcessSummaryList = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummary] {0}, {1}", applicantCurrentStatusId, MaxFYId).ToListAsync(); ;*/
             //-----------------------------------
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);          
-            ViewBag.UserCurrentAccess = currentUser.ApplicantCurrentStatusId;
-            ViewData["SeverityLevelId"] = _context.SeverityLevel;
+            ViewBag.UserCurrentAccess = currentUser.ApplicantCurrentStatusId;            
             var SectionCommentList = _context.SectionComment.Where(a => a.BEEFSectionId == currentUser.ApplicantCurrentStatusId)
                 .Select(s => new
                 {
-                    SectionCommentId = s.SeverityLevelId,
+                    SectionCommentId = s.SectionCommentId,
                     Description = string.Format("{0}", s.Comment)
                 })
                 .ToList();
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             var result = _context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUser.Id);
             ViewData["UserAccessToForwardId"] = new SelectList(result, "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
-            if(result.Count(a => a.IsDefault == true) > 0)
-            {
-                ViewBag.DefaultForward = result.Where(a => a.IsDefault == true).Select(a => a.ApplicantCurrentStatusId).FirstOrDefault();
-                ViewBag.AccessToForwardId = result.Where(a => a.IsDefault == true).Select(a => a.UserAccessToForwardId).FirstOrDefault();
-            }            
+            
             ViewBag.SchemeLevelId = SchemeLevelId;
             ViewBag.Inbox = Inbox;
             //-----------------------------------
@@ -121,11 +117,20 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.MaxFYId = MaxFYId;
             ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
             ViewBag.Inbox = id;
-            ViewBag.SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
-
+            int SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
+            ViewBag.SchemeLevelId = SchemeLevelId;
             var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1}, {2}, {3}", applicantCurrentStatusId, MaxFYId, currentUser.Id, 1).ToListAsync();//KDA Hard 1 (ApplicantSelectionStatusId=1)
             ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
             ViewBag.Title = title;
+            //---------------------
+            List<UserViewModel> users = await _context.UserAccessToSchemeLevel.Include(a => a.ApplicationUser).Where(a => a.ApplicationUser.ApplicantCurrentStatusId == (applicantCurrentStatusId + 1) && a.SchemeLevelId == SchemeLevelId).Select(a => new UserViewModel { UserId = a.UserId, UserName = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName }).ToListAsync();
+            var userlist = users.Select(m => new SelectListItem()
+            {
+                Text = m.UserName.ToString(),
+                Value = m.UserId,
+            });
+            ViewBag.UserList = users;// new SelectList(users, "UserId", "UserName");            
+            //---------------------
             return View(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantRejected()
@@ -176,8 +181,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             var currentUserId = await _userManager.GetUserAsync(HttpContext.User);
             //var CurrentUser = await _userManager.Users.Where(a => a.Id == currentUserId.Id).FirstOrDefaultAsync();
-            ViewBag.UserCurrentAccess = currentUserId.ApplicantCurrentStatusId;
-            ViewData["SeverityLevelId"] = _context.SeverityLevel;
+            ViewBag.UserCurrentAccess = currentUserId.ApplicantCurrentStatusId;            
             var SectionCommentList = _context.SectionComment.Include(a=>a.SeverityLevel).Where(a=>a.BEEFSectionId == currentUserId.BEEFSectionId)
                 .Select(s => new
                 {
@@ -187,7 +191,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 .ToList();
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
-            ViewData["UserAccessToForwardId"] = new SelectList(_context.userAccessToForward.Include(a=>a.ApplicantCurrentStatus).Where(a=>a.UserId == currentUserId.Id), "UserAccessToForwardId", "ApplicantCurrentStatus.ProcessState");
+            var result = _context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUserId.Id);
+            ViewData["ddlApplicantCurrentStatusId"] = new SelectList(result, "ApplicantCurrentStatusId", "ApplicantCurrentStatus.ProcessState");            
             ViewBag.IsInRoleReject = false;
             var IsInRoleReject = await _userManager.IsInRoleAsync(currentUserId, "Reject");
             if(IsInRoleReject)
@@ -559,6 +564,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 RollNumber = a.RollNumber,                 
                 ApplicantReferenceNo = a.ApplicantReferenceNo,
                 HomeAddress = a.SchemeLevelPolicy.SchemeLevel.Name,
+                SchemeLevelPolicyId = a.SchemeLevelPolicy.SchemeLevelId,
                 SelectionMethodId = a.SelectionMethodId,
                 Religion = a.SelectionMethod.Name,
                 IsFormSubmitted = a.IsFormSubmitted,
@@ -749,7 +755,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been moved in ISRC queue successfully." });
         }
-        public async Task<JsonResult> ForwardCase(int applicantId, int ForwardId, int UserAccessToForwardId)
+        public async Task<JsonResult> ForwardCase(int applicantId, string UserId)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
@@ -763,13 +769,14 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantId = applicantId;
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = comments;
-                obj.CreatedOn = DateTime.Now;
-                obj.SeverityLevelId = 1;
+                obj.CreatedOn = DateTime.Now;                
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);             
                 obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
                 obj.UserName = User.Identity.Name;
-                obj.UserAccessToForwardId = UserAccessToForwardId;                
-                obj.ForwardToUserName = _context.ApplicantCurrentStatus.Include(a=>a.BEEFSection).Where(a=>a.ApplicantCurrentStatusId == ForwardId).Select(a=>a.BEEFSection.Name).FirstOrDefault();
+                obj.FromUserId = currentUser.Id;                
+                obj.ToUserId = UserId;                
+                var UserInfo = _context.Users.Find(UserId);
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
                 _context.Add(obj);
                 //-----------------------------------------------------------
                 await _context.SaveChangesAsync();
@@ -809,18 +816,17 @@ namespace ScholarshipManagementSystem.Controllers.Student
             if (applicantInfo != null)
             {
                 applicantInfo.IsPaymentInProcess = false;
+                applicantInfo.ApplicantInboxId = 2;
                 _context.Update(applicantInfo);
-                ApplicantStudent obj = new ApplicantStudent();
+               /* ApplicantStudent obj = new ApplicantStudent();
                 obj.ApplicantId = applicantId;
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = Issues;
-                obj.CreatedOn = DateTime.Now;
-                obj.SeverityLevelId = 4;//KDA Hard
+                obj.CreatedOn = DateTime.Now;                
                 obj.ApplicantCurrentStatusId = 25;//KDA Hard
-                obj.UserName = User.Identity.Name;
-                obj.UserAccessToForwardId = 16;//KDA Hard
+                obj.UserName = User.Identity.Name;                
                 obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == obj.UserAccessToForwardId).FirstName;
-                _context.Add(obj);
+                _context.Add(obj);*/
                 //await _context.SaveChangesAsync();
                 //-----------------------------------------------------------
             }
@@ -929,6 +935,16 @@ namespace ScholarshipManagementSystem.Controllers.Student
             });
             var test = Json(districtList);
             return test;
+        }
+        public async Task<JsonResult> GetUsers(int ApplicantCurrentStatusId, int SchemeLevelId)
+        {
+            List<UserViewModel> users = await _context.UserAccessToSchemeLevel.Include(a=>a.ApplicationUser).Where(a => a.ApplicationUser.ApplicantCurrentStatusId == ApplicantCurrentStatusId && a.SchemeLevelId == SchemeLevelId).Select(a=> new UserViewModel { UserId = a.UserId, UserName = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName}).ToListAsync();
+            var userlist = users.Select(m => new SelectListItem()
+            {
+                Text = m.UserName.ToString(),
+                Value = m.UserId,
+            });
+            return Json(userlist);            
         }
         public async Task<JsonResult> GetSchemeLevels(int FYId)
         {

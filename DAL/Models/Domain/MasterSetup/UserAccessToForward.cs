@@ -9,11 +9,13 @@ namespace DAL.Models.Domain.MasterSetup
         [Key]
         public int UserAccessToForwardId { get; set; }
         [Required]
+        [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }        
         [ForeignKey("ApplicantCurrentStatus")]
         [Display(Name = "ApplicantCurrentStatus")]
         public int ApplicantCurrentStatusId { get; set; }
         public bool IsDefault { get; set; } = false;
         public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

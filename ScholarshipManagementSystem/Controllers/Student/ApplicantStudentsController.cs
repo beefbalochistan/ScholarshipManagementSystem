@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using DAL.Models;
+using System.Security.Claims;
 
 namespace ScholarshipManagementSystem.Controllers.Student
 {
@@ -36,7 +37,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<IActionResult> _Index(int id)
         {            
-            var applicationDbContext = _context.ApplicantStudent.Include(a => a.ApplicantCurrentStatus.BEEFSection).Where(a=>a.ApplicantId == id);
+            var applicationDbContext = _context.ApplicantStudent.Include(a=>a.ApplicationUserFrom).Include(a=>a.ApplicationUserTo).Include(a => a.ApplicantCurrentStatus.BEEFSection).Where(a=>a.ApplicantId == id);
             return PartialView(await applicationDbContext.ToListAsync());
         }
         public ActionResult DisplayPDF(int id)
@@ -180,35 +181,34 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         [HttpPost]
-        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, bool IsReject, string comment, int severityLevelId, int userAccessToForwardId, int userCurrentAccess, IFormFile Attachment)
+        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, bool IsReject, string comment,int ForwardApplicantCurrentStatusId, string UserId, int userCurrentAccess, IFormFile Attachment)
         {
             var applicantInfo = await _context.Applicant.FindAsync(applicantId);
             if (IsReject)
             {
-                userAccessToForwardId = 1;
+                ForwardApplicantCurrentStatusId = 1;
             }
-            if (applicantId != 0 && applicantRefNo != "" && comment != "" && userAccessToForwardId != 0)
+            if (!(applicantId == 0 || applicantRefNo == "" || comment == "" || UserId == ""))
             {                
                 ApplicantStudent obj = new ApplicantStudent();
                 obj.ApplicantId = applicantId;
                 obj.ApplicantReferenceId = applicantRefNo;
                 obj.Comments = comment;
-                obj.CreatedOn = DateTime.Now;
-                obj.SeverityLevelId = 1;// severityLevelId;      KDA Hard            
+                obj.CreatedOn = DateTime.Now;                
+                obj.FromUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 obj.ApplicantCurrentStatusId = userCurrentAccess;
-                obj.UserName = User.Identity.Name;
-                obj.UserAccessToForwardId = userAccessToForwardId;    
-                var forwardTo = _context.userAccessToForward.Find(userAccessToForwardId).ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;                              
+                var forwardTo = ForwardApplicantCurrentStatusId;
+                obj.ToUserId = UserId;
+                var ForwardUserInfo = _context.Users.Find(UserId);
+                obj.ForwardToUserName = ForwardUserInfo.FirstName + " " + ForwardUserInfo.LastName;
                 applicantInfo.ApplicantInboxId = 1;
                 if (applicantInfo.ApplicantCurrentStatusId > forwardTo)
                 {
                     applicantInfo.ApplicantInboxId = 2;
                 }
                 if (!IsReject)
-                {
-                    //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.Id == _context.userAccessToForward.Find(userAccessToForwardId).UserId).FirstName;
-                    //obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
-                    obj.ForwardToUserName = _context.ApplicantCurrentStatus.Include(a => a.BEEFSection).Where(a => a.ApplicantCurrentStatusId == userAccessToForwardId).Select(a => a.BEEFSection.Name).FirstOrDefault();
+                {                   
                     applicantInfo.ApplicantCurrentStatusId = forwardTo;
                 }
                 /*else
@@ -296,7 +296,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<string> SubmitCommentInBulk(string applicantIdList, string comment, int severityLevelId, int userAccessToForwardId, int userCurrentAccess, IFormFile Attachment)
         {
             
@@ -311,11 +311,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
                     obj.ApplicantId = applicantId;
                     obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                     obj.Comments = comment;
-                    obj.CreatedOn = DateTime.Now;
-                    obj.SeverityLevelId = severityLevelId;
+                    obj.CreatedOn = DateTime.Now;                    
                     obj.ApplicantCurrentStatusId = userCurrentAccess;
-                    obj.UserName = User.Identity.Name;
-                    obj.UserAccessToForwardId = userAccessToForwardId;
+                    obj.UserName = User.Identity.Name;                    
                     obj.ForwardToUserName = _userManager.Users.FirstOrDefault(a => a.ApplicantCurrentStatusId == _context.userAccessToForward.Find(obj.UserAccessToForwardId).ApplicantCurrentStatusId).FirstName;
                     //----------------Upload Attachment----------------------
                     if (Attachment != null)
@@ -366,6 +364,6 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             await _context.SaveChangesAsync();
             return "Uploaded Successfully!";            
-        }
+        }*/
     }
 }
