@@ -492,7 +492,7 @@ else
                         $('#s_attach_cnic').prop('checked', response.attach_CNIC_BForm);
                         $('#s_attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
                         $('#formsubmitdate').text(response.formSubmittedOnDate);
-                        if (response.applicantCurrentStatusId == UserCurrentAccess) {
+                        if (response.applicantCurrentStatusId == UserCurrentAccess && UserCurrentAccess != 15) {
                             $('#commentPortion').show();
                         } else {
                             $('#commentPortion').hide();

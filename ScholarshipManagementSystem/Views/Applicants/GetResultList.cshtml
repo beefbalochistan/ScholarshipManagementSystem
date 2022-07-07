@@ -100,7 +100,7 @@
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Pending" data-original-title="Track" onclick="MoveToPend(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-clock-outline font-size-18"></i></a>
                         }
-                        else if (ViewBag.Inbox == 3)
+                        else if (ViewBag.Inbox == 3 || ViewBag.Inbox == 4)
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-primary" data-toggle="tooltip" data-placement="top" title="Move to Primary Inbox" data-original-title="Track" onclick="MoveToPrimary(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-check-outline font-size-18"></i></a>
                         }
@@ -108,7 +108,7 @@
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-alert-outline font-size-18"></i></a>
                         }
-                        if (ViewBag.UserCurrentAccess > 3 && ViewBag.DefaultForward != 0)
+                        if (ViewBag.UserCurrentAccess > 3 && ViewBag.UserCurrentAccess != 15 && ViewBag.Inbox != 4)
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
                         }
@@ -116,10 +116,10 @@
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Forward To IA" data-original-title="Track" onclick="ForwardToIA(@item.ApplicantId, @ViewBag.SchemeLevelId, @ViewBag.DefaultForward, @ViewBag.AccessToForwardId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
                         }
-                       @* if (ViewBag.UserCurrentAccess == 14)
+                        if (ViewBag.UserCurrentAccess == 15)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="ForwardToRejectedCases(@item.ApplicantId, @ViewBag.SchemeLevelId, @ViewBag.DefaultForward, @ViewBag.AccessToForwardId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
-                        }*@
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCaseByFinance(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
+                        }
                     }
                 </td>
                 </tr>

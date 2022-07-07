@@ -122,7 +122,7 @@
                         </a>
                     </li>
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewWaiting.View)).Result.Succeeded)
+                @if (false)
                 {
                     <li>
                         <a asp-action="ApplicantWaiting" asp-controller="Applicants" class=" waves-effect">
@@ -132,7 +132,7 @@
                         </a>
                     </li>
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewRejected.View)).Result.Succeeded)
+                @if (false)
                 {
                     <li>
                         <a asp-action="ApplicantRejected" asp-controller="Applicants" class=" waves-effect">

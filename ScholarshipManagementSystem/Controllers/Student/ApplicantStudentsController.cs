@@ -186,7 +186,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var applicantInfo = await _context.Applicant.FindAsync(applicantId);
             if (IsReject)
             {
-                ForwardApplicantCurrentStatusId = 1;
+                applicantInfo.ApplicantInboxId = 4;                
+                ForwardApplicantCurrentStatusId = applicantInfo.ApplicantCurrentStatusId;
+                UserId = "292a61c0-563c-4ba5-aff8-adb6ce90878c";
             }
             if (!(applicantId == 0 || applicantRefNo == "" || comment == "" || UserId == ""))
             {                

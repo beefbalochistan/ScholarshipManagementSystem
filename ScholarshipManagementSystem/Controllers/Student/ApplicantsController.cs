@@ -69,7 +69,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<IActionResult> GetResultList(int MaxFYId, int applicantCurrentStatusId, int SchemeLevelId, int Inbox)
         {                                
-            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}, {2},{3}, {4}", applicantCurrentStatusId, MaxFYId, SchemeLevelId,Inbox,1).ToListAsync();
+            var applicationDbContext = await _context.SPApplicantInProcess.FromSqlRaw("exec [Student].[ApplicantInProcess] {0}, {1}, {2},{3}", applicantCurrentStatusId, MaxFYId, SchemeLevelId,Inbox).ToListAsync();
             /*ParentApplicantInProcess mymodel = new ParentApplicantInProcess();
             mymodel.SPApplicantInProcessList = applicationDbContext;
             mymodel.SPApplicantInProcessSummaryList = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummary] {0}, {1}", applicantCurrentStatusId, MaxFYId).ToListAsync(); ;*/
@@ -123,13 +123,17 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
             ViewBag.Title = title;
             //---------------------
-            List<UserViewModel> users = await _context.UserAccessToSchemeLevel.Include(a => a.ApplicationUser).Where(a => a.ApplicationUser.ApplicantCurrentStatusId == (applicantCurrentStatusId + 1) && a.SchemeLevelId == SchemeLevelId).Select(a => new UserViewModel { UserId = a.UserId, UserName = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName }).ToListAsync();
-            var userlist = users.Select(m => new SelectListItem()
-            {
-                Text = m.UserName.ToString(),
-                Value = m.UserId,
-            });
+            List<UserViewModel> users = await _context.UserAccessToSchemeLevel.Include(a => a.ApplicationUser).Where(a => a.ApplicationUser.ApplicantCurrentStatusId == (_context.ApplicantCurrentStatus.Find(applicantCurrentStatusId).ProcessValue) && a.SchemeLevelId == SchemeLevelId).Select(a => new UserViewModel { UserId = a.UserId, UserName = a.ApplicationUser.FirstName + " " + a.ApplicationUser.LastName }).ToListAsync();            
             ViewBag.UserList = users;// new SelectList(users, "UserId", "UserName");            
+            //---------------------
+            List<TrancheViewModel> tranches = new List<TrancheViewModel>();
+            ViewBag.TrancheList = tranches;
+            if (applicantCurrentStatusId == 15)
+            {
+                tranches = await _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).Select(a=> new TrancheViewModel { TrancheId = a.TrancheId, TrancheName = a.Name}).ToListAsync();
+                ViewBag.DefaultPaymentMethodId = _context.SchemeLevel.Where(a => a.SchemeLevelId == SchemeLevelId).Max(a=>a.PaymentMethodId);
+                ViewBag.TrancheList = tranches;
+            }
             //---------------------
             return View(applicationDbContext);
         }
@@ -761,7 +765,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             if (applicantInfo != null)
             {
                 applicantInfo.ApplicantInboxId = 1;//KDA Hard
-                applicantInfo.ApplicantCurrentStatusId++;
+                applicantInfo.ApplicantCurrentStatusId = _context.Users.Find(UserId).ApplicantCurrentStatusId;
                 _context.Update(applicantInfo);
                 //---------------Add Default Comments------------------------
                 var comments = _context.DefaultComment.Find(1).ForwardCaseDefaultComment;
@@ -779,6 +783,49 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
                 _context.Add(obj);
                 //-----------------------------------------------------------
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Forward!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been forwarded successfully." });
+        }
+        public async Task<JsonResult> ForwardCaseByFinance(int applicantId, string UserId, int TrancheId)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantInboxId = 1;//KDA Hard
+                applicantInfo.ApplicantCurrentStatusId = _context.Users.Find(UserId).ApplicantCurrentStatusId;                
+                //---------------Add Default Comments------------------------
+                var comments = _context.DefaultComment.Find(1).ForwardCaseDefaultComment;
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = comments;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = UserId;
+                var UserInfo = _context.Users.Find(UserId);
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
+                //-----------------------------------------------------------
+                if (TrancheId != 0)
+                {
+                    var applicantPolicyInfo = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.SchemeLevelPolicyId == applicantInfo.SchemeLevelPolicyId).FirstOrDefault();
+                    applicantInfo.TrancheId = TrancheId;
+                    var currentTranche = _context.Tranche.Find(TrancheId);
+                    currentTranche.ApplicantCount++;
+                    currentTranche.CurrentCommittedAmount += applicantPolicyInfo.Amount;
+                    _context.Update(currentTranche);
+                }
+                //-----------------------------------------------------------
+                _context.Update(applicantInfo);
                 await _context.SaveChangesAsync();
                 //-----------------------------------------------------------
             }

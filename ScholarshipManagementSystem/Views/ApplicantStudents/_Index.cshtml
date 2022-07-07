@@ -18,13 +18,20 @@
                     <div class="media p-2" style="width:40%">
                         <div class="p-2">
                             <div class="align-self-center mr-3">
-                                @if (item.ApplicationUserFrom == null)
+                                @if (item.ApplicationUserFrom != null)
                                 {
-                                    <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                                    if (item.ApplicationUserFrom.ProfilePicture == null)
+                                    {
+                                        <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(item.ApplicationUserFrom.ProfilePicture))" alt="User!">
+                                    }
                                 }
                                 else
                                 {
-                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(item.ApplicationUserFrom.ProfilePicture))" alt="User!">
+                                    <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
                                 }
                             </div>
                             <div class="media-body">
@@ -39,13 +46,20 @@
                     <div class="media p-2" style="width:40%">
                         <div>
                             <div class="align-self-center mr-3">
-                                @if (item.ApplicationUserTo == null)
+                                @if (item.ApplicationUserTo != null)
                                 {
-                                    <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                                    if (item.ApplicationUserTo.ProfilePicture == null)
+                                    {
+                                        <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(item.ApplicationUserTo.ProfilePicture))" alt="User!">
+                                    }
                                 }
                                 else
                                 {
-                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(item.ApplicationUserTo.ProfilePicture))" alt="User!">
+                            <img src="~/assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle" alt="">
                                 }
                             </div>
                             <div class="media-body">

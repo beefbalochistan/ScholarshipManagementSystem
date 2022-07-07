@@ -13,7 +13,6 @@ namespace DAL.Models.ViewModels.ApplicantInProcess
         public string ApplicantReferenceNo { get; set; }
         public string RollNumber { get; set; }
         public string Name { get; set; }
-        public string SchemeLevel { get; set; }
-        public int Round { get; set; }        
+        public string SchemeLevel { get; set; }           
     }
 }

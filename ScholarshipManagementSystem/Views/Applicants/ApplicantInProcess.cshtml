@@ -8,7 +8,11 @@
 @{
     List<UserViewModel> users = ViewBag.UserList;
     var usersTextArray = users.Select(a=>a.UserName).ToArray<string>();
-    var usersValueArray = users.Select(a => a.UserId).ToArray<string>();
+    var usersValueArray = users.Select(a => a.UserId).ToArray<string>();    
+    List<TrancheViewModel> tranches = ViewBag.TrancheList;
+    var tranchesTextArray = tranches.Select(a => a.TrancheName).ToArray<string>();
+    var tranchesValueArray = tranches.Select(a => a.TrancheId).ToArray<int>();
+    
 }
 <link href="~/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
@@ -51,58 +55,10 @@
                                     <span class="badge badge-soft-success badge-pill float-right ml-1 font-size-12">@item.Applicant.ToString().PadLeft(2, '0')</span>
                                 </a>
                             </li>
-                        }
-                        @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Business</a></li>
-                            <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Project</a></li>
-                            <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Travel<span class="badge badge-soft-success badge-pill ml-1 float-right font-size-12">12</span></a></li>*@
-                        <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i></a></li>
-                        <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i></a></li>
-                        <li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i><span class="badge badge-soft-success badge-pill ml-1 float-right font-size-12"></span></a></li>
+                        }                       
                     </ul>
                 </div>
-
-                @*<hr class="my-4">
-                    <div id="sidebar-menu">
-                        <ul class="metismenu list-unstyled" id="side-menu">
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="bx bx-share-alt"></i>
-                                    <span key="t-multi-level">Multi Level</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="true">
-                                    <li><a href="javascript: void(0);" key="t-level-1-1">Level 1.1</a></li>
-                                    <li>
-                                        <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Level 1.2</a>
-                                        <ul class="sub-menu" aria-expanded="true">
-                                            <li><a href="javascript: void(0);">Level 2.1</a></li>
-                                            <li><a href="javascript: void(0);">Level 2.2</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    </div>*@<hr class="my-4">
-                <div id="sidebar-menu">
-                    <ul class="metismenu list-unstyled" id="side-menu">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="bx bx-share-alt"></i>
-                                <span key="t-multi-level"></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="javascript: void(0);" key="t-level-1-1"></a></li>
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2"></a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="javascript: void(0);"></a></li>
-                                        <li><a href="javascript: void(0);"></a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+              
             </div>
         </div>
         <!-- end card -->
@@ -317,22 +273,17 @@
             // Get server side variables
             var usersTextArray = []; // it will contain user names
             var usersValueArray = []; // it will contain user Ids
-            debugger;
             @foreach (var text in usersTextArray)
             {
                 @:usersTextArray.push("@text");
             }
-
             @foreach (var value in usersValueArray)
             {
                 @:usersValueArray.push("@value");
             }
-
             // Create string for select options
             var options = "";
-
             for (let i = 0; i < usersValueArray.length; ++i) {
-
                 var optionTag = "<option value=\"" + usersValueArray[i] + "\">" + usersTextArray[i] + "</option>";
                 options = options.concat(optionTag);
             }
@@ -363,7 +314,106 @@
                         success: function (response) {
                             if (response != null) {
                                 if (response.isValid) {
-                                    Swal.fire("Back", response.message, "success");                                    
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+
+        function ForwardCaseByFinance(applicantId, schemeLevelId) {
+            // Get server side variables
+            var usersTextArray = []; // it will contain user names
+            var usersValueArray = []; // it will contain user Ids
+            var tranchesTextArray = []; // it will contain user names
+            var tranchesValueArray = []; // it will contain user Ids
+            @foreach (var text in usersTextArray)
+            {
+                @:usersTextArray.push("@text");
+            }
+            @foreach (var value in usersValueArray)
+            {
+                @:usersValueArray.push("@value");
+            }
+            // Create string for select options
+            var options = "";
+            for (let i = 0; i < usersValueArray.length; ++i) {
+                var optionTag = "<option value=\"" + usersValueArray[i] + "\">" + usersTextArray[i] + "</option>";
+                options = options.concat(optionTag);
+            }
+            //--------------------------------
+             @foreach (var text in tranchesTextArray)
+            {
+                @:tranchesTextArray.push("@text");
+            }
+            @foreach (var value in tranchesValueArray)
+            {
+                @:tranchesValueArray.push("@value");
+            }
+            var options2 = "";
+            var PMId = '@ViewBag.DefaultPaymentMethodId';
+            var index = -1;            
+            for (let i = 0; i < tranchesValueArray.length; ++i) {                
+                if (PMId == tranchesValueArray[i]) {
+                    index = tranchesValueArray[i];
+                }
+                var optionTag2 = "<option value=\"" + tranchesValueArray[i] + "\">" + tranchesTextArray[i] + "</option>";
+                options2 = options2.concat(optionTag2);
+            }            
+            if (index >= 0) {
+                var str = "value=\"" + index;
+                alert(str)
+                var str2 = " selected value=\"" + index;
+                alert(str2)
+                options2 = options2.replace(str, str2);
+            }
+            alert(options2)
+            //--------------------------------
+            var UserId = "";
+            var TrancheId = 0;
+            Swal.fire({
+                title: "Are you sure?",
+                //text: 'You Want to Forward Applicant With Default Comments',
+                html: "<h6>You Want to Forward Applicant With Default Comments</h6><div class='text-center'> <select id='UserListId' name='UserListId' class='form-control'>" + options + "</select></div><div class='text-center'> <select id='TrancheListId' name='TrancheListId' class='form-control'>" + options2 + "</select></div>",
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!",
+                preConfirm: () => {
+                    UserId = document.getElementById('UserListId').value;
+                    if (UserId == "") {
+                        Swal.showValidationMessage(
+                            `Invalid User to forward!`
+                        )
+                    }
+                    if (TrancheId == 0) {
+                        Swal.showValidationMessage(
+                            `Invalid Tranche!`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/ForwardCaseByFinance",
+                        data: { applicantId: applicantId, UserId: UserId, TrancheId: TrancheId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
                                     UpdateRecord(schemeLevelId);
                                 } else {
                                     notificationme(response.message);
