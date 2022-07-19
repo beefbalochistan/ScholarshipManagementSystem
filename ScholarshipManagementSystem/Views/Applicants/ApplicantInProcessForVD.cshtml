@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<DAL.Models.ViewModels.VirtualAccount.SPApplicantPaymentInProcessSummary>
 @{
-    ViewBag.pTitle = "Applicant In Process Cases";
+    ViewBag.pTitle = ViewBag.Title;
     ViewBag.pageTitle = "Applicant";
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
@@ -59,12 +59,20 @@
     })
         function fetchRecord(TrancheId) {
             var MaxFYId = '@ViewBag.MaxFYId';
+            var InboxId = '@ViewBag.InboxId';
+            var applicantPaymentInProcess = '@ViewBag.ApplicantPaymentInProcess';
+            var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
+            var userIdForPaymentMethodAccessFilter = '@ViewBag.UserIdForPaymentMethodAccessFilter';
             $("#fetchspinner").show();
             $.ajax({
                 url: '@Url.Action("GetPaymentResultList", "Applicants")',
                 data: {
                     MaxFYId: MaxFYId,
-                    TrancheId: TrancheId
+                    TrancheId: TrancheId,
+                    InboxId: InboxId,
+                    applicantCurrentStatusId: applicantCurrentStatusId,
+                    ApplicantPaymentInProcess: applicantPaymentInProcess,
+                    UserIdForPaymentMethodAccessFilter: userIdForPaymentMethodAccessFilter
                 },
                 success: function (data) {
                     $("#ApplicantDataPlace").html(data);
@@ -115,8 +123,76 @@
                 }
             })
         }
-
-
+        function MoveToPrimary(applicantId, TrancheId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Resume Applicant File in "Primary Cases"',
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendPrimary",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(TrancheId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
+        function MoveToPend(applicantId, TrancheId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: 'You Want to Send Applicant File in "Pending Cases!"',
+                type: "warning",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!"
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/SendPend",
+                        data: { applicantId: applicantId },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(TrancheId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
         function sendBackWithIssue(applicantId, trancheId) {
             Swal.fire({
                 title: "Please Write Issue of Applicant",

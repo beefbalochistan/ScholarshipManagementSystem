@@ -12,6 +12,37 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-calendar">BEEF Workspace</li>
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FMInbox.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="1" asp-route-title="Applicant In Process" class=" waves-effect">
+                            @*<i class="bx bx-data"></i>*@<span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">Main - Inbox</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="3" asp-route-title="Pending Cases" class=" waves-effect">
+                            <span key="t-calendar"><span class="mr-2 ml-1"><img src="~/assets/images/icons/PendInbox.svg" height="22" /></span>Pending Cases Inbox</span>
+                        </a>
+                    </li>
+
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.VDInbox.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="1" asp-route-title="Applicant In Process" class=" waves-effect">
+                            <span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">Main - Inbox</span>
+                        </a>
+                    </li>
+
+                }
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewFinding.View)).Result.Succeeded)
+                {
+                    <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="8" asp-route-title="Finding Cases" class=" waves-effect">
+                            <i class="mdi mdi-account-question-outline" style="margin-left:7px"></i><span key="t-calendar">Finding Cases Inbox</span>
+                        </a>
+                    </li>
+                }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                 {
                     <li>
@@ -66,42 +97,30 @@
                         </li>
                     }
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
+                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FMInbox.View)).Result.Succeeded)
                 {
-                    <li class="menu-title" key="t-menu">Finance Management</li>
-
+                    <li class="menu-title" key="t-menu">Finance Tranche Management</li>
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-map"></i>
                             <span key="t-invoices">Disbursement</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
-                            {
-                                <li>
-                                    <a asp-action="Create" asp-controller="Tranches" class=" waves-effect">
-                                        <span key="t-calendar">Create Tranche</span>
-                                    </a>
-                                </li>
-
-                            }
-                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
-                            {
-                                <li>
-                                    <a asp-action="Index" asp-controller="Tranches" asp-route-x="true" asp-route-y="false" asp-route-name="Tranche Setup/Configuration" class=" waves-effect">
-                                        <span key="t-calendar">Tranche SetUp/Config</span>
-                                    </a>
-                                </li>
-
-                            }
-                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.District.View)).Result.Succeeded)
-                            {
-                                <li>
-                                    <a asp-action="ActiveTrancheDisbursement" asp-controller="Tranches" class=" waves-effect">
-                                        <span key="t-calendar">Tranche Disbursement</span>
-                                    </a>
-                                </li>
-                            }
+                            <li>
+                                <a asp-action="Create" asp-controller="Tranches" class=" waves-effect">
+                                    <span key="t-calendar">Create Tranche</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="Tranches" asp-route-x="true" asp-route-y="false" asp-route-name="Tranche Setup/Configuration" class=" waves-effect">
+                                    <span key="t-calendar">Tranche SetUp/Config</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="ActiveTrancheDisbursement" asp-controller="Tranches" class=" waves-effect">
+                                    <span key="t-calendar">Tranche Disbursement</span>
+                                </a>
+                            </li>
                             <li>
                                 <a asp-action="CompletedTranche" asp-controller="Tranches" asp-route-name="Closed Tranche" class=" waves-effect">
                                     <span key="t-calendar">Closed Tranche</span>
@@ -114,13 +133,7 @@
                     </li>*@
                         </ul>
                     </li>
-                    <li>
-                        <a asp-action="ApplicantInProcessforvd" asp-controller="Applicants" class=" waves-effect">
-                            <i class="bx bxs-eraser"></i>
-                            <span @*id="TotalInProcessFiles"*@ class="badge badge-pill badge-soft-info float-right">@*@(await MyStaticClass.GetInProcessFile())*@</span>
-                            <span key="t-forms">Applicant In V&amp;D <img @*id="inProcesssLoad"*@ style="display:none" src="~/assets/images/loading.gif" width="20" class="float-right" /></span>
-                        </a>
-                    </li>
+
                 }
                 @if (false)
                 {
@@ -233,7 +246,7 @@
                                     </a>
                                 </li>
                             }
-                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.District.View)).Result.Succeeded)
+                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.View)).Result.Succeeded)
                             {
                                 <li>
                                     <a asp-action="Index" asp-controller="Districts" key="t-invoice-detail">
@@ -404,6 +417,12 @@
                                     <span key="t-calendar">Scheme Level Access</span>
                                 </a>
                             </li>
+                            <li>
+                                <a asp-action="Users" asp-controller="UserAccessToPaymentMethods" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Payment Method Access</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -425,19 +444,21 @@
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Result.Analyzer)).Result.Succeeded)
                 {
-                    <li class="menu-title" key="t-menu">Result Management</li>                   
-                        <li>
-                            <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
-                                <i class="bx bxs-dizzy"></i>
-                                <span key="t-calendar">Assist Tool</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
-                                <i class="bx bxs-dizzy"></i>
-                                <span key="t-calendar">Seletion Criteria</span>
-                            </a>
-                        </li>                    
+                    <li class="menu-title" key="t-menu">Result Management</li>
+
+                    <li>
+                        <a asp-action="Index" asp-controller="DocumentAssistGenerals" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Assist Tool</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="SelectionCriteriaGenerals" class=" waves-effect">
+                            <i class="bx bxs-dizzy"></i>
+                            <span key="t-calendar">Seletion Criteria</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a asp-action="ResultAnalyserPanel" asp-controller="ResultAnalyzer" class=" waves-effect">
                             <i class="bx bxs-dizzy"></i>

@@ -15,15 +15,14 @@
     <table id="datatable" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
-                @*<th></th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.TrancheName)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.SchemeLevel)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ApplicantReferenceNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RollNumber)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
@@ -34,27 +33,45 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    @*<td>@item.ApplicantId</td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SchemeLevel)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RollNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        <a style="cursor:pointer" id="sa-warning" class="mr-2 text-warning" data-toggle="tooltip" data-placement="top" title="Back" data-original-title="Track" onclick="sendBack(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-reply font-size-18"></i></a>|
-                        <a style="cursor:pointer" data-toggle="modal" data-target="#paymentsubmitform" class="mr-2 text-success" data-placement="top" title="Forward" data-original-title="Track" onclick="setValue('@item.ApplicantId','@item.Name','@item.FatherName','@item.ApplicantReferenceNo','@item.SchemeLevel','@item.District','@item.Institute','@item.PaymentMethodId','@item.TrancheDocumentId')"><i class="dripicons-forward font-size-18"></i></a>|
-                        <a style="cursor:pointer" class="mr-2 text-danger" data-toggle="tooltip" data-placement="top" title="Back with Issue" data-original-title="Track" onclick="sendBackWithIssue(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-warning font-size-18"></i></a>
-                    </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrancheName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchemeLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantReferenceNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>                
+                    @{ 
+                        if(ViewBag.UserCurrentAccess == 16)
+                {
+                                    <td>
+                                        <a asp-controller="Applicants" asp-action="ApplicantTracking" asp-route-RefId="@item.ApplicantReferenceNo" class="text-primary" data-toggle="tooltip" data-placement="top" title="View Profile" data-original-title="Track"><i class="mdi mdi-account-search-outline font-size-18"></i></a>
+                                        @if (ViewBag.InboxId == 1)
+                                        {
+                                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Pending" data-original-title="Track" onclick="MoveToPend(@item.ApplicantId, @ViewBag.TrancheId)"><i class="mdi mdi-account-clock-outline font-size-18"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-primary" data-toggle="tooltip" data-placement="top" title="Move to Primary Inbox" data-original-title="Track" onclick="MoveToPrimary(@item.ApplicantId, @ViewBag.TrancheId)"><i class="mdi mdi-account-check-outline font-size-18"></i></a>
+                                        }
+                                    </td>
+                }
+                else if(ViewBag.UserCurrentAccess == 25)
+                {
+                                    <td>
+                                        <a style="cursor:pointer" id="sa-warning" class="mr-2 text-warning" data-toggle="tooltip" data-placement="top" title="Back" data-original-title="Track" onclick="sendBack(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-reply font-size-18"></i></a>|
+                                        <a style="cursor:pointer" data-toggle="modal" data-target="#paymentsubmitform" class="mr-2 text-success" data-placement="top" title="Forward" data-original-title="Track" onclick="setValue('@item.ApplicantId','@item.Name','@item.FatherName','@item.ApplicantReferenceNo','@item.SchemeLevel','@item.District','@item.Institute','@item.PaymentMethodId','@item.TrancheDocumentId')"><i class="dripicons-forward font-size-18"></i></a>|
+                                        <a style="cursor:pointer" class="mr-2 text-danger" data-toggle="tooltip" data-placement="top" title="Back with Issue" data-original-title="Track" onclick="sendBackWithIssue(@item.ApplicantId, @item.TrancheId)"><i class="dripicons-warning font-size-18"></i></a>
+                                    </td>
+                }
+                    }                                   
 
-                </tr>
+            </tr>
             }
         </tbody>
     </table>

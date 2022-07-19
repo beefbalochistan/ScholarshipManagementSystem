@@ -92,6 +92,7 @@ namespace Repository.Data
         public DbSet<DAL.Models.ViewModels.SPDocumentViewerReport> SPDocumentViewerReport { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToForward> userAccessToForward { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToPaymentMethod> UserAccessToPaymentMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.DefaultComment> DefaultComment { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }
         [NotMapped]

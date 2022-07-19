@@ -100,7 +100,8 @@
         }
         function UpdateRecord(SchemeLevelId) {
             if (SchemeLevelId != 0) {
-                fetchRecord(SchemeLevelId);
+                var inbox = '@ViewBag.Inbox';
+                fetchRecord(SchemeLevelId, inbox);
             } else {
                 notificationme('No Record Found!');
             }
@@ -267,7 +268,50 @@
                 }
             })
         }
-
+        function RejectCase(applicantId, schemeLevelId) {
+            var Description = '@ViewBag.DefaultRejectComments';
+            Swal.fire({
+                title: "Are you sure?",
+                html: "<h6>You Want to Reject Applicant Case</h6><div class='text-center'><label class='control-label'>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'>" + Description +"</textarea></div>",
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!",
+                preConfirm: () => {
+                    Description = document.getElementById('description').value;
+                    if (Description == "") {
+                        Swal.showValidationMessage(
+                            `Invalid Decription!`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/RejectApplicantByIA",
+                        data: { applicantId: applicantId, Description: Description },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
 
         function ForwardCase(applicantId, schemeLevelId) {
             // Get server side variables
@@ -363,22 +407,20 @@
             }
             var options2 = "";
             var PMId = '@ViewBag.DefaultPaymentMethodId';
-            var index = -1;            
-            for (let i = 0; i < tranchesValueArray.length; ++i) {                
+            var index = -1;
+            for (let i = 0; i < tranchesValueArray.length; ++i) {
                 if (PMId == tranchesValueArray[i]) {
                     index = tranchesValueArray[i];
                 }
                 var optionTag2 = "<option value=\"" + tranchesValueArray[i] + "\">" + tranchesTextArray[i] + "</option>";
                 options2 = options2.concat(optionTag2);
-            }            
+            }
             if (index >= 0) {
                 var str = "value=\"" + index;
-                alert(str)
                 var str2 = " selected value=\"" + index;
-                alert(str2)
                 options2 = options2.replace(str, str2);
             }
-            alert(options2)
+            //alert(options2)
             //--------------------------------
             var UserId = "";
             var TrancheId = 0;
@@ -397,6 +439,7 @@
                             `Invalid User to forward!`
                         )
                     }
+                    TrancheId = document.getElementById('TrancheListId').value;
                     if (TrancheId == 0) {
                         Swal.showValidationMessage(
                             `Invalid Tranche!`
@@ -430,5 +473,110 @@
                 }
             })
         }
+
+        function ForwardWithFinding(applicantId, schemeLevelId) {
+            // Get server side variables
+            var usersTextArray = []; // it will contain user names
+            var usersValueArray = []; // it will contain user Ids
+            var tranchesTextArray = []; // it will contain user names
+            var tranchesValueArray = []; // it will contain user Ids
+            @foreach (var text in usersTextArray)
+            {
+                @:usersTextArray.push("@text");
+            }
+            @foreach (var value in usersValueArray)
+            {
+                @:usersValueArray.push("@value");
+            }
+            // Create string for select options
+            var options = "";
+            for (let i = 0; i < usersValueArray.length; ++i) {
+                var optionTag = "<option value=\"" + usersValueArray[i] + "\">" + usersTextArray[i] + "</option>";
+                options = options.concat(optionTag);
+            }
+            //--------------------------------
+             @foreach (var text in tranchesTextArray)
+            {
+                @:tranchesTextArray.push("@text");
+            }
+            @foreach (var value in tranchesValueArray)
+            {
+                @:tranchesValueArray.push("@value");
+            }
+            var options2 = "";
+            var PMId = '@ViewBag.DefaultPaymentMethodId';
+            var index = -1;
+            for (let i = 0; i < tranchesValueArray.length; ++i) {
+                if (PMId == tranchesValueArray[i]) {
+                    index = tranchesValueArray[i];
+                }
+                var optionTag2 = "<option value=\"" + tranchesValueArray[i] + "\">" + tranchesTextArray[i] + "</option>";
+                options2 = options2.concat(optionTag2);
+            }
+            if (index >= 0) {
+                var str = "value=\"" + index;
+                var str2 = " selected value=\"" + index;
+                options2 = options2.replace(str, str2);
+            }
+            //alert(options2)
+            //--------------------------------
+            var UserId = "";
+            var Description = "";
+            var TrancheId = 0;
+            Swal.fire({
+                title: "Are you sure?",
+                //text: 'You Want to Forward Applicant With Default Comments',
+                html: "<h6>You Want to Forward Applicant With Default Comments</h6><div class='text-center'> <select id='UserListId' name='UserListId' class='form-control'>" + options + "</select></div><div class='text-center'> <select id='TrancheListId' name='TrancheListId' class='form-control'>" + options2 + "</select><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
+                type: "success",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Back it!",
+                preConfirm: () => {
+                    UserId = document.getElementById('UserListId').value;
+                    if (UserId == "") {
+                        Swal.showValidationMessage(
+                            `Invalid User to forward!`
+                        )
+                    }
+                    TrancheId = document.getElementById('TrancheListId').value;
+                    if (TrancheId == 0) {
+                        Swal.showValidationMessage(
+                            `Invalid Tranche!`
+                        )
+                    }
+                    Description = document.getElementById('description').value;
+                    if (Description == "") {
+                        Swal.showValidationMessage(
+                            `Invalid Decription!`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/ForwardWithFinding",
+                        data: { applicantId: applicantId, UserId: UserId, TrancheId: TrancheId, Description: Description },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }        
     </script>
 }

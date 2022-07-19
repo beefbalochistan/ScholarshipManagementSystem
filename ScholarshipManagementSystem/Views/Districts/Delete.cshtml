@@ -8,7 +8,7 @@
     Layout = "~/Views/_Shared/_Layout.cshtml";
 }
 
-@if ((AuthorizationService.AuthorizeAsync(User, Permissions.District.Delete)).Result.Succeeded)
+@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Division.Delete)).Result.Succeeded)
 {
     <h2>Delete</h2>
     <h3>Are you sure you want to delete this?</h3>

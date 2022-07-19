@@ -25,17 +25,7 @@ public class PermissionController : Controller
         var model = new PermissionViewModel();
         var allPermissions = new List<RoleClaimsViewModel>();
         /*allPermissions.GetPermissions(typeof(Permissions.Country), roleId);*/
-        allPermissions.GetPermissions(typeof(Permissions.Division), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.District), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.DistrictDetail), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.ScholarshipType), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.ScholarshipFiscalYear), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.Degree), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.Discipline), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.InstituteType), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.Institute), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.InstituteDepartment), roleId);
-        allPermissions.GetPermissions(typeof(Permissions.QualificationLevel), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.Division), roleId);    
         allPermissions.GetPermissions(typeof(Permissions.Scheme), roleId);
         allPermissions.GetPermissions(typeof(Permissions.SchemeLevel), roleId);
         allPermissions.GetPermissions(typeof(Permissions.PolicySRCForum), roleId);
@@ -51,6 +41,12 @@ public class PermissionController : Controller
         allPermissions.GetPermissions(typeof(Permissions.Attachment), roleId);
         allPermissions.GetPermissions(typeof(Permissions.ViewISRC), roleId);
         allPermissions.GetPermissions(typeof(Permissions.ViewIA), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.ViewFinding), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.MainInbox), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.PendInbox), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.ReturnInbox), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.FMInbox), roleId);
+        allPermissions.GetPermissions(typeof(Permissions.VDInbox), roleId);
         var role = await _roleManager.FindByIdAsync(roleId);
         model.RoleId = roleId;
         var claims = await _roleManager.GetClaimsAsync(role);

@@ -12,6 +12,7 @@ namespace DAL.Models.ViewModels.VirtualAccount
         [Key]
         public int ApplicantId { get; set; }
         public int TrancheId { get; set; }
+        public string TrancheName { get; set; }
         [Display(Name = "Reference No")]
         public string ApplicantReferenceNo { get; set; }
         [Display(Name = "Roll No")]

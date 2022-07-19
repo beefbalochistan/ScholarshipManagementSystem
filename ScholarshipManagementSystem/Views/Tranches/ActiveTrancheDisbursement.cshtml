@@ -134,7 +134,15 @@
                             <span class="badge badge-info">Total Amount</span>
                         </li>
                         <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Approved">
-                            <i class="bx bx-list-check mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@item.ApprovedAmount</span>
+                            <i class="bx bx-list-check mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@Math.Round(item.ApprovedAmount)</span>
+                        </li>
+                    </ul>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <span class="badge badge-success">Committed</span>
+                        </li>
+                        <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="Committed Amount" data-original-title="Committed">
+                            <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-info font-size-12">@Math.Round(item.CurrentCommittedAmount)</span>
                         </li>
                     </ul>
                     <ul class="list-inline mb-0">
@@ -142,7 +150,7 @@
                             <span class="badge badge-success">Disbursed</span>
                         </li>
                         <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Disbursed">
-                            <i class="bx bx-transfer mr-1"></i> <span class="badge badge-pill badge-soft-success font-size-12">@item.DisbursedAmount</span>
+                            <i class="bx bx-transfer mr-1"></i> <span class="badge badge-pill badge-soft-success font-size-12">@Math.Round(item.DisbursedAmount)</span>
                         </li>
                     </ul>
                     <ul class="list-inline mb-0">
@@ -150,7 +158,7 @@
                             <span class="badge badge-warning">Remaining</span>
                         </li>
                         <li class="list-inline-item mr-3 float-right" data-toggle="tooltip" data-placement="top" title="" data-original-title="Commit">
-                            <i class="bx bx-lock mr-1"></i> <span class="badge badge-pill badge-soft-warning font-size-12">@(item.ApprovedAmount - item.DisbursedAmount)</span>
+                            <i class="bx bx-lock-open mr-1"></i> <span class="badge badge-pill badge-soft-warning font-size-12">@(Math.Round(item.ApprovedAmount - item.DisbursedAmount))</span>
                         </li>
                     </ul>
                     <ul class="list-inline mb-0">

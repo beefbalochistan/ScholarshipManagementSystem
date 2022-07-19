@@ -384,7 +384,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 if (updateCSV_paymentInProcess != "")
                 {
                     updateCSV_paymentInProcess = updateCSV_paymentInProcess.TrimEnd(',');
-                    await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE [Student].[Applicant] SET [IsPaymentInProcess] = 1, [TrancheDocumentId] = { TrancheMaxId } WHERE [ApplicantId] IN( {updateCSV_paymentInProcess} )");
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE [Student].[Applicant] SET [IsPaymentInProcess] = 1, [ApplicantCurrentStatusId] = 25, [TrancheDocumentId] = { TrancheMaxId } WHERE [ApplicantId] IN( {updateCSV_paymentInProcess} )");
                 }
                 var MaxTranchDocumentId = _context.TrancheDocument.Max(a=>a.TrancheDocumentId);
                 await GeneratePGP(MaxTranchDocumentId);

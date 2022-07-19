@@ -1822,6 +1822,29 @@ namespace Repository.Data.Migrations
                     b.ToTable("UserAccessToForward", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToPaymentMethod", b =>
+                {
+                    b.Property<int>("UserAccessToPaymentMethodId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserAccessToPaymentMethodId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAccessToPaymentMethod", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel", b =>
                 {
                     b.Property<int>("UserAccessToSchemeLevelId")
@@ -2591,13 +2614,13 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FromUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ToUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
@@ -2607,6 +2630,10 @@ namespace Repository.Data.Migrations
                     b.HasIndex("ApplicantCurrentStatusId");
 
                     b.HasIndex("ApplicantId");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
 
                     b.ToTable("ApplicantStudent", "Student");
                 });
@@ -2918,13 +2945,7 @@ namespace Repository.Data.Migrations
                     b.Property<string>("RollNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Round")
-                        .HasColumnType("int");
-
                     b.Property<string>("SchemeLevel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Severity")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantId");
@@ -3409,6 +3430,9 @@ namespace Repository.Data.Migrations
 
                     b.Property<int>("TrancheId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TrancheName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantId");
 
@@ -4098,6 +4122,25 @@ namespace Repository.Data.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToPaymentMethod", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("PaymentMethod");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel", b =>
                 {
                     b.HasOne("DAL.Models.Domain.MasterSetup.SchemeLevel", "SchemeLevel")
@@ -4412,9 +4455,21 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Models.ApplicationUser", "ApplicationUserFrom")
+                        .WithMany()
+                        .HasForeignKey("FromUserId");
+
+                    b.HasOne("DAL.Models.ApplicationUser", "ApplicationUserTo")
+                        .WithMany()
+                        .HasForeignKey("ToUserId");
+
                     b.Navigation("Applicant");
 
                     b.Navigation("ApplicantCurrentStatus");
+
+                    b.Navigation("ApplicationUserFrom");
+
+                    b.Navigation("ApplicationUserTo");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.VirtualAccount.PaymentDisbursement", b =>

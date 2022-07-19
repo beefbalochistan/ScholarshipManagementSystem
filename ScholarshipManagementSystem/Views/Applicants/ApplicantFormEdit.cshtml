@@ -191,7 +191,7 @@
                                                     <input asp-for="BFormCNIC" id="bcnic" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" placeholder="Re-Type SmartID/CNIC" required />
                                                 </div>
                                                 <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask':'99999-9999999-9'" required
+                                                    <input value="@Model.BFormCNIC" class="form-control inputBox input-mask" data-inputmask="'mask':'99999-9999999-9'" required
                                                            data-parsley-equalto="#bcnic" placeholder="Re-Type SmartID/CNIC" />
                                                 </div>
                                                 <span asp-validation-for="BFormCNIC" class="text-danger"></span>
@@ -204,7 +204,7 @@
                                                     <input asp-for="DisbursementCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" placeholder="Disbursement CNIC" required />
                                                 </div>
                                                 <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required
+                                                    <input value="@Model.DisbursementCNIC" class="form-control inputBox input-mask" data-inputmask="'mask': '99999-9999999-9'" required
                                                            data-parsley-equalto="#DisbursementCNIC"
                                                            placeholder="Re-Type Disbursement CNIC" />
                                                 </div>
@@ -267,7 +267,7 @@
                                                     <input asp-for="StudentMobile" id="mobilenumber" class="form-control inputBox input-mask" data-inputmask="'mask': '0399-9999999'" required placeholder="Type Mobile Number" />
                                                 </div>
                                                 <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask': '0399-9999999'" required
+                                                    <input value="@Model.StudentMobile" class="form-control inputBox input-mask" data-inputmask="'mask': '0399-9999999'" required
                                                            data-parsley-equalto="#mobilenumber"
                                                            placeholder="Re-Type Mobile number" />
                                                 </div>
@@ -286,7 +286,7 @@
                                                     <input asp-for="FatherMobile" id="fmobile" class="form-control inputBox input-mask" data-inputmask="'mask': '0399-9999999'" placeholder="Type Mobile#" />
                                                 </div>
                                                 <div class="mt-2">
-                                                    <input class="form-control inputBox input-mask" data-inputmask="'mask':'0399-9999999'"
+                                                    <input value="=@Model.FatherMobile" class="form-control inputBox input-mask" data-inputmask="'mask':'0399-9999999'"
                                                            data-parsley-equalto="#fmobile" placeholder="Re-Type Mobile#" />
                                                 </div>
                                                 <span asp-validation-for="FatherMobile" class="text-danger"></span>

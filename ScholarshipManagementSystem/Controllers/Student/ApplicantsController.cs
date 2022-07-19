@@ -92,21 +92,39 @@ namespace ScholarshipManagementSystem.Controllers.Student
             //-----------------------------------
             return PartialView(applicationDbContext);
         }
-        public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int TrancheId)
+        public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int InboxId,int TrancheId, int applicantCurrentStatusId, int SchemeLevelId, int ApplicantPaymentInProcess, string UserIdForPaymentMethodAccessFilter)
         {
-            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1}", TrancheId, MaxFYId).ToListAsync();                       
+            
+            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4}", TrancheId, MaxFYId, ApplicantPaymentInProcess, InboxId, UserIdForPaymentMethodAccessFilter, applicantCurrentStatusId).ToListAsync();            
+            ViewBag.UserCurrentAccess = applicantCurrentStatusId;
+            ViewBag.TrancheId = TrancheId;
+            //HttpContext.Session.SetInt32("TrancheId", TrancheId);
+            ViewBag.InboxId = InboxId;
             return PartialView(applicationDbContext);
         }
-        public async Task<IActionResult> ApplicantInProcessForVD()
+        public async Task<IActionResult> ApplicantInProcessForVD(int id, string title)
         {
             int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
-            //var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             //int applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
             ViewBag.MaxFYId = MaxFYId;
-            //ViewBag.applicantCurrentStatusId = applicantCurrentStatusId;
-            ViewBag.TrancheId = _context.Tranche.Where(a => a.IsApproved == true && a.IsClose == false).Select(a => a.TrancheId).FirstOrDefault();
-
-            var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}", MaxFYId).ToListAsync();
+            ViewBag.InboxId = id;
+            ViewBag.Title = title;            
+            ViewBag.applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+            string UserIdForPaymentMethodAccessFilter = "";
+            int ApplicantPaymentInProcess = 0;
+            var TrancheList = _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).ToList();
+            int defaultTrancheId = TrancheList.Select(a=>a.TrancheId).FirstOrDefault();
+            if (currentUser.ApplicantCurrentStatusId == 25)
+            {
+                UserIdForPaymentMethodAccessFilter = currentUser.Id;
+                ApplicantPaymentInProcess = 1;
+                defaultTrancheId = TrancheList.Where(a => (_context.UserAccessToPaymentMethod.Where(a => a.UserId == UserIdForPaymentMethodAccessFilter).Select(a => a.PaymentMethodId)).Contains(a.PaymentMethodId)).Select(a => a.TrancheId).FirstOrDefault();
+            }            
+            ViewBag.TrancheId = /*HttpContext.Session.GetInt32("TrancheId") ??*/ defaultTrancheId;
+            var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}, {1}, {2}, {3}", MaxFYId, currentUser.ApplicantCurrentStatusId, ApplicantPaymentInProcess, UserIdForPaymentMethodAccessFilter).ToListAsync();
+            ViewBag.ApplicantPaymentInProcess = ApplicantPaymentInProcess;
+            ViewBag.UserIdForPaymentMethodAccessFilter = UserIdForPaymentMethodAccessFilter;
             return View(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantInProcess(int id, string title)
@@ -130,10 +148,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.TrancheList = tranches;
             if (applicantCurrentStatusId == 15)
             {
-                tranches = await _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).Select(a=> new TrancheViewModel { TrancheId = a.TrancheId, TrancheName = a.Name}).ToListAsync();
-                ViewBag.DefaultPaymentMethodId = _context.SchemeLevel.Where(a => a.SchemeLevelId == SchemeLevelId).Max(a=>a.PaymentMethodId);
+                var DefaultSchemePaymentMethodId = _context.SchemeLevel.Where(a => a.SchemeLevelId == SchemeLevelId).Max(a => a.PaymentMethodId);
+                var result = await _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).ToListAsync();
+                tranches = result.Select(a=> new TrancheViewModel { TrancheId = a.TrancheId, TrancheName = a.Name}).ToList();                
                 ViewBag.TrancheList = tranches;
+                ViewBag.DefaultPaymentMethodId = result.Where(a => a.PaymentMethodId == DefaultSchemePaymentMethodId).Max(a=>a.TrancheId);
             }
+            ViewBag.DefaultRejectComments = _context.DefaultComment.Find(3).ForwardCaseDefaultComment;
             //---------------------
             return View(applicationDbContext);
         }
@@ -743,6 +764,38 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been restored in primary queue successfully." });
         }
+        public async Task<JsonResult> RejectApplicantByIA(int applicantId, string Description)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantInboxId = 4;//KDA Hard
+                applicantInfo.ApplicantCurrentStatusId = 14;//KDA Hard
+                _context.Update(applicantInfo);
+                //---------------Add Default Comments------------------------                
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = Description;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = "b1150e21-eb79-4170-ab12-4f2aa5a106a9";
+                var UserInfo = _context.Users.Find("b1150e21-eb79-4170-ab12-4f2aa5a106a9");
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
+                //-----------------------------------------------------------
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Push in Primary Queue!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been restored in primary queue successfully." });
+        }
         public async Task<JsonResult> SendISRC(int applicantId)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
@@ -758,6 +811,48 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 return Json(new { isValid = false, message = "Failed to Push in ISRC Queue!" });
             }
             return Json(new { isValid = true, message = "Applicant file has been moved in ISRC queue successfully." });
+        }        
+        public async Task<JsonResult> ForwardWithFinding(int applicantId, string UserId, int TrancheId, string Description)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantInboxId = 8;//KDA Hard
+                applicantInfo.ApplicantCurrentStatusId = _context.Users.Find(UserId).ApplicantCurrentStatusId;
+                _context.Update(applicantInfo);
+                //---------------Add Default Comments------------------------                
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = Description;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = UserId;
+                var UserInfo = _context.Users.Find(UserId);
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
+                //-----------------------------------------------------------
+                if (TrancheId != 0)
+                {
+                    var applicantPolicyInfo = _context.SchemeLevelPolicy.Include(a => a.SchemeLevel).Where(a => a.SchemeLevelPolicyId == applicantInfo.SchemeLevelPolicyId).FirstOrDefault();
+                    applicantInfo.TrancheId = TrancheId;
+                    var currentTranche = _context.Tranche.Find(TrancheId);
+                    currentTranche.ApplicantCount++;
+                    currentTranche.CurrentCommittedAmount += applicantPolicyInfo.Amount;
+                    _context.Update(currentTranche);
+                }                
+                //-----------------------------------------------------------
+                await _context.SaveChangesAsync();
+                //-----------------------------------------------------------
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Forward!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been forwarded successfully." });
         }
         public async Task<JsonResult> ForwardCase(int applicantId, string UserId)
         {

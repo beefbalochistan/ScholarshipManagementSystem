@@ -52,6 +52,7 @@ namespace ScholarshipManagementSystem
             EmailSender emailSender = new EmailSender(smtpServer, port, password, displayName, email);
             services.AddSingleton<IEmailSender>(emailSender);
             services.AddTransient<reCaptchaService>();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +73,7 @@ namespace ScholarshipManagementSystem
             app.UseStaticFiles();
             app.UseFileServer();
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
