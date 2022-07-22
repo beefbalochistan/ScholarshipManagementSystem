@@ -137,7 +137,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.Inbox = id;
             int SchemeLevelId = _context.UserAccessToSchemeLevel.Where(a=>a.UserId == currentUser.Id).Select(a=>a.SchemeLevelId).FirstOrDefault();
             ViewBag.SchemeLevelId = SchemeLevelId;
-            var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1}, {2}, {3}", applicantCurrentStatusId, MaxFYId, currentUser.Id, 1).ToListAsync();//KDA Hard 1 (ApplicantSelectionStatusId=1)
+            var applicationDbContext = await _context.SPApplicantInProcessSummary.FromSqlRaw("exec [Student].[ApplicantInProcessSummarySchemeLevelWise] {0}, {1}, {2}", applicantCurrentStatusId, MaxFYId, currentUser.Id).ToListAsync();//KDA Hard 1 (ApplicantSelectionStatusId=1)
             ViewBag.TotalCases = applicationDbContext.Sum(a=>a.Applicant);
             ViewBag.Title = title;
             //---------------------
@@ -609,6 +609,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 ApplicantSelectionStatusId = a.ApplicantSelectionStatusId,                
                 BFormCNIC = a.Picture == null ? "" : string.Format("data:image/png;base64,{0}", Convert.ToBase64String(a.Picture)),                
                 ApplicantId = a.ApplicantId,
+                ApplicantInboxId = a.ApplicantInboxId,
                 DegreeScholarshipLevel = new DegreeScholarshipLevel {Name = a.DegreeScholarshipLevel.Name},
                 DAEInstitute = new DAEInstitute { Name = a.DAEInstitute.Name},                
             }).FirstOrDefault();
@@ -732,21 +733,66 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been pushed in pending queue successfully." });
         }
-        public async Task<JsonResult> SendIA(int applicantId)
+        public async Task<JsonResult> SendIA(int applicantId, string description)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
             {
                 applicantInfo.ApplicantInboxId = 7;//KDA Hard
                 _context.Update(applicantInfo);
-                await _context.SaveChangesAsync();
+                //---------------Add Default Comments------------------------                
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = description;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = currentUser.Id;
+                var UserInfo = _context.Users.Find(currentUser.Id);
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
                 //-----------------------------------------------------------
+                await _context.SaveChangesAsync();                
             }
             else
             {
                 return Json(new { isValid = false, message = "Failed to Push on IA Queue!" });
             }
             return Json(new { isValid = true, message = "Applicant file has been pushed in IA queue successfully." });
+        }
+
+        public async Task<JsonResult> ResumeCase(int applicantId, string description)
+        {
+            var applicantInfo = _context.Applicant.Find(applicantId);
+            if (applicantInfo != null)
+            {
+                applicantInfo.ApplicantInboxId = 1;//KDA Hard
+                _context.Update(applicantInfo);
+                //---------------Add Default Comments------------------------                
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = description;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = currentUser.Id;
+                var UserInfo = _context.Users.Find(currentUser.Id);
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
+                //-----------------------------------------------------------
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return Json(new { isValid = false, message = "Failed to Resume!" });
+            }
+            return Json(new { isValid = true, message = "Applicant file has been Resumed successfully." });
         }
         public async Task<JsonResult> SendPrimary(int applicantId)
         {
@@ -796,15 +842,29 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             return Json(new { isValid = true, message = "Applicant file has been restored in primary queue successfully." });
         }
-        public async Task<JsonResult> SendISRC(int applicantId)
+        public async Task<JsonResult> SendISRC(int applicantId, string description)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
             {
                 applicantInfo.ApplicantInboxId = 6;//KDA Hard
-                _context.Update(applicantInfo);
-                await _context.SaveChangesAsync();
+                _context.Update(applicantInfo);                
+                //---------------Add Default Comments------------------------                
+                ApplicantStudent obj = new ApplicantStudent();
+                obj.ApplicantId = applicantId;
+                obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
+                obj.Comments = description;
+                obj.CreatedOn = DateTime.Now;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                obj.UserName = User.Identity.Name;
+                obj.FromUserId = currentUser.Id;
+                obj.ToUserId = "b1150e21-eb79-4170-ab12-4f2aa5a106a9";
+                var UserInfo = _context.Users.Find("b1150e21-eb79-4170-ab12-4f2aa5a106a9");
+                obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
+                _context.Add(obj);
                 //-----------------------------------------------------------
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -1464,7 +1524,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 //Passing image data in viewbag to view  
                 ViewBag.ImageData = imgDataURL;
             }            
-            applicant.DateOfBirth = DateTime.Now.Date;
+            applicant.DateOfBirth = DateTime.Today.Date;
             return View(applicant);
         }
         [HttpPost]

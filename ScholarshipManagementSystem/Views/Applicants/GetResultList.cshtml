@@ -36,12 +36,12 @@
     }
 </style>
 <div class="table-responsive p-3">
-    @{
+  @*  @{
         if (ViewBag.Inbox == 1 && ViewBag.UserCurrentAccess > 3)
         {
             <button type="button" class="btn btn-sm btn-info mb-2" id="frm-example">Batch Processing</button>
         }
-    }
+    }*@
     <table id="datatable-buttons" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
@@ -104,11 +104,11 @@
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-primary" data-toggle="tooltip" data-placement="top" title="Move to Primary Inbox" data-original-title="Track" onclick="MoveToPrimary(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-check-outline font-size-18"></i></a>
                         }
-                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewISRC.View)).Result.Succeeded && ViewBag.Inbox != 6)
+                        @if ((ViewBag.UserCurrentAccess == 7 || ViewBag.UserCurrentAccess == 5) && ViewBag.Inbox != 6)
                         {
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-alert-outline font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Move to ISRC Forum" data-original-title="Track" onclick="MoveToISRC(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
                         }
-                        if (ViewBag.UserCurrentAccess > 3 && ViewBag.UserCurrentAccess != 15 && ViewBag.Inbox != 4)
+                        if (ViewBag.UserCurrentAccess > 3 && ViewBag.UserCurrentAccess != 15 && ViewBag.Inbox == 1)
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
                         }
@@ -116,16 +116,24 @@
                         {
                             if (ViewBag.Inbox == 7)
                             {
-                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
+                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="Resumease(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-remove-outline font-size-18"></i></a>
                             }
                             else
                             {
-                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Forward To IA" data-original-title="Track" onclick="ForwardToIA(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Forward To IA" data-original-title="Track" onclick="ForwardToIA(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
+                                }
                             }
-                        }
-                        if (ViewBag.UserCurrentAccess == 14 && ViewBag.Inbox != 4)
-                        {                           
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>                           
+                            if (ViewBag.UserCurrentAccess == 14)
+                            {                           
+                                if(ViewBag.Inbox == 4)
+                                {
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="Resumease(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                }
+                                else
+                                {
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-remove-outline font-size-18"></i></a>                           
+                                }                                                               
                         }
                         if (ViewBag.UserCurrentAccess == 15)
                         {

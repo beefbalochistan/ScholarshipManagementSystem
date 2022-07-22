@@ -344,7 +344,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
                 student.Sno = counter++;
                 student.ApplicantReferenceNo = applicant.ApplicantReferenceNo;
                 student.Name = applicant.Name;
-                student.CNIC = applicant.BFormCNIC;
+                student.CNIC = applicant.DisbursementCNIC;
                 student.StudentMobile = applicant.StudentMobile;
                 student.District = applicant.District.Name;
                 student.Amount = applicant.SchemeLevelPolicy.Amount;

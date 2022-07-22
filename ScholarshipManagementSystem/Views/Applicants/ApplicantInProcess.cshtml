@@ -135,7 +135,7 @@
                 type: "warning",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!"
+                confirmButtonText: "Yes, Send it!"
             }).then(function (t) {
                 if (t.value == true) {
                     $.ajax({
@@ -164,19 +164,28 @@
             })
         }
         function ForwardToIA(applicantId, schemeLevelId) {
+            var Description = "";
             Swal.fire({
-                title: "Are you sure?",
-                text: 'You Want to Send Applicant File in "Internal Audit Inbox!"',
+                title: "Are you sure?",                
+                html: "<h6>You Want to Send Applicant File in 'Internal Audit Inbox!'</h6><div class='text-center'><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
                 type: "warning",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!"
+                confirmButtonText: "Yes, Send it!",
+                preConfirm: () => {                 
+                    Description = document.getElementById('description').value;
+                    if (Description == "") {
+                        Swal.showValidationMessage(
+                            `Invalid Decription!`
+                        )
+                    }
+                }
             }).then(function (t) {
                 if (t.value == true) {
                     $.ajax({
                         type: "POST",
                         url: "/Applicants/SendIA",
-                        data: { applicantId: applicantId },
+                        data: { applicantId: applicantId, description: Description },
                         dataType: "json",
                         success: function (response) {
                             if (response != null) {
@@ -205,7 +214,7 @@
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!"
+                confirmButtonText: "Yes, Resume it!"
             }).then(function (t) {
                 if (t.value == true) {
                     $.ajax({
@@ -234,19 +243,28 @@
             })
         }
         function MoveToISRC(applicantId, schemeLevelId) {
+            var Description = "";
             Swal.fire({
-                title: "Are you sure?",
-                text: 'You Want to Send Applicant File in "ISRC Forum"',
+                title: "Are you sure?",                
+                html: "<h6>You Want to Send Applicant File in 'ISRC Forum'</h6><div class='text-center'><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!"
+                confirmButtonText: "Yes, Send it!",
+                preConfirm: () => {                 
+                    Description = document.getElementById('description').value;
+                    if (Description == "") {
+                        Swal.showValidationMessage(
+                            `Invalid Decription!`
+                        )
+                    }
+                }
             }).then(function (t) {
                 if (t.value == true) {
                     $.ajax({
                         type: "POST",
                         url: "/Applicants/SendISRC",
-                        data: { applicantId: applicantId },
+                        data: { applicantId: applicantId, description: Description },
                         dataType: "json",
                         success: function (response) {
                             if (response != null) {
@@ -276,7 +294,7 @@
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!",
+                confirmButtonText: "Yes, Reject Case!",
                 preConfirm: () => {
                     Description = document.getElementById('description').value;
                     if (Description == "") {
@@ -339,7 +357,7 @@
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!",
+                confirmButtonText: "Yes, Forward it!",
                 preConfirm: () => {
                     UserId = document.getElementById('UserListId').value;
                     if (UserId == "") {
@@ -431,7 +449,7 @@
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!",
+                confirmButtonText: "Yes, Forward it!",
                 preConfirm: () => {
                     UserId = document.getElementById('UserListId').value;
                     if (UserId == "") {
@@ -530,7 +548,7 @@
                 type: "success",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, Back it!",
+                confirmButtonText: "Yes, Forward it!",
                 preConfirm: () => {
                     UserId = document.getElementById('UserListId').value;
                     if (UserId == "") {
@@ -577,6 +595,50 @@
                     });
                 }
             })
-        }        
+        }       
+        function ResumeCase(applicantId, schemeLevelId) {
+            var Description = "";
+            Swal.fire({
+                title: "Are you sure?",                
+                html: "<h6>You Want to Resume Applicant File</h6><div class='text-center'><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
+                type: "warning",
+                showCancelButton: !0, confirmButtonColor: "#34c38f",
+                cancelButtonColor: "#f46a6a",
+                confirmButtonText: "Yes, Send it!",
+                preConfirm: () => {                 
+                    Description = document.getElementById('description').value;
+                    if (Description == "") {
+                        Swal.showValidationMessage(
+                            `Invalid Decription!`
+                        )
+                    }
+                }
+            }).then(function (t) {
+                if (t.value == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Applicants/ResumeCase",
+                        data: { applicantId: applicantId, description: Description },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                if (response.isValid) {
+                                    Swal.fire("Back", response.message, "success");
+                                    UpdateRecord(schemeLevelId);
+                                } else {
+                                    notificationme(response.message);
+                                }
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            })
+        }
     </script>
 }

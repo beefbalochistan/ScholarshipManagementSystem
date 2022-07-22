@@ -94,6 +94,9 @@ namespace Repository.Data
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToSchemeLevel> UserAccessToSchemeLevel { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.UserAccessToPaymentMethod> UserAccessToPaymentMethod { get; set; }
         public DbSet<DAL.Models.Domain.MasterSetup.DefaultComment> DefaultComment { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.BudgetLevel> BudgetLevel { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.AnnualBudget> AnnualBudget { get; set; }
+        public DbSet<DAL.Models.Domain.MasterSetup.SpecialQuotaCategory> SpecialQuotaCategory { get; set; }
         public DbSet<DAL.Models.Domain.ImportResult.DocumentAssistIndicator> DocumentAssistIndicator { get; set; }
         [NotMapped]
         public DbSet<DAL.Models.ViewModels.ApplicantInProcess.SPApplicantInProcess> SPApplicantInProcess { get; set; }

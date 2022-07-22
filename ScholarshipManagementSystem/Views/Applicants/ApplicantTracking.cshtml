@@ -331,12 +331,12 @@
                                                 </div>
                                                 <div class="form-inline pt-3">
                                                     <button onclick="UploadComment(false)" type="button" class="btn btn-primary btn-rounded chat-send w-md waves-effect waves-light"><span class="d-none d-sm-inline-block mr-2">Submit</span> <i class="mdi mdi-send"></i></button>
-                                                    @{
+                                                    @*@{
                                                         if (ViewBag.IsInRoleReject == true)
                                                         {
                                                             <button onclick="UploadComment(true)" type="button" class="btn btn-danger btn-rounded chat-send w-md waves-effect waves-light ml-2"><span class="d-none d-sm-inline-block mr-2">Reject</span> <i class="mdi mdi-pen-off"></i></button>
                                                         }
-                                                    }
+                                                    }*@
                                                 </div>
                                             </div>
                                         </form>
@@ -492,7 +492,7 @@ else
                         $('#s_attach_cnic').prop('checked', response.attach_CNIC_BForm);
                         $('#s_attach_guardiancnic').prop('checked', response.attach_Father_Mother_Guardian_CNIC);
                         $('#formsubmitdate').text(response.formSubmittedOnDate);
-                        if (response.applicantCurrentStatusId == UserCurrentAccess && UserCurrentAccess != 15) {
+                        if (response.applicantCurrentStatusId == UserCurrentAccess && UserCurrentAccess != 15 && response.applicantInboxId == 1) {
                             $('#commentPortion').show();
                         } else {
                             $('#commentPortion').hide();

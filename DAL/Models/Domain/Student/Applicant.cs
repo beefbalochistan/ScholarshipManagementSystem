@@ -22,6 +22,7 @@ namespace DAL.Models.Domain.Student
         public string FatherName { get; set; }
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime DateOfBirth { get; set; }
         [Display(Name = "B-Form/CNIC")]
         public string BFormCNIC { get; set; }

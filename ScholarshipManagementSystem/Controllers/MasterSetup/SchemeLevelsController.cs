@@ -55,6 +55,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name");
             ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name");
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name");
             var gradingSystemList = new List<SelectListItem>
             {
                new SelectListItem{ Text="GPA Based", Value = "1", Selected = true },
@@ -69,7 +70,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchemeLevelId,Name,Code,OrderBy,Description1,GradingSystem,IsActive,InstituteId,SchemeId,TotalMarks_GPA,QualificationLevelId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Create(SchemeLevel schemeLevel)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +81,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
             ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name", schemeLevel.PaymentMethodId);
             var gradingSystemList = new List<SelectListItem>
             {
                new SelectListItem{ Text="GPA Based", Value = "1", Selected = true },
@@ -105,6 +107,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
             ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name");
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name");
             var gradingSystemList = new List<SelectListItem>
             {
                new SelectListItem{ Text="GPA Based", Value = "1", Selected = true },
@@ -119,7 +122,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchemeLevelId,Name,Code,OrderBy,Description1,GradingSystem,IsActive,TotalMarks_GPA,InstituteId,SchemeId,QualificationLevelId")] SchemeLevel schemeLevel)
+        public async Task<IActionResult> Edit(int id, SchemeLevel schemeLevel)
         {
             if (id != schemeLevel.SchemeLevelId)
             {
@@ -149,6 +152,7 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             ViewData["QualificationLevelId"] = new SelectList(_context.QualificationLevel, "QualificationLevelId", "Name", schemeLevel.QualificationLevelId);
             ViewData["InstituteId"] = new SelectList(_context.Institute, "InstituteId", "Name", schemeLevel.InstituteId);
             ViewData["SchemeId"] = new SelectList(_context.Scheme, "SchemeId", "Name", schemeLevel.SchemeId);
+            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethod, "PaymentMethodId", "Name", schemeLevel.PaymentMethodId);
             var gradingSystemList = new List<SelectListItem>
             {
                new SelectListItem{ Text="GPA Based", Value = "1", Selected = true },

@@ -165,7 +165,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label asp-for="DateOfBirth" class="control-label"></label>
-                                                <input asp-for="DateOfBirth" value="@Model.DateOfBirth.ToString("dd/M/yyyy")" type="text" class="form-control inputBox" data-date-format="dd/M/yyyy" data-provide="datepicker">
+                                                @*<input asp-for="DateOfBirth" type="date" class="form-control inputBox" data-date-format="dd/M/yyyy" data-provide="datepicker">*@
+                                                <input asp-for="DateOfBirth" type="date" class="form-control inputBox">
                                             </div><!-- input-group -->
                                         </div>
                                         <div class="col-lg-6">
