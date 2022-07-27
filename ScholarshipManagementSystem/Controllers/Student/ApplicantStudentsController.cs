@@ -181,15 +181,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
 
         [HttpPost]
-        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, bool IsReject, string comment,int ForwardApplicantCurrentStatusId, string UserId, int userCurrentAccess, IFormFile Attachment)
+        public async Task<string> SubmitComment(int applicantId, string applicantRefNo, string comment,int ForwardApplicantCurrentStatusId, string UserId, int userCurrentAccess, IFormFile Attachment)
         {
-            var applicantInfo = await _context.Applicant.FindAsync(applicantId);
-            if (IsReject)
-            {
-                applicantInfo.ApplicantInboxId = 4;                
-                ForwardApplicantCurrentStatusId = applicantInfo.ApplicantCurrentStatusId;
-                UserId = "292a61c0-563c-4ba5-aff8-adb6ce90878c";
-            }
+            var applicantInfo = await _context.Applicant.FindAsync(applicantId);           
             if (!(applicantId == 0 || applicantRefNo == "" || comment == "" || UserId == ""))
             {                
                 ApplicantStudent obj = new ApplicantStudent();
@@ -208,15 +202,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 if (applicantInfo.ApplicantCurrentStatusId > forwardTo)
                 {
                     applicantInfo.ApplicantInboxId = 2;
-                }
-                if (!IsReject)
-                {                   
-                    applicantInfo.ApplicantCurrentStatusId = forwardTo;
-                }
-                /*else
-                {
-                    applicantInfo.ApplicantCurrentStatusId = 24;
-                }  */
+                }                                
+                applicantInfo.ApplicantCurrentStatusId = forwardTo;               
                 //----------------Upload Attachment----------------------
                 if (Attachment != null)
                 {
@@ -256,22 +243,6 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 }
                 //-------------------------------------------------------
                 _context.Add(obj);                
-                if (IsReject)
-                {
-                    ApplicantStateChanger applicantStateChanger = new ApplicantStateChanger();
-                    applicantStateChanger.ApplicantId = applicantId;
-                    applicantStateChanger.ApplicantSelectionStatusId = 4;
-                    applicantStateChanger.AttachmentPath = obj.Attachment;
-                    applicantStateChanger.CurrentState = "Rejected";
-                    applicantStateChanger.Notes = comment;
-                    applicantStateChanger.OnDate = DateTime.Today;
-                    applicantStateChanger.PreviousState = "Selected";
-                    applicantStateChanger.UserName = User.Identity.Name;
-                    _context.Add(applicantStateChanger);
-                    applicantInfo.ApplicantSelectionStatusId = 4;
-                    applicantInfo.SelectionStatus = "Rejected";
-                    applicantInfo.ApplicantInboxId = 4;//KDA Hard
-                }                              
                 if (userCurrentAccess == 15)//KDA Hard
                 {
                     if(applicantInfo.TrancheId != null)

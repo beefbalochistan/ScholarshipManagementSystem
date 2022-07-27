@@ -95,7 +95,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int InboxId,int TrancheId, int applicantCurrentStatusId, int SchemeLevelId, int ApplicantPaymentInProcess, string UserIdForPaymentMethodAccessFilter)
         {
             
-            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4}", TrancheId, MaxFYId, ApplicantPaymentInProcess, InboxId, UserIdForPaymentMethodAccessFilter, applicantCurrentStatusId).ToListAsync();            
+            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4}", TrancheId, MaxFYId, ApplicantPaymentInProcess, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();            
             ViewBag.UserCurrentAccess = applicantCurrentStatusId;
             ViewBag.TrancheId = TrancheId;
             //HttpContext.Session.SetInt32("TrancheId", TrancheId);
@@ -112,13 +112,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewBag.Title = title;            
             ViewBag.applicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
             string UserIdForPaymentMethodAccessFilter = "";
-            int ApplicantPaymentInProcess = 0;
-            var TrancheList = _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).ToList();
+            int ApplicantPaymentInProcess = 1;
+            var TrancheList = _context.Tranche.Where(a => a.IsApproved == false && a.IsActive == true).ToList();
             int defaultTrancheId = TrancheList.Select(a=>a.TrancheId).FirstOrDefault();
             if (currentUser.ApplicantCurrentStatusId == 25)
             {
-                UserIdForPaymentMethodAccessFilter = currentUser.Id;
-                ApplicantPaymentInProcess = 1;
+                UserIdForPaymentMethodAccessFilter = currentUser.Id;                
                 defaultTrancheId = TrancheList.Where(a => (_context.UserAccessToPaymentMethod.Where(a => a.UserId == UserIdForPaymentMethodAccessFilter).Select(a => a.PaymentMethodId)).Contains(a.PaymentMethodId)).Select(a => a.TrancheId).FirstOrDefault();
             }            
             ViewBag.TrancheId = /*HttpContext.Session.GetInt32("TrancheId") ??*/ defaultTrancheId;
@@ -149,13 +148,15 @@ namespace ScholarshipManagementSystem.Controllers.Student
             if (applicantCurrentStatusId == 15)
             {
                 var DefaultSchemePaymentMethodId = _context.SchemeLevel.Where(a => a.SchemeLevelId == SchemeLevelId).Max(a => a.PaymentMethodId);
-                var result = await _context.Tranche.Where(a => a.IsApproved == true && a.IsOpen == true).ToListAsync();
+                var result = await _context.Tranche.Where(a => a.IsApproved == false && a.IsActive == true).ToListAsync();
                 tranches = result.Select(a=> new TrancheViewModel { TrancheId = a.TrancheId, TrancheName = a.Name}).ToList();                
                 ViewBag.TrancheList = tranches;
                 ViewBag.DefaultPaymentMethodId = result.Where(a => a.PaymentMethodId == DefaultSchemePaymentMethodId).Max(a=>a.TrancheId);
             }
             ViewBag.DefaultRejectComments = _context.DefaultComment.Find(3).ForwardCaseDefaultComment;
             //---------------------
+            List<ProcessViewModel> processViews = await _context.userAccessToForward.Include(a=>a.ApplicationUser).Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUser.Id).Select(a => new ProcessViewModel { ApplicantCurrentStatusId = a.ApplicantCurrentStatusId, ProcessState = a.ApplicantCurrentStatus.ProcessState }).ToListAsync();             
+            ViewBag.UserAccessToForwardId = processViews;            
             return View(applicationDbContext);
         }
         public async Task<IActionResult> ApplicantRejected()
@@ -217,29 +218,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             ViewData["SectionCommentId"] = new SelectList(SectionCommentList, "SectionCommentId", "Description");
             //ViewData["SectionCommentId"] = new SelectList(_context.SectionComment, "SectionCommentId", "Comment");
             var result = _context.userAccessToForward.Include(a => a.ApplicantCurrentStatus).Where(a => a.UserId == currentUserId.Id);
-            ViewData["ddlApplicantCurrentStatusId"] = new SelectList(result, "ApplicantCurrentStatusId", "ApplicantCurrentStatus.ProcessState");            
-            ViewBag.IsInRoleReject = false;
-            var IsInRoleReject = await _userManager.IsInRoleAsync(currentUserId, "Reject");
-            if(IsInRoleReject)
-            {
-                ViewBag.IsInRoleReject = true;
-            }
-            ViewBag.IsInRoleResume = false;
-          /*  var IsInRoleReject = await _userManager.IsInRoleAsync(currentUserId, "ISRCCases");
-            if (IsInRoleReject)
-            {
-                ViewBag.IsInRoleReject = true;
-            }
-            ViewBag.IsInRoleResume = false;*/
-            var IsInRoleResume = await _userManager.IsInRoleAsync(currentUserId, "Resume");
-            if (IsInRoleResume)
-            {
-                var IsRejected = _context.Applicant.Count(a => a.ApplicantReferenceNo == RefId && a.ApplicantSelectionStatusId == 4);
-                if(IsRejected > 0)
-                {
-                    ViewBag.IsInRoleResume = true;
-                }                
-            }
+            ViewData["ddlApplicantCurrentStatusId"] = new SelectList(result, "ApplicantCurrentStatusId", "ApplicantCurrentStatus.ProcessState");                                                                     
             return View();
         }
         
@@ -764,12 +743,13 @@ namespace ScholarshipManagementSystem.Controllers.Student
             return Json(new { isValid = true, message = "Applicant file has been pushed in IA queue successfully." });
         }
 
-        public async Task<JsonResult> ResumeCase(int applicantId, string description)
+        public async Task<JsonResult> ResumeCase(int applicantId, string description, int applicantCurrentStatusId)
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
             {
-                applicantInfo.ApplicantInboxId = 1;//KDA Hard
+                applicantInfo.ApplicantInboxId = 2;//KDA Hard
+                applicantInfo.ApplicantCurrentStatusId = applicantCurrentStatusId;
                 _context.Update(applicantInfo);
                 //---------------Add Default Comments------------------------                
                 ApplicantStudent obj = new ApplicantStudent();
@@ -781,8 +761,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
-                obj.ToUserId = currentUser.Id;
-                var UserInfo = _context.Users.Find(currentUser.Id);
+                var UserInfo = _context.Users.Where(a=>a.ApplicantCurrentStatusId == applicantCurrentStatusId && a.IsSectionHead == true).FirstOrDefault();
+                if(UserInfo.Id == currentUser.Id)
+                {
+                    UserInfo = _context.Users.Where(a => a.ApplicantCurrentStatusId == applicantCurrentStatusId && a.IsSectionHead == false).FirstOrDefault();
+                }
+                obj.ToUserId = UserInfo.Id;                
                 obj.ForwardToUserName = UserInfo.FirstName + " " + UserInfo.LastName;
                 _context.Add(obj);
                 //-----------------------------------------------------------
@@ -848,6 +832,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
             if (applicantInfo != null)
             {
                 applicantInfo.ApplicantInboxId = 6;//KDA Hard
+                applicantInfo.ApplicantCurrentStatusId = 14;
                 _context.Update(applicantInfo);                
                 //---------------Add Default Comments------------------------                
                 ApplicantStudent obj = new ApplicantStudent();

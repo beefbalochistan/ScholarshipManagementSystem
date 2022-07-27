@@ -116,7 +116,7 @@
                         {
                             if (ViewBag.Inbox == 7)
                             {
-                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="Resumease(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="ResumeCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
                                 <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-remove-outline font-size-18"></i></a>
                             }
                             else
@@ -128,7 +128,12 @@
                             {                           
                                 if(ViewBag.Inbox == 4)
                                 {
-                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="Resumease(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="ResumeCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                }
+                                else if (ViewBag.Inbox == 6)
+                                {
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="ResumeCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                                    <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-danger" data-toggle="tooltip" data-placement="top" title="Reject Case" data-original-title="Track" onclick="RejectCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-remove-outline font-size-18"></i></a>                           
                                 }
                                 else
                                 {
@@ -138,7 +143,7 @@
                         if (ViewBag.UserCurrentAccess == 15)
                         {
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCaseByFinance(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
-                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Finding Case" data-original-title="Track" onclick="ForwardWithFinding(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Finding Case" data-original-title="Track" onclick="ForwardWithFinding(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
                         }
                     }
                 </td>

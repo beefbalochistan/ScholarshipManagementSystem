@@ -9,6 +9,9 @@
     List<UserViewModel> users = ViewBag.UserList;
     var usersTextArray = users.Select(a=>a.UserName).ToArray<string>();
     var usersValueArray = users.Select(a => a.UserId).ToArray<string>();    
+    List<ProcessViewModel> processStates = ViewBag.UserAccessToForwardId;
+    var processStatesTextArray = processStates.Select(a=>a.ProcessState).ToArray<string>();
+    var processStatesValueArray = processStates.Select(a => a.ApplicantCurrentStatusId).ToArray<int>();
     List<TrancheViewModel> tranches = ViewBag.TrancheList;
     var tranchesTextArray = tranches.Select(a => a.TrancheName).ToArray<string>();
     var tranchesValueArray = tranches.Select(a => a.TrancheId).ToArray<int>();
@@ -82,6 +85,7 @@
         function fetchRecord(SchemeLevelId, inbox) {
             var MaxFYId = '@ViewBag.MaxFYId';
             var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
+            debugger;
             $("#fetchspinner").show();
             $.ajax({
                 url: '@Url.Action("GetResultList", "Applicants")',
@@ -597,10 +601,28 @@
             })
         }       
         function ResumeCase(applicantId, schemeLevelId) {
+            // Get server side variables
+            var processStatesTextArray = []; // it will contain user names
+            var processStatesValueArray = []; // it will contain user Ids
+            @foreach (var text in processStatesTextArray)
+            {
+                @:processStatesTextArray.push("@text");
+            }
+            @foreach (var value in processStatesValueArray)
+            {
+                @:processStatesValueArray.push("@value");
+            }
+            // Create string for select options
+            var options = "";
+            for (let i = 0; i < processStatesValueArray.length; ++i) {
+                var optionTag = "<option value=\"" + processStatesValueArray[i] + "\">" + processStatesTextArray[i] + "</option>";
+                options = options.concat(optionTag);
+            }       
+            var ApplicantCurrentStatusId = 0;
             var Description = "";
             Swal.fire({
                 title: "Are you sure?",                
-                html: "<h6>You Want to Resume Applicant File</h6><div class='text-center'><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
+                html: "<h6>You Want to Resume Applicant File</h6><div class='text-center'><label>Forward To</label><select id='UserAccessToForwardResumeId' name='UserAccessToForwardResumeId' class='form-control'>" + options + "</select><label>Description</label><div class='text-center'><textarea id='description' class='form-control' rows='2'></textarea></div>",
                 type: "warning",
                 showCancelButton: !0, confirmButtonColor: "#34c38f",
                 cancelButtonColor: "#f46a6a",
@@ -612,13 +634,21 @@
                             `Invalid Decription!`
                         )
                     }
+                    ApplicantCurrentStatusId = document.getElementById('UserAccessToForwardResumeId').value;
+                    alert(ApplicantCurrentStatusId);
+                    return;
+                    if (ApplicantCurrentStatusId == 0) {
+                        Swal.showValidationMessage(
+                            `Invalid User to forward!`
+                        )
+                    }
                 }
             }).then(function (t) {
                 if (t.value == true) {
                     $.ajax({
                         type: "POST",
                         url: "/Applicants/ResumeCase",
-                        data: { applicantId: applicantId, description: Description },
+                        data: { applicantId: applicantId, description: Description, applicantCurrentStatusId: ApplicantCurrentStatusId },
                         dataType: "json",
                         success: function (response) {
                             if (response != null) {

@@ -32,6 +32,7 @@ namespace DAL.Models.Domain.MasterSetup
         [Display(Name = "Total Marks/GPA")]
         public decimal TotalMarks_GPA { get; set; }
         public int GradingSystem { get; set; }
+        public int BudgetLevelId { get; set; } = 1;
         public virtual Scheme Scheme { get; set; }
         public virtual ICollection<DegreeScholarshipLevel> DegreeScholarshipLevels { get; set; }
         public virtual QualificationLevel QualificationLevel { get; set; }

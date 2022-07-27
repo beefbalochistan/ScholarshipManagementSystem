@@ -15,5 +15,6 @@ namespace DAL.Models
         public int ApplicantCurrentStatusId { get; set; }
         public int UsernameChangeLimit { get; set; } = 10;
         public byte[] ProfilePicture { get; set; }
+        public bool IsSectionHead { get; set; } = false;
     }
 }

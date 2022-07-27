@@ -20,11 +20,10 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="3" asp-route-title="Pending Cases" class=" waves-effect">
-                            <span key="t-calendar"><span class="mr-2 ml-1"><img src="~/assets/images/icons/PendInbox.svg" height="22" /></span>Pending Cases Inbox</span>
+                        <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="8" asp-route-title="Finding Cases" class=" waves-effect">
+                            <i class="mdi mdi-account-question-outline"></i><span key="t-calendar"><span class="mr-2 ml-1"></span>Finding Cases Inbox</span>
                         </a>
                     </li>
-
                 }
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.VDInbox.View)).Result.Succeeded)
                 {
@@ -35,14 +34,14 @@
                     </li>
 
                 }
-                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewFinding.View)).Result.Succeeded)
+                @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewFinding.View)).Result.Succeeded)
                 {
                     <li>
                         <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="8" asp-route-title="Finding Cases" class=" waves-effect">
                             <i class="mdi mdi-account-question-outline" style="margin-left:7px"></i><span key="t-calendar">Finding Cases Inbox</span>
                         </a>
                     </li>
-                }
+                }*@
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Applicant.Edit)).Result.Succeeded)
                 {
                     <li>
@@ -76,7 +75,7 @@
                     {
                         <li>
                             <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="7" asp-route-title="Internal Audit Cases" class=" waves-effect">
-                                <i class="mdi mdi-account-question-outline"></i><span key="t-calendar">IA Cases Inbox</span>
+                                <span class="mr-2 ml-1"><img src="~/assets/images/icons/ISRCInbox.svg" height="22" /></span><span key="t-calendar">IA Cases Inbox</span>
                             </a>
                         </li>
                     }

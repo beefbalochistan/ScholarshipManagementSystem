@@ -1,0 +1,101 @@
+﻿@model IEnumerable<DAL.Models.Domain.MasterSetup.AnnualBudget>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.POMQuota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DOMSQuota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecialQuota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeclineQuota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MeetingName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MeetingReferancNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BudgetType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BudgetLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScholarshipFiscalYear)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.POMQuota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOMSQuota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpecialQuota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeclineQuota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingReferancNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BudgetType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BudgetLevel.BudgetLevelId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScholarshipFiscalYear.Code)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AnnualBudgetId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AnnualBudgetId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AnnualBudgetId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

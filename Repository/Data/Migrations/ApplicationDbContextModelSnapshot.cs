@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
+#nullable disable
+
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
@@ -15,9 +17,10 @@ namespace Repository.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.16")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
                 {
@@ -46,6 +49,9 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSectionHead")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -102,15 +108,16 @@ namespace Repository.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Audit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AffectedColumns")
                         .HasColumnType("nvarchar(max)");
@@ -145,8 +152,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ColumnLabelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColumnLabelId"), 1L, 1);
 
                     b.Property<string>("C1")
                         .HasColumnType("nvarchar(max)");
@@ -213,8 +221,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ColumnLabelTempId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColumnLabelTempId"), 1L, 1);
 
                     b.Property<string>("C1")
                         .HasColumnType("nvarchar(max)");
@@ -281,8 +290,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DocumentAssistId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentAssistId"), 1L, 1);
 
                     b.Property<string>("ConditionalOperator")
                         .HasColumnType("nvarchar(max)");
@@ -296,8 +306,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DocumentAssistIndicatorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentAssistIndicatorId"), 1L, 1);
 
                     b.Property<int>("DocumentAssistId")
                         .HasColumnType("int");
@@ -326,8 +337,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ExcelColumnNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExcelColumnNameId"), 1L, 1);
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -344,8 +356,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ResultContainerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultContainerId"), 1L, 1);
 
                     b.Property<decimal>("CGPA")
                         .HasColumnType("decimal(18,2)");
@@ -420,8 +433,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ResultContainerTempId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultContainerTempId"), 1L, 1);
 
                     b.Property<decimal>("CGPA")
                         .HasColumnType("decimal(18,2)");
@@ -490,8 +504,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ResultRepositoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultRepositoryId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -543,8 +558,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ResultRepositoryTempId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultRepositoryTempId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -576,12 +592,66 @@ namespace Repository.Data.Migrations
                     b.ToTable("ResultRepositoryTemp", "ImportResult");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.AnnualBudget", b =>
+                {
+                    b.Property<int>("AnnualBudgetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnnualBudgetId"), 1L, 1);
+
+                    b.Property<int>("BudgetLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BudgetType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DOMSQuota")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DeclineQuota")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeetingName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeetingReferancNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("POMQuota")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ScholarshipFiscalYearId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SpecialQuota")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AnnualBudgetId");
+
+                    b.HasIndex("BudgetLevelId");
+
+                    b.HasIndex("ScholarshipFiscalYearId");
+
+                    b.ToTable("AnnualBudget", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BEEFSection", b =>
                 {
                     b.Property<int>("BEEFSectionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BEEFSectionId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -595,12 +665,37 @@ namespace Repository.Data.Migrations
                     b.ToTable("BEEFSection", "master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BudgetLevel", b =>
+                {
+                    b.Property<int>("BudgetLevelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BudgetLevelId"), 1L, 1);
+
+                    b.Property<int>("AnualStipend")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BudgetLevelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BudgetLevelId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.ToTable("BudgetLevel", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.CompanyInfo", b =>
                 {
                     b.Property<int>("CompanyInfoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyInfoId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -657,8 +752,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DAEInstituteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DAEInstituteId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -727,8 +823,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DefaultCommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DefaultCommentId"), 1L, 1);
 
                     b.Property<string>("ForwardCaseDefaultComment")
                         .HasColumnType("nvarchar(max)");
@@ -742,8 +839,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DegreeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DegreeId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -782,8 +880,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DegreeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DegreeLevelId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -808,8 +907,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DegreeScholarshipLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DegreeScholarshipLevelId"), 1L, 1);
 
                     b.Property<int>("DegreeLevelId")
                         .HasColumnType("int");
@@ -842,8 +942,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DisciplineId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DisciplineId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -866,8 +967,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DistrictId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -898,8 +1000,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DistrictDetailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictDetailId"), 1L, 1);
 
                     b.Property<string>("CensesYear")
                         .IsRequired()
@@ -937,8 +1040,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DivisionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DivisionId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -966,8 +1070,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DocumentAssistGeneralId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentAssistGeneralId"), 1L, 1);
 
                     b.Property<int?>("DegreeScholarshipLevelId")
                         .HasColumnType("int");
@@ -1004,8 +1109,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("EmployeeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"), 1L, 1);
 
                     b.Property<int>("BEEFSectionId")
                         .HasColumnType("int");
@@ -1037,8 +1143,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("FacultyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacultyId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -1058,8 +1165,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("GenderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenderId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1074,8 +1182,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("InstituteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstituteId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -1129,8 +1238,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("InstituteDepartmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstituteDepartmentId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -1174,8 +1284,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("InstituteFacultyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstituteFacultyId"), 1L, 1);
 
                     b.Property<int>("FacultyId")
                         .HasColumnType("int");
@@ -1211,8 +1322,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("InstituteTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstituteTypeId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -1230,8 +1342,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("OperatorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperatorId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1252,8 +1365,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PaymentDisbursementModeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentDisbursementModeId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -1267,8 +1381,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PaymentMethodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentMethodId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -1312,8 +1427,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PreferenceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PreferenceId"), 1L, 1);
 
                     b.Property<float>("BSProfDistrictThresholdFor1stY")
                         .HasColumnType("real");
@@ -1531,8 +1647,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ProvienceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProvienceId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -1552,8 +1669,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("QualificationLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QualificationLevelId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -1584,33 +1702,13 @@ namespace Repository.Data.Migrations
                     b.ToTable("Religion", "master");
                 });
 
-            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SMSMassage", b =>
-                {
-                    b.Property<int>("SMSMassageTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Massage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SMSType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SMSMassageTypeId");
-
-                    b.ToTable("SMSMassage", "master");
-                });
-
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.Scheme", b =>
                 {
                     b.Property<int>("SchemeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -1633,8 +1731,12 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelId"), 1L, 1);
+
+                    b.Property<int>("BudgetLevelId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -1687,8 +1789,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelMandatoryColumnId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelMandatoryColumnId"), 1L, 1);
 
                     b.Property<int>("ExcelColumnNameId")
                         .HasColumnType("int");
@@ -1709,8 +1812,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SectionCommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SectionCommentId"), 1L, 1);
 
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
@@ -1743,8 +1847,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SelectionCriteriaGeneralId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SelectionCriteriaGeneralId"), 1L, 1);
 
                     b.Property<string>("Expression")
                         .HasColumnType("nvarchar(max)");
@@ -1763,8 +1868,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SelectionMethodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SelectionMethodId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1779,8 +1885,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SeverityLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeverityLevelId"), 1L, 1);
 
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
@@ -1796,12 +1903,57 @@ namespace Repository.Data.Migrations
                     b.ToTable("SeverityLevel", "Master");
                 });
 
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SMSMassage", b =>
+                {
+                    b.Property<int>("SMSMassageTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SMSMassageTypeId"), 1L, 1);
+
+                    b.Property<string>("Massage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SMSType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SMSMassageTypeId");
+
+                    b.ToTable("SMSMassage", "master");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.SpecialQuotaCategory", b =>
+                {
+                    b.Property<int>("SpecialQuotaCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecialQuotaCategoryId"), 1L, 1);
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PercentageValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("SpecialQuotaCategoryId");
+
+                    b.ToTable("SpecialQuotaCategory", "master");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.UserAccessToForward", b =>
                 {
                     b.Property<int>("UserAccessToForwardId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAccessToForwardId"), 1L, 1);
 
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
@@ -1826,8 +1978,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("UserAccessToPaymentMethodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAccessToPaymentMethodId"), 1L, 1);
 
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
@@ -1849,8 +2002,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("UserAccessToSchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAccessToSchemeLevelId"), 1L, 1);
 
                     b.Property<int>("SchemeLevelId")
                         .HasColumnType("int");
@@ -1872,8 +2026,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DAEInstituteQoutaBySchemeLevelId"), 1L, 1);
 
                     b.Property<int>("ClassEnrollment")
                         .HasColumnType("int");
@@ -1917,8 +2072,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DegreeLevelQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DegreeLevelQoutaBySchemeLevelId"), 1L, 1);
 
                     b.Property<float>("AdditionalSlotAllocate")
                         .HasColumnType("real");
@@ -1959,8 +2115,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictQoutaBySchemeLevelId"), 1L, 1);
 
                     b.Property<int>("CurrentYearPopulation")
                         .HasColumnType("int");
@@ -2010,8 +2167,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PolicySRCForumId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PolicySRCForumId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -2055,8 +2213,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelPaymentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelPaymentId"), 1L, 1);
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -2098,8 +2257,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelPolicyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelPolicyId"), 1L, 1);
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -2141,8 +2301,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ScholarshipId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScholarshipId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -2161,8 +2322,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ScholarshipFiscalYearId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScholarshipFiscalYearId"), 1L, 1);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -2187,8 +2349,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SelectionCriteriaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SelectionCriteriaId"), 1L, 1);
 
                     b.Property<string>("Condition")
                         .HasColumnType("nvarchar(max)");
@@ -2217,8 +2380,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantId"), 1L, 1);
 
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
@@ -2448,8 +2612,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantAttachmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantAttachmentId"), 1L, 1);
 
                     b.Property<int>("ApplicantId")
                         .HasColumnType("int");
@@ -2474,8 +2639,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantCurrentStatusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantCurrentStatusId"), 1L, 1);
 
                     b.Property<int>("BEEFSectionId")
                         .HasColumnType("int");
@@ -2509,8 +2675,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantInboxId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantInboxId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -2525,8 +2692,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantSelectionStatusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantSelectionStatusId"), 1L, 1);
 
                     b.Property<string>("SelectionStatus")
                         .HasColumnType("nvarchar(max)");
@@ -2540,8 +2708,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantStateChangerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantStateChangerId"), 1L, 1);
 
                     b.Property<int>("ApplicantId")
                         .HasColumnType("int");
@@ -2580,8 +2749,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantStudentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantStudentId"), 1L, 1);
 
                     b.Property<int>("ApplicantCurrentStatusId")
                         .HasColumnType("int");
@@ -2642,8 +2812,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantFinanceCurrentStatusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantFinanceCurrentStatusId"), 1L, 1);
 
                     b.Property<string>("ProcessState")
                         .HasColumnType("nvarchar(max)");
@@ -2669,8 +2840,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PaymentDisbursementId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentDisbursementId"), 1L, 1);
 
                     b.Property<string>("AgentName")
                         .HasColumnType("nvarchar(max)");
@@ -2763,8 +2935,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("PaymentMethodModeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentMethodModeId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -2803,8 +2976,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrancheId"), 1L, 1);
 
                     b.Property<int>("ApplicantCount")
                         .HasColumnType("int");
@@ -2875,8 +3049,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("TrancheDocumentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrancheDocumentId"), 1L, 1);
 
                     b.Property<string>("CSVAttachment")
                         .HasColumnType("nvarchar(max)");
@@ -2933,8 +3108,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantId"), 1L, 1);
 
                     b.Property<string>("ApplicantReferenceNo")
                         .HasColumnType("nvarchar(max)");
@@ -2957,8 +3133,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelId"), 1L, 1);
 
                     b.Property<int>("Applicant")
                         .HasColumnType("int");
@@ -2984,8 +3161,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantId"), 1L, 1);
 
                     b.Property<string>("ApplicantReferenceNo")
                         .HasColumnType("nvarchar(max)");
@@ -3011,8 +3189,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelId"), 1L, 1);
 
                     b.Property<int>("Applicant")
                         .HasColumnType("int");
@@ -3038,8 +3217,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantId"), 1L, 1);
 
                     b.Property<string>("ApplicantReferenceNo")
                         .HasColumnType("nvarchar(max)");
@@ -3065,8 +3245,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelId"), 1L, 1);
 
                     b.Property<int>("Applicant")
                         .HasColumnType("int");
@@ -3092,8 +3273,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DAEInstituteQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DAEInstituteQoutaBySchemeLevelId"), 1L, 1);
 
                     b.Property<int>("ClassEnrollment")
                         .HasColumnType("int");
@@ -3212,8 +3394,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("DistrictQoutaBySchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictQoutaBySchemeLevelId"), 1L, 1);
 
                     b.Property<int>("CurrentYearPopulation")
                         .HasColumnType("int");
@@ -3267,8 +3450,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SchemeLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchemeLevelId"), 1L, 1);
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -3395,8 +3579,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("ApplicantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantId"), 1L, 1);
 
                     b.Property<string>("ApplicantReferenceNo")
                         .HasColumnType("nvarchar(max)");
@@ -3443,8 +3628,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("TrancheId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrancheId"), 1L, 1);
 
                     b.Property<int>("Applicant")
                         .HasColumnType("int");
@@ -3481,15 +3667,16 @@ namespace Repository.Data.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -3505,15 +3692,16 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -3529,7 +3717,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -3551,7 +3739,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -3566,7 +3754,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -3585,15 +3773,16 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("SMSService.Models.Domain.AutoSMSApi.SMSAPIService", b =>
                 {
                     b.Property<int>("SMSAPIServiceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SMSAPIServiceId"), 1L, 1);
 
                     b.Property<string>("BalanceEnquiryURL")
                         .HasColumnType("nvarchar(max)");
@@ -3625,8 +3814,9 @@ namespace Repository.Data.Migrations
                 {
                     b.Property<int>("SMSAPIServiceAuditTrailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SMSAPIServiceAuditTrailId"), 1L, 1);
 
                     b.Property<int>("ApplicantId")
                         .HasColumnType("int");
@@ -3804,6 +3994,36 @@ namespace Repository.Data.Migrations
                     b.Navigation("SchemeLevelPolicy");
 
                     b.Navigation("ScholarshipFiscalYear");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.AnnualBudget", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.BudgetLevel", "BudgetLevel")
+                        .WithMany()
+                        .HasForeignKey("BudgetLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Domain.ScholarshipSetup.ScholarshipFiscalYear", "ScholarshipFiscalYear")
+                        .WithMany()
+                        .HasForeignKey("ScholarshipFiscalYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BudgetLevel");
+
+                    b.Navigation("ScholarshipFiscalYear");
+                });
+
+            modelBuilder.Entity("DAL.Models.Domain.MasterSetup.BudgetLevel", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.MasterSetup.DAEInstitute", b =>
@@ -4182,9 +4402,9 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("DAEInstitute");
 
-                    b.Navigation("SchemeLevelPolicy");
-
                     b.Navigation("SRCForum");
+
+                    b.Navigation("SchemeLevelPolicy");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DegreeLevelQoutaBySchemeLevel", b =>
@@ -4209,9 +4429,9 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("DegreeScholarshipLevel");
 
-                    b.Navigation("SchemeLevelPolicy");
-
                     b.Navigation("SRCForum");
+
+                    b.Navigation("SchemeLevelPolicy");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.DistrictQoutaBySchemeLevel", b =>
@@ -4236,9 +4456,9 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("District");
 
-                    b.Navigation("SchemeLevelPolicy");
-
                     b.Navigation("SRCForum");
+
+                    b.Navigation("SchemeLevelPolicy");
                 });
 
             modelBuilder.Entity("DAL.Models.Domain.ScholarshipSetup.PolicySRCForum", b =>
@@ -4566,9 +4786,9 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("DAEInstitute");
 
-                    b.Navigation("SchemeLevelPolicy");
-
                     b.Navigation("SRCForum");
+
+                    b.Navigation("SchemeLevelPolicy");
                 });
 
             modelBuilder.Entity("DAL.Models.ViewModels.PolicyDetailView", b =>

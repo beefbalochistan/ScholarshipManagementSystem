@@ -1,0 +1,83 @@
+﻿@model DAL.Models.Domain.MasterSetup.AnnualBudget
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>AnnualBudget</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="POMQuota" class="control-label"></label>
+                <input asp-for="POMQuota" class="form-control" />
+                <span asp-validation-for="POMQuota" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DOMSQuota" class="control-label"></label>
+                <input asp-for="DOMSQuota" class="form-control" />
+                <span asp-validation-for="DOMSQuota" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecialQuota" class="control-label"></label>
+                <input asp-for="SpecialQuota" class="form-control" />
+                <span asp-validation-for="SpecialQuota" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeclineQuota" class="control-label"></label>
+                <input asp-for="DeclineQuota" class="form-control" />
+                <span asp-validation-for="DeclineQuota" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingName" class="control-label"></label>
+                <input asp-for="MeetingName" class="form-control" />
+                <span asp-validation-for="MeetingName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingReferancNo" class="control-label"></label>
+                <input asp-for="MeetingReferancNo" class="form-control" />
+                <span asp-validation-for="MeetingReferancNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OnDate" class="control-label"></label>
+                <input asp-for="OnDate" class="form-control" />
+                <span asp-validation-for="OnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BudgetType" class="control-label"></label>
+                <input asp-for="BudgetType" class="form-control" />
+                <span asp-validation-for="BudgetType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScholarshipFiscalYearId" class="control-label"></label>
+                <select asp-for="ScholarshipFiscalYearId" class ="form-control" asp-items="ViewBag.ScholarshipFiscalYearId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BudgetLevelId" class="control-label"></label>
+                <select asp-for="BudgetLevelId" class ="form-control" asp-items="ViewBag.BudgetLevelId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
