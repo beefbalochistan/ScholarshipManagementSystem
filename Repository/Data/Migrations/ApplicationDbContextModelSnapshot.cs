@@ -100,6 +100,8 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BEEFSectionId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -1753,6 +1755,9 @@ namespace Repository.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSpecialQouta")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2753,9 +2758,6 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicantStudentId"), 1L, 1);
 
-                    b.Property<int>("ApplicantCurrentStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ApplicantId")
                         .HasColumnType("int");
 
@@ -2796,8 +2798,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantStudentId");
-
-                    b.HasIndex("ApplicantCurrentStatusId");
 
                     b.HasIndex("ApplicantId");
 
@@ -3859,6 +3859,17 @@ namespace Repository.Data.Migrations
                     b.ToTable("SMSAPIServiceAuditTrail", "sms");
                 });
 
+            modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("DAL.Models.Domain.MasterSetup.BEEFSection", "BEEFSection")
+                        .WithMany()
+                        .HasForeignKey("BEEFSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BEEFSection");
+                });
+
             modelBuilder.Entity("DAL.Models.Domain.ImportResult.ColumnLabel", b =>
                 {
                     b.HasOne("DAL.Models.Domain.ImportResult.ResultRepository", "ResultRepository")
@@ -4663,12 +4674,6 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("DAL.Models.Domain.Student.ApplicantStudent", b =>
                 {
-                    b.HasOne("DAL.Models.Domain.Student.ApplicantCurrentStatus", "ApplicantCurrentStatus")
-                        .WithMany()
-                        .HasForeignKey("ApplicantCurrentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DAL.Models.Domain.Student.Applicant", "Applicant")
                         .WithMany()
                         .HasForeignKey("ApplicantId")
@@ -4684,8 +4689,6 @@ namespace Repository.Data.Migrations
                         .HasForeignKey("ToUserId");
 
                     b.Navigation("Applicant");
-
-                    b.Navigation("ApplicantCurrentStatus");
 
                     b.Navigation("ApplicationUserFrom");
 
