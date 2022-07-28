@@ -21,7 +21,7 @@
                     </li>
                     <li>
                         <a asp-action="ApplicantInProcess" asp-controller="Applicants" asp-route-id="8" asp-route-title="Finding Cases" class=" waves-effect">
-                            <i class="mdi mdi-account-question-outline"></i><span key="t-calendar"><span class="mr-2 ml-1"></span>Finding Cases Inbox</span>
+                            <span class="mr-2 ml-1"><img src="~/assets/images/icons/ReturnInbox.svg" height="22" /></span><span key="t-calendar">Finding Cases Inbox</span>
                         </a>
                     </li>
                 }
@@ -32,7 +32,6 @@
                             <span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">Main - Inbox</span>
                         </a>
                     </li>
-
                 }
                 @*@if ((AuthorizationService.AuthorizeAsync(User, Permissions.ViewFinding.View)).Result.Succeeded)
                 {
@@ -388,6 +387,32 @@
                                 <a asp-action="Index" asp-controller="PaymentMethods" class=" waves-effect">
                                     <i class="bx bxs-dizzy"></i>
                                     <span key="t-calendar">Payment Method</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-map"></i>
+                            <span key="t-invoices">Budget Setup</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li>
+                                <a asp-action="Index" asp-controller="BudgetLevels" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Budget Level</span>
+                                </a>
+                            </li>
+                             <li>
+                                <a asp-action="Index" asp-controller="BudgetLevels" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Annual Budget</span>
+                                </a>
+                            </li>
+                             <li>
+                                <a asp-action="Index" asp-controller="SpecialQuotaCategories" class=" waves-effect">
+                                    <i class="bx bxs-dizzy"></i>
+                                    <span key="t-calendar">Special Qouta</span>
                                 </a>
                             </li>
                         </ul>

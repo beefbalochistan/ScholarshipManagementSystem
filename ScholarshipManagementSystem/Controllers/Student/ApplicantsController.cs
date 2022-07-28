@@ -94,8 +94,14 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int InboxId,int TrancheId, int applicantCurrentStatusId, int SchemeLevelId, int ApplicantPaymentInProcess, string UserIdForPaymentMethodAccessFilter)
         {
-            
-            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4}", TrancheId, MaxFYId, ApplicantPaymentInProcess, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();            
+            int IsTrancheDisbursed = 0;
+            int IsTrancheApproved = 0;
+            if(applicantCurrentStatusId == 25)
+            {
+                IsTrancheDisbursed = 1;
+                IsTrancheApproved = 1;
+            }
+            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4},{5}", TrancheId, IsTrancheApproved, IsTrancheDisbursed, MaxFYId, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();            
             ViewBag.UserCurrentAccess = applicantCurrentStatusId;
             ViewBag.TrancheId = TrancheId;
             //HttpContext.Session.SetInt32("TrancheId", TrancheId);
@@ -115,13 +121,17 @@ namespace ScholarshipManagementSystem.Controllers.Student
             int ApplicantPaymentInProcess = 1;
             var TrancheList = _context.Tranche.Where(a => a.IsApproved == false && a.IsActive == true).ToList();
             int defaultTrancheId = TrancheList.Select(a=>a.TrancheId).FirstOrDefault();
+            int IsTrancheDisbursed = 0;
+            int IsTrancheApproved = 0;           
             if (currentUser.ApplicantCurrentStatusId == 25)
             {
+                IsTrancheDisbursed = 1;
+                IsTrancheApproved = 1;
                 UserIdForPaymentMethodAccessFilter = currentUser.Id;                
                 defaultTrancheId = TrancheList.Where(a => (_context.UserAccessToPaymentMethod.Where(a => a.UserId == UserIdForPaymentMethodAccessFilter).Select(a => a.PaymentMethodId)).Contains(a.PaymentMethodId)).Select(a => a.TrancheId).FirstOrDefault();
             }            
             ViewBag.TrancheId = /*HttpContext.Session.GetInt32("TrancheId") ??*/ defaultTrancheId;
-            var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}, {1}, {2}, {3}", MaxFYId, currentUser.ApplicantCurrentStatusId, ApplicantPaymentInProcess, UserIdForPaymentMethodAccessFilter).ToListAsync();
+            var applicationDbContext = await _context.SPApplicantPaymentInProcessSummary.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcessSummaryTrancheWise] {0}, {1}, {2}, {3}, {4}",IsTrancheApproved, IsTrancheDisbursed, MaxFYId, currentUser.ApplicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();
             ViewBag.ApplicantPaymentInProcess = ApplicantPaymentInProcess;
             ViewBag.UserIdForPaymentMethodAccessFilter = UserIdForPaymentMethodAccessFilter;
             return View(applicationDbContext);
@@ -725,8 +735,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = description;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 obj.ToUserId = currentUser.Id;
@@ -757,8 +766,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = description;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 var UserInfo = _context.Users.Where(a=>a.ApplicantCurrentStatusId == applicantCurrentStatusId && a.IsSectionHead == true).FirstOrDefault();
@@ -808,8 +816,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = Description;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 obj.ToUserId = "b1150e21-eb79-4170-ab12-4f2aa5a106a9";
@@ -840,8 +847,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = description;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 obj.ToUserId = "b1150e21-eb79-4170-ab12-4f2aa5a106a9";
@@ -871,8 +877,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = Description;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 obj.ToUserId = UserId;
@@ -914,8 +919,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = comments;
                 obj.CreatedOn = DateTime.Now;                
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);             
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                             
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;                
                 obj.ToUserId = UserId;                
@@ -946,8 +950,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 obj.ApplicantReferenceId = applicantInfo.ApplicantReferenceNo;
                 obj.Comments = comments;
                 obj.CreatedOn = DateTime.Now;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                obj.ApplicantCurrentStatusId = currentUser.ApplicantCurrentStatusId;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);                
                 obj.UserName = User.Identity.Name;
                 obj.FromUserId = currentUser.Id;
                 obj.ToUserId = UserId;

@@ -16,9 +16,7 @@ namespace DAL.Models.Domain.Student
         public int ApplicantId { get; set; }
         public string SelectionStatus { get; set; }
         public string ApplicantReferenceId { get; set; }           
-        public string Comments { get; set; }
-        [ForeignKey("ApplicantCurrentStatus")]
-        public int ApplicantCurrentStatusId { get; set; }
+        public string Comments { get; set; }       
         public string Attachment { get; set; }
         public string AttachFileName { get; set; }        
         public string AttachFileType { get; set; }
@@ -31,8 +29,7 @@ namespace DAL.Models.Domain.Student
         public string ToUserId { get; set; }
         public string ForwardToUserName { get; set; }
         public DateTime CreatedOn  { get; set; }        
-        public virtual Applicant Applicant { get; set; }        
-        public virtual ApplicantCurrentStatus ApplicantCurrentStatus { get; set; }        
+        public virtual Applicant Applicant { get; set; }                
         public virtual ApplicationUser ApplicationUserFrom { get; set; }        
         public virtual ApplicationUser ApplicationUserTo { get; set; }        
     }

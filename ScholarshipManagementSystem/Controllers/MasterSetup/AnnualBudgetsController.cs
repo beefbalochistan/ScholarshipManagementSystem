@@ -49,8 +49,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
         // GET: AnnualBudgets/Create
         public IActionResult Create()
         {
-            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelId");
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code");
+            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelName");
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelId", annualBudget.BudgetLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", annualBudget.ScholarshipFiscalYearId);
+            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelName", annualBudget.BudgetLevelId);
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", annualBudget.ScholarshipFiscalYearId);
             return View(annualBudget);
         }
 
@@ -85,8 +85,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
             {
                 return NotFound();
             }
-            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelId", annualBudget.BudgetLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", annualBudget.ScholarshipFiscalYearId);
+            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelName", annualBudget.BudgetLevelId);
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", annualBudget.ScholarshipFiscalYearId);
             return View(annualBudget);
         }
 
@@ -122,8 +122,8 @@ namespace ScholarshipManagementSystem.Controllers.MasterSetup
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelId", annualBudget.BudgetLevelId);
-            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Code", annualBudget.ScholarshipFiscalYearId);
+            ViewData["BudgetLevelId"] = new SelectList(_context.BudgetLevel, "BudgetLevelId", "BudgetLevelName", annualBudget.BudgetLevelId);
+            ViewData["ScholarshipFiscalYearId"] = new SelectList(_context.ScholarshipFiscalYear, "ScholarshipFiscalYearId", "Name", annualBudget.ScholarshipFiscalYearId);
             return View(annualBudget);
         }
 
