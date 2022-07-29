@@ -92,10 +92,10 @@ namespace ScholarshipManagementSystem.Controllers.Student
             //-----------------------------------
             return PartialView(applicationDbContext);
         }
-        public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int InboxId,int TrancheId, int applicantCurrentStatusId, int SchemeLevelId, int ApplicantPaymentInProcess, string UserIdForPaymentMethodAccessFilter)
+        public async Task<IActionResult> GetPaymentResultList(int MaxFYId, int InboxId,int TrancheId, int applicantCurrentStatusId, int SchemeLevelId, int ApplicantPaymentInProcess, string UserIdForPaymentMethodAccessFilter, int Isapproved)
         {
             int IsTrancheDisbursed = 0;
-            int IsTrancheApproved = 0;
+            int IsTrancheApproved = Isapproved;
             if(applicantCurrentStatusId == 25)
             {
                 IsTrancheDisbursed = 1;
@@ -103,12 +103,12 @@ namespace ScholarshipManagementSystem.Controllers.Student
             }
             var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4},{5}", TrancheId, IsTrancheApproved, IsTrancheDisbursed, MaxFYId, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();            
             ViewBag.UserCurrentAccess = applicantCurrentStatusId;
-            ViewBag.TrancheId = TrancheId;
+            ViewBag.TrancheId = TrancheId;            
             //HttpContext.Session.SetInt32("TrancheId", TrancheId);
             ViewBag.InboxId = InboxId;
             return PartialView(applicationDbContext);
         }
-        public async Task<IActionResult> ApplicantInProcessForVD(int id, string title)
+        public async Task<IActionResult> ApplicantInProcessForVD(int id, string title, int Isapproved = 0)
         {
             int MaxFYId = _context.PolicySRCForum.Where(a => a.IsEndorse == true).Max(a => a.ScholarshipFiscalYearId);
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -122,7 +122,8 @@ namespace ScholarshipManagementSystem.Controllers.Student
             var TrancheList = _context.Tranche.Where(a => a.IsApproved == false && a.IsActive == true).ToList();
             int defaultTrancheId = TrancheList.Select(a=>a.TrancheId).FirstOrDefault();
             int IsTrancheDisbursed = 0;
-            int IsTrancheApproved = 0;           
+            int IsTrancheApproved = Isapproved;
+            ViewBag.IsTrancheApproved = IsTrancheApproved;
             if (currentUser.ApplicantCurrentStatusId == 25)
             {
                 IsTrancheDisbursed = 1;
@@ -980,7 +981,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         }
         public async Task<IActionResult> ApplicantInTranche(int trancheId)
         {
-            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == trancheId && a.IsPaymentInProcess == false && a.ApplicantInboxId == 1).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == trancheId && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             return PartialView(await applicationDbContext.ToListAsync());
         }
         [HttpPost]
@@ -1004,8 +1005,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         {
             var applicantInfo = _context.Applicant.Find(applicantId);
             if (applicantInfo != null)
-            {
-                applicantInfo.IsPaymentInProcess = false;
+            {                
                 applicantInfo.ApplicantInboxId = 2;
                 _context.Update(applicantInfo);
                /* ApplicantStudent obj = new ApplicantStudent();

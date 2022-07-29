@@ -15,8 +15,18 @@
                 @if ((AuthorizationService.AuthorizeAsync(User, Permissions.FMInbox.View)).Result.Succeeded)
                 {
                     <li>
-                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="1" asp-route-title="Applicant In Process" class=" waves-effect">
-                            @*<i class="bx bx-data"></i>*@<span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">Main - Inbox</span>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="1" asp-route-Isapproved="0" asp-route-title="Applicant In Process" class=" waves-effect">
+                            @*<i class="bx bx-data"></i>*@<span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">RFP - Inbox</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="3" asp-route-Isapproved="0" asp-route-title="Applicant In Process" class=" waves-effect">
+                            <span key="t-calendar"><span class="mr-2 ml-1"><img src="~/assets/images/icons/PendInbox.svg" height="22" /></span>Pending - Inbox</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a asp-action="ApplicantInProcessForVD" asp-controller="Applicants" asp-route-id="1" asp-route-Isapproved="1" asp-route-title="Applicant In Process" class=" waves-effect">
+                            @*<i class="bx bx-data"></i>*@<span class="mr-2 ml-1"><img src="~/assets/images/icons/MainInbox.svg" height="22" /></span><span key="t-calendar">RFD - Inbox</span>
                         </a>
                     </li>
                     <li>

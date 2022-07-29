@@ -54,6 +54,7 @@
                                         @if (ViewBag.InboxId == 1)
                                         {
                                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Pending" data-original-title="Track" onclick="MoveToPend(@item.ApplicantId, @ViewBag.TrancheId)"><i class="mdi mdi-account-clock-outline font-size-18"></i></a>
+                                            //<span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Finding Case" data-original-title="Track" onclick="sendBackWithIssue(@item.ApplicantId, @ViewBag.TrancheId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
                                         }
                                         else
                                         {

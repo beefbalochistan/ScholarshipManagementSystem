@@ -60,6 +60,7 @@
         function fetchRecord(TrancheId) {
             var MaxFYId = '@ViewBag.MaxFYId';
             var InboxId = '@ViewBag.InboxId';
+            var IsTrancheApproved = '@ViewBag.IsTrancheApproved';
             var applicantPaymentInProcess = '@ViewBag.ApplicantPaymentInProcess';
             var applicantCurrentStatusId = '@ViewBag.applicantCurrentStatusId';
             var userIdForPaymentMethodAccessFilter = '@ViewBag.UserIdForPaymentMethodAccessFilter';
@@ -72,7 +73,8 @@
                     InboxId: InboxId,
                     applicantCurrentStatusId: applicantCurrentStatusId,
                     ApplicantPaymentInProcess: applicantPaymentInProcess,
-                    UserIdForPaymentMethodAccessFilter: userIdForPaymentMethodAccessFilter
+                    UserIdForPaymentMethodAccessFilter: userIdForPaymentMethodAccessFilter,
+                    Isapproved: IsTrancheApproved
                 },
                 success: function (data) {
                     $("#ApplicantDataPlace").html(data);
