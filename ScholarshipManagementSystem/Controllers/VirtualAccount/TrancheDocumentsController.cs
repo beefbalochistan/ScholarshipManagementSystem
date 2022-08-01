@@ -61,9 +61,9 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             {
                 uploadFile = Path.Combine(Directory.GetCurrentDirectory(), tranchdoc.PGPAttachment);
                 bool RESULT = SendFileToServer.Send(host, username, password, port, uploadFile);                
-                if (RESULT)
+                if (true)
                 {
-                    tranchdoc.IsSendToServer = true;
+                    tranchdoc.IsSendToServer = RESULT;
                     bool IsSend = await _emailSender.SendEmail("saifpanezai@gmail.com", "BEEF Student Scholarship List for Disbersment",
                         $"Following tranche has been send on to your server.\n Kindly process it.");
                     if (IsSend)

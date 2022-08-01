@@ -145,6 +145,9 @@
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Forward Case" data-original-title="Track" onclick="ForwardCaseByFinance(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-arrow-right-outline font-size-18"></i></a>
                             <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-warning" data-toggle="tooltip" data-placement="top" title="Finding Case" data-original-title="Track" onclick="ForwardWithFinding(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-question-outline font-size-18"></i></a>
                         }
+                        if(ViewBag.UserCurrentAccess == 16){
+                            <span> | </span><a style="cursor:pointer" id="sa-warning" class="text-success" data-toggle="tooltip" data-placement="top" title="Resume Case" data-original-title="Track" onclick="ResumeCase(@item.ApplicantId, @ViewBag.SchemeLevelId)"><i class="mdi mdi-account-convert-outline font-size-18"></i></a>
+                        }
                     }
                 </td>
                 </tr>

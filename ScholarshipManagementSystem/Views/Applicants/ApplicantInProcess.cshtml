@@ -47,7 +47,7 @@
                 <div>
                     <p class="text-muted">List of In Process Applicant Cases</p>
 
-                    <ul class="list-unstyled font-weight-medium">
+                    <ul class="list-unstyled">
                         @*<li><a href="#" class="text-muted py-2 d-block"><i class="mdi mdi-chevron-right mr-1"></i> Design</a></li>*@
                         @foreach (var item in Model)
                         {
@@ -399,6 +399,10 @@
         }
 
         function ForwardCaseByFinance(applicantId, schemeLevelId) {
+            var PMId = '@ViewBag.DefaultPaymentMethodId';
+            if(PMId == 0){
+                notificationme("No Tranche Open/Active for Default Applicant Payment Mode");                
+            }
             // Get server side variables
             var usersTextArray = []; // it will contain user names
             var usersValueArray = []; // it will contain user Ids
@@ -427,8 +431,7 @@
             {
                 @:tranchesValueArray.push("@value");
             }
-            var options2 = "";
-            var PMId = '@ViewBag.DefaultPaymentMethodId';
+            var options2 = "";            
             var index = -1;
             for (let i = 0; i < tranchesValueArray.length; ++i) {
                 if (PMId == tranchesValueArray[i]) {

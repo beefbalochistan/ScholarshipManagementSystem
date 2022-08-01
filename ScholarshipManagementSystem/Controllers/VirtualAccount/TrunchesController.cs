@@ -334,7 +334,7 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
         }
         public async Task<IActionResult> GenerateCSV(int trancheId, string startDate, string endDate, int paymentMethodModeId)
         {
-            var applicants = await _context.Applicant.Include(a=>a.SchemeLevelPolicy).Include(a=>a.District).Where(a => a.TrancheId == trancheId && a.IsDisbursed == false).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, Name = a.Name, BFormCNIC = a.BFormCNIC, StudentMobile = a.StudentMobile, District = new District { Name = a.District.Name}, SchemeLevelPolicy = new SchemeLevelPolicy { Amount = a.SchemeLevelPolicy.Amount } }).ToArrayAsync();
+            var applicants = await _context.Applicant.Include(a=>a.SchemeLevelPolicy).Include(a=>a.District).Where(a => a.TrancheId == trancheId && a.IsDisbursed == false && a.ApplicantInboxId == 1).Select(a => new Applicant { ApplicantId = a.ApplicantId, ApplicantReferenceNo = a.ApplicantReferenceNo, Name = a.Name, BFormCNIC = a.BFormCNIC, StudentMobile = a.StudentMobile, District = new District { Name = a.District.Name}, SchemeLevelPolicy = new SchemeLevelPolicy { Amount = a.SchemeLevelPolicy.Amount } }).ToArrayAsync();
             List<CSVModel> mylist = new List<CSVModel>();
             int counter = 1;
             string updateCSV_paymentInProcess = "";
@@ -362,16 +362,18 @@ namespace ScholarshipManagementSystem.Controllers.VirtualAccount
             {
                 System.IO.Directory.CreateDirectory(rootPath);
             }
-            string filename = _context.Tranche.Find(trancheId).Name /*+ "-" + RandomNo(10000, 99999).ToString()*/ + ".csv";
-            bool response = WriteCSVFile(rootPath + filename, mylist);
+            string count = (_context.TrancheDocument.Count(a => a.TrancheId == trancheId) + 1).ToString();
+            string TrancheDocumentName = _context.Tranche.Find(trancheId).Name + "-" + count.PadLeft(3, '0');
+            string filename = TrancheDocumentName + ".csv";
+            bool response = WriteCSVFile(rootPath + filename, mylist);                        
+            
             if (response)
             {
                 TrancheDocument trancheDocument = new TrancheDocument();
                 trancheDocument.CSVAttachment = Path.Combine("/Documents/Finance/TrancheId" + trancheId.ToString() + "/CSV/" + filename);//Server Path
                 trancheDocument.CSVAttachmentOn = DateTime.Today;
                 trancheDocument.TrancheId = trancheId;
-                trancheDocument.PaymentMethodModeId = paymentMethodModeId;
-                string count = (_context.TrancheDocument.Count(a => a.TrancheId == trancheId) + 1).ToString();                
+                trancheDocument.PaymentMethodModeId = paymentMethodModeId;                
                 trancheDocument.TrancheDocumentName = _context.Tranche.Find(trancheId).Name + "-" + count.PadLeft(3, '0');
                 _context.Add(trancheDocument);
                 //------------------------------

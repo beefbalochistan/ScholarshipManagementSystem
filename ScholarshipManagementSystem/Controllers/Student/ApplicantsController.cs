@@ -53,7 +53,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
         public async Task<IActionResult> GetApplicantListInTrancheForDisbursement(int id)
         {
             ViewBag.TrancheId = id;
-            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsDisbursed == false && a.IsPaymentInProcess == false).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
+            var applicationDbContext = _context.Applicant.Include(a => a.SchemeLevelPolicy.SchemeLevel).Where(a => a.TrancheId == id && a.IsDisbursed == false && a.IsPaymentInProcess == false && a.ApplicantInboxId == 1).Select(a => new Applicant { ApplicantReferenceNo = a.ApplicantReferenceNo, RollNumber = a.RollNumber, Name = a.Name, SchemeLevelPolicy = new SchemeLevelPolicy { SchemeLevelPolicyId = a.SchemeLevelPolicyId, SchemeLevel = new SchemeLevel { Name = a.SchemeLevelPolicy.SchemeLevel.Name } } });/*.Include(a => a.SchemeLevelPolicy.SchemeLevel)*/;
             ViewData["PaymentMethodModeId"] = new SelectList(_context.PaymentMethodMode.Include(a=>a.PaymentDisbursementMode), "PaymentMethodModeId", "PaymentDisbursementMode.Name");
             return View(await applicationDbContext.ToListAsync());
         }
@@ -162,7 +162,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 var result = await _context.Tranche.Where(a => a.IsApproved == false && a.IsActive == true).ToListAsync();
                 tranches = result.Select(a=> new TrancheViewModel { TrancheId = a.TrancheId, TrancheName = a.Name}).ToList();                
                 ViewBag.TrancheList = tranches;
-                ViewBag.DefaultPaymentMethodId = result.Where(a => a.PaymentMethodId == DefaultSchemePaymentMethodId).Max(a=>a.TrancheId);
+                ViewBag.DefaultPaymentMethodId = result.Where(a => a.PaymentMethodId == DefaultSchemePaymentMethodId).Select(a=>a.TrancheId).DefaultIfEmpty().Max();
             }
             ViewBag.DefaultRejectComments = _context.DefaultComment.Find(3).ForwardCaseDefaultComment;
             //---------------------
@@ -1604,10 +1604,10 @@ namespace ScholarshipManagementSystem.Controllers.Student
                         applicant.IsFormEntered = true;
                         applicant.ApplicantCurrentStatusId = 4;//KDA Hard
                     }
-                    else
+                    /*else
                     {
                         applicant.ApplicantCurrentStatusId = 1;//KDA Hard
-                    }          
+                    } */         
                     _context.Update(applicant);
                     await _context.SaveChangesAsync();
                 }
