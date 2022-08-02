@@ -21,8 +21,8 @@ namespace DAL.Models.ViewModels.VirtualAccount
         public string SchemeLevel { get; set; }
         public string District { get; set; }
         public string FatherName { get; set; }
-        public string Institute { get; set; }
-        public int TrancheDocumentId { get; set; }
+        public string? Institute { get; set; }
+        public int? TrancheDocumentId { get; set; }
         public string PaymentMethod { get; set; }
         public int PaymentMethodId { get; set; }        
     }

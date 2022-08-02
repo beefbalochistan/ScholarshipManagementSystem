@@ -14,9 +14,9 @@ namespace DAL.Models.Domain.MasterSetup
     {
         [Key]
         public int AnnualBudgetId { get; set; }
-        [Display(Name = "POM/OM Quota")]
+        [Display(Name = "Provincial Quota")]
         public decimal POMQuota { get; set; }
-        [Display(Name = "DOMS Quota")]
+        [Display(Name = "Open Metrit Quota")]
         public decimal DOMSQuota { get; set; }
         [Display(Name = "Special Quota")]
         public decimal SpecialQuota { get; set; }

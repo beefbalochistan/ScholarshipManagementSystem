@@ -101,7 +101,9 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 IsTrancheDisbursed = 1;
                 IsTrancheApproved = 1;
             }
-            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4},{5}", TrancheId, IsTrancheApproved, IsTrancheDisbursed, MaxFYId, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();            
+           
+            var applicationDbContext = await _context.SPApplicantPaymentInProcess.FromSqlRaw("exec [VirtualAccount].[ApplicantPaymentInProcess] {0}, {1},{2},{3}, {4},{5}", TrancheId, IsTrancheApproved, IsTrancheDisbursed, MaxFYId, InboxId, applicantCurrentStatusId, UserIdForPaymentMethodAccessFilter).ToListAsync();
+                    
             ViewBag.UserCurrentAccess = applicantCurrentStatusId;
             ViewBag.TrancheId = TrancheId;            
             //HttpContext.Session.SetInt32("TrancheId", TrancheId);
@@ -643,6 +645,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 _context.Update(applicantInfo);
                 await _context.SaveChangesAsync();
                 //--------------------SMS Alert------------------------------
+                mobileNo = mobileNo.Replace("-", "");
                 SMSAPIService ConfigObj = new SMSAPIService();
                 ConfigObj = _context.SMSAPIService.Find(1);
                 SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.SendSMSURL);                
@@ -1068,6 +1071,7 @@ namespace ScholarshipManagementSystem.Controllers.Student
                 ConfigObj = _context.SMSAPIService.Find(1);
                 SMSAPI SMSObj = new SMSAPI(ConfigObj.Username, ConfigObj.Password, ConfigObj.Mask, ConfigObj.SendSMSURL);
                 var Text = "Dear " + name + ",\n" + message + "\nBEEF.";
+                mobileNo = mobileNo.Replace("-", "");
                 string contactNo = "92" + (mobileNo.Remove(0, 1));
                 var response = SMSObj.SendSingleSMS(Text, contactNo, "English");
                 SMSAPIServiceAuditTrail SMSRecord = new SMSAPIServiceAuditTrail();
